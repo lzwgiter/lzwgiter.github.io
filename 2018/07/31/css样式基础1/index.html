@@ -261,7 +261,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">1,485</span> / Reading time: <span class="post-count">6 min</span></span>
+                        <span>Word count: <span class="post-count">1,580</span> / Reading time: <span class="post-count">7 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -422,6 +422,13 @@ height:50vh;
 <p>导入样式使用\@import命令导入外部样式表。导入样式表有6种书写方式：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@import daoru.css;</span><br><span class="line">@import ‘daoru.css’;</span><br><span class="line">@import “daoru.css”;</span><br><span class="line">@import url(daoru.css);</span><br><span class="line">@import url(‘daoru.css’);</span><br><span class="line">@import url(“daoru.css”);</span><br></pre></td></tr></table></figure></p>
 <p>例：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=<span class="string">"utf-8"</span>&gt;</span><br><span class="line">&lt;title&gt;链接式&lt;/title&gt;</span><br><span class="line">\@import url(ianjie.css);</span><br><span class="line">\@import url(daoru.css);</span><br><span class="line">body &#123;background-color: <span class="comment">#e4e929;&#125;</span></span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;p&gt;该段落由lianjie-2.css控制&lt;/p&gt;</span><br><span class="line">&lt;h1&gt;该段落由lianjie.cdd控制&lt;/h1&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
 <p>daoru.css:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@import url(lianjie.css);</span><br><span class="line">p &#123;text-indent: 3em;&#125; /* 段落缩进 */</span><br></pre></td></tr></table></figure></p>
+<p>导入式与链接式区别：</p>
+<ol>
+<li>link属于HTML标签，而@import是CSS提供的</li>
+<li>页面被加载时，link会同时加载，而@import引用的CSS会等页面加载完成后再加载</li>
+<li>@import标签只在IE5以上可以使用，link标签属于HTML标签无兼容问题</li>
+<li>link方式的样式的权重高于@import的权重，即优先级</li>
+</ol>
 
     </article>
     <!-- license  -->
