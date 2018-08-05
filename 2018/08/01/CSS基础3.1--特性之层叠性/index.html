@@ -391,7 +391,7 @@ height:50vh;
             <main class="main post-page">
     <article class="article-entry">
         <blockquote>
-<p>层叠和继承是CSS最基本的两个特性，本篇将对层叠性相关内容简单介绍。</p>
+<p>层叠和继承是CSS最基本的两个特性，本篇将对层叠性相关内容简单介绍。<br><a id="more"></a></p>
 </blockquote>
 <h1 id="CSS层叠性"><a href="#CSS层叠性" class="headerlink" title="CSS层叠性:"></a>CSS层叠性:</h1><h2 id="1-gt-CSS-样式表的优先级："><a href="#1-gt-CSS-样式表的优先级：" class="headerlink" title="1&gt; CSS 样式表的优先级："></a>1&gt; CSS 样式表的优先级：</h2><p>  按照CSS 的起源可以将网页定义的样式分为4种：HTML、作者、用户、浏览器。HTML表示元素的默认样式； 作者就是创建人，即创建网站所编辑的CSS； 用户也就是浏览网页的人所设置的样式； 浏览器就是指浏览器默认的样式。<br>  原则上讲，作者定义的样式会优先于用户设置的样式，用户设置的样式优先于浏览器的默认样式，而浏览器的默认样式会优先于HTML的默认样式。<br>  特别的，在CSS2中，当用户设置的样式使用了<code>!important</code>命令声明之后，用户的<code>!important</code>的命令会优先于作者声明的<code>!important</code>命令。</p>
 <h2 id="2-gt-CSS样式的优先级"><a href="#2-gt-CSS样式的优先级" class="headerlink" title="2&gt;CSS样式的优先级"></a>2&gt;CSS样式的优先级</h2><p>  对于相同CSS起源来说，不同位置的样式器优先级也是不同的。一般来说，行内样式会优先于内嵌式样式表，内部样式表会优先于外部样式表。即<code>行内 &gt; 内嵌式 &gt; 外部</code>。而被附加了<code>!important</code>关键字的声明会拥有最高的优先级。<br>  如在实际开发中，如果作者设计网页字体颜色为14号黑色字体，而用户在浏览器中利用firefox的firebug插件修改字体为18号红色字体，浏览器如何处理呢？<br>  <img src="/img/2.png" alt="更改"><br>  <img src="/img/3.png" alt="结果"><br>  根据CSS层叠规则：<strong>作者设计的样式能够覆盖浏览器默认设置的样式，而用户在浏览器里设置的样式可以覆盖作者的样式。</strong>(上图所示)<strong>同时，CSS根据样式的远近关系来决定层叠样式的优先级：在同等条件下，距离应用对象(也就是标签)的距离越近就越有较大的优先权，因而行内样式的优先权大于内部样式和外部样式。</strong><br>  如果多个不同类型的选择器同时对一个对象设置样式时，该对象最终样式由一个优先级加权值决定，下面是计算方法：</p>
@@ -512,6 +512,10 @@ height:50vh;
     
         
     
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title=rss></a>
+            
         
     
 
@@ -637,14 +641,6 @@ top:50vh;
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 7
@@ -657,20 +653,6 @@ top:50vh;
     
     
     
-    
-    <div class="archive-year"> 2018 </div>
-    <ul class="year-list">
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2018/08/01/CSS基础1--样式/" >CSS基础1--样式</a>
-        </li>
-    
-    
-    
-    
-    
-        </ul>
     
     <div class="archive-year"> Invalid date </div>
     <ul class="year-list">
@@ -686,31 +668,12 @@ top:50vh;
     
         </ul>
     
-    <div class="archive-year"> 2018 </div>
-    <ul class="year-list">
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2018/07/31/CSS基础2--应用/" >CSS基础2--应用</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/28</span><a class="archive-post-title" href= "/2018/07/28/Markdown简单语法/" >Markdown简单语法</a>
-        </li>
-    
-    
-    
-    
-    
-        </ul>
-    
     <div class="archive-year"> Invalid date </div>
     <ul class="year-list">
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2018/08/03/CSS基础4--选择器/" >CSS基础4--选择器</a>
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2018/08/03/CSS基础4.1--选择器之基本选择器/" >CSS基础4.1--选择器之基本选择器</a>
         </li>
     
     
@@ -739,6 +702,30 @@ top:50vh;
     
         <li class="archive-post-item">
             <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2018/08/01/CSS基础3.1--特性之层叠性/" >CSS基础3.1--特性之层叠性</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/2018/08/01/CSS基础1--样式/" >CSS基础1--样式</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/31</span><a class="archive-post-title" href= "/2018/07/31/CSS基础2--应用/" >CSS基础2--应用</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/28</span><a class="archive-post-title" href= "/2018/07/28/Markdown简单语法/" >Markdown简单语法</a>
         </li>
     
     </div>
