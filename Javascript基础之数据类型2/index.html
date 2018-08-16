@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html>
+    <!-- title -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="float">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="float">
+    <meta name="keywords" content="Hexo | float">
+    <meta name="description" content="">
+    <meta name="Cache-Control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>Javascript基础之数据类型2 · float&#39;s blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s 1;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= /css/style.css?v=20180721 as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= /css/mobile.css?v=20180721 media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/favicon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >float&#39;s blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Javascript基础之数据类型2</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>float's blog</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style=
+
+
+
+
+
+
+
+
+height:50vh;
+
+>
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Javascript基础之数据类型2
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Javascript">Javascript</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count">2,232</span> / Reading time: <span class="post-count">9 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2018/08/16</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="今将学习上片提到的数据类型中的三种引用型数据：函数、数组、对象"><a href="#今将学习上片提到的数据类型中的三种引用型数据：函数、数组、对象" class="headerlink" title="今将学习上片提到的数据类型中的三种引用型数据：函数、数组、对象"></a>今将学习上片提到的数据类型中的三种引用型数据：<strong>函数、数组、对象</strong></h2><a id="more"></a>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><blockquote>
+<p>Javascript是函数式编程语言。</p>
+</blockquote>
+<p>一.定义函数的方法有两种：</p>
+<ol>
+<li>使用function语句声明函数<br>如：<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;           <span class="comment">//命名函数</span></span><br><span class="line">    alert(<span class="string">'hello,world!'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>或<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;       <span class="comment">//匿名函数</span></span><br><span class="line">    alert(<span class="string">'hello,world!'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>命名函数的方法也被称为声名式函数，匿名函数的方法也被称为引用式函数或函数表达式（可理解为讲一个复杂的表达式赋给了变量）</p>
+<ol start="2">
+<li>通过Function对象来构造函数<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> f = function_name = <span class="keyword">new</span> <span class="built_in">Function</span>(arg1, arg2, ..., argN, function_body)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>每一个arg为一个参数。最后一个参数为函数主体。<strong>所有参数必须为字符串</strong><br>如：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> say = <span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">"name"</span>, <span class="string">"say"</span>, <span class="string">"document.write('&lt;h1&gt;' + name + ': ' + say + '&lt;/h1&gt;');"</span>);</span><br><span class="line">say(<span class="string">"李四"</span>, <span class="string">"Hi!"</span>);         <span class="comment">//调用函数</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="/img/Javascript基础之数据类型2/1.png" alt=""><br>但是function定义方法更为简单，执行效率高，第二种定义方法仅用于特定的动态环境。<br>改为function定义：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">name, say</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">document</span>.write(<span class="string">'&lt;h1&gt;'</span> + name + <span class="string">'：'</span> + say + <span class="string">'&lt;/h1&gt;'</span>);</span><br><span class="line">&#125;</span><br><span class="line">f(<span class="string">"李四"</span>, <span class="string">"Hi!"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>效果相同，但结构更清晰。</p>
+<p>二.调用方法、参数、应用</p>
+<ol>
+<li>调用方法很简单，使用小括号<code>()</code>包含参数列表即可，可参考上面的代码。</li>
+<li>参数可分为两种：实参和形参。如果接触过C语言的话，理解起来就很简单了。<br>形参：即定义函数时的参数，称为形参，形式上的参数，实际上没东西（手动滑稽）<br>实参：调用函数时传给形参的参数，即实际参数<br>如上面代码中函数f的name和say就是形参，表示我这个函数需要两个参数才能执行，后面的李四和Hi！才是真正的参数，即实参。<br><strong>注意 Javascript没有规定实参数量和形参相等，所以含有两个形参的函数，如果在调用时传三个参数，第三个参数是没有用的。相反的你如果只传了一个参数的话，另一个会默认为<code>undefined</code>，返回值是会出错的。</strong><br>这里有一个检测方法确保参数数量正常，使用js定义的Arguments对象，用它来操控实参，使用arguments.length可以获取函数实参的个数，使用数组下标可以获取实际传输的参数的值。再使用异常处理语句(try/catch)来捕获异常信息，并显示出来。如：<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">a, b</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(f.length != <span class="built_in">arguments</span>.length)        <span class="comment">//检测形参和实参的个数是否形同</span></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"形参和实参数量不相同！"</span>);</span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">	    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    alert(f(<span class="number">2</span>));    <span class="comment">//尝试调用函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span>(e)&#123;</span><br><span class="line">    alert(e.message);  <span class="comment">//捕捉异常信息</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="/img/Javascript基础之数据类型2/2.png" alt=""></p>
+<ol start="3">
+<li>函数应用：<br><strong>匿名函数</strong>：即没有名称的函数，一次性使用时更加有效率。<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> z = <span class="function"><span class="keyword">function</span>(<span class="params">x, y</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (x + y) /<span class="number">2</span>;</span><br><span class="line">&#125;(<span class="number">23</span>, <span class="number">35</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><strong>函数作为值</strong>：函数也属于一种数据，可以作为值付给其他变量<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="function"><span class="keyword">function</span>(<span class="params">x,y</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> (x+y)/<span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line">alert( a(<span class="number">12</span>,<span class="number">33</span>) );</span><br></pre></td></tr></table></figure></p>
+<p><strong>函数作为参数</strong><br>函数作为值可以进行传递，可以将函数作为参数传递给另一个函数，也可以作为返回值。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="function"><span class="keyword">function</span> (<span class="params">f, x, y</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> f(x, y);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> b = <span class="function"><span class="keyword">function</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">&#125;;  </span><br><span class="line">alert( a(b, <span class="number">3</span>, <span class="number">4</span>) );    <span class="comment">//返回值为7</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>函数作为表达式</strong><br>即参与表达式运算中<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">    alert(x);</span><br><span class="line">&#125;)(<span class="number">50</span>);</span><br></pre></td></tr></table></figure></p>
+<p>第一个小括号包含的是一个匿名函数，第一个小括号调用第一个小括号所包含的函数，并传递参数和返回值。</p>
+<ol start="4">
+<li>闭包函数<br>闭包是ECMAScript （JavaScript）最强大的特性之一，闭包是指一个拥由许多变量和绑定了这些变量的环境的表达式（通常为一个函数），所以这些变量也属于表达式的一部分。</li>
+</ol>
+<p>闭包函数即被外部函数调用之后，它的变量不会消失，仍被内部函数所使用，而且所有的内部函数拥有对外部函数的访问权限。闭包可以用在许多地方。它的最大用处有两个，<strong>一个是下面提到的可以读取函数内部的变量，另一个就是让这些变量的值始终保持在内存中。</strong></p>
+<p>简单来说吧，如果你能理解全局变量和局部变量的概念就简单了。一般来说我们在外部函数中定义的变量(私有变量)，外部是不能读取的。那如何读取呢？方法就是在外部函数内部再定义一个内部函数，在其内部输出外部函数的私有变量。如：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">　<span class="function"><span class="keyword">function</span> <span class="title">f1</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">　　　　<span class="keyword">var</span> n=<span class="number">999</span>;</span><br><span class="line">　　　　<span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">　　　　　　alert(n); <span class="comment">// 输出结果999</span></span><br><span class="line">　　　　&#125;</span><br><span class="line">　　&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>但是注意</strong>，反过来就不行，f2内部的局部变量，对f1就是不可见的。这就是Javascript语言特有的”链式作用域”结构（chain scope），子对象会一级一级地向上寻找所有父对象的变量。所以，父对象的所有变量，对子对象都是可见的，反之则不成立。</p>
+<p>那么在外部读取内部函数私有变量值的方法就有了！只要把f2作为返回值，我们就可以在f1外部读取它的内部变量了。</p>
+<p>如该例中，定义了一个函数a,该函数包含一个私有函数b。内部函数b把自身参数m递加给外层函数的私有变量n上，然后返回n的值。外层函数a的返回值为内部函数b，从而形成了一种<strong>内层引用外层的闭包关系</strong>，于是外层函数就是一个典型的闭包函数。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;        <span class="comment">//外层函数，闭包函数</span></span><br><span class="line">	<span class="keyword">var</span> n = <span class="number">0</span>;        <span class="comment">//右边变量n</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params">m</span>)</span>&#123;    <span class="comment">//内部函数，私有函数</span></span><br><span class="line">        n = n + m;    <span class="comment">//递加上级私有变量的值</span></span><br><span class="line">		<span class="keyword">return</span> n;     <span class="comment">//返回改变的值</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> b;         <span class="comment">//返回私有函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> b = a();      <span class="comment">//调用外层函数，返回内部函数</span></span><br><span class="line"><span class="built_in">document</span>.write(b(<span class="number">3</span>));        <span class="comment">//输出3</span></span><br><span class="line"><span class="built_in">document</span>.write(<span class="string">"&lt;br&gt;"</span>);    </span><br><span class="line"><span class="built_in">document</span>.write(b(<span class="number">3</span>));      <span class="comment">//输出6</span></span><br><span class="line"><span class="built_in">document</span>.write(<span class="string">"&lt;br&gt;"</span>);</span><br><span class="line"><span class="built_in">document</span>.write(b(<span class="number">3</span>));      <span class="comment">//输出9</span></span><br><span class="line"><span class="built_in">document</span>.write(<span class="string">"&lt;br&gt;"</span>);</span><br><span class="line"><span class="built_in">document</span>.write(b(<span class="number">3</span>));     <span class="comment">//输出12</span></span><br></pre></td></tr></table></figure></p>
+<p>如果没有闭包函数a的作用，就无法保护私有变量n，就无法实现值的递增效果。<br><a href="https://www.w3cschool.cn/jsnote/jsnote-closure.html" target="_blank" rel="noopener">更多</a></p>
+<h3 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h3><p>对象(Object)是面向对象编程的核心概念，它是已经命名的数据集合。</p>
+<ol>
+<li>创建对象<br>在Javascript中，对象由new运算符生成，生成对象的函数被称为<strong>类</strong>（或称为构造函数、对象类型）。生成的对象被称为类的实例，简称为对象。<br>如我们调动系统内置类型函数，实例化几个特殊对象。<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = <span class="keyword">new</span> <span class="built_in">Object</span>();     <span class="comment">//构造原型对象</span></span><br><span class="line"><span class="keyword">var</span> date = <span class="keyword">new</span> <span class="built_in">Date</span>();    <span class="comment">//构造日期对象</span></span><br><span class="line"><span class="keyword">var</span> ptn = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">"ab+c"</span>, <span class="string">"i"</span>);    <span class="comment">//构造正则表达式对象</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>也可以通过大括号定义对象直接量。如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    name : value,</span><br><span class="line">    name1 : value1,</span><br><span class="line">    ......</span><br></pre></td></tr></table></figure></p>
+<p>使用一个列表来构成对象直接量，这个列表的元素使用冒号分割的属性/值对，元素之间用逗号隔开，整体放在大括号中。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> point = &#123;     <span class="comment">//定义对象</span></span><br><span class="line">    x:<span class="number">2.3</span>,        <span class="comment">//属性值</span></span><br><span class="line">    y:<span class="number">-1.2</span>        <span class="comment">//属性值</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ol start="2">
+<li>访问对象<br>我们通过点好运算符<code>.</code>来访问对象的属性。<br>如：<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> point = &#123;     <span class="comment">//定义对象</span></span><br><span class="line">    x:<span class="number">2.3</span>,        <span class="comment">//属性值</span></span><br><span class="line">    y:<span class="number">-1.2</span>        <span class="comment">//属性值</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> x = point.x;           <span class="comment">//访问对象的属性值</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>对象的属性值可以是简单的值，也可以是复杂的值，如函数、对象。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> point = &#123;</span><br><span class="line">    f : <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.y;</span><br><span class="line">        &#125;,</span><br><span class="line">    y : <span class="number">-1.2</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> y = point.f();         <span class="comment">//返回值为-1.2</span></span><br></pre></td></tr></table></figure></p>
+<p><code>this</code>关键字可以代表当前对象，这里指的便是point。<br>也可以使用多个<code>.</code>来访问嵌套的对象。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> point = &#123;</span><br><span class="line">    x : &#123;</span><br><span class="line">            a : <span class="number">1</span>,</span><br><span class="line">            b : <span class="number">2</span></span><br><span class="line">        &#125;,</span><br><span class="line">    y : <span class="number">-1.2</span></span><br><span class="line">&#125;；</span><br><span class="line"><span class="keyword">var</span> a = point.x.a;            <span class="comment">//返回值为1</span></span><br><span class="line"><span class="comment">//也可以使用集合运算符[]来访问，var a = point["x"]["a"];</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>上面得对象是无序的数据集合，而数组(Array)则是有序的。</p>
+<ol>
+<li>定义数组<br>定义数组通过构造函数Arry()和运算符new来实现，如下：<br><strong>定义空数组</strong> <code>var a = new Arry();</code><br><strong>定义含有参数的数组</strong><code>var a = new Array(1,2,3,&quot;4&quot;,&quot;5&quot;);</code><br>每一个参数都是数组的一个元素值，数组的元素类型没有类型限制。<br><strong>定义指定长度的数组</strong><code>var a = new Array(6);</code>这时所有的元素初始值都为undefined。<br>定义数组是也可以省略new运算符，如<code>var a = Arry(6);</code><br><strong>定义数组直接量</strong><code>var a = [1,2,3,&quot;4&quot;,&quot;5&quot;];</code><br>这样定义快一点。</li>
+<li>存取元素</li>
+</ol>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者: <a href="http://lzwgiter.github.io">float</a>
+            <p>原文链接: <a href="http://lzwgiter.github.io/Javascript基础之数据类型2/">http://lzwgiter.github.io/Javascript基础之数据类型2/</a>
+            <p>发表日期: <a href="http://lzwgiter.github.io/Javascript基础之数据类型2/">August 16th 2018, 12:40:42 pm</a>
+            <p>版权声明: 本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/Javascript基础之数据类型1/" title= Javascript基础之数据类型1 >
+                    <div class="prevTitle">Javascript基础之数据类型1</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!--PC和WAP自适应版-->
+
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:2262988374@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lzwgiter" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/wechat.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title=rss></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#今将学习上片提到的数据类型中的三种引用型数据：函数、数组、对象"><span class="toc-number">1.</span> <span class="toc-text">今将学习上片提到的数据类型中的三种引用型数据：函数、数组、对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#函数"><span class="toc-number">1.1.</span> <span class="toc-text">函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对象"><span class="toc-number">1.2.</span> <span class="toc-text">对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数组"><span class="toc-number">1.3.</span> <span class="toc-text">数组</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 13
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/16</span><a class="archive-post-title" href= "/Javascript基础之数据类型2/" >Javascript基础之数据类型2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/Javascript基础之数据类型1/" >Javascript基础之数据类型1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/CTF ZIP结构/" >CTF隐写术--关于ZIP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/09</span><a class="archive-post-title" href= "/CSS基础4.4--选择器之伪类选择器/" >CSS样式基础4.4--选择器之伪类选择器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span><a class="archive-post-title" href= "/猫片/" >Bugku的一道misc-----猫片</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span><a class="archive-post-title" href= "/CSS基础4.3--选择器之属性选择器/" >CSS基础4.3--选择器之属性选择器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/05</span><a class="archive-post-title" href= "/CSS基础4.2--选择器之组合选择器/" >CSS基础4.2--选择器之组合选择器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span><a class="archive-post-title" href= "/CSS基础4.1--选择器之基本选择器/" >CSS基础4.1--选择器之基本选择器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/02</span><a class="archive-post-title" href= "/CSS基础3.2--特性之继承性/" >CSS基础3.2--特性之继承性</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/CSS基础3.1--特性之层叠性/" >CSS基础3.1--特性之层叠性</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/CSS基础2--应用/" >CSS基础2--应用</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/CSS基础1--样式/" >CSS基础1--样式</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/28</span><a class="archive-post-title" href= "/Markdown简单语法/" >Markdown简单语法</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
+    
+        <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
+    
+        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
+    
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
+    
+        <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+	<div style="position: absolute; bottom:50px; left:30px; width: 76%">
+	    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=525295060&auto=1&height=66"></iframe>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "float"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+
