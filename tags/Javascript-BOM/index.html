@@ -15,7 +15,7 @@
     <meta name="description" content="">
     <meta name="Cache-Control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>Javascript基础之数据类型 · float&#39;s blog</title>
+    <title>float&#39;s blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -70,8 +70,6 @@
 
     <link rel="preload" href= /css/style.css?v=20180721 as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <link rel="stylesheet" href= /css/mobile.css?v=20180721 media="(max-width: 980px)">
-    
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
@@ -196,23 +194,12 @@
 </head>
 
     
-        <body class="post-body">
-    
     
 <header class="header">
 
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
-    
-    <div class="banner">
-            <div class="blog-title">
-                <a href="/" >float&#39;s blog</a>
-            </div>
-            <div class="post-title">
-                <a href="#" class="post-name">Javascript基础之数据类型</a>
-            </div>
-    </div>
     
     <a class="home-link" href=/>float's blog</a>
 </header>
@@ -226,74 +213,24 @@
 
 
 
-height:50vh;
-
 >
     
     <!-- 主页  -->
-    
-    
-    <!-- 404页  -->
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-img" style="background-image: url(/)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
-            
-            Javascript基础之数据类型
-            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
-            
-            <!-- 404 -->
-            
         </p>
         <!-- 文章页meta -->
-        
-            <div class="post-intros">
-                <!-- 文章页标签  -->
-                
-                    <div class= post-intro-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Javascript">Javascript</a>
-    
-</div>
-                
-                
-                    <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">938</span> / Reading time: <span class="post-count">4 min</span></span>
-                    </div>
-                
-                <div class="post-intro-meta">
-                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2018/08/15</span>
-                    
-                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
-                        <span class="iconfont-archer">&#xe602;</span>
-                        <span id="busuanzi_value_page_pv"></span>
-                    </span>
-                    
-                    <span class="shareWrapper">
-                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
-                        <span class="shareText">Share</span>
-                        <ul class="shareList">
-                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
-                                <div class="share-qrcode"></div>
-                            </li>
-                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
-                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
-                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
-                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
-                        </ul>
-                    </span>
-                </div>
-            </div>
         
     </div>
 </div>
@@ -394,65 +331,44 @@ height:50vh;
 </script>        
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
-            <main class="main post-page">
-    <article class="article-entry">
-        <blockquote>
-<p>Javascript属于一种弱类型语言，定义变量时不需要指定类型，一个变量可以储存任何类型的值，但在运算时，JavaScript还是会把它转换成相应的数据类型。<br><a id="more"></a></p>
-</blockquote>
-<p>Javascript中，数据存在着两种不同的储存方式，<strong>直接储存数据和间接储存数据</strong>，前者成为值类型数据；而后者通过储存数据的空间地址来间接保存数据，称为引用型数据。</p>
-<p><img src="/img/Javascript基础之数据类型/Javascript数据类型.bmp" alt=""><br><a href="https://www.w3cschool.cn/javascript/javascript-skillmap.html" target="_blank" rel="noopener">图片来源</a></p>
-<h2 id="三种基本数据类型：数值、字符串和布尔型。"><a href="#三种基本数据类型：数值、字符串和布尔型。" class="headerlink" title="三种基本数据类型：数值、字符串和布尔型。"></a>三种基本数据类型：数值、字符串和布尔型。</h2><h3 id="数值型"><a href="#数值型" class="headerlink" title="数值型"></a>数值型</h3><p>Javascript数值不区分整数和浮点数，所遇到额数都能为浮点型数值来表示。除了基本的算术运算外，Javascript还提供了大量的算数函数，均包含在Math内置对象中。<br>如：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">var</span> c = a.toString()             <span class="comment">//转换为字符串</span></span><br><span class="line">alert(<span class="keyword">typeof</span>(c));</span><br></pre></td></tr></table></figure></p>
-<p><strong>快捷方法：使用数值与空字符串，即可把数值转换为字符串，如下</strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">var</span> c = a + <span class="string">""</span>                  <span class="comment">//转换为字符串</span></span><br><span class="line">alert(<span class="keyword">typeof</span>(c));               <span class="comment">//返回值为string类型</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="/img/Javascript基础之数据类型/1.png" alt=""><br>(推荐使用可以使用firebug的版本的firefox浏览器，在firebug的控制台中可以进行代码的运行查看，或者在开发者工具里的代码草稿纸中直接运行)<br><img src="/img/Javascript基础之数据类型/2.png" alt=""></p>
-<h3 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a>字符串类型</h3><p>字符串由Unicode字符、数字、标点符号等组成的字符序列，字符串出必须使用单引号或双引号包括。<br>如：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"abcdefg"</span>      <span class="comment">//简单字符串</span></span><br><span class="line"><span class="keyword">var</span> str = <span class="string">"'JavaScript'"</span>  <span class="comment">//包含单引号的字符串</span></span><br><span class="line"><span class="keyword">var</span> str = <span class="string">'&lt;meta charset="utf-8"&gt;'</span>      <span class="comment">//HTML字符换</span></span><br><span class="line"><span class="keyword">var</span> str = <span class="number">1</span>;               <span class="comment">//test</span></span><br><span class="line">alert(str);</span><br></pre></td></tr></table></figure></p>
-<p><img src="/img/Javascript基础之数据类型/3.png" alt="">    从结果中也可以看出JavaScript 拥有动态类型。这意味着相同的变量可用作不同的类型：<br>使用parseInt()和parseFloat()方法可以将字符串变为整数。<br>如：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"123.30"</span>;</span><br><span class="line"><span class="keyword">var</span> a = <span class="built_in">parseInt</span>(str);        <span class="comment">//返回值为123</span></span><br><span class="line"><span class="keyword">var</span> b = <span class="built_in">parseFloat</span>(str);      <span class="comment">//返回值为123.3</span></span><br></pre></td></tr></table></figure></p>
-<p><strong>便捷方法：让一个字符串与1相乘就可以将字符串转换为数值。</strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"123.30"</span>;</span><br><span class="line"><span class="keyword">var</span> a = str * <span class="number">1</span>;</span><br><span class="line">alert(typof(a))           <span class="comment">//返回nunmber类型</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="布尔型"><a href="#布尔型" class="headerlink" title="布尔型"></a>布尔型</h3><p>布尔类型仅包括两个值true和false。分别表示逻辑的真和假。布尔值多用在逻辑运算，比较运算中的条件语句或运算符的条件而使用。<br><strong>使用两个<code>!!</code>就可以将任何值转为布尔型数据</strong><br>如：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">var</span> c = !!a;</span><br><span class="line">alert(c);</span><br><span class="line">alert(<span class="keyword">typeof</span>(c));</span><br></pre></td></tr></table></figure></p>
-<p><img src="/img/Javascript基础之数据类型/4.png" alt=""><img src="/img/Javascript基础之数据类型/5.png" alt=""><br><strong>任何非空字符转换为布尔值为true，空格转换后为false<br>如将布尔值转换为字符串，则true为’true’，false为’false’。</strong></p>
-<p>注意：以下为一组不同类型的假值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 0              //Number</span><br><span class="line">2. NaN            //Number</span><br><span class="line">3. ’’             //String</span><br><span class="line">4. false          //boolean</span><br><span class="line">5. null           //Object</span><br><span class="line">6. undefined      //Undefined</span><br></pre></td></tr></table></figure></p>
-<h2 id="两个特殊值"><a href="#两个特殊值" class="headerlink" title="两个特殊值"></a>两个特殊值</h2><p>除了上面的简单的三个数据类型，js中还有两个特殊的数据类型的值：<strong>null和undefined</strong><br>null是Null类型的值，且Null类型只有一个值，即null，表示空值。当对象为空，挥着变量没有引用任何对象，其返回值就为null。当一个变量的值为null时，那么他的值就不是有效的对象、数组、数值、字符串和布尔型等。如果用以下代码测试其类型：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="literal">null</span>;</span><br><span class="line">alert(<span class="keyword">typeof</span>(a));</span><br></pre></td></tr></table></figure></p>
-<p>会得到这个结果：<br><img src="/img/Javascript基础之数据类型/6.png" alt=""><br>是一种特殊的对象。<br>undefined表示未定义的值，当变量未初始化时，会默认他的值为undefined。它区别任何对象、数组、数值、字符串和布尔型，使用typeof检测返回值为undefined。</p>
-<h2 id="三个引用型数据"><a href="#三个引用型数据" class="headerlink" title="三个引用型数据"></a>三个引用型数据</h2><p>引用型数据包括数组、对象和函数等，详细请移步下一篇博客~~</p>
-
-    </article>
-    <!-- license  -->
+            <main class="main index-page">
     
-        <div class="license-wrapper">
-            <p>原文作者: <a href="http://lzwgiter.github.io">float</a>
-            <p>原文链接: <a href="http://lzwgiter.github.io/Javascript基础之数据类型/">http://lzwgiter.github.io/Javascript基础之数据类型/</a>
-            <p>发表日期: <a href="http://lzwgiter.github.io/Javascript基础之数据类型/">August 15th 2018, 8:27:38 pm</a>
-            <p>版权声明: 本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/BOM-浏览器操作对象模型/" >
+            
+                <span>BOM 浏览器操作对象模型</span>
+        </a>
+        <div class="abstract-content">
+            <blockquote>
+<p>JavaScript的实现包括以下3个部分：</p>
+<ol>
+<li>核心（ECMAScript）：描述了JS的语法和基本对象。</li>
+<li>文档对象模型 ☆（DOM）：处理网页内容的方法和接口</li>
+<li>浏览器对象模型（BOM）：与浏览器交互的方法和接口</li></ol></blockquote>
         </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/18</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "-Javascript -BOM">-Javascript -BOM</a>
+    
+</div>
+            
+        </div>
+    </article>
     
     <!-- paginator  -->
-    <ul class="post-paginator">
-        <li class="next">
-            
-        </li>
-        <li class="previous">
-            
-                <div class="prevSlogan">Previous Post</div>
-                <a href= "/CTF ZIP结构/" title= CTF隐写术--关于ZIP >
-                    <div class="prevTitle">CTF隐写术--关于ZIP</div>
-                </a>
-            
-        </li>
-    </ul>
-    <!-- 评论插件 -->
-    <!-- 来必力City版安装代码 -->
-
-<!-- City版安装代码已完成 -->
     
-    
-    <!--PC和WAP自适应版-->
-
-    <!--PC版-->
-
-
-    
-    
-
-    <!-- 评论 -->
 </main>
             <!-- profile -->
             
@@ -537,24 +453,6 @@ height:50vh;
 </footer>
     </div>
     <!-- toc -->
-    
-    <div class="toc-wrapper" style=
-    
-
-
-
-
-
-
-
-top:50vh;
-
-    >
-        <div class="toc-catalog">
-            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
-        </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#三种基本数据类型：数值、字符串和布尔型。"><span class="toc-number">1.</span> <span class="toc-text">三种基本数据类型：数值、字符串和布尔型。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数值型"><span class="toc-number">1.1.</span> <span class="toc-text">数值型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串类型"><span class="toc-number">1.2.</span> <span class="toc-text">字符串类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#布尔型"><span class="toc-number">1.3.</span> <span class="toc-text">布尔型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#两个特殊值"><span class="toc-number">2.</span> <span class="toc-text">两个特殊值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三个引用型数据"><span class="toc-number">3.</span> <span class="toc-text">三个引用型数据</span></a></li></ol>
-    </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
     <div class="sidebar sidebar-hide">
@@ -712,9 +610,57 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 12
+        Total : 14
         </div>
         <!-- search  -->
         
@@ -730,7 +676,17 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/Javascript基础之数据类型/" >Javascript基础之数据类型</a>
+            <span class="archive-post-date">08/18</span><a class="archive-post-title" href= "/BOM-浏览器操作对象模型/" >BOM 浏览器操作对象模型</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/16</span><a class="archive-post-title" href= "/Javascript基础之数据类型2/" >Javascript基础之数据类型2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/Javascript基础之数据类型1/" >Javascript基础之数据类型1</a>
         </li>
     
     
@@ -793,15 +749,19 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
+    
+        <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
+    
         <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
         <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
     
         <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
-        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
-    
         <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
+    
+        <span class="sidebar-tag-name" data-tags="-Javascript -BOM"><span class="iconfont-archer">&#xe606;</span>-Javascript -BOM</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -871,8 +831,6 @@ jsonContent:
     
     </div>
     <!-- async load share.js -->
-    
-        <script src="/scripts/share.js" async></script>    
      
     <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>
