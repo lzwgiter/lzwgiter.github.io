@@ -267,7 +267,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">1,870</span> / Reading time: <span class="post-count">7 min</span></span>
+                        <span>Word count: <span class="post-count">1,843</span> / Reading time: <span class="post-count">7 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -414,7 +414,6 @@ height:50vh;
 <li><a href="https://www.w3cschool.cn/jsref/obj-screen.html" target="_blank" rel="noopener">screen</a>:包含客户端显示屏的信息。</li>
 <li><a href="https://www.w3cschool.cn/jsref/obj-history.html" target="_blank" rel="noopener">history</a>:包含浏览器窗口访问过的URL。</li>
 <li><a href="https://www.w3cschool.cn/jsref/obj-location.html" target="_blank" rel="noopener">location</a>:包含当前网页文档的URL信息。</li>
-<li><a href="https://www.w3cschool.cn/jsref/dom-obj-document.html" target="_blank" rel="noopener">document</a>:包含整个HTML文档，可被用来访问文档内容，及其所有页面元素。</li>
 </ol>
 <p>　　今天主要学习Window对象的相关知识。</p>
 <h3 id="二-全局作用域"><a href="#二-全局作用域" class="headerlink" title="二.全局作用域"></a>二.全局作用域</h3><p>　　客户端Javascript代码都在全局上下文环境中运行，window对象提供了<strong>全局作用域</strong>。由于window对象是全局对象，所以<strong>所有的全局变量都被视为该对象的属性。</strong><br>如图：<br><img src="/img/BOM-浏览器操作对象模型/1.png" alt=""><br>如：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">"window.a"</span>;                 <span class="comment">//全局变量</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;                       <span class="comment">//全局函数</span></span><br><span class="line">    alert (a);</span><br><span class="line">&#125;</span><br><span class="line">alert(<span class="built_in">window</span>.a);                <span class="comment">//引用window对象的属性a，返回字符串"window.a"</span></span><br><span class="line"><span class="built_in">window</span>.f();                    <span class="comment">//调用window对象的方法f()，返回字符串"window.a"</span></span><br></pre></td></tr></table></figure></p>
@@ -803,7 +802,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">08/21</span><a class="archive-post-title" href= "/BOM-浏览器操作对象模型之history、screen和document对象/" >BOM-浏览器操作对象模型之history、screen和document对象</a>
+            <span class="archive-post-date">08/21</span><a class="archive-post-title" href= "/BOM-浏览器操作对象模型之history和screen对象/" >BOM-浏览器操作对象模型之history和screen对象</a>
         </li>
     
     
