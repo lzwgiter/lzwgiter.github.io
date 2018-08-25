@@ -15,7 +15,7 @@
     <meta name="description" content="">
     <meta name="Cache-Control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>float&#39;s blog</title>
+    <title>CTF常见隐写手段小结 · float&#39;s blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -70,6 +70,8 @@
 
     <link rel="preload" href= /css/style.css?v=20180721 as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <link rel="stylesheet" href= /css/mobile.css?v=20180721 media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
@@ -194,12 +196,23 @@
 </head>
 
     
+        <body class="post-body">
+    
     
 <header class="header">
 
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >float&#39;s blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">CTF常见隐写手段小结</a>
+            </div>
+    </div>
     
     <a class="home-link" href=/>float's blog</a>
 </header>
@@ -213,24 +226,76 @@
 
 
 
+height:50vh;
+
 >
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
+            
+            CTF常见隐写手段小结
+            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "隐写术">隐写术</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count">1,191</span> / Reading time: <span class="post-count">4 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2018/08/25</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
         
     </div>
 </div>
@@ -331,200 +396,57 @@
 </script>        
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
-            <main class="main index-page">
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/DOM-文档对象模型基础/" >
-            
-                <span>DOM 文档对象模型</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>DOM(Document Object Model)文档对象模型是W3C指定的一套技术规范，用来描述Javascript脚本怎么与HTML或XML文档进行交互的Web标准。DOM定义了一系列标准接口，允许开发人员通过标准方式访问文档结构、操作网页内容、控制样式和行为等。</p>
-</blockquote>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/22</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Javascript">Javascript</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "DOM">DOM</a>
-    
-</div>
-            
-        </div>
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>今天想把遇到的知识点进行一个小结，以便于后续复习。<br><a id="more"></a></p>
+<p>隐写这方面的内容还是丰富的，涉及面较广，知识较多，可以通过各种手段、方式、载体来隐藏重要的信息。在这个过程中你可以学到很多工具的使用以及一些基础理论常识。</p>
+<h3 id="图种"><a href="#图种" class="headerlink" title="图种"></a>图种</h3><p>　　1. 什么是图种？<br>　　<strong>图种一种采用特殊方式将图片文件（如jpg格式）与压缩文件结合起来的文件。</strong>，可以将你想要隐藏的文件”藏”于另一个文件。<br>　　生成图种的方法也十分简单，这里我们将一个普通的图片1.jpg和一个secret文本合成图种。<br>　　<img src="/img/CTF常见隐写手段小结/2.png" alt=""><br>　　在winhex下，原图的结尾是正常的FF D9。<br>　　<img src="/img/CTF常见隐写手段小结/1.png" alt=""><br>　　而生成的图种很明显我们可以看到后续有别的文件。这里我们可以看到内容。<br>　　<img src="/img/CTF常见隐写手段小结/3.png" alt=""><br>　　<br>　　这个属于最简单的手段了，很基础，也很重要，往往拿道题目我们就先放进winhex中查看有没有其他的文件，即图种。<br>　　2. 分离方法：<br>　　分离方法大体上有两种，手动分离和工具分离。手动即将图种的完整部分(即包含文件头和文件尾)截取出来，单独成型。工具分离的话常见的工具有binwalk和foremost。<br>这两个工具会自动识别文件头、文件尾，并将文件自动提出，当然了有些题目会删去隐藏文件的文件头和文件尾，”躲”开工具的识别，这时候就需要你手动分离了。附上<a href="https://blog.csdn.net/xiangshangbashaonian/article/details/80156865" target="_blank" rel="noopener">常见文件头文件尾。</a></p>
+<h3 id="图片信息"><a href="#图片信息" class="headerlink" title="图片信息"></a>图片信息</h3><p>　　可以通过改变图片的信息，比如属性信息来实现信息隐藏。比如下图：<br>　　<img src="/img/CTF常见隐写手段小结/dabai.png" alt=""><br>　　放进winhex中好像没有什么特殊的信息，这时我们查看属性：<br>　　<img src="/img/CTF常见隐写手段小结/属性.png" alt=""><br>　　我们可以看到宽和高差距较大，我们尝试在winhex改变图片的高度：<br>　　<img src="/img/CTF常见隐写手段小结/4.jpg" alt=""><br>　　图中信息有：<br>    &gt; 89 50 4E 0D 0A 1A 0A     //图像的标识<br>    00 00 00 0D             //文件头数据块IHDR的长度 0x0D = 13Byte<br>    49 48 44 52             //IHDR标识<br>    00 00 02 A7            //图像的宽度，单位为像素 4Byte<br>    00 00 01 00             //图像的高度，单位为像素  4Byte</p>
+<p>　　黄圈和蓝圈分别是图片的长和宽，我们将图片改为正方形。<br>　　<img src="/img/CTF常见隐写手段小结/5.jpg" alt=""><br>　　得到结果：<br>　　<img src="/img/CTF常见隐写手段小结/flag.png" alt=""><br>　　有时候也会将信息隐藏在属性的备注中，常常容易被忘掉。
+　　</p>
+<h3 id="zip文件"><a href="#zip文件" class="headerlink" title="zip文件"></a>zip文件</h3><p>　　这种类型文件的题很常见，主要有以下几个方向：<br>　　1. 伪加密：通过特定的加密点来实现。<br>　　2. 暴力破解：使用工具来爆破密码，比如：Advanced Archive Password Recovery等<br>　　3. 明文攻击：明文攻击使用条件是我们有一个加密压缩包中的一个文件，使用这个已知的信息来瓦解加密的信息。同样使用Advanced Archive Password Recovery可以进行明文攻击。<br>　　4. CRC32碰撞：这种类型不是很多见，CRC，循环冗余校验(Cyclic Redundancy Check, CRC)，用来校验文件是否出错。主要通过脚本实现爆破解密，当然也有工具可用，如：crc32-master。</p>
+<p>　　更多关于zip文件格式请参考我<a href="">另一篇博客</a>。</p>
+<h3 id="ntfs文件流隐写-amp-amp-LSB隐写-amp-amp-盲水印隐写"><a href="#ntfs文件流隐写-amp-amp-LSB隐写-amp-amp-盲水印隐写" class="headerlink" title="ntfs文件流隐写&amp;&amp;LSB隐写&amp;&amp;盲水印隐写"></a>ntfs文件流隐写&amp;&amp;LSB隐写&amp;&amp;盲水印隐写</h3><p>　　这三个就属于高级一点的了，需要借助工具完成工作。<br>　　1. nfts文件流隐写：请移步我的<a href="">传送门</a><br>　　2. LSB隐写：<a href="">传送门</a><br>　　3. 盲水印隐写：这个说实话，我也是今天在安恒杯上新碰到的题型(孤陋寡闻的我)，谢谢冰皇指导(手动滑稽)。<br>　　数字水印（Digital Watermarking）技术是将一些标识信息（即数字水印）直接嵌入数字载体当中（包括多媒体、文档、软件等）或是间接表示（修改特定区域的结构），且不影响原载体的使用价值，也不容易被探知和再次修改。但可以被生产方识别和辨认。<br>　　实现盲水印是需要条件的，即原图和水印，和图种类似，但是另一种方式隐藏了信息。这里直接用这次安恒的题做示例。<br>　　拿到题目以后，里面有两个加密文件：<br>　　<img src="/img/CTF常见隐写手段小结/6.png" alt=""><br>　　拖进winhex中查看：<br>　　<img src="/img/CTF常见隐写手段小结/7.jpg" alt=""><br>　　可以看到该压缩包全局加密，排除伪加密可能，再根据题目暴力的提示，只能暴力破解了。<br>　　<img src="/img/CTF常见隐写手段小结/破解结果.png" alt=""><br>　　得到密码后解压，得到两张一模一样的图，但大小有很大区别，这时可以判断属于盲水印了，使用工具：<a href="https://github.com/chishaxie/BlindWaterMark" target="_blank" rel="noopener">BlindWaterMark-master</a><br>　　将大的图作为原图，小图作为盲水印，使用命令行：<br>　　<img src="/img/CTF常见隐写手段小结/BWM.jpg" alt=""><br>　　得到水印，放大就能看到flag了：<br>　　<img src="/img/CTF常见隐写手段小结/结果.png" alt=""></p>
+
     </article>
+    <!-- license  -->
     
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/BOM-浏览器操作对象模型之history和screen对象/" >
-            
-                <span>BOM-浏览器操作对象模型之history和screen对象</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>emmmmm今天把剩下的两个Browser对象搞定</p>
-</blockquote>
+        <div class="license-wrapper">
+            <p>原文作者: <a href="http://lzwgiter.github.io">float</a>
+            <p>原文链接: <a href="http://lzwgiter.github.io/CTF常见隐写手段小结/">http://lzwgiter.github.io/CTF常见隐写手段小结/</a>
+            <p>发表日期: <a href="http://lzwgiter.github.io/CTF常见隐写手段小结/">August 25th 2018, 4:23:33 pm</a>
+            <p>版权声明: 本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/21</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Javascript">Javascript</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/BOM-浏览器操作对象模型之navigator、location对象/" >
-            
-                <span>BOM 浏览器操作对象模型之navigator、location对象</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>　navigator对象中包含了浏览器的基本信息，如名称、版本和系统。可以通过window.navigator可以引用该对象，客户端并利用它的属性来读取客户端基本信息。</p>
-</blockquote>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/20</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Javascript">Javascript</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/BOM-浏览器操作对象模型之window对象/" >
-            
-                <span>BOM 浏览器操作对象模型之window对象</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>JavaScript的实现包括以下3个部分：</p>
-<ol>
-<li>核心（ECMAScript）：描述了JS的语法和基本对象。</li>
-<li>文档对象模型 ☆（DOM）：处理网页内容的方法和接口</li>
-<li>浏览器对象模型（BOM）：与浏览器交互的方法和接口</li></ol></blockquote>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/18</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Javascript">Javascript</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "BOM">BOM</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/Javascript基础之数据类型2/" >
-            
-                <span>Javascript基础之数据类型2</span>
-        </a>
-        <div class="abstract-content">
-            <p>今将学习上篇提到的数据类型中的三种引用型数据：<strong>数组(Array)、对象(Object)和函数(Function)</strong><br></p>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/16</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Javascript">Javascript</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/Javascript基础之数据类型1/" >
-            
-                <span>Javascript基础之数据类型1</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>Javascript属于一种弱类型语言，定义变量时不需要指定类型，一个变量可以储存任何类型的值，但在运算时，JavaScript还是会把它转换成相应的数据类型。<br></p></blockquote>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/15</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Javascript">Javascript</a>
-    
-</div>
-            
-        </div>
-    </article>
     
     <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/DOM-文档对象模型基础/" title= DOM 文档对象模型 >
+                    <div class="prevTitle">DOM 文档对象模型</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
     
+    
+    <!--PC和WAP自适应版-->
+
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
 </main>
             <!-- profile -->
             
@@ -609,6 +531,24 @@
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#图种"><span class="toc-number">1.</span> <span class="toc-text">图种</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#图片信息"><span class="toc-number">2.</span> <span class="toc-text">图片信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zip文件"><span class="toc-number">3.</span> <span class="toc-text">zip文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ntfs文件流隐写-amp-amp-LSB隐写-amp-amp-盲水印隐写"><span class="toc-number">4.</span> <span class="toc-text">ntfs文件流隐写&amp;&amp;LSB隐写&amp;&amp;盲水印隐写</span></a></li></ol>
+    </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
     <div class="sidebar sidebar-hide">
@@ -1037,6 +977,8 @@ jsonContent:
     
     </div>
     <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
      
     <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>
