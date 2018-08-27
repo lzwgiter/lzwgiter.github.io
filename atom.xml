@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://lzwgiter.github.io/"/>
-  <updated>2018-08-25T13:42:22.636Z</updated>
+  <updated>2018-08-27T02:55:13.184Z</updated>
   <id>http://lzwgiter.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>隐写术--NTFS流隐写</title>
+    <link href="http://lzwgiter.github.io/%E9%9A%90%E5%86%99%E6%9C%AF-NTFS%E6%B5%81%E9%9A%90%E5%86%99/"/>
+    <id>http://lzwgiter.github.io/隐写术-NTFS流隐写/</id>
+    <published>2018-08-26T01:49:53.000Z</published>
+    <updated>2018-08-27T02:55:13.184Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>你看不见我~~<br><a id="more"></a></p><h3 id="NTFS数据流"><a href="#NTFS数据流" class="headerlink" title="NTFS数据流"></a>NTFS数据流</h3><p>　　什么是NTFS数据流呢？<br>　　在介绍NTFS数据流之前，我们先简单了解一下NTFS文件系统。NTFS是微软Windows NT内核的系列操作系统支持的、一个特别为网络和磁盘配额、文件加密等管理安全特性设计的磁盘格式。NTFS比FAT文件系统更稳定，更安全，功能也更为强大。如果要让FAT文件系统转换为NTFS文件系统，可以在“命令提示符”中输入“convert 分区盘符: /fs:ntfs”，即可将该分区的文件系统转换为NTFS。<br>　　NTFS交换数据流（alternate data streams，简称ADS）是NTFS磁盘格式的一个特性，在NTFS文件系统下，每个文件都可以存在多个数据流，就是说除了主文件流之外还可以有许多非主文件流寄宿在主文件流中。它使用资源派生来维持与文件相关的信息，虽然我们无法看到数据流文件，但是它却是真实存在于我们的系统中的。创建一个数据交换流文件的方法很简单，命令为“宿主文件：准备与宿主文件关联的数据流文件”。<br>　　简单来说吧，就是可以将一个想要隐藏起来的文件，把他的数据流”寄生”在另一个文件的数据流里，实现了隐藏，也就为隐写提供了一种途径，请看下面的实例。　　</p><h3 id="操作方法"><a href="#操作方法" class="headerlink" title="操作方法"></a>操作方法</h3><p>　　下面进行一个简单的隐写。准备一个空文件夹<code>test</code>，和一个文本文件<code>secret</code><br>　　1.使用<code>type</code>命令<br>　　在文本中写入<code>you find me!</code><br><img src="/img/隐写术-NTFS流隐写/1.png" alt=""><br>　　使用<code>type</code>命令：<br>　　<img src="/img/隐写术-NTFS流隐写/2.png" alt=""><br>　　这时我们就完成了一个简单的隐写，打开test文件夹我们可以看到什么都没有的，查看属性，也显示为0字节大小，表面上看确实是没有东西的了。但是我们使用notepad就能看到其内容了：<br>　　<img src="/img/隐写术-NTFS流隐写/3.png" alt=""><br>　　或者使用工具:ntfsstreamseditor(安利一波)查看文件夹，也是可以发现隐藏数据的：<br>　　<img src="/img/隐写术-NTFS流隐写/4.png" alt=""><br>　　<br>　　当然不只是文本，图片也可以进行隐写：<br>　　<img src="/img/隐写术-NTFS流隐写/5.png" alt=""><br>　　可以使用mspaint(windows自带画图工具)，或者上述工具查看：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mspaint <span class="built_in">test</span>:1.jpg</span><br></pre></td></tr></table></figure></p><p>　　2.使用echo命令：<br>　　type命令是将一个存在的文件寄生，而echo可以创建文件和寄生同时完成:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> you find me &gt;&gt; <span class="built_in">test</span>:secret.txt</span><br></pre></td></tr></table></figure></p><p>　　效果相同。　　</p><h3 id="一些安全问题"><a href="#一些安全问题" class="headerlink" title="一些安全问题"></a>一些安全问题</h3><p>　　在WinXP中，可执行文件(exe)可以和文本文件一样实现真正的隐藏，这可能也是当时大多数杀毒软件添加数据流病毒查杀功能的原因；在Win7之后的系统中，微软可能出于安全考虑，不允许直接运行交换数据流可执行文件，必须要创建符号链接，这个符号链接是可见的（当然可以使用其他手段隐藏这个符号链接），并且这个符号链接创建出来后不能复制到其他地方，只能在创建的那个位置使用命令行方式调用（鼠标双击会报错）。<br>　　我们可以使用刚才的工具ntfsstreamseditor来查看并管理一个文件的数据流，可以对数据流进行导出、删除等等。如果将一个木马程序寄生在一个文件上，比如<strong>自解压格式文件</strong>等等，就可能对电脑数据等等造成伤害。<br>　　<br>　　<br>参考文章：<br>　　<a href="https://www.qingsword.com/qing/812.html" target="_blank" rel="noopener">1</a>, <a href="https://baike.baidu.com/item/ntfs%E6%95%B0%E6%8D%AE%E6%B5%81/1885985?fr=aladdin#3" target="_blank" rel="noopener">2</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;你看不见我~~&lt;br&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="隐写术" scheme="http://lzwgiter.github.io/tags/%E9%9A%90%E5%86%99%E6%9C%AF/"/>
+    
+      <category term="CTF" scheme="http://lzwgiter.github.io/tags/CTF/"/>
+    
+  </entry>
   
   <entry>
     <title>CTF常见隐写手段小结</title>
@@ -32,9 +54,9 @@
     </summary>
     
     
-      <category term="CTF" scheme="http://lzwgiter.github.io/tags/CTF/"/>
-    
       <category term="隐写术" scheme="http://lzwgiter.github.io/tags/%E9%9A%90%E5%86%99%E6%9C%AF/"/>
+    
+      <category term="CTF" scheme="http://lzwgiter.github.io/tags/CTF/"/>
     
   </entry>
   
@@ -190,9 +212,9 @@
     </summary>
     
     
-      <category term="CTF" scheme="http://lzwgiter.github.io/tags/CTF/"/>
-    
       <category term="隐写术" scheme="http://lzwgiter.github.io/tags/%E9%9A%90%E5%86%99%E6%9C%AF/"/>
+    
+      <category term="CTF" scheme="http://lzwgiter.github.io/tags/CTF/"/>
     
   </entry>
   
