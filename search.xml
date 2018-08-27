@@ -6,8 +6,16 @@
       <title>隐写术-LSB隐写</title>
       <link href="/%E9%9A%90%E5%86%99%E6%9C%AF-LSB%E9%9A%90%E5%86%99/"/>
       <url>/%E9%9A%90%E5%86%99%E6%9C%AF-LSB%E9%9A%90%E5%86%99/</url>
-      <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
+      <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>RGB色彩模式是工业界的一种颜色标准，是通过对红(R)、绿(G)、蓝(B)三个颜色通道的变化以及它们相互之间的叠加来得到各式各样的颜色的，RGB即是代表红、绿、蓝三个通道的颜色，这个标准几乎包括了人类视力所能感知的所有颜色，是目前运用最广的颜色系统之一。</p></blockquote><a id="more"></a><h3 id="RGB色彩模式"><a href="#RGB色彩模式" class="headerlink" title="RGB色彩模式"></a>RGB色彩模式</h3><p>　　RGB色彩模式，即Red，Green，Blue。电脑屏幕上的所有颜色，都由这红色绿色蓝色三种色光按照不同的比例混合而成的。一组红色绿色蓝色就是一个最小的显示单位。屏幕上的任何一个颜色都可以由一组RGB值来记录和表达。RGB三个<strong>颜色通道</strong>每个都有256级，所以可以组合的颜色数量就有：256<em>256</em>256=16777216，通常也被简称为1600万色或千万色。也称为24位色(2的24次方)。　　</p><h3 id="LSB隐写"><a href="#LSB隐写" class="headerlink" title="LSB隐写"></a>LSB隐写</h3><p>　　LSB全称leastsignificantbit，即最低有效位。<br>　　PNG文件中的图像像数一般是由RGB三原色（红绿蓝）组成，每一种颜色占用8位，取值范围为0x00~0xFF，即有256种颜色，一共包含了256的3次方的颜色，即16777216种颜色<br>人类的眼睛可以区分约1000万种不同的颜色这意味着人类的眼睛无法区分余下的颜色大约有6777216种<br>　　LSB隐写就是修改RGB颜色分量的最低二进制位（LSB），而人类的眼睛不会注意到这前后的变化，每个像数可以携带3bit的信息(一个色道携带1bit)。<br>　　例如在PNG图片的储存中，每个颜色会有8bit，LSB隐写就是修改了像数中的最低的1bit，在人眼看来是看不出来区别的，也把信息隐藏起来了。　　</p><h3 id="查看方法"><a href="#查看方法" class="headerlink" title="查看方法"></a>查看方法</h3><p>　　可以使用神器Stegsolve中的Data Extract等功能。这里放一道例题：<a href="https://lzwgiter.github.io/猫片/">传送门</a></p>]]></content>
       
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> 隐写术 </tag>
+            
+        </tags>
       
     </entry>
     
