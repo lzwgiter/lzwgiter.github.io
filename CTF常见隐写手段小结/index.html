@@ -269,7 +269,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">1,191</span> / Reading time: <span class="post-count">4 min</span></span>
+                        <span>Word count: <span class="post-count">1,196</span> / Reading time: <span class="post-count">4 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -406,7 +406,7 @@ height:50vh;
 　　</p>
 <h3 id="zip文件"><a href="#zip文件" class="headerlink" title="zip文件"></a>zip文件</h3><p>　　这种类型文件的题很常见，主要有以下几个方向：<br>　　1. 伪加密：通过特定的加密点来实现。<br>　　2. 暴力破解：使用工具来爆破密码，比如：Advanced Archive Password Recovery等<br>　　3. 明文攻击：明文攻击使用条件是我们有一个加密压缩包中的一个文件，使用这个已知的信息来瓦解加密的信息。同样使用Advanced Archive Password Recovery可以进行明文攻击。<br>　　4. CRC32碰撞：这种类型不是很多见，CRC，循环冗余校验(Cyclic Redundancy Check, CRC)，用来校验文件是否出错。主要通过脚本实现爆破解密，当然也有工具可用，如：crc32-master。</p>
 <p>　　更多关于zip文件格式请参考我<a href="https://lzwgiter.github.io/CTF%20ZIP结构/">另一篇博客</a>。</p>
-<h3 id="ntfs文件流隐写-amp-amp-LSB隐写-amp-amp-盲水印隐写"><a href="#ntfs文件流隐写-amp-amp-LSB隐写-amp-amp-盲水印隐写" class="headerlink" title="ntfs文件流隐写&amp;&amp;LSB隐写&amp;&amp;盲水印隐写"></a>ntfs文件流隐写&amp;&amp;LSB隐写&amp;&amp;盲水印隐写</h3><p>　　这三个就属于高级一点的了，需要借助工具完成工作。<br>　　1. nfts文件流隐写：请移步我的<a href="">传送门</a><br>　　2. LSB隐写：<a href="">传送门</a><br>　　3. 盲水印隐写：这个说实话，我也是今天在安恒杯上新碰到的题型(孤陋寡闻的我)，谢谢冰皇指导(手动滑稽)。<br>　　数字水印（Digital Watermarking）技术是将一些标识信息（即数字水印）直接嵌入数字载体当中（包括多媒体、文档、软件等）或是间接表示（修改特定区域的结构），且不影响原载体的使用价值，也不容易被探知和再次修改。但可以被生产方识别和辨认。<br>　　实现盲水印是需要条件的，即原图和水印，和图种类似，但是另一种方式隐藏了信息。这里直接用这次安恒的题做示例。<br>　　拿到题目以后，里面有两个加密文件：<br>　　<img src="/img/CTF常见隐写手段小结/6.png" alt=""><br>　　拖进winhex中查看：<br>　　<img src="/img/CTF常见隐写手段小结/7.jpg" alt=""><br>　　可以看到该压缩包全局加密，排除伪加密可能，再根据题目暴力的提示，只能暴力破解了。<br>　　<img src="/img/CTF常见隐写手段小结/破解结果.png" alt=""><br>　　得到密码后解压，得到两张一模一样的图，但大小有很大区别，这时可以判断属于盲水印了，使用工具：<a href="https://github.com/chishaxie/BlindWaterMark" target="_blank" rel="noopener">BlindWaterMark-master</a><br>　　将大的图作为原图，小图作为盲水印，使用命令行：<br>　　<img src="/img/CTF常见隐写手段小结/BWM.jpg" alt=""><br>　　得到水印，放大就能看到flag了：<br>　　<img src="/img/CTF常见隐写手段小结/结果.png" alt=""></p>
+<h3 id="ntfs文件流隐写-amp-amp-LSB隐写-amp-amp-盲水印隐写"><a href="#ntfs文件流隐写-amp-amp-LSB隐写-amp-amp-盲水印隐写" class="headerlink" title="ntfs文件流隐写&amp;&amp;LSB隐写&amp;&amp;盲水印隐写"></a>ntfs文件流隐写&amp;&amp;LSB隐写&amp;&amp;盲水印隐写</h3><p>　　这三个就属于高级一点的了，需要借助工具完成工作。<br>　　1. nfts文件流隐写：请移步我的另一篇博客<a href="https://lzwgiter.github.io/隐写术-NTFS流隐写/">传送门</a><br>　　2. LSB隐写：<a href="">传送门</a><br>　　3. 盲水印隐写：这个说实话，我也是今天在安恒杯上新碰到的题型(孤陋寡闻的我)，谢谢冰皇指导(手动滑稽)。<br>　　数字水印（Digital Watermarking）技术是将一些标识信息（即数字水印）直接嵌入数字载体当中（包括多媒体、文档、软件等）或是间接表示（修改特定区域的结构），且不影响原载体的使用价值，也不容易被探知和再次修改。但可以被生产方识别和辨认。<br>　　实现盲水印是需要条件的，即原图和水印，和图种类似，但是另一种方式隐藏了信息。这里直接用这次安恒的题做示例。<br>　　拿到题目以后，里面有两个加密文件：<br>　　<img src="/img/CTF常见隐写手段小结/6.png" alt=""><br>　　拖进winhex中查看：<br>　　<img src="/img/CTF常见隐写手段小结/7.jpg" alt=""><br>　　可以看到该压缩包全局加密，排除伪加密可能，再根据题目暴力的提示，只能暴力破解了。<br>　　<img src="/img/CTF常见隐写手段小结/破解结果.png" alt=""><br>　　得到密码后解压，得到两张一模一样的图，但大小有很大区别，这时可以判断属于盲水印了，使用工具：<a href="https://github.com/chishaxie/BlindWaterMark" target="_blank" rel="noopener">BlindWaterMark-master</a><br>　　将大的图作为原图，小图作为盲水印，使用命令行：<br>　　<img src="/img/CTF常见隐写手段小结/BWM.jpg" alt=""><br>　　得到水印，放大就能看到flag了：<br>　　<img src="/img/CTF常见隐写手段小结/结果.png" alt=""></p>
 
     </article>
     <!-- license  -->
@@ -565,28 +565,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
