@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://lzwgiter.github.io/"/>
-  <updated>2018-09-18T16:27:56.328Z</updated>
+  <updated>2018-09-28T16:04:22.742Z</updated>
   <id>http://lzwgiter.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>安恒九月题的misc和一道web</title>
+    <link href="http://lzwgiter.github.io/%E5%AE%89%E6%81%92%E4%B9%9D%E6%9C%88%E9%A2%98%E7%9A%84misc%E5%92%8C%E4%B8%80%E9%81%93web/"/>
+    <id>http://lzwgiter.github.io/安恒九月题的misc和一道web/</id>
+    <published>2018-09-25T12:30:43.000Z</published>
+    <updated>2018-09-28T16:04:22.742Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>这两天做了安恒的九月题，学了一些新姿势，小结一下，这里主要是web第二道题和Misc的两道题。。</p></blockquote><a id="more"></a><h3 id="babypass"><a href="#babypass" class="headerlink" title="babypass"></a>babypass</h3><p>网页源码：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span> <span class="string">'flag.php'</span>;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'code'</span>]))&#123;</span><br><span class="line">    $code = $_GET[<span class="string">'code'</span>];</span><br><span class="line">    <span class="keyword">if</span>(strlen($code)&gt;<span class="number">35</span>)&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">"Long."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">"/[A-Za-z0-9_$]+/"</span>,$code))&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">"NO."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    @<span class="keyword">eval</span>($code);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//$hint =  "php function getFlag() to get flag";</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p><p>　　分析：我们get一个名为code的参数过去，要求1：该参数长度不能大于35，要求2：参数值中不能含有A到Z，a到z的字母、0到9的数字以及_，$字符。判断结束后会将我们的参数<br>作为语句执行。<br>　　提示信息：可以通过getFlag()方法得到flag。<br>　　那么思路大概就有了：我们要构造一个语句，该语句的作用是调用getflag()函数来获取flag值，并且这个语句不能含有任何字母，数字，下划线等。即我们需要编写一个不使用数字和字母的webshell。这里提供三种方法来实现。<br>　　1. 字符异或构造<br>　　2. 取反操作<br>　　3. 通配符操作<br>　　前两种的原理很简单，即通过位运算，1为异或运算，2为取反运算，而第三个则是通过通配符来实现查询。</p><h4 id="字符串异或"><a href="#字符串异或" class="headerlink" title="字符串异或"></a>字符串异或</h4><p>　　原理：先将字符串转为二进制串，再通过二者的异或运算(相反位为1，相同位为0)，再将结果还原成字符串。比如我们构造字符串：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">u</span><span class="params">($x)</span></span>&#123;</span><br><span class="line"><span class="keyword">return</span> urldecode($x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$_=(u(<span class="string">'%07'</span>)^<span class="string">'`'</span>).(u(<span class="string">'%05'</span>)^<span class="string">'`'</span>).(u(<span class="string">'%14'</span>)^<span class="string">'`'</span>).(u(<span class="string">'%1B'</span>)^<span class="string">']'</span>).(u(<span class="string">'%0C'</span>)^<span class="string">'`'</span>).(u(<span class="string">'%01'</span>)^<span class="string">'`'</span>).(u(<span class="string">'%07'</span>)^<span class="string">'`'</span>);</span><br><span class="line"><span class="keyword">echo</span> ($_);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p><p>　　输出结果即为<code>getFlag</code>，但是长度过长，很明显不能符合题目的要求。　　</p><h4 id="取反操作"><a href="#取反操作" class="headerlink" title="取反操作"></a>取反操作</h4><p>　　这种方法是利用UTF-8编码的某个汉字，并将其中某个字符取出来。<br>　　如：<code>~(&#39;瞰&#39;{1})</code>，即将’瞰’字符的二进制串取第二组(类似数组下标，8个bit一字节为一组)，进行按位取反操作后还原成字符串，</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;这两天做了安恒的九月题，学了一些新姿势，小结一下，这里主要是web第二道题和Misc的两道题。。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="CTF" scheme="http://lzwgiter.github.io/tags/CTF/"/>
+    
+      <category term="安恒月赛" scheme="http://lzwgiter.github.io/tags/%E5%AE%89%E6%81%92%E6%9C%88%E8%B5%9B/"/>
+    
+  </entry>
   
   <entry>
     <title>Mysql小记</title>
@@ -428,27 +452,6 @@
     
       &lt;blockquote&gt;
 &lt;p&gt;CSS样式必须保存在.css类型的文件中，或者放在网页的&lt;code&gt;&amp;lt;style&amp;gt;&lt;/code&gt;标签中，或者插在网页标签的style属性中。&lt;br&gt;&lt;/p&gt;&lt;/blockquote&gt;
-    
-    </summary>
-    
-    
-      <category term="CSS" scheme="http://lzwgiter.github.io/tags/CSS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CSS基础1--样式</title>
-    <link href="http://lzwgiter.github.io/CSS%E5%9F%BA%E7%A1%801--%E6%A0%B7%E5%BC%8F/"/>
-    <id>http://lzwgiter.github.io/CSS基础1--样式/</id>
-    <published>2018-08-01T03:27:07.000Z</published>
-    <updated>2018-08-06T13:26:51.437Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>样式是CSS的最小语法单元<br><a id="more"></a><br><em>今天是8月1日，新的一个月新的起点，在接下来的时间里，我会坚持陆续每天学习HTML、CSS、JS内容，博客中的知识点主要来自W3cschool，CSDN和书本《HTML5+CSS3+JavaScript从入门到精通》，fighting~~</em></p></blockquote><h2 id="CSS每个样式包含两个内容：选择器和声明（规则）"><a href="#CSS每个样式包含两个内容：选择器和声明（规则）" class="headerlink" title="CSS每个样式包含两个内容：选择器和声明（规则）"></a>CSS每个样式包含两个内容：<strong>选择器</strong>和<strong>声明（规则）</strong></h2><p>如：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span>&#123;<span class="attribute">font-size</span>:<span class="number">12px</span>; <span class="attribute">color</span>:<span class="number">#333</span>;&#125;</span><br></pre></td></tr></table></figure></p><p>这里的<code>body</code>是选择符，<code>{}</code>是样式分隔符，<code>font-size: 12px</code>和<code>color: #333;</code>都是声明、</p><h2 id="选择符部分我们叫做网页标签名，声明部分内部则有属性名及其属性值组成。下面是详细内容。"><a href="#选择符部分我们叫做网页标签名，声明部分内部则有属性名及其属性值组成。下面是详细内容。" class="headerlink" title="选择符部分我们叫做网页标签名，声明部分内部则有属性名及其属性值组成。下面是详细内容。"></a><strong>选择符</strong>部分我们叫做<strong>网页标签名</strong>，<strong>声明</strong>部分内部则有属性名及其属性值组成。下面是详细内容。</h2><h3 id="1-选择器-selector-：选择器告诉浏览器该样式将作用于页面中哪些对象，这些对象可以是某个标签、所有网页对象、指定Class或ID值等。浏览器在解析这个样式时，根据选择器来渲染对象的显示效果。"><a href="#1-选择器-selector-：选择器告诉浏览器该样式将作用于页面中哪些对象，这些对象可以是某个标签、所有网页对象、指定Class或ID值等。浏览器在解析这个样式时，根据选择器来渲染对象的显示效果。" class="headerlink" title="1.  选择器(selector)：选择器告诉浏览器该样式将作用于页面中哪些对象，这些对象可以是某个标签、所有网页对象、指定Class或ID值等。浏览器在解析这个样式时，根据选择器来渲染对象的显示效果。"></a>1.  选择器(selector)：选择器告诉浏览器该样式将作用于页面中哪些对象，这些对象可以是某个标签、所有网页对象、指定Class或ID值等。浏览器在解析这个样式时，根据选择器来渲染对象的显示效果。</h3><h3 id="2-声明-Declaration-声明可以增加一个或无数个，这些声明命令浏览器如何去渲染选择器指定的对象，声明必须包括两个部分：属性和属性值，并用分号’；’来表示一个声明的结束，在一个样式的最后一个声明可以省略分号。整体被放在一个大括号内’-’紧邻选择器的后面。"><a href="#2-声明-Declaration-声明可以增加一个或无数个，这些声明命令浏览器如何去渲染选择器指定的对象，声明必须包括两个部分：属性和属性值，并用分号’；’来表示一个声明的结束，在一个样式的最后一个声明可以省略分号。整体被放在一个大括号内’-’紧邻选择器的后面。" class="headerlink" title="2.  声明(Declaration): 声明可以增加一个或无数个，这些声明命令浏览器如何去渲染选择器指定的对象，声明必须包括两个部分：属性和属性值，并用分号’；’来表示一个声明的结束，在一个样式的最后一个声明可以省略分号。整体被放在一个大括号内’{}’紧邻选择器的后面。"></a>2.  声明(Declaration): 声明可以增加一个或无数个，这些声明命令浏览器如何去渲染选择器指定的对象，声明必须包括两个部分：<strong>属性</strong>和<strong>属性值</strong>，并用分号’；’来表示一个声明的结束，在一个样式的最后一个声明可以省略分号。整体被放在一个大括号内’{}’紧邻选择器的后面。</h3><h3 id="3-属性-Property-属性是CSS提供的设置好的样式选项。属性名由一个单词或多个单词组成，多个单词之间通过连字符相连。"><a href="#3-属性-Property-属性是CSS提供的设置好的样式选项。属性名由一个单词或多个单词组成，多个单词之间通过连字符相连。" class="headerlink" title="3.  属性(Property): 属性是CSS提供的设置好的样式选项。属性名由一个单词或多个单词组成，多个单词之间通过连字符相连。"></a>3.  属性(Property): 属性是CSS提供的设置好的样式选项。属性名由一个单词或多个单词组成，多个单词之间通过连字符相连。</h3><h3 id="4-属性值-Value-：属性值使用来显示属性效果的参数。包括：数值和单位，或者关键字。"><a href="#4-属性值-Value-：属性值使用来显示属性效果的参数。包括：数值和单位，或者关键字。" class="headerlink" title="4.  属性值(Value)：属性值使用来显示属性效果的参数。包括：数值和单位，或者关键字。"></a>4.  属性值(Value)：属性值使用来显示属性效果的参数。包括：<strong>数值</strong>和<strong>单位</strong>，或者<strong>关键字</strong>。</h3><p>例：要定义一个网页字体大小为12像素，字体颜色为深灰色：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span>&#123;<span class="attribute">font-size</span>: <span class="number">12px</span>; <span class="attribute">color</span>: <span class="number">#CCCCCC</span>&#125;</span><br></pre></td></tr></table></figure></p><p>例：定义段落文本背景颜色为紫色<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">p</span>&#123;<span class="attribute">background-color</span>: <span class="number">#FF00FF</span>;&#125;</span><br></pre></td></tr></table></figure></p><p>同时，我们可以使用类似HTML中<code>&lt;!--注释语句--&gt;</code>的标签来进行注释，CSS使用<code>/*注释语句*/</code>来注释语句。注释内容页面中不会显示，只会在页面源代码中显示，良好的注释习惯有助于自己或他人来维护代码。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;样式是CSS的最小语法单元&lt;br&gt;&lt;/p&gt;&lt;/blockquote&gt;
     
     </summary>
     
