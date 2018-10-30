@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html>
+    <!-- title -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="float">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="float">
+    <meta name="keywords" content="Hexo | float">
+    <meta name="description" content="">
+    <meta name="Cache-Control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>CTF中的python脚本题小结（一） · float&#39;s blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s 1;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= /css/style.css?v=20180721 as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= /css/mobile.css?v=20180721 media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/favicon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >float&#39;s blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">CTF中的python脚本题小结（一）</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>float's blog</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style=
+
+
+
+
+
+
+
+
+height:50vh;
+
+>
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            CTF中的python脚本题小结（一）
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "python">python</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count">1,443</span> / Reading time: <span class="post-count">8 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2018/10/30</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <blockquote>
+<p>每次遇到有关于写脚本的题都不能很好的做出来。。。这里总结一下</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="最基本的requests库"><a href="#最基本的requests库" class="headerlink" title="最基本的requests库"></a>最基本的requests库</h2><p>　　首先我们需要一点网络编程的基础。<br>　　这是requests库的所有模块和函数：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">'ConnectTimeout'</span>, <span class="string">'ConnectionError'</span>, <span class="string">'DependencyWarning'</span>, <span class="string">'FileModeWarning'</span>, <span class="string">'HTTPError'</span>, <span class="string">'NullHandler'</span>, <span class="string">'PreparedRequest'</span>, <span class="string">'ReadTimeout'</span>, <span class="string">'Request'</span>, <span class="string">'RequestException'</span>, <span class="string">'RequestsDependencyWarning'</span>, <span class="string">'Response'</span>, <span class="string">'Session'</span>, <span class="string">'Timeout'</span>, <span class="string">'TooManyRedirects'</span>, <span class="string">'URLRequired'</span>, <span class="string">'__author__'</span>, <span class="string">'__author_email__'</span>, <span class="string">'__build__'</span>, <span class="string">'__builtins__'</span>, <span class="string">'__cached__'</span>, <span class="string">'__cake__'</span>, <span class="string">'__copyright__'</span>, <span class="string">'__description__'</span>, <span class="string">'__doc__'</span>, <span class="string">'__file__'</span>, <span class="string">'__license__'</span>, <span class="string">'__loader__'</span>, <span class="string">'__name__'</span>, <span class="string">'__package__'</span>, <span class="string">'__path__'</span>, <span class="string">'__spec__'</span>, <span class="string">'__title__'</span>, <span class="string">'__url__'</span>, <span class="string">'__version__'</span>, <span class="string">'_check_cryptography'</span>, <span class="string">'_internal_utils'</span>, <span class="string">'adapters'</span>, <span class="string">'api'</span>, <span class="string">'auth'</span>, <span class="string">'certs'</span>, <span class="string">'chardet'</span>, <span class="string">'check_compatibility'</span>, <span class="string">'codes'</span>, <span class="string">'compat'</span>, <span class="string">'cookies'</span>, <span class="string">'delete'</span>, <span class="string">'exceptions'</span>, <span class="string">'get'</span>, <span class="string">'head'</span>, <span class="string">'hooks'</span>, <span class="string">'logging'</span>, <span class="string">'models'</span>, <span class="string">'options'</span>, <span class="string">'packages'</span>, <span class="string">'patch'</span>, <span class="string">'post'</span>, <span class="string">'put'</span>, <span class="string">'request'</span>, <span class="string">'session'</span>, <span class="string">'sessions'</span>, <span class="string">'status_codes'</span>, <span class="string">'structures'</span>, <span class="string">'urllib3'</span>, <span class="string">'utils'</span>, <span class="string">'warnings'</span>]</span><br></pre></td></tr></table></figure></p>
+<p>　　requests库使用来干什么的呢？<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Help on package requests:</span><br><span class="line"></span><br><span class="line">NAME</span><br><span class="line">    requests</span><br><span class="line"></span><br><span class="line">DESCRIPTION</span><br><span class="line">    Requests HTTP Library</span><br><span class="line">    ~~~~~~~~~~~~~~~~~~~~~</span><br><span class="line"></span><br><span class="line">    Requests is an HTTP library, written <span class="keyword">in</span> Python, <span class="keyword">for</span> human beings.</span><br></pre></td></tr></table></figure></p>
+<p>　　简单明了。<br>　　下面我们从基本请求，响应，一些常用功能如从响应中获取cookies，响应头信息等，以及如文件上传等操作。
+　　</p>
+<h3 id="请求"><a href="#请求" class="headerlink" title="请求"></a>请求</h3><h4 id="GET请求"><a href="#GET请求" class="headerlink" title="GET请求"></a>GET请求</h4><p>　　1. 基本写法：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">"http://httpbin.org/get"</span></span><br><span class="line">response = requests.get(url)</span><br><span class="line"><span class="keyword">print</span> (response.stauts_code)</span><br><span class="line"><span class="keyword">print</span> (response.text)</span><br></pre></td></tr></table></figure></p>
+<p>　　结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">200</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;args&quot;: &#123;&#125;,</span><br><span class="line">  &quot;headers&quot;: &#123;</span><br><span class="line">    &quot;Accept&quot;: &quot;*/*&quot;,</span><br><span class="line">    &quot;Accept-Encoding&quot;: &quot;gzip, deflate&quot;,</span><br><span class="line">    &quot;Connection&quot;: &quot;close&quot;,</span><br><span class="line">    &quot;Host&quot;: &quot;httpbin.org&quot;,</span><br><span class="line">    &quot;User-Agent&quot;: &quot;python-requests/2.19.1&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;origin&quot;: &quot;xxxx&quot;,</span><br><span class="line">  &quot;url&quot;: &quot;https://httpbin.org/get&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　2. 带有参数的GET请求：<br>　　写法一：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="comment"># 直接将参数写入</span></span><br><span class="line">url = <span class="string">"http://httpbin.org/get?word=xixixixi"</span></span><br><span class="line"></span><br><span class="line">response = requests.get(url)</span><br><span class="line"><span class="keyword">print</span> (requests.text)</span><br></pre></td></tr></table></figure></p>
+<p>　　结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;args&quot;: &#123;</span><br><span class="line">    &quot;word&quot;: &quot;xixixixi&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;headers&quot;: &#123;</span><br><span class="line">    &quot;Accept&quot;: &quot;*/*&quot;,</span><br><span class="line">    &quot;Accept-Encoding&quot;: &quot;gzip, deflate&quot;,</span><br><span class="line">    &quot;Connection&quot;: &quot;close&quot;,</span><br><span class="line">    &quot;Host&quot;: &quot;httpbin.org&quot;,</span><br><span class="line">    &quot;User-Agent&quot;: &quot;python-requests/2.19.1&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;origin&quot;: &quot;xxxx&quot;,</span><br><span class="line">  &quot;url&quot;: &quot;http://httpbin.org/get?word=xixixixi&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　写法二：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将参数依次以下面的格式写入</span></span><br><span class="line">param = &#123;</span><br><span class="line">    <span class="string">'word1'</span>:<span class="string">'xixixixixi'</span>,</span><br><span class="line">    <span class="string">'word2'</span>:<span class="string">'hahahahaha'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">url = <span class="string">"http://httpbin.org/get"</span></span><br><span class="line">response = requests.get(url,params=param)</span><br><span class="line"><span class="keyword">print</span> (requests.text)</span><br></pre></td></tr></table></figure></p>
+<p>　　结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;args&quot;: &#123;</span><br><span class="line">    &quot;word1&quot;: &quot;xixixixixi&quot;,</span><br><span class="line">    &quot;word2&quot;: &quot;hahahahaha&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;headers&quot;: &#123;</span><br><span class="line">    &quot;Accept&quot;: &quot;*/*&quot;,</span><br><span class="line">    &quot;Accept-Encoding&quot;: &quot;gzip, deflate&quot;,</span><br><span class="line">    &quot;Connection&quot;: &quot;close&quot;,</span><br><span class="line">    &quot;Host&quot;: &quot;httpbin.org&quot;,</span><br><span class="line">    &quot;User-Agent&quot;: &quot;python-requests/2.19.1&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;origin&quot;: &quot;xxxx&quot;,</span><br><span class="line">  &quot;url&quot;: &quot;http://httpbin.org/get?word1=xixixixixi&amp;word2=hahahahaha&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="POST请求"><a href="#POST请求" class="headerlink" title="POST请求"></a>POST请求</h4><p>　　写法：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="comment"># 写入post表单信息</span></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">'word1'</span>:<span class="string">'hahaha'</span>,</span><br><span class="line">    <span class="string">'word2'</span>:<span class="string">'xixixi'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 设置请求头信息</span></span><br><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">"User-Agent"</span>: <span class="string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0"</span></span><br><span class="line">&#125;</span><br><span class="line">url = <span class="string">"http://httpbin.org/post"</span></span><br><span class="line">response = requests.post(url,data=data,headers=headers)</span><br><span class="line"></span><br><span class="line">print(response.text)</span><br></pre></td></tr></table></figure></p>
+<p>　　结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;args&quot;: &#123;&#125;,</span><br><span class="line">  &quot;data&quot;: &quot;&quot;,</span><br><span class="line">  &quot;files&quot;: &#123;&#125;,</span><br><span class="line">  &quot;form&quot;: &#123;</span><br><span class="line">    &quot;word1&quot;: &quot;hahaha&quot;,</span><br><span class="line">    &quot;word2&quot;: &quot;xixixi&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;headers&quot;: &#123;</span><br><span class="line">    &quot;Accept&quot;: &quot;*/*&quot;,</span><br><span class="line">    &quot;Accept-Encoding&quot;: &quot;gzip, deflate&quot;,</span><br><span class="line">    &quot;Connection&quot;: &quot;close&quot;,</span><br><span class="line">    &quot;Content-Length&quot;: &quot;25&quot;,</span><br><span class="line">    &quot;Content-Type&quot;: &quot;application/x-www-form-urlencoded&quot;,</span><br><span class="line">    &quot;Host&quot;: &quot;httpbin.org&quot;,</span><br><span class="line">    &quot;User-Agent&quot;: &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;json&quot;: null,</span><br><span class="line">  &quot;origin&quot;: &quot;xxxx&quot;,</span><br><span class="line">  &quot;url&quot;: &quot;http://httpbin.org/post&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="其他功能"><a href="#其他功能" class="headerlink" title="其他功能"></a>其他功能</h4><h5 id="解析json"><a href="#解析json" class="headerlink" title="解析json"></a>解析json</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">response = requests.get(<span class="string">'http://httpbin.org/get'</span>)</span><br><span class="line"><span class="comment"># 获取响应内容</span></span><br><span class="line">print(type(response.text))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果响应内容是json,就将其转为json</span></span><br><span class="line">print(response.json())</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出的是字典类型</span></span><br><span class="line">print(type(response.json()))</span><br></pre></td></tr></table></figure>
+<h5 id="获取二进制数据"><a href="#获取二进制数据" class="headerlink" title="获取二进制数据"></a>获取二进制数据</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">response = requests.get(<span class="string">'http://github.com/favicon.ico'</span>)</span><br><span class="line"><span class="comment"># str，bytes</span></span><br><span class="line">print(type(response.text),type(response.content))</span><br><span class="line">print(response.text)</span><br><span class="line"><span class="comment"># 二进制内容</span></span><br><span class="line">print(response.content)</span><br><span class="line"><span class="comment"># 下载二进制数据到本地</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'favicon.ico'</span>,<span class="string">'wb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(response.content)</span><br><span class="line">    f.close()</span><br></pre></td></tr></table></figure>
+<h3 id="响应"><a href="#响应" class="headerlink" title="响应"></a>响应</h3><h4 id="response属性"><a href="#response属性" class="headerlink" title="response属性:"></a>response属性:</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">response = requests.get(<span class="string">'http://www.baidu.com/'</span>)</span><br><span class="line"><span class="comment"># 获取响应状态码</span></span><br><span class="line">print(type(response.status_code),response.status_code)</span><br><span class="line"></span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">int</span>'&gt; 200</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"># 获取响应头信息</span></span><br><span class="line"><span class="class"><span class="title">print</span><span class="params">(type<span class="params">(response.headers)</span>,response.headers)</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> '<span class="title">requests</span>.<span class="title">structures</span>.<span class="title">CaseInsensitiveDict</span>'&gt; </span></span><br><span class="line"><span class="class"></span></span><br><span class="line">&#123;'Cache-Control': 'private, no-cache, no-store, proxy-revalidate, no-transform', 'Connection': 'Keep-Alive', 'Content-Encoding': 'gzip', 'Content-Type': 'text/html', 'Date': 'Tue, 30 Oct 2018 11:24:10 GMT', 'Last-Modified': 'Mon, 23 Jan 2017 13:27:36 GMT', 'Pragma': 'no-cache', 'Server': 'bfe/1.0.8.18', 'Set-Cookie': 'BDORZ=27315; max-age=86400; domain=.baidu.com; path=/', 'Transfer-Encoding': 'chunked'&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取响应头中的cookies</span></span><br><span class="line">print(type(response.cookies),response.cookies)</span><br><span class="line"></span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">requests</span>.<span class="title">cookies</span>.<span class="title">RequestsCookieJar</span>'&gt;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line">&lt;RequestsCookieJar[&lt;Cookie BDORZ=27315 for .baidu.com/&gt;]&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取访问的url</span></span><br><span class="line">print(type(response.url),response.url)</span><br><span class="line"></span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">str</span>'&gt;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">http</span>:</span>//www.baidu.com/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取访问的历史记录</span></span><br><span class="line">print(type(response.history),response.history)</span><br><span class="line"></span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">list</span>'&gt;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">[]</span></span><br></pre></td></tr></table></figure>
+<p>　　下面是requests内置的所有状态字符<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">100: (&apos;continue&apos;,),</span><br><span class="line">101: (&apos;switching_protocols&apos;,),</span><br><span class="line">102: (&apos;processing&apos;,),</span><br><span class="line">103: (&apos;checkpoint&apos;,),</span><br><span class="line">122: (&apos;uri_too_long&apos;, &apos;request_uri_too_long&apos;),</span><br><span class="line">200: (&apos;ok&apos;, &apos;okay&apos;, &apos;all_ok&apos;, &apos;all_okay&apos;, &apos;all_good&apos;, &apos;\\o/&apos;, &apos;✓&apos;),</span><br><span class="line">201: (&apos;created&apos;,),</span><br><span class="line">202: (&apos;accepted&apos;,),</span><br><span class="line">203: (&apos;non_authoritative_info&apos;, &apos;non_authoritative_information&apos;),</span><br><span class="line">204: (&apos;no_content&apos;,),</span><br><span class="line">205: (&apos;reset_content&apos;, &apos;reset&apos;),</span><br><span class="line">206: (&apos;partial_content&apos;, &apos;partial&apos;),</span><br><span class="line">207: (&apos;multi_status&apos;, &apos;multiple_status&apos;, &apos;multi_stati&apos;, &apos;multiple_stati&apos;),</span><br><span class="line">208: (&apos;already_reported&apos;,),</span><br><span class="line">226: (&apos;im_used&apos;,),</span><br><span class="line"></span><br><span class="line"># Redirection.</span><br><span class="line">300: (&apos;multiple_choices&apos;,),</span><br><span class="line">301: (&apos;moved_permanently&apos;, &apos;moved&apos;, &apos;\\o-&apos;),</span><br><span class="line">302: (&apos;found&apos;,),</span><br><span class="line">303: (&apos;see_other&apos;, &apos;other&apos;),</span><br><span class="line">304: (&apos;not_modified&apos;,),</span><br><span class="line">305: (&apos;use_proxy&apos;,),</span><br><span class="line">306: (&apos;switch_proxy&apos;,),</span><br><span class="line">307: (&apos;temporary_redirect&apos;, &apos;temporary_moved&apos;, &apos;temporary&apos;),</span><br><span class="line">308: (&apos;permanent_redirect&apos;,</span><br><span class="line">      &apos;resume_incomplete&apos;, &apos;resume&apos;,), # These 2 to be removed in 3.0</span><br><span class="line"></span><br><span class="line"># Client Error.</span><br><span class="line">400: (&apos;bad_request&apos;, &apos;bad&apos;),</span><br><span class="line">401: (&apos;unauthorized&apos;,),</span><br><span class="line">402: (&apos;payment_required&apos;, &apos;payment&apos;),</span><br><span class="line">403: (&apos;forbidden&apos;,),</span><br><span class="line">404: (&apos;not_found&apos;, &apos;-o-&apos;),</span><br><span class="line">405: (&apos;method_not_allowed&apos;, &apos;not_allowed&apos;),</span><br><span class="line">406: (&apos;not_acceptable&apos;,),</span><br><span class="line">407: (&apos;proxy_authentication_required&apos;, &apos;proxy_auth&apos;, &apos;proxy_authentication&apos;),</span><br><span class="line">408: (&apos;request_timeout&apos;, &apos;timeout&apos;),</span><br><span class="line">409: (&apos;conflict&apos;,),</span><br><span class="line">410: (&apos;gone&apos;,),</span><br><span class="line">411: (&apos;length_required&apos;,),</span><br><span class="line">412: (&apos;precondition_failed&apos;, &apos;precondition&apos;),</span><br><span class="line">413: (&apos;request_entity_too_large&apos;,),</span><br><span class="line">414: (&apos;request_uri_too_large&apos;,),</span><br><span class="line">415: (&apos;unsupported_media_type&apos;, &apos;unsupported_media&apos;, &apos;media_type&apos;),</span><br><span class="line">416: (&apos;requested_range_not_satisfiable&apos;, &apos;requested_range&apos;, &apos;range_not_satisfiable&apos;),</span><br><span class="line">417: (&apos;expectation_failed&apos;,),</span><br><span class="line">418: (&apos;im_a_teapot&apos;, &apos;teapot&apos;, &apos;i_am_a_teapot&apos;),</span><br><span class="line">421: (&apos;misdirected_request&apos;,),</span><br><span class="line">422: (&apos;unprocessable_entity&apos;, &apos;unprocessable&apos;),</span><br><span class="line">423: (&apos;locked&apos;,),</span><br><span class="line">424: (&apos;failed_dependency&apos;, &apos;dependency&apos;),</span><br><span class="line">425: (&apos;unordered_collection&apos;, &apos;unordered&apos;),</span><br><span class="line">426: (&apos;upgrade_required&apos;, &apos;upgrade&apos;),</span><br><span class="line">428: (&apos;precondition_required&apos;, &apos;precondition&apos;),</span><br><span class="line">429: (&apos;too_many_requests&apos;, &apos;too_many&apos;),</span><br><span class="line">431: (&apos;header_fields_too_large&apos;, &apos;fields_too_large&apos;),</span><br><span class="line">444: (&apos;no_response&apos;, &apos;none&apos;),</span><br><span class="line">449: (&apos;retry_with&apos;, &apos;retry&apos;),</span><br><span class="line">450: (&apos;blocked_by_windows_parental_controls&apos;, &apos;parental_controls&apos;),</span><br><span class="line">451: (&apos;unavailable_for_legal_reasons&apos;, &apos;legal_reasons&apos;),</span><br><span class="line">499: (&apos;client_closed_request&apos;,),</span><br><span class="line"></span><br><span class="line"># Server Error.</span><br><span class="line">500: (&apos;internal_server_error&apos;, &apos;server_error&apos;, &apos;/o\\&apos;, &apos;✗&apos;),</span><br><span class="line">501: (&apos;not_implemented&apos;,),</span><br><span class="line">502: (&apos;bad_gateway&apos;,),</span><br><span class="line">503: (&apos;service_unavailable&apos;, &apos;unavailable&apos;),</span><br><span class="line">504: (&apos;gateway_timeout&apos;,),</span><br><span class="line">505: (&apos;http_version_not_supported&apos;, &apos;http_version&apos;),</span><br><span class="line">506: (&apos;variant_also_negotiates&apos;,),</span><br><span class="line">507: (&apos;insufficient_storage&apos;,),</span><br><span class="line">509: (&apos;bandwidth_limit_exceeded&apos;, &apos;bandwidth&apos;),</span><br><span class="line">510: (&apos;not_extended&apos;,),</span><br><span class="line">511: (&apos;network_authentication_required&apos;, &apos;network_auth&apos;, &apos;network_authentication&apos;)</span><br></pre></td></tr></table></figure></p>
+<p>　　</p>
+<h3 id="高级操作"><a href="#高级操作" class="headerlink" title="高级操作"></a>高级操作</h3><h4 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">files = &#123;</span><br><span class="line">    <span class="string">'file'</span>:open(<span class="string">'1.txt'</span>,<span class="string">'rb'</span>)</span><br><span class="line">&#125;</span><br><span class="line">url = <span class="string">"http://httpbin.org/get"</span></span><br><span class="line">response = requests.get(url,files=files)</span><br><span class="line">print(response.text)</span><br></pre></td></tr></table></figure>
+<p>　　结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;args&quot;: &#123;&#125;,</span><br><span class="line">  &quot;headers&quot;: &#123;</span><br><span class="line">    &quot;Accept&quot;: &quot;*/*&quot;,</span><br><span class="line">    &quot;Accept-Encoding&quot;: &quot;gzip, deflate&quot;,</span><br><span class="line">    &quot;Connection&quot;: &quot;close&quot;,</span><br><span class="line">    &quot;Content-Length&quot;: &quot;500&quot;,</span><br><span class="line">    &quot;Content-Type&quot;: &quot;multipart/form-data; boundary=592e015eed01c47f9d7c40b7eb8f9019&quot;,</span><br><span class="line">    &quot;Host&quot;: &quot;httpbin.org&quot;,</span><br><span class="line">    &quot;User-Agent&quot;: &quot;python-requests/2.19.1&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;origin&quot;: &quot;xxxx&quot;,</span><br><span class="line">  &quot;url&quot;: &quot;http://httpbin.org/get&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="会话维持"><a href="#会话维持" class="headerlink" title="会话维持"></a>会话维持</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">session = requests.session()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Sends a GET request. Returns :class:`Response` object.</span></span><br><span class="line">session.get(<span class="string">'http://httpbin.org/cookies/set/number/12456'</span>)</span><br><span class="line"><span class="comment"># &lt;Response [200]&gt;</span></span><br><span class="line"></span><br><span class="line">response = session.get(<span class="string">'http://httpbin.org/cookies'</span>)</span><br><span class="line">print(response.text)</span><br></pre></td></tr></table></figure>
+<p>　　结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;cookies&quot;: &#123;</span><br><span class="line">    &quot;number&quot;: &quot;12456&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　关于session():<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Help on Session <span class="keyword">in</span> module requests.sessions object:</span><br><span class="line"></span><br><span class="line">class Session(SessionRedirectMixin) </span><br><span class="line"></span><br><span class="line">A Requests session.</span><br><span class="line"> </span><br><span class="line">Provides cookie persistence, connection-pooling, and configuration.</span><br></pre></td></tr></table></figure></p>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者: <a href="http://lzwgiter.github.io">float</a>
+            <p>原文链接: <a href="http://lzwgiter.github.io/CTF中的python脚本题小结（一）/">http://lzwgiter.github.io/CTF中的python脚本题小结（一）/</a>
+            <p>发表日期: <a href="http://lzwgiter.github.io/CTF中的python脚本题小结（一）/">October 30th 2018, 6:34:26 pm</a>
+            <p>版权声明: 本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/Hackergame-2018-wp/" title= Hackergame 2018 wp >
+                    <div class="prevTitle">Hackergame 2018 wp</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!--PC和WAP自适应版-->
+
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:2262988374@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lzwgiter" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/wechat.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title=rss></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#最基本的requests库"><span class="toc-number">1.</span> <span class="toc-text">最基本的requests库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#请求"><span class="toc-number">1.1.</span> <span class="toc-text">请求</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#GET请求"><span class="toc-number">1.1.1.</span> <span class="toc-text">GET请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#POST请求"><span class="toc-number">1.1.2.</span> <span class="toc-text">POST请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#其他功能"><span class="toc-number">1.1.3.</span> <span class="toc-text">其他功能</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#解析json"><span class="toc-number">1.1.3.1.</span> <span class="toc-text">解析json</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#获取二进制数据"><span class="toc-number">1.1.3.2.</span> <span class="toc-text">获取二进制数据</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#响应"><span class="toc-number">1.2.</span> <span class="toc-text">响应</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#response属性"><span class="toc-number">1.2.1.</span> <span class="toc-text">response属性:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#高级操作"><span class="toc-number">1.3.</span> <span class="toc-text">高级操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#文件上传"><span class="toc-number">1.3.1.</span> <span class="toc-text">文件上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#会话维持"><span class="toc-number">1.3.2.</span> <span class="toc-text">会话维持</span></a></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 24
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/CTF中的python脚本题小结（一）/" >CTF中的python脚本题小结（一）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/Hackergame-2018-wp/" >Hackergame 2018 wp</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/安恒九月题的misc和一道web/" >安恒九月题的misc和一道web</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span><a class="archive-post-title" href= "/Mysql小记/" >Mysql小记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/27</span><a class="archive-post-title" href= "/隐写术-LSB隐写/" >隐写术-LSB隐写</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/隐写术-NTFS流隐写/" >隐写术--NTFS流隐写</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span><a class="archive-post-title" href= "/CTF常见隐写手段小结/" >CTF常见隐写手段小结</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href= "/DOM-文档对象模型基础/" >DOM 文档对象模型</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/21</span><a class="archive-post-title" href= "/BOM-浏览器操作对象模型之history和screen对象/" >BOM-浏览器操作对象模型之history和screen对象</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span><a class="archive-post-title" href= "/BOM-浏览器操作对象模型之navigator、location对象/" >BOM 浏览器操作对象模型之navigator、location对象</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span><a class="archive-post-title" href= "/BOM-浏览器操作对象模型之window对象/" >BOM 浏览器操作对象模型之window对象</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/16</span><a class="archive-post-title" href= "/Javascript基础之数据类型2/" >Javascript基础之数据类型2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/Javascript基础之数据类型1/" >Javascript基础之数据类型1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/CTF ZIP结构/" >CTF隐写术--关于ZIP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/09</span><a class="archive-post-title" href= "/CSS基础4.4--选择器之伪类选择器/" >CSS样式基础4.4--选择器之伪类选择器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span><a class="archive-post-title" href= "/猫片/" >Bugku的一道misc-----猫片</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span><a class="archive-post-title" href= "/CSS基础4.3--选择器之属性选择器/" >CSS基础4.3--选择器之属性选择器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/05</span><a class="archive-post-title" href= "/CSS基础4.2--选择器之组合选择器/" >CSS基础4.2--选择器之组合选择器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span><a class="archive-post-title" href= "/CSS基础4.1--选择器之基本选择器/" >CSS基础4.1--选择器之基本选择器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/02</span><a class="archive-post-title" href= "/CSS基础3.2--特性之继承性/" >CSS基础3.2--特性之继承性</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/CSS基础3.1--特性之层叠性/" >CSS基础3.1--特性之层叠性</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/CSS基础2--应用/" >CSS基础2--应用</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/CSS基础1--样式/" >CSS基础1--样式</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/28</span><a class="archive-post-title" href= "/Markdown简单语法/" >Markdown简单语法</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
+    
+        <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
+    
+        <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
+    
+        <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
+    
+        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
+    
+        <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
+    
+        <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
+    
+        <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="SQLi"><span class="iconfont-archer">&#xe606;</span>SQLi</span>
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "float"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+
