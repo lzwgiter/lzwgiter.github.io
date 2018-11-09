@@ -404,7 +404,7 @@ height:50vh;
 <blockquote>
 <p>PHP: Hypertext Preprocessor (or simply PHP) is a server-side scripting language designed for Web development, and also used as a general-purpose programming language.`</p>
 </blockquote>
-<p>　　即:PHP(Hypertext Preprocessor), 它的名字意为：超文本预处理器。它的起源初期主要用于统记自己网站的访问者，后来用c语言进行了重新编写，拥有了自己的访问文件和数据库功能。PHP是一种生成<strong>动态网页</strong>的工具。与其他的制作技术相比，它的优点是学习简单，易于掌握，数据库连接方便，兼容性和扩展性强。可以进行面向对象编程。它是嵌入HTML文件的一种脚本语言，也是当前因特网中最为流行的脚本语言，它只需要很少的编程知识和技能，就能用PHP建立一个真正交互的Web站点。PHP可以结合HTML语言共同使用，与HTML之间具有很好的兼容性，使用者可以直接在脚本代码中加入HTML标签，或者在HTML标签中加入脚本代码，从而更好地实现页面控制，并提供更加丰富的功能。<br>　　（以上来自ctrl+v）<br>　　我自己的认识的话。首先从它本身来说，他是基于C语言开发的，所以对有C语言基础的人也比较友好，其次它具有面向对象编程的特点—但不能说它是一门面向对象的语言，因为它没有封装等的类实现。其次从功能来说，我自己了解的程度就是PHP是实现让用户和后台交互的一门语言，包括访问指定页面、获取查询的数据。除此之外PHP也可用于构建网站框架等等。
+<p>　　即:PHP(Hypertext Preprocessor), 它的名字意为：超文本预处理器。它的起源初期主要用于统记自己网站的访问者，后来用c语言进行了重新编写，拥有了自己的访问文件和数据库功能。PHP是一种生成<strong>动态网页</strong>的工具。与其他的制作技术相比，它的优点是学习简单，易于掌握，数据库连接方便，兼容性和扩展性强。可以进行面向对象编程。它是嵌入HTML文件的一种脚本语言，也是当前因特网中最为流行的脚本语言，它只需要很少的编程知识和技能，就能用PHP建立一个真正交互的Web站点。PHP可以结合HTML语言共同使用，与HTML之间具有很好的兼容性，使用者可以直接在脚本代码中加入HTML标签，或者在HTML标签中加入脚本代码，从而更好地实现页面控制，并提供更加丰富的功能。<br>　　（以上来自ctrl+v）<br>　　我自己的认识的话。首先从它本身来说，他是基于C语言开发的，所以对有C语言基础的人也比较友好，其次它具有面向对象编程的特点——但不能说它是一门面向对象的语言，因为它没有封装等的类实现。其次从功能来说，我自己了解的程度就是PHP是实现让用户和后台交互的一门语言，包括访问指定页面、获取查询的数据。除此之外PHP也可用于构建网站框架等等。
 　　</p>
 <h3 id="语法规则"><a href="#语法规则" class="headerlink" title="语法规则"></a>语法规则</h3><h4 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h4><p>　　1. 标志：PHP脚本以<code>&lt;?php</code>开始，<code>?&gt;</code>结束，如：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">//php代码</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>文件默认扩展名为<code>.php</code>。<br>　　2. 使用：PHP文件通常包含HTML标签和一些PHP脚本代码。如：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>This is a test<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php"><span class="keyword">echo</span> <span class="string">"Hello World"</span>;<span class="comment">//可以看出与C语句以分号结尾的习惯相同</span></span></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure></p>
@@ -413,7 +413,7 @@ height:50vh;
 <h4 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h4><p>　　PHP变量是具有面向对象编程特点的，即我们可以将变量理解为一模一样的“容器”，只不过他们里面装的东西类型不一样，所以类型区别而已。<br>　　1. 定义变量：所有变量的定义都以<code>$</code>开头，其后跟变量的名称。关于变量名称，必须以下划线或字母开头。且只能包括字母数字及下划线，字母的话是区别大小写的，即：<code>&amp;a</code>和<code>&amp;A</code>是两个变量。<strong>注意不能包含空格。</strong><br>　　2. 创建变量：注意这里我们的变量是不用声明类型的。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$a = <span class="string">"Hi"</span>;</span><br><span class="line">$b = <span class="number">5</span>;</span><br><span class="line">$c = <span class="number">5.5</span>;</span><br></pre></td></tr></table></figure></p>
 <p>　　这里需要说明不需要声明类型的原因：<strong>PHP是弱类型语言。</strong>，当然python、Javascript都是弱类型语言。<br>　　关于弱类型语言:</p>
 <blockquote>
-<p>In computer programming, programming languages are often colloquially classified as to whether the language’s type system makes it strongly typed or weakly typed (loosely typed). Generally, <strong>a strongly typed language has stricter typing rules at compile time</strong>, which implies that errors and exceptions are more likely to happen during compilation. Most of these rules affect variable assignment, return values and function calling. On the other hand, <strong>a weakly typed language has looser typing rules</strong> and may produce unpredictable results or may perform implicit type conversion at runtime. <strong>A different but related concept is latent typing.</strong><br>　　<br>　　那么弱类型有什么好处呢？直觉就是简单，直接复制，是什么类型会自动处理，完全的逻辑设计。所以使用弱类型会减少我们的开发时间，使代码更简洁。当然，也有坏处，类型不确定导致的不可预料的混乱，不像C语言等面向过程的强类语言，1就是1，绝对不会是”1”。</p>
+<p>In computer programming, programming languages are often colloquially classified as to whether the language’s type system makes it strongly typed or weakly typed (loosely typed). Generally, <strong>a strongly typed language has stricter typing rules at compile time</strong>, which implies that errors and exceptions are more likely to happen during compilation. Most of these rules affect variable assignment, return values and function calling. On the other hand, <strong>a weakly typed language has looser typing rules</strong> and may produce unpredictable results or may perform implicit type conversion at runtime. <strong>A different but related concept is latent typing.</strong><br>　　<br>　　<br>　　那么弱类型有什么好处呢？直觉就是简单，直接复制，是什么类型会自动处理，完全的逻辑设计。所以使用弱类型会减少我们的开发时间，使代码更简洁。当然，也有坏处，类型不确定导致的不可预料的混乱，不像C语言等面向过程的强类语言，1就是1，绝对不会是”1”。</p>
 </blockquote>
 <h4 id="变量作用域"><a href="#变量作用域" class="headerlink" title="变量作用域"></a>变量作用域</h4><p>　　PHP有四种不同的作用域：local、global、stastic、parameter。<br>　　1. 局部和全局作用域：与C语言一样，变量加上global关键词后脚本的任何一个地方都可以访问这个变量，local关键词默认是不用写的，比如C语言，定义在函数里的变量，main()函数是不能访问的。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$x=<span class="number">5</span>;</span><br><span class="line">$y=<span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myTest</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">global</span> $x,$y;    <span class="comment">//全局变量，函数内可访问</span></span><br><span class="line">$y=$x+$y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myTest();</span><br><span class="line"><span class="keyword">echo</span> $y;  <span class="comment">//输出应该为15而不是10</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>　　结果：<img src="/img/PHP学习-变量/1.jpg" alt=""><br>　　如果我们这么写：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$x=<span class="number">5</span>;</span><br><span class="line">$y=<span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myTest</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">global</span> $x;</span><br><span class="line">    <span class="keyword">echo</span> $x;</span><br><span class="line">    <span class="keyword">echo</span> $y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myTest();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
@@ -913,26 +913,6 @@ top:50vh;
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 27
@@ -1091,9 +1071,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
+        <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
+    
         <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
-        <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
+        <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
     
         <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
@@ -1101,13 +1083,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
     
-        <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
-    
         <span class="sidebar-tag-name" data-tags="PHP"><span class="iconfont-archer">&#xe606;</span>PHP</span>
     
-        <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
-    
         <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
+    
+        <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
     
         <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
     
