@@ -273,7 +273,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">3,195</span> / Reading time: <span class="post-count">12 min</span></span>
+                        <span>Word count: <span class="post-count">3,810</span> / Reading time: <span class="post-count">14 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -431,8 +431,16 @@ height:50vh;
 　　</p>
 <h4 id="cookie注入攻击"><a href="#cookie注入攻击" class="headerlink" title="cookie注入攻击"></a>cookie注入攻击</h4><p>　　<strong>特点：没有GET参数，但是在报头信息中有cookie信息。</strong><br>　　现在给出一个页面，显示了一个人的名称和年龄，无参数输入，页面信息不改变。<br>　　BP截包看看：<br>　　<img src="/img/Mysql小记--二/20.png" alt=""><br>　　可以看到它默认了cookie值是id=1，我们尝试改变id值发现可以获得不同信息。<br>　　<img src="/img/Mysql小记--二/21.png" alt=""><br>　　说明服务器获取我们的cookie值作为查询的依据，且默认设置为了id=1。我们就在此处构造注入语句。<br>　　<img src="/img/Mysql小记--二/22.png" alt=""><br>　　下来的步骤就是union注入了，这里不再细说。
 　　</p>
-<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><p>　　
+<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><p>　　在sql注入时，服务端经常会利用php的一些函数将我们的语句进行过滤，过滤掉我们注入所需的东西，阻止攻击。绕过这些过滤主要原理是用其他的特殊字符换掉敏感词，或根据过滤特点隐藏敏感词。我们有这些方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">大小写绕过</span><br><span class="line">双写绕过</span><br><span class="line">编码绕过</span><br><span class="line">内联注释符绕过</span><br></pre></td></tr></table></figure></p>
+<h4 id="大小写绕过"><a href="#大小写绕过" class="headerlink" title="大小写绕过"></a>大小写绕过</h4><p>　　原理：mysql是不会区分大小写的:<br>　　<img src="/img/Mysql小记--二/23.png" alt=""><br>　　比如我们的语句<code>?id=1&#39; and 1=2#</code>，后台会检测到<code>and</code>关键词。我们可以将它写成<code>And</code>来绕过，其他的如<code>order</code>写成<code>Order</code>等道理相同。
 　　</p>
+<h4 id="双写绕过"><a href="#双写绕过" class="headerlink" title="双写绕过"></a>双写绕过</h4><p>　　原理：后台会删掉我们的关键词，我们将其双写即可。<br>　　比如我们的语句<code>?id=1&#39; and 1=1#</code>，<code>and</code>被过滤了，语句失去了作用怎么办呢？<br><code>?id=1&#39; anandd 1=1#</code>，后台删掉中间的and后剩下的还是and，达到了保留关键词的作用。</p>
+<h4 id="编码绕过"><a href="#编码绕过" class="headerlink" title="编码绕过"></a>编码绕过</h4><p>　　原理：后台接受GET请求时，会对我们的语句进行一次URL编码和解码，后台收到的是一次解码的结果，我们将其编码两次即可。<br>　　比如我们的语句<code>?id=1&#39; and 1=1#</code>，我们一次编码结果为<code>%61%6e%64</code>；二次编码（注意是全编码），传过去时and关键词是<code>%25%36%31%25%36%65%25%36%34</code>这时就会逃脱过滤，我们就可以注入了。
+　　</p>
+<h4 id="内联注释符绕过"><a href="#内联注释符绕过" class="headerlink" title="内联注释符绕过"></a>内联注释符绕过</h4><p>　　原理：sql里有一个特属于的内联注释符，它的作用不是注释，而是可以运行的。<br>　　<img src="/img/Mysql小记--二/24.png" alt=""><br>　　这个<code>/*!注释内容*/</code>注释符，是可以运行里面内容的，将关键词放进去就可以逃过滤了。
+　　
+　　</p>
+<h3 id="最后小结"><a href="#最后小结" class="headerlink" title="最后小结"></a>最后小结</h3><p>　　SQL注入中首先判断注入类型，这个网页是什么特点呢？有报错吗？需要什么方法呢？如果有过滤怎么绕过呢？这些都是需要判断的。尽管有sqlmap神器，我还是觉得经常手注，练一练脚本能力(比如python注入脚本等)，熟悉熟悉工具使用(Burpsuite等)，是有益无害的。<br>　　上面我的总结只是最基础的东西，还需花时间去练习，熟悉。后面我会单独总结PHP中数据库管理这块的内容，也会找一些防御性的代码来审计。<br>　　Stay hungry, stay foolish.</p>
 
     </article>
     <!-- license  -->
@@ -573,7 +581,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#基于报错的注入"><span class="toc-number">1.</span> <span class="toc-text">基于报错的注入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Union注入"><span class="toc-number">1.1.</span> <span class="toc-text">Union注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二次注入攻击"><span class="toc-number">1.2.</span> <span class="toc-text">二次注入攻击</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#宽字节注入"><span class="toc-number">1.3.</span> <span class="toc-text">宽字节注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#base64注入攻击"><span class="toc-number">1.4.</span> <span class="toc-text">base64注入攻击</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XFF注入攻击"><span class="toc-number">1.5.</span> <span class="toc-text">XFF注入攻击</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于时间的盲注"><span class="toc-number">2.</span> <span class="toc-text">基于时间的盲注</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基本时间注入"><span class="toc-number">2.1.</span> <span class="toc-text">基本时间注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#堆叠查询注入"><span class="toc-number">2.2.</span> <span class="toc-text">堆叠查询注入</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于布尔的盲注"><span class="toc-number">3.</span> <span class="toc-text">基于布尔的盲注</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#简单布尔盲注"><span class="toc-number">3.1.</span> <span class="toc-text">简单布尔盲注</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cookie注入攻击"><span class="toc-number">3.2.</span> <span class="toc-text">cookie注入攻击</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#绕过"><span class="toc-number">4.</span> <span class="toc-text">绕过</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#基于报错的注入"><span class="toc-number">1.</span> <span class="toc-text">基于报错的注入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Union注入"><span class="toc-number">1.1.</span> <span class="toc-text">Union注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二次注入攻击"><span class="toc-number">1.2.</span> <span class="toc-text">二次注入攻击</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#宽字节注入"><span class="toc-number">1.3.</span> <span class="toc-text">宽字节注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#base64注入攻击"><span class="toc-number">1.4.</span> <span class="toc-text">base64注入攻击</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XFF注入攻击"><span class="toc-number">1.5.</span> <span class="toc-text">XFF注入攻击</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于时间的盲注"><span class="toc-number">2.</span> <span class="toc-text">基于时间的盲注</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基本时间注入"><span class="toc-number">2.1.</span> <span class="toc-text">基本时间注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#堆叠查询注入"><span class="toc-number">2.2.</span> <span class="toc-text">堆叠查询注入</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于布尔的盲注"><span class="toc-number">3.</span> <span class="toc-text">基于布尔的盲注</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#简单布尔盲注"><span class="toc-number">3.1.</span> <span class="toc-text">简单布尔盲注</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#cookie注入攻击"><span class="toc-number">3.2.</span> <span class="toc-text">cookie注入攻击</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#绕过"><span class="toc-number">4.</span> <span class="toc-text">绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#大小写绕过"><span class="toc-number">4.1.</span> <span class="toc-text">大小写绕过</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#双写绕过"><span class="toc-number">4.2.</span> <span class="toc-text">双写绕过</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#编码绕过"><span class="toc-number">4.3.</span> <span class="toc-text">编码绕过</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#内联注释符绕过"><span class="toc-number">4.4.</span> <span class="toc-text">内联注释符绕过</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#最后小结"><span class="toc-number">5.</span> <span class="toc-text">最后小结</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -586,20 +594,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -1135,11 +1129,9 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
-    
         <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
-        <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
+        <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
         <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
     
@@ -1147,13 +1139,15 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
     
+        <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
+    
         <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
     
         <span class="sidebar-tag-name" data-tags="PHP"><span class="iconfont-archer">&#xe606;</span>PHP</span>
     
-        <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
-    
         <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
+    
+        <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
     
         <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
     
