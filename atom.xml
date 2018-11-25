@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://lzwgiter.github.io/"/>
-  <updated>2018-11-19T10:44:32.787Z</updated>
+  <updated>2018-11-25T11:41:42.903Z</updated>
   <id>http://lzwgiter.github.io/</id>
   
   <author>
@@ -15,6 +15,49 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ThinkPHP框架学习---config类和config助手函数</title>
+    <link href="http://lzwgiter.github.io/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0-config%E7%B1%BB%E5%92%8Cconfig%E5%8A%A9%E6%89%8B%E5%87%BD%E6%95%B0/"/>
+    <id>http://lzwgiter.github.io/ThinkPHP框架学习-config类和config助手函数/</id>
+    <published>2018-11-25T11:41:42.000Z</published>
+    <updated>2018-11-25T11:41:42.903Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>ThinkPHP框架学习---框架目录及框架配置</title>
+    <link href="http://lzwgiter.github.io/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---%E6%A1%86%E6%9E%B6%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%A1%86%E6%9E%B6%E9%85%8D%E7%BD%AE/"/>
+    <id>http://lzwgiter.github.io/ThinkPHP框架学习---框架目录及框架配置/</id>
+    <published>2018-11-25T11:41:25.000Z</published>
+    <updated>2018-11-25T12:41:56.933Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>先从国产的方便学习的ThinkPHP框架开始学起，stay hungry, stay foolish.</p></blockquote><a id="more"></a><h3 id="关于ThinkPHP"><a href="#关于ThinkPHP" class="headerlink" title="关于ThinkPHP"></a>关于ThinkPHP</h3><p>　　ThinkPHP是为了简化企业级应用开发和敏捷WEB应用开发而诞生的。最早诞生于2006年初，2007年元旦正式更名为ThinkPHP，并且遵循Apache2开源协议发布。ThinkPHP从诞生以来一直秉承简洁实用的设计原则，在保持出色的性能和至简的代码的同时，也注重易用性。并且拥有众多原创功能和特性，在社区团队的积极参与下，在易用性、扩展性和性能方面不断优化和改进。 [1]<br>　　ThinkPHP是一个快速、兼容而且简单的轻量级国产PHP开发框架，诞生于2006年初，原名FCS，2007年元旦正式更名为ThinkPHP，遵循Apache2开源协议发布，从Struts结构移植过来并做了改进和完善，同时也借鉴了国外很多优秀的框架和模式，使用面向对象的开发结构和MVC模式，融合了Struts的思想和TagLib（标签库）、RoR的ORM映射和ActiveRecord模式。<br>　　ThinkPHP可以支持windows/Unix/Linux等服务器环境，正式版需要PHP5.0以上版本支持，支持MySql、PgSQL、Sqlite多种数据库以及PDO扩展，ThinkPHP框架本身没有什么特别模块要求，具体的应用系统运行环境要求视开发所涉及的模块。<br>　　作为一个整体开发解决方案，ThinkPHP能够解决应用开发中的大多数需要，因为其自身包含了底层架构、兼容处理、基类库、数据库访问层、模板引擎、缓存机制、插件机制、角色认证、表单处理等常用的组件，并且对于跨版本、跨平台和跨数据库移植都比较方便。并且每个组件都是精心设计和完善的，应用开发过程仅仅需要关注您的业务逻辑。<br>　　摘自百度百科。</p><h3 id="目录信息"><a href="#目录信息" class="headerlink" title="目录信息"></a>目录信息</h3><p>　　框架就的作用就像一个毛坯房，他提供了各种房间：卧室、客厅、厨房、厕所等等，也提供了各类方法：电线插板、空调线口、下水道等等。充分了解一个框架有助于我们去更好的工作。下面我们来看看ThinkPHP的框架目录信息以及各自的作用。<br>　　这是官方文档给出的目录信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">├─application           应用目录</span><br><span class="line">│  ├─common             公共模块目录（可以更改）</span><br><span class="line">│  ├─module_name        模块目录</span><br><span class="line">│  │  ├─config.php      模块配置文件</span><br><span class="line">│  │  ├─common.php      模块函数文件</span><br><span class="line">│  │  ├─controller      控制器目录</span><br><span class="line">│  │  ├─model           模型目录</span><br><span class="line">│  │  ├─view            视图目录</span><br><span class="line">│  │  └─ ...            更多类库目录</span><br><span class="line">│  │</span><br><span class="line">│  ├─command.php        命令行工具配置文件</span><br><span class="line">│  ├─common.php         公共函数文件</span><br><span class="line">│  ├─config.php         公共配置文件</span><br><span class="line">│  ├─route.php          路由配置文件</span><br><span class="line">│  ├─tags.php           应用行为扩展定义文件</span><br><span class="line">│  └─database.php       数据库配置文件</span><br><span class="line">│</span><br><span class="line">├─public                WEB目录（对外访问目录）</span><br><span class="line">│  ├─index.php          入口文件</span><br><span class="line">│  ├─router.php         快速测试文件</span><br><span class="line">│  └─.htaccess          用于apache的重写</span><br><span class="line">│</span><br><span class="line">├─thinkphp              框架系统目录</span><br><span class="line">│  ├─lang               语言文件目录</span><br><span class="line">│  ├─library            框架类库目录</span><br><span class="line">│  │  ├─think           Think类库包目录</span><br><span class="line">│  │  └─traits          系统Trait目录</span><br><span class="line">│  │</span><br><span class="line">│  ├─tpl                系统模板目录</span><br><span class="line">│  ├─base.php           基础定义文件</span><br><span class="line">│  ├─console.php        控制台入口文件</span><br><span class="line">│  ├─convention.php     框架惯例配置文件</span><br><span class="line">│  ├─helper.php         助手函数文件</span><br><span class="line">│  ├─phpunit.xml        phpunit配置文件</span><br><span class="line">│  └─start.php          框架入口文件</span><br><span class="line">│</span><br><span class="line">├─extend                扩展类库目录</span><br><span class="line">├─runtime               应用的运行时目录（可写，可定制）</span><br><span class="line">├─vendor                第三方类库目录（Composer依赖库）</span><br><span class="line">├─build.php             自动生成定义文件（参考）</span><br><span class="line">├─composer.json         composer 定义文件</span><br><span class="line">├─LICENSE.txt           授权说明文件</span><br><span class="line">├─README.md             README 文件</span><br><span class="line">├─think                 命令行入口文件</span><br></pre></td></tr></table></figure></p><p>　　ThinkPHP框架特点之一是，它是单一入口的框架，框架的入口就是<strong>publc</strong>目录，下面是public目录下的index.php文件内容。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// +----------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">// | ThinkPHP [ WE CAN DO IT JUST THINK ]</span></span><br><span class="line"><span class="comment">// +----------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">// | Copyright (c) 2006-2016 http://thinkphp.cn All rights reserved.</span></span><br><span class="line"><span class="comment">// +----------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )</span></span><br><span class="line"><span class="comment">// +----------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">// | Author: liu21st &lt;liu21st@gmail.com&gt;</span></span><br><span class="line"><span class="comment">// +----------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// [ 应用入口文件 ]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义应用目录</span></span><br><span class="line">define(<span class="string">'APP_PATH'</span>, <span class="keyword">__DIR__</span> . <span class="string">'/../app/'</span>);</span><br><span class="line"><span class="comment">// 定义配置文件目录</span></span><br><span class="line">define(<span class="string">'CONF_PATH'</span>,<span class="keyword">__DIR__</span> . <span class="string">'/../app/conf/'</span>);</span><br><span class="line"><span class="comment">// 加载框架引导文件</span></span><br><span class="line"><span class="keyword">require</span> <span class="keyword">__DIR__</span> . <span class="string">'/../thinkphp/start.php'</span>;</span><br></pre></td></tr></table></figure></p><p>　　我们可以看到在这个文件里，它定义了两个常量，’APP_PATH’是我们的应用路径、’CONF_PATH’是用于应用的配置文件，在该目录下我们可以根据需求来为应用进行配置。(ps:这个是我自己加的，我的版本是5.0.22_with_extends，好像删除了以前版本的conf目录，我还是觉得加上更好管理)<br>　　之后会加载框架的引导文件。下面是一个简单示例。<br>　　这是我的目录信息：<br>　　<img src="/img/ThinkPHP框架学习---框架目录及框架配置/1.png" alt=""><br>　　<img src="/img/ThinkPHP框架学习---框架目录及框架配置/2.png" alt=""><br>　　第一张是我的thinkphp目录，和默认的是一样的。第二张是我的app目录。<br>　　首先我设立了四个模块，分别是’admin’,’common’,’conf’,’index’。这四个模块使用的是MVC的设计模式，每个文件夹下都会有一个controller、view、model文件夹。可以简单理解为’index’是我的前端模块、admin是我的后端模块、common是公用模块、conf是我的配置模块(下一节会细说)。如何使用这个框架呢？在index文件夹下建立controller文件夹、建立Index.php文件，文件内容如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">namespace</span> <span class="title">app</span>\<span class="title">index</span>\<span class="title">controller</span>;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Index</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">hello</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"Hello World!"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p><p>　　打开服务器，进入localhost下的public目录就会看到：<br>　　<img src="/img/ThinkPHP框架学习---框架目录及框架配置/3.png" alt=""><br>　　URL也能看出我访问的是<strong>public下的index模块的Index类的hello方法</strong>，输出正常。这就是一个示例了。<br>　　当然我再添加方法也可以，只需改变URL后的内容即可，如我新建了world方法，URL为<code>http://localhost:8080/thinkphp/public/index/Index/world</code>即可。<br>　　同理，访问不同的模块方法亦是如此，如访问我建好的admin模块，同样改变URL即可，如：<code>http://localhost:8080/thinkphp/public/admin/xxx/xxx</code></p><p>### </p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;先从国产的方便学习的ThinkPHP框架开始学起，stay hungry, stay foolish.&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="PHP" scheme="http://lzwgiter.github.io/tags/PHP/"/>
+    
+  </entry>
   
   <entry>
     <title>Nmap使用指南</title>
@@ -271,9 +314,9 @@
     </summary>
     
     
-      <category term="隐写术" scheme="http://lzwgiter.github.io/tags/%E9%9A%90%E5%86%99%E6%9C%AF/"/>
-    
       <category term="CTF" scheme="http://lzwgiter.github.io/tags/CTF/"/>
+    
+      <category term="隐写术" scheme="http://lzwgiter.github.io/tags/%E9%9A%90%E5%86%99%E6%9C%AF/"/>
     
   </entry>
   
@@ -293,9 +336,9 @@
     </summary>
     
     
-      <category term="隐写术" scheme="http://lzwgiter.github.io/tags/%E9%9A%90%E5%86%99%E6%9C%AF/"/>
-    
       <category term="CTF" scheme="http://lzwgiter.github.io/tags/CTF/"/>
+    
+      <category term="隐写术" scheme="http://lzwgiter.github.io/tags/%E9%9A%90%E5%86%99%E6%9C%AF/"/>
     
   </entry>
   
@@ -315,9 +358,9 @@
     </summary>
     
     
-      <category term="隐写术" scheme="http://lzwgiter.github.io/tags/%E9%9A%90%E5%86%99%E6%9C%AF/"/>
-    
       <category term="CTF" scheme="http://lzwgiter.github.io/tags/CTF/"/>
+    
+      <category term="隐写术" scheme="http://lzwgiter.github.io/tags/%E9%9A%90%E5%86%99%E6%9C%AF/"/>
     
   </entry>
   
@@ -433,49 +476,6 @@
     
     
       <category term="Javascript" scheme="http://lzwgiter.github.io/tags/Javascript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Javascript基础之数据类型1</title>
-    <link href="http://lzwgiter.github.io/Javascript%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B1/"/>
-    <id>http://lzwgiter.github.io/Javascript基础之数据类型1/</id>
-    <published>2018-08-15T12:27:38.000Z</published>
-    <updated>2018-08-17T04:20:59.582Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>Javascript属于一种弱类型语言，定义变量时不需要指定类型，一个变量可以储存任何类型的值，但在运算时，JavaScript还是会把它转换成相应的数据类型。<br><a id="more"></a></p></blockquote><p>Javascript中，数据存在着两种不同的储存方式，<strong>直接储存数据和间接储存数据</strong>，前者成为值类型数据；而后者通过储存数据的空间地址来间接保存数据，称为引用型数据。</p><p><img src="/img/Javascript基础之数据类型/Javascript数据类型.bmp" alt=""><br><a href="https://www.w3cschool.cn/javascript/javascript-skillmap.html" target="_blank" rel="noopener">图片来源</a></p><h2 id="三种基本数据类型：数值、字符串和布尔型。"><a href="#三种基本数据类型：数值、字符串和布尔型。" class="headerlink" title="三种基本数据类型：数值、字符串和布尔型。"></a>三种基本数据类型：数值、字符串和布尔型。</h2><h3 id="数值型"><a href="#数值型" class="headerlink" title="数值型"></a>数值型</h3><p>Javascript数值不区分整数和浮点数，所遇到额数都能为浮点型数值来表示。除了基本的算术运算外，Javascript还提供了大量的算数函数，均包含在Math内置对象中。<br>如：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">var</span> c = a.toString()             <span class="comment">//转换为字符串</span></span><br><span class="line">alert(<span class="keyword">typeof</span>(c));</span><br></pre></td></tr></table></figure></p><p><strong>快捷方法：使用数值与空字符串，即可把数值转换为字符串，如下</strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">var</span> c = a + <span class="string">""</span>                  <span class="comment">//转换为字符串</span></span><br><span class="line">alert(<span class="keyword">typeof</span>(c));               <span class="comment">//返回值为string类型</span></span><br></pre></td></tr></table></figure></p><p><img src="/img/Javascript基础之数据类型/1.png" alt=""><br>(推荐使用可以使用firebug的版本的firefox浏览器，在firebug的控制台中可以进行代码的运行查看，或者在开发者工具里的代码草稿纸中直接运行或者在HTML代码中用script标签，在网页中查看)<br><img src="/img/Javascript基础之数据类型/2.png" alt=""></p><h3 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a>字符串类型</h3><p>字符串由Unicode字符、数字、标点符号等组成的字符序列，字符串出必须使用单引号或双引号包括。<br>如：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"abcdefg"</span>      <span class="comment">//简单字符串</span></span><br><span class="line"><span class="keyword">var</span> str = <span class="string">"'JavaScript'"</span>  <span class="comment">//包含单引号的字符串</span></span><br><span class="line"><span class="keyword">var</span> str = <span class="string">'&lt;meta charset="utf-8"&gt;'</span>      <span class="comment">//HTML字符换</span></span><br><span class="line"><span class="keyword">var</span> str = <span class="number">1</span>;               <span class="comment">//test</span></span><br><span class="line">alert(str);</span><br></pre></td></tr></table></figure></p><p><img src="/img/Javascript基础之数据类型/3.png" alt="">    从结果中也可以看出JavaScript 拥有动态类型。这意味着相同的变量可用作不同的类型：<br>使用parseInt()和parseFloat()方法可以将字符串变为整数。<br>如：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"123.30"</span>;</span><br><span class="line"><span class="keyword">var</span> a = <span class="built_in">parseInt</span>(str);        <span class="comment">//返回值为123</span></span><br><span class="line"><span class="keyword">var</span> b = <span class="built_in">parseFloat</span>(str);      <span class="comment">//返回值为123.3</span></span><br></pre></td></tr></table></figure></p><p><strong>便捷方法：让一个字符串与1相乘就可以将字符串转换为数值。</strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"123.30"</span>;</span><br><span class="line"><span class="keyword">var</span> a = str * <span class="number">1</span>;</span><br><span class="line">alert(typof(a))           <span class="comment">//返回nunmber类型</span></span><br></pre></td></tr></table></figure></p><h3 id="布尔型"><a href="#布尔型" class="headerlink" title="布尔型"></a>布尔型</h3><p>布尔类型仅包括两个值true和false。分别表示逻辑的真和假。布尔值多用在逻辑运算，比较运算中的条件语句或运算符的条件而使用。<br><strong>使用两个<code>!!</code>就可以将任何值转为布尔型数据</strong><br>如：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">var</span> c = !!a;</span><br><span class="line">alert(c);</span><br><span class="line">alert(<span class="keyword">typeof</span>(c));</span><br></pre></td></tr></table></figure></p><p><img src="/img/Javascript基础之数据类型/4.png" alt=""><img src="/img/Javascript基础之数据类型/5.png" alt=""><br><strong>任何非空字符转换为布尔值为true，空格转换后为false<br>如将布尔值转换为字符串，则true为’true’，false为’false’。</strong></p><p>注意：以下为一组不同类型的假值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 0              //Number</span><br><span class="line">2. NaN            //Number</span><br><span class="line">3. ’’             //String</span><br><span class="line">4. false          //boolean</span><br><span class="line">5. null           //Object</span><br><span class="line">6. undefined      //Undefined</span><br></pre></td></tr></table></figure></p><h2 id="两个特殊值"><a href="#两个特殊值" class="headerlink" title="两个特殊值"></a>两个特殊值</h2><p>除了上面的简单的三个数据类型，js中还有两个特殊的数据类型的值：<strong>null和undefined</strong><br>null是Null类型的值，且Null类型只有一个值，即null，表示空值。当对象为空，挥着变量没有引用任何对象，其返回值就为null。当一个变量的值为null时，那么他的值就不是有效的对象、数组、数值、字符串和布尔型等。如果用以下代码测试其类型：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="literal">null</span>;</span><br><span class="line">alert(<span class="keyword">typeof</span>(a));</span><br></pre></td></tr></table></figure></p><p>会得到这个结果：<br><img src="/img/Javascript基础之数据类型/6.png" alt=""><br>是一种特殊的对象。<br>undefined表示未定义的值，当变量未初始化时，会默认他的值为undefined。它区别任何对象、数组、数值、字符串和布尔型，使用typeof检测返回值为undefined。</p><h2 id="三个引用型数据"><a href="#三个引用型数据" class="headerlink" title="三个引用型数据"></a>三个引用型数据</h2><p>引用型数据包括数组(Array)、对象(Object)和函数(Function)等，详细请移步下一篇博客~~</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;Javascript属于一种弱类型语言，定义变量时不需要指定类型，一个变量可以储存任何类型的值，但在运算时，JavaScript还是会把它转换成相应的数据类型。&lt;br&gt;&lt;/p&gt;&lt;/blockquote&gt;
-    
-    </summary>
-    
-    
-      <category term="Javascript" scheme="http://lzwgiter.github.io/tags/Javascript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CTF隐写术--关于ZIP</title>
-    <link href="http://lzwgiter.github.io/CTF%20ZIP%E7%BB%93%E6%9E%84/"/>
-    <id>http://lzwgiter.github.io/CTF ZIP结构/</id>
-    <published>2018-08-12T03:06:55.000Z</published>
-    <updated>2018-08-13T02:25:16.911Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>最近刷隐写的时候，zip这类格式的题型还是不少的，今天打算复习一下zip的文件格式内容。<br><a id="more"></a></p><blockquote><p><a href="https://blog.csdn.net/moxiajuzi/article/details/52752027" target="_blank" rel="noopener">参考文章1</a><br><a href="https://blog.csdn.net/wclxyn/article/details/7288994" target="_blank" rel="noopener">参考文章2</a></p></blockquote><p>一个ZIP文件由三部分组成：</p><ol><li>压缩源文件数据区</li><li>压缩源文件目录区</li><li>压缩源文件目录结束标志</li></ol><p>如(Winhex下)：<br><strong>未加密</strong><br><img src="/img/ZIP结构/3.jpg" alt=""><br>1.第一个标记处:(压缩源文件数据区初始位置)50 4B 03 04(文件头标记 4bytes) <a href="https://blog.csdn.net/xiangshangbashaonian/article/details/80156865" target="_blank" rel="noopener">更多文件头标识</a>，14 00(解压文件所需pkware版本 2bytes)00 00(全局方式位标记 2bytes)<strong>有无加密标志</strong>后面紧跟的08 00则是加密方式,而画圈处则为CRC32值，图中为8A90ABA9。<br>2.第二个标记处：50 4B 01 02(目录中文件文件头标识 4bytes)<br>1F 00(压缩使用的pkware版本 2bytes)<br>3.第三个标记处：14 00(解压文件所需pkware版本 2bytes)<br>00 00(全局方式未标记 2bytes)</p><p>那么如何判断一个文件是否加密码了呢？<br>1.无加密：<br>压缩源文件数据区的全局加密应当为00 00且压缩源文件目录区的全局方式位标记应当为00 00。如上图<br>2.假加密(伪加密)：<br>压缩源文件数据区的全局加密应当为00 00且压缩源文件目录区的全局方式位标记应当为09 00。如下图：<br><img src="/img/ZIP结构/伪加密.jpg" alt=""><br>3.加密：<br>压缩源文件数据区的全局加密应当为09 00且压缩源文件目录区的全局方式位标记应当为09 00。如下图：<br><img src="/img/ZIP结构/加密.jpg" alt=""></p><p>全局方式位标记作用：共四个数字，前面我们看到有00 00,也有09 00。即四个数字中只有第二个数字对其有影响，为奇数时加密，偶数时未加密。其他无论为何值都不影响它的加密属性。</p><p>放两张图以供参考<a href="https://blog.csdn.net/kajweb/article/details/76474476" target="_blank" rel="noopener">来源</a>：<br><img src="/img/ZIP结构/1.png" alt=""><br><img src="/img/ZIP结构/2.png" alt=""></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;最近刷隐写的时候，zip这类格式的题型还是不少的，今天打算复习一下zip的文件格式内容。&lt;br&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="隐写术" scheme="http://lzwgiter.github.io/tags/%E9%9A%90%E5%86%99%E6%9C%AF/"/>
-    
-      <category term="CTF" scheme="http://lzwgiter.github.io/tags/CTF/"/>
     
   </entry>
   
