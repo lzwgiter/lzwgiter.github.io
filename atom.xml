@@ -64,27 +64,6 @@
   </entry>
   
   <entry>
-    <title>Linux 基础知识补坑</title>
-    <link href="http://lzwgiter.github.io/Linux-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%9D%91/"/>
-    <id>http://lzwgiter.github.io/Linux-基础知识补坑/</id>
-    <published>2018-11-28T13:37:58.000Z</published>
-    <updated>2018-11-28T13:37:58.484Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla
-      
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
     <title>ThinkPHP框架学习---路由</title>
     <link href="http://lzwgiter.github.io/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---%E8%B7%AF%E7%94%B1/"/>
     <id>http://lzwgiter.github.io/ThinkPHP框架学习---路由/</id>
@@ -475,6 +454,28 @@
       <category term="Javascript" scheme="http://lzwgiter.github.io/tags/Javascript/"/>
     
       <category term="DOM" scheme="http://lzwgiter.github.io/tags/DOM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>BOM-浏览器操作对象模型之history和screen对象</title>
+    <link href="http://lzwgiter.github.io/BOM-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B%E4%B9%8Bhistory%E5%92%8Cscreen%E5%AF%B9%E8%B1%A1/"/>
+    <id>http://lzwgiter.github.io/BOM-浏览器操作对象模型之history和screen对象/</id>
+    <published>2018-08-21T05:42:36.000Z</published>
+    <updated>2018-08-21T09:26:11.817Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>emmmmm今天把剩下的两个Browser对象搞定</p></blockquote><a id="more"></a><h3 id="history对象"><a href="#history对象" class="headerlink" title="history对象"></a>history对象</h3><p>　　history对象储存浏览器窗口的浏览历史，通过window对象的history属性可以访问该对象，其储存的是最近访问的、有限条目的URL信息。为了保护客户端浏览信息的隐私性，history对象机制脚本直接操作访问这些信息。<br>　　其方法如下：<br>　　<img src="/img/BOM-浏览器操作对象模型之history和screen对象/1.png" alt=""><br>　　其属性只有一个，<code>length</code>，该属性可读取列表中的URL个数，并可以调用以上的方法来访问数组中的URL。具体如下。<br>　　1. back()：返回前一个URL。<br>　　2. forward()：访问下一个URL。<br>　　3. go()：可根据参数决定访问的URL:<br>　　　　1. 如果参数为正整数，就在历史列表中向前移动；负整数就向后移动，0为刷新。<br>　　　　2. 如果一个参数字符串，则该对象可在浏览历史中检索包含该字符串的URL，并访问第一个。　　</p><h3 id="screen对象"><a href="#screen对象" class="headerlink" title="screen对象"></a>screen对象</h3><p>　　screen对象储存客户端屏幕信息，可以用来探测客户端硬件的基本配置，该对象可用于优化程序的设计，满足不同用户的显示要求。<br>　　<img src="/img/BOM-浏览器操作对象模型之history和screen对象/2.png" alt=""><br>　　比如让一个弹出窗口居中显示：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">center</span>(<span class="params">url</span>)</span>&#123; <span class="comment">// 窗口居中处理函数</span></span><br><span class="line">    <span class="keyword">var</span> w = screen.availWidth / <span class="number">2</span>; <span class="comment">// 获取客户端屏幕的宽度一半</span></span><br><span class="line">    <span class="keyword">var</span> h = screen.availHeight / <span class="number">2</span>; <span class="comment">// 获取客户端屏幕的高度一半</span></span><br><span class="line">    <span class="keyword">var</span> t = (screen.availHeight - h)/<span class="number">2</span>; <span class="comment">// 计算居中显示时顶部坐标</span></span><br><span class="line">    <span class="keyword">var</span> l = (screen.availWidth - w)/<span class="number">2</span>; <span class="comment">// 计算居中显示时左侧坐标</span></span><br><span class="line">    <span class="keyword">var</span> p = <span class="string">"top="</span> + t + <span class="string">",left="</span> + l + <span class="string">",width="</span> + w + <span class="string">",height="</span> + h; </span><br><span class="line"><span class="comment">// 设计坐标参数字符串</span></span><br><span class="line">    <span class="keyword">var</span> win = <span class="built_in">window</span>.open(url,<span class="string">"url"</span>,p); <span class="comment">// 打开指定的窗口，并传递参数</span></span><br><span class="line">    win.focus();<span class="comment">// 获取窗口焦点</span></span><br><span class="line">&#125;</span><br><span class="line">center(<span class="string">"https://www.baidu.com/"</span>);<span class="comment">// 调用该函数</span></span><br></pre></td></tr></table></figure></p><p>　　</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;emmmmm今天把剩下的两个Browser对象搞定&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="Javascript" scheme="http://lzwgiter.github.io/tags/Javascript/"/>
     
   </entry>
   
