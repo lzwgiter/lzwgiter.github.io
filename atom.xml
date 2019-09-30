@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://lzwgiter.github.io/"/>
-  <updated>2019-09-29T07:09:58.528Z</updated>
+  <updated>2019-09-29T14:42:10.377Z</updated>
   <id>http://lzwgiter.github.io/</id>
   
   <author>
@@ -17,28 +17,23 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>入坑Pwn---基本习题和知识</title>
-    <link href="http://lzwgiter.github.io/%E5%85%A5%E5%9D%91Pwn-%E5%9F%BA%E6%9C%AC%E4%B9%A0%E9%A2%98%E5%92%8C%E7%9F%A5%E8%AF%86/"/>
-    <id>http://lzwgiter.github.io/入坑Pwn-基本习题和知识/</id>
-    <published>2019-09-29T04:26:38.000Z</published>
-    <updated>2019-09-29T07:09:58.528Z</updated>
+    <title>记一次简单的ROP攻击</title>
+    <link href="http://lzwgiter.github.io/%E8%AE%B0%E4%B8%80%E6%AC%A1%E7%AE%80%E5%8D%95%E7%9A%84ROP%E6%94%BB%E5%87%BB/"/>
+    <id>http://lzwgiter.github.io/记一次简单的ROP攻击/</id>
+    <published>2019-09-29T14:42:10.000Z</published>
+    <updated>2019-09-29T14:42:10.377Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>经过了多次比赛web的碰壁，发现现在单纯的web题已经很少见了。。大多都混合了如密码学、逆向等的知识。所以打算入坑pwn，打开新的大门。</p></blockquote><a id="more"></a><h2 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h2><h2 id="要准备的工具-带后续补充"><a href="#要准备的工具-带后续补充" class="headerlink" title="要准备的工具(带后续补充)"></a>要准备的工具(带后续补充)</h2><pre><code>逆向分析及动态调试用：IDAPro，Ollydbg 调试用：gdb，peda-gdb(或pwngdb这类基于gdb)，objdump其他工具：ROPgadget，one_gadget，LibcSearcher, pwntools</code></pre><h2 id="Pwnable习题"><a href="#Pwnable习题" class="headerlink" title="Pwnable习题"></a>Pwnable习题</h2><h2 id="BUUCTF习题"><a href="#BUUCTF习题" class="headerlink" title="BUUCTF习题"></a>BUUCTF习题</h2><h2 id="其他习题"><a href="#其他习题" class="headerlink" title="其他习题"></a>其他习题</h2>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
     
     <summary type="html">
     
-      &lt;blockquote&gt;
-&lt;p&gt;经过了多次比赛web的碰壁，发现现在单纯的web题已经很少见了。。大多都混合了如密码学、逆向等的知识。所以打算入坑pwn，打开新的大门。&lt;/p&gt;
-&lt;/blockquote&gt;
+      
+      
+        &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\assets\js\APlayer.min.js&quot; cla
+      
     
     </summary>
     
-    
-      <category term="CTF" scheme="http://lzwgiter.github.io/tags/CTF/"/>
-    
-      <category term="PWN" scheme="http://lzwgiter.github.io/tags/PWN/"/>
-    
-      <category term="漏洞挖掘" scheme="http://lzwgiter.github.io/tags/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/"/>
     
   </entry>
   
