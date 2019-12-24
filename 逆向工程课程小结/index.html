@@ -267,7 +267,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">2,908</span> / Reading time: <span class="post-count">12 min</span></span>
+                        <span>Word count: <span class="post-count">2,905</span> / Reading time: <span class="post-count">12 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -449,10 +449,10 @@ height:50vh;
 <h3 id="CreateRemoteThread"><a href="#CreateRemoteThread" class="headerlink" title="CreateRemoteThread()"></a>CreateRemoteThread()</h3><p>  主要原理：通过获取要注入的进程的PID，使用OpenProcess()函数来返回目标进程对象的句柄。<br>伪代码<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">InjectDll</span><span class="params">(DWORD dwPID, LPCTSTR srcDllPath)</span></span>&#123;</span><br><span class="line">    HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS，<span class="literal">false</span>, dwPID);</span><br><span class="line">	WriteProcessMemory(hProcess);		<span class="comment">//向目标进程中写入Dll的路径</span></span><br><span class="line">	GETLoadLibraryW();		<span class="comment">//获取当前进程中的LoadLibraryW()函数的地址，由Kernel32.dll导入</span></span><br><span class="line">	CreateRemoteThread();		<span class="comment">//创建一个新线程执行LoadLibraryW()函数，其参数为自定义的Dll的路径</span></span><br><span class="line">	next();		<span class="comment">//关闭创建的线程和目标进程的句柄返回True</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="修改注册表项"><a href="#修改注册表项" class="headerlink" title="修改注册表项"></a>修改注册表项</h3><p>  主要原理：注册表中有当某进程加载User32.dll时，可默认加载一个自定义DLL的表项。<br>  具体为将<code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows</code>下的<code>AppInit_DLLs</code>修改为你要注入的DLL的路径，<code>LoadAppInit_DLLs</code>修改为1</p>
 <h3 id="SetWindowsHookEx"><a href="#SetWindowsHookEx" class="headerlink" title="SetWindowsHookEx()"></a>SetWindowsHookEx()</h3><blockquote>
-<p>“消息钩子”就是字事件消息从操作系统向应用程序传递的过程中，获取、查看、修改和拦截这些消息的机制</p>
+<p>“消息钩子”就是子事件消息从操作系统向应用程序传递的过程中，获取、查看、修改和拦截这些消息的机制</p>
 </blockquote>
 <p>  主要原理：将自定义的钩子加入钩子链中。如钩取键盘消息，将SetWindowsHookEx()函数的第一个参数设置为WH_KEYBOARD</p>
-<p>伪代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">C</span><br><span class="line">//TestHook.</span><br><span class="line">c</span><br><span class="line">int _tmain()&#123;</span><br><span class="line">	LoadLibraryA(&quot;Hook.dll&quot;);	//加载自定义的DLL</span><br><span class="line">	HookStart();</span><br><span class="line">	return True;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//Hook.dll的实现代码</span><br><span class="line">BOOL WINAPI DllMain()&#123;</span><br><span class="line">	switch(dwReason)&#123;</span><br><span class="line">		CALL_PROCESS_ATTACH:</span><br><span class="line">			//获取句柄</span><br><span class="line">			break;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">LRESULT CALLBACK KeyboardProc()&#123;</span><br><span class="line">	if (isNotepad)&#123;</span><br><span class="line">		hook();			//钩取消息</span><br><span class="line">	&#125; else&#123;     </span><br><span class="line">	//传递给下一个钩子</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>伪代码<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//TestHook.c</span></span><br><span class="line"><span class="keyword">int</span> _tmain()&#123;</span><br><span class="line">	LoadLibraryA(<span class="string">"Hook.dll"</span>);	<span class="comment">//加载自定义的DLL</span></span><br><span class="line">	HookStart();</span><br><span class="line">	<span class="keyword">return</span> True;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Hook.dll的实现代码</span></span><br><span class="line"><span class="function">BOOL WINAPI <span class="title">DllMain</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">switch</span>(dwReason)&#123;</span><br><span class="line">		CALL_PROCESS_ATTACH:</span><br><span class="line">			<span class="comment">//获取句柄</span></span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">LRESULT CALLBACK <span class="title">KeyboardProc</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (isNotepad)&#123;</span><br><span class="line">		hook();			<span class="comment">//钩取消息</span></span><br><span class="line">	&#125; <span class="keyword">else</span>&#123;     </span><br><span class="line">	<span class="comment">//传递给下一个钩子</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="DLL卸载的基本原理"><a href="#DLL卸载的基本原理" class="headerlink" title="DLL卸载的基本原理"></a>DLL卸载的基本原理</h3><p>　　DLL的卸载只有通过强制目标进程调用FreeLibrary()函数来实现，这是其基本原理</p>
 <h2 id="代码注入"><a href="#代码注入" class="headerlink" title="代码注入"></a>代码注入</h2><p>　　主要原理：CreateRemoteThread函数可以更一般化的直接将独立运行的代码插入目标进程中并使之运行，这一技术称为代码注入/线程注入技术<br>　　<strong>和DLL注入的区别</strong></p>
 <ol>
@@ -1401,6 +1401,22 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 52
@@ -1533,12 +1549,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP框架学习---config类和config助手函数/" >ThinkPHP框架学习---config类和config助手函数</a>
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP框架学习---框架目录及框架配置/" >ThinkPHP框架学习---框架目录及框架配置</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP框架学习---框架目录及框架配置/" >ThinkPHP框架学习---框架目录及框架配置</a>
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP框架学习---config类和config助手函数/" >ThinkPHP框架学习---config类和config助手函数</a>
         </li>
     
     
@@ -1693,13 +1709,13 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
-        <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
-    
         <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
     
         <span class="sidebar-tag-name" data-tags="SQLi"><span class="iconfont-archer">&#xe606;</span>SQLi</span>
     
         <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
+    
+        <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
     
         <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
     
