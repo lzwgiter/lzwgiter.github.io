@@ -267,7 +267,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">2,905</span> / Reading time: <span class="post-count">12 min</span></span>
+                        <span>Word count: <span class="post-count">4,634</span> / Reading time: <span class="post-count">18 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -397,8 +397,25 @@ height:50vh;
             <main class="main post-page">
     <article class="article-entry">
         <blockquote>
-<p>逆向工程课程小结<br><a id="more"></a></p>
+<p>逆向工程课程小结</p>
 </blockquote>
+<a id="more"></a>
+<h2 id="一些基础概念"><a href="#一些基础概念" class="headerlink" title="一些基础概念"></a>一些基础概念</h2><p>什么是逆向工程？软件逆向工程？具体阶段？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">答：从对象中提取知识或设计信息，并重建对象或基于对象信息的任意事物的过程</span><br><span class="line"></span><br><span class="line">一种分析目标系统的过程，其目的是识别出系统的各个组件以及他们之间的关系，并在较高的抽象层次上以</span><br><span class="line">另一种形式创建对系统的表示，从而理解目标系统的结构和行为。</span><br><span class="line"></span><br><span class="line">主要有两个阶段：收集信息和抽象信息阶段。前者涉及有解释器、调试器等，后者主要用于构造可理解的高层模型(动态或静态)</span><br></pre></td></tr></table></figure></p>
+<p>逆向工程主要的活动？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">答：反汇编(撤销汇编过程)、分析、可能的修改</span><br><span class="line"></span><br><span class="line">逆向工程中恶意代码分析的静态方法和动态方法区别？</span><br><span class="line">答：静态方法：分析但不运行代码；相比较动态方法更为安全；使用如IDA Pro等的反汇编器</span><br><span class="line">动态方法：检查进程执行过程中寄存器、内存值的实时变化；允许操作操作进程；要使用到调试器</span><br></pre></td></tr></table></figure></p>
+<p>举几个软件逆向工程的主要应用？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">答：恶意代码分析、闭源软件的漏洞分析、闭源软件的互操作性分析、衡量编译器性能</span><br></pre></td></tr></table></figure></p>
+<p>说说逆向工程的困难性？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">答：编译过程中造成的信息损失、由于编译属于多对多操作，所以可能反编译的源文件有偏差、不同编程语言的反编译器不同</span><br></pre></td></tr></table></figure></p>
+<p>什么是x86系统？什么是x64系统？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">答：x86是基于Intel 8086/8088处理器的一系列向后兼容的指令体系结构(ISA)的总称</span><br><span class="line">x64又称为x86-64，是x86体系结构的扩展。是与x86(IA-32)兼容的64位CPU体系结构</span><br></pre></td></tr></table></figure></p>
+<p>小端序大端序？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">答：小端序是低位字节储存在内存中的低位地址，效率较高(Intel使用)，而大端序是低位字节储存在内存中高位地址，符合一般的思维逻辑</span><br><span class="line">RISC架构处理器使用(MIPS和PowerPC采用)</span><br></pre></td></tr></table></figure></p>
+<p>保护模式下用户程序运行在哪一层？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">答：Ring3层，即最低权限级别，程序金科以读写系统设置的一个子集</span><br></pre></td></tr></table></figure></p>
+<p>IA-32内存模型有哪几种？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">答：平面内存模型(代码数据和栈在线性地址空间中，大小为0~2^31 - 1)</span><br><span class="line">分段内存模型(代码、数据和栈在不同的段中)</span><br></pre></td></tr></table></figure></p>
+<p>什么是反汇编？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">答：将二进制文件中的机器码转化为汇编代码或等价的中间语言代码</span><br></pre></td></tr></table></figure></p>
+<p>反汇编器分为？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">答：动态反汇编器和静态反汇编器</span><br><span class="line">前者会执行二进制码，记录执行路径，并对记录执行路径进行解码</span><br><span class="line">    优点：精确，可对混淆的二进制进行反汇编</span><br><span class="line">    缺点：记录路径需要时间，且一次只能反汇编一条执行路径</span><br><span class="line">后者不会执行文件，而是直接反汇编</span><br><span class="line">    优点：快，能覆盖多于一条执行路径</span><br><span class="line">    缺点：复杂，难以处理代码混淆</span><br></pre></td></tr></table></figure></p>
+<p>静态反汇编的挑战？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">答：变长指令集、数据嵌入在代码中、间接跳转/调用</span><br></pre></td></tr></table></figure></p>
+<p>可执行程序中的元信息都可以有啥？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">答：符号表(源代码的符号信息，由链接器和调试器使用)、重定位信息、调试信息(由调试器生成)</span><br></pre></td></tr></table></figure></p>
+<p>ELF文件由啥构成？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">答：ELF头：包含如指令集体系结构、32/64位格式、大端序/小端序、执行入口点、程序头表和节头表等信息</span><br><span class="line">程序头表(PHT):用于执行视图，告诉系统如何在内存中创建一个进程</span><br><span class="line">    有以下几个段类型：PHDR(保存程序头表本身的位置和大小), LOAD(代表该类型的段会被装载到内存中), INTERP(指向可执行文件的动态连接器的指针), DYNAMIC(保存指向动态链接信息的指针), NOTE(保存操作系统相关的规范信息)</span><br><span class="line">节头表(SHT):用于链接视图，包含名称和类型、请求的内存位置、权限</span><br><span class="line">    有下面这几个重要节类型：.interp(程序解释器的路径名), .text(程序代码), .data(已初始化的全局数据), .rodata(只读数据), .bss(未初始化的全局数据), .init(用于进程初始化的可执行指令序列), .fini(用于进程终止的可执行指令序列), .plt(保存过程链接表，其中包含动态连接器调用共享库函数的必须代码), .rel.&lt;x&gt;(节&lt;x&gt;的重定位信息), dynamic(动态链接信息)</span><br></pre></td></tr></table></figure></p>
+<p>ELF文件怎么加载到内存？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">答：1. 装载器使用程序头表，将所有LOAD类型的段映射到内存，并赋以权限位</span><br><span class="line">2. 调用动态连接器(INTERP段内指定)，传入可执行文件相关信息</span><br></pre></td></tr></table></figure></p>
+<p>段和节的区别？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">答：1. 段是程序执行的必要组成部分，每个段划分为不同节</span><br><span class="line">2. 程序内存分布的描述是由程序头表来完成的</span><br><span class="line">3. 每个ELF目标文件都有节，但不一定有节头(对程序执行非必须。主要用于链接和调试)</span><br></pre></td></tr></table></figure></p>
+<p>PE32文件由啥构成？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">答：大体分为PE头，PE体和NULL填充</span><br><span class="line">前者由DOS头、Dos存根(可选)、NT头、节区头(各节区在文件或内存中的大小，位置，属性等)</span><br><span class="line">后者由节区构成(包括.text, .data, .rsrc)</span><br></pre></td></tr></table></figure></p>
 <h2 id="IA-32指令集"><a href="#IA-32指令集" class="headerlink" title="IA-32指令集"></a>IA-32指令集</h2><pre><code>（待补充）
 </code></pre><h2 id="静态反汇编算法"><a href="#静态反汇编算法" class="headerlink" title="静态反汇编算法"></a>静态反汇编算法</h2><pre><code>1. 线性扫描算法
 2. 递归遍历算法
@@ -447,6 +464,7 @@ height:50vh;
 <li>使用SetWindowsHookEx()函数进行消息钩取</li>
 </ol>
 <h3 id="CreateRemoteThread"><a href="#CreateRemoteThread" class="headerlink" title="CreateRemoteThread()"></a>CreateRemoteThread()</h3><p>  主要原理：通过获取要注入的进程的PID，使用OpenProcess()函数来返回目标进程对象的句柄。<br>伪代码<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">InjectDll</span><span class="params">(DWORD dwPID, LPCTSTR srcDllPath)</span></span>&#123;</span><br><span class="line">    HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS，<span class="literal">false</span>, dwPID);</span><br><span class="line">	WriteProcessMemory(hProcess);		<span class="comment">//向目标进程中写入Dll的路径</span></span><br><span class="line">	GETLoadLibraryW();		<span class="comment">//获取当前进程中的LoadLibraryW()函数的地址，由Kernel32.dll导入</span></span><br><span class="line">	CreateRemoteThread();		<span class="comment">//创建一个新线程执行LoadLibraryW()函数，其参数为自定义的Dll的路径</span></span><br><span class="line">	next();		<span class="comment">//关闭创建的线程和目标进程的句柄返回True</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　如果写的再详细一点的话：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">InjectDll</span><span class="params">(DWORD dwPID, LPCTSTR szDllPath)</span></span>&#123;		<span class="comment">//dwPID --- 要注入的进程的PID, szDllPath --- 要注入的DLL(你自己写的)路径</span></span><br><span class="line">	DWORD dwBufSize = (DWORD)(lstrlen(szDllPath) + <span class="number">1</span>) * <span class="keyword">sizeof</span>(TCHAR);	<span class="comment">//计算要放入内存的内容的大小</span></span><br><span class="line">	LPTHREAD_START_ROUTINE pThreadProc;		<span class="comment">//要使用的线程函数指针</span></span><br><span class="line">	HANDLE hProcess = <span class="literal">NULL</span>, hThread = <span class="literal">NULL</span>;</span><br><span class="line">	LPVOID pRemoteBuf = <span class="literal">NULL</span>;</span><br><span class="line">	HMOUDLE hMod = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//先打开进程获取他的句柄：</span></span><br><span class="line">	hProcess = OpenProcess(PROCESS_ALL_ACCESS, <span class="literal">false</span>, dwPID)</span><br><span class="line">	<span class="keyword">if</span> (!(hProcess))&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//在该进程中分配空间：</span></span><br><span class="line">	pRemoteBuf = VirtualAlloceEx(hProcess, <span class="literal">NULL</span>, dwBufSize, MEM_COMMIT, PAGE_READWRITE)</span><br><span class="line">	<span class="keyword">if</span> (!(pRemoteBuf)&#123;</span><br><span class="line">		retun <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//向新的内存空间内写入数据：使用一个任意类型指针指向LPCTSTR类型的、要加载的DLL名称，大小为上面开的dwBuSize</span></span><br><span class="line">	WriteProcessMemory(hProcess, pRemoteBuf, (LPVOID)szDllPath, dwBufSize, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//获得LoadLibraryA函数的地址</span></span><br><span class="line">	hMod = GetModuleHandle(<span class="string">L"kernel32.dll"</span>);</span><br><span class="line">	pThreadProc = (LPTHREAD_START_ROUTINE)GetProcAddress(hMod, <span class="string">L"LoadLibraryA"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//创建线程</span></span><br><span class="line">	pThreadProc = CreateRemoteThread(hProcess, <span class="literal">NULL</span>, <span class="number">0</span>, pThreadProc, pRemoteBuf, <span class="number">0</span>, <span class="literal">NULL</span>);</span><br><span class="line">	WaitForSingleObject(hThread, INFINITE);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	CloseHandle(hProcess);</span><br><span class="line">	CloseHandle(hThread);</span><br><span class="line">	<span class="keyword">return</span> TRUE;		<span class="comment">//注入成功</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="修改注册表项"><a href="#修改注册表项" class="headerlink" title="修改注册表项"></a>修改注册表项</h3><p>  主要原理：注册表中有当某进程加载User32.dll时，可默认加载一个自定义DLL的表项。<br>  具体为将<code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows</code>下的<code>AppInit_DLLs</code>修改为你要注入的DLL的路径，<code>LoadAppInit_DLLs</code>修改为1</p>
 <h3 id="SetWindowsHookEx"><a href="#SetWindowsHookEx" class="headerlink" title="SetWindowsHookEx()"></a>SetWindowsHookEx()</h3><blockquote>
 <p>“消息钩子”就是子事件消息从操作系统向应用程序传递的过程中，获取、查看、修改和拦截这些消息的机制</p>
@@ -472,6 +490,7 @@ height:50vh;
 <li>转3</li>
 </ol>
 <p>　　<img src="/img/逆向工程课程小结/1.png" alt="流程变化图"><br>　　<br>伪代码<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">BYTE INT3 = <span class="number">0xCC</span></span><br><span class="line">BYTE OriginalByte = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">BOOL OnCreateProcessDebugEvent(LPDEBUG_EVENT pde)&#123;</span><br><span class="line">	<span class="comment">//获取WriteFile()函数的地址</span></span><br><span class="line">	LPVOID pWriteFile = GetProcAddress(GetModuleHandleA(<span class="string">"kernel32.dll"</span>), <span class="string">"WriteFile"</span>);</span><br><span class="line"></span><br><span class="line">	GEThProcess();	<span class="comment">//获取被调试者的进程句柄</span></span><br><span class="line">	GEThThread();	<span class="comment">//获取被调试者的初始线程句柄</span></span><br><span class="line"></span><br><span class="line">	ReadProcessMemory(OriginalByte);	<span class="comment">//保存原来的字节</span></span><br><span class="line">	WriteProcessMemory(INT3);		<span class="comment">//写入0xCC</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">BOOL <span class="title">OnExceptionDebugEvent</span><span class="params">(LPDEBUG_EVENT pde)</span></span>&#123;</span><br><span class="line">	hook();		<span class="comment">//执行相应的钩取动作</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span>&#123;</span><br><span class="line">    DWORD dwPID;	<span class="comment">//设置要被调试的进程的PID</span></span><br><span class="line">    DEBUG_EVENT de;		<span class="comment">//设置调试触发事件的结构体DEBUG_EVENT</span></span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">2</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"请输入要钩取API的进程的PID\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    dwPID = atoi(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="comment">//设置被调试的进程的PID</span></span><br><span class="line">    <span class="keyword">if</span> (!DebugActiveProcess(dwPID))</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="comment">//一直等待事件的发生</span></span><br><span class="line">    <span class="keyword">while</span>(WaitForDebugEvent(&amp;de))&#123;</span><br><span class="line">        <span class="comment">//被调试进程创建或被关联到调试器执行</span></span><br><span class="line">        <span class="keyword">if</span> (CREATE_PROCESS_DEBUG_EVENT == de.dwDebugEventCode)&#123;</span><br><span class="line">            OnCreateProcessDebugEvent(&amp;de);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//异常事件发生</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (EXCEPTION_DEBUG_EVENT == de.dwDebugEventCode)&#123;</span><br><span class="line">            <span class="keyword">if</span> (OnExceptionDebugEvent(&amp;de))</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (EXIT_PROCESS_DEBUG_EVENT == de.dwDebugEventCode)&#123;</span><br><span class="line">            <span class="keyword">break</span>;	<span class="comment">//调试器终止</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　下面是上述的代码的简单流程图：<br>　　<img src="/img/逆向工程课程小结/2.png" alt="流程变化图"></p>
 <h3 id="修改IAT表"><a href="#修改IAT表" class="headerlink" title="修改IAT表"></a>修改IAT表</h3><p>  通过更改PE文件的IAT表，将API函数的地址修改为钩取函数的地址，自己定义的钩取函数中进行完要执行的操作后再调用kernel32.dll中的正常API功能</p>
 <h3 id="修改API代码"><a href="#修改API代码" class="headerlink" title="修改API代码"></a>修改API代码</h3><p>  DLL映射进目标进程的地址空间后，直接查找目标API的实际地址，直接修改其代码</p>
 
@@ -614,7 +633,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#IA-32指令集"><span class="toc-number">1.</span> <span class="toc-text">IA-32指令集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#静态反汇编算法"><span class="toc-number">2.</span> <span class="toc-text">静态反汇编算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#线性扫描算法"><span class="toc-number">2.1.</span> <span class="toc-text">线性扫描算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#递归遍历算法"><span class="toc-number">2.2.</span> <span class="toc-text">递归遍历算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用Windows核心API"><span class="toc-number">3.</span> <span class="toc-text">常用Windows核心API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DLL注入的基本概念和方法"><span class="toc-number">4.</span> <span class="toc-text">DLL注入的基本概念和方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CreateRemoteThread"><span class="toc-number">4.1.</span> <span class="toc-text">CreateRemoteThread()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改注册表项"><span class="toc-number">4.2.</span> <span class="toc-text">修改注册表项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SetWindowsHookEx"><span class="toc-number">4.3.</span> <span class="toc-text">SetWindowsHookEx()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DLL卸载的基本原理"><span class="toc-number">4.4.</span> <span class="toc-text">DLL卸载的基本原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码注入"><span class="toc-number">5.</span> <span class="toc-text">代码注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#调试方式的API钩取"><span class="toc-number">6.</span> <span class="toc-text">调试方式的API钩取</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#调试方式的钩取"><span class="toc-number">6.1.</span> <span class="toc-text">调试方式的钩取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改IAT表"><span class="toc-number">6.2.</span> <span class="toc-text">修改IAT表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改API代码"><span class="toc-number">6.3.</span> <span class="toc-text">修改API代码</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一些基础概念"><span class="toc-number">1.</span> <span class="toc-text">一些基础概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IA-32指令集"><span class="toc-number">2.</span> <span class="toc-text">IA-32指令集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#静态反汇编算法"><span class="toc-number">3.</span> <span class="toc-text">静态反汇编算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#线性扫描算法"><span class="toc-number">3.1.</span> <span class="toc-text">线性扫描算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#递归遍历算法"><span class="toc-number">3.2.</span> <span class="toc-text">递归遍历算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用Windows核心API"><span class="toc-number">4.</span> <span class="toc-text">常用Windows核心API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DLL注入的基本概念和方法"><span class="toc-number">5.</span> <span class="toc-text">DLL注入的基本概念和方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CreateRemoteThread"><span class="toc-number">5.1.</span> <span class="toc-text">CreateRemoteThread()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改注册表项"><span class="toc-number">5.2.</span> <span class="toc-text">修改注册表项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SetWindowsHookEx"><span class="toc-number">5.3.</span> <span class="toc-text">SetWindowsHookEx()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DLL卸载的基本原理"><span class="toc-number">5.4.</span> <span class="toc-text">DLL卸载的基本原理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码注入"><span class="toc-number">6.</span> <span class="toc-text">代码注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#调试方式的API钩取"><span class="toc-number">7.</span> <span class="toc-text">调试方式的API钩取</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#调试方式的钩取"><span class="toc-number">7.1.</span> <span class="toc-text">调试方式的钩取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改IAT表"><span class="toc-number">7.2.</span> <span class="toc-text">修改IAT表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改API代码"><span class="toc-number">7.3.</span> <span class="toc-text">修改API代码</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -627,24 +646,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -1549,12 +1550,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP框架学习---框架目录及框架配置/" >ThinkPHP框架学习---框架目录及框架配置</a>
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP框架学习---config类和config助手函数/" >ThinkPHP框架学习---config类和config助手函数</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP框架学习---config类和config助手函数/" >ThinkPHP框架学习---config类和config助手函数</a>
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP框架学习---框架目录及框架配置/" >ThinkPHP框架学习---框架目录及框架配置</a>
         </li>
     
     
@@ -1707,15 +1708,15 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
-    
         <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
     
         <span class="sidebar-tag-name" data-tags="SQLi"><span class="iconfont-archer">&#xe606;</span>SQLi</span>
     
-        <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
         <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
+    
+        <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
         <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
     
@@ -1729,21 +1730,21 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="PHP"><span class="iconfont-archer">&#xe606;</span>PHP</span>
     
-        <span class="sidebar-tag-name" data-tags="C编程"><span class="iconfont-archer">&#xe606;</span>C编程</span>
-    
         <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
+    
+        <span class="sidebar-tag-name" data-tags="C编程"><span class="iconfont-archer">&#xe606;</span>C编程</span>
     
         <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
     
         <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
     
-        <span class="sidebar-tag-name" data-tags="school"><span class="iconfont-archer">&#xe606;</span>school</span>
-    
-        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
-    
         <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
     
         <span class="sidebar-tag-name" data-tags="漏洞挖掘"><span class="iconfont-archer">&#xe606;</span>漏洞挖掘</span>
+    
+        <span class="sidebar-tag-name" data-tags="school"><span class="iconfont-archer">&#xe606;</span>school</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
