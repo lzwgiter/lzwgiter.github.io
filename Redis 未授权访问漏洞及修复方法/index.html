@@ -400,7 +400,7 @@ height:50vh;
 <p>Redis</p>
 </blockquote>
 <a id="more"></a>
-<h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>  这个漏洞的主要原因是没有正确的配置Redis的配置文件，主要的错误配置有一下几点(redis.conf)：</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>  这个漏洞的主要原因是没有正确的配置Redis的配置文件，主要的错误配置有一下几点(redis.conf)：</p>
 <ul>
 <li><code>protected-mode no</code> 关闭了保护模式，允许外部的客户端使用redis-cli进行连接</li>
 <li>将<code>bind 127.0.0.1</code> 注释掉，导致redis服务暴露在外部</li>
@@ -412,7 +412,7 @@ height:50vh;
 <h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p>  清单</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">攻击机 ： kali 10.10.10.12</span><br><span class="line">靶机 ：CentOS7 10.10.10.11</span><br><span class="line">Redis版本： 3.2.0</span><br></pre></td></tr></table></figure>
 <p>  下载好源码后编译，并修改redis.conf文件部分如下：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> IF YOU ARE SURE YOU WANT YOUR INSTANCE TO LISTEN TO ALL THE INTERFACES</span><br><span class="line"><span class="meta">#</span> JUST COMMENT THE FOLLOWING LINE.</span><br><span class="line"><span class="meta">#</span> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span><br><span class="line"><span class="meta">#</span> bind 127.0.0.1		//此处将bind 127.0.0.1进行了注释</span><br><span class="line"></span><br><span class="line">......</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> By default protected mode is enabled. You should disable it only if</span><br><span class="line"><span class="meta">#</span> you are sure you want clients from other hosts to connect to Redis</span><br><span class="line"><span class="meta">#</span> even if no authentication is configured, nor a specific set of interfaces</span><br><span class="line"><span class="meta">#</span> are explicitly listed using the "bind" directive.</span><br><span class="line">protected-mode no		//修改为no</span><br><span class="line"></span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> IF YOU ARE SURE YOU WANT YOUR INSTANCE TO LISTEN TO ALL THE INTERFACES</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> JUST COMMENT THE FOLLOWING LINE.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">bind</span> 127.0.0.1		//此处将<span class="built_in">bind</span> 127.0.0.1进行了注释</span></span><br><span class="line"></span><br><span class="line">......</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> By default protected mode is enabled. You should <span class="built_in">disable</span> it only <span class="keyword">if</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> you are sure you want clients from other hosts to connect to Redis</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> even <span class="keyword">if</span> no authentication is configured, nor a specific <span class="built_in">set</span> of interfaces</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> are explicitly listed using the <span class="string">"bind"</span> directive.</span></span><br><span class="line">protected-mode no		//修改为no</span><br><span class="line"></span><br><span class="line">......</span><br></pre></td></tr></table></figure>
 <p>  使用src下的<code>redis-server</code>可执行文件 + 指定的配置文件运行Redis服务：</p>
 <p><img src="/img/Redis未授权访问漏洞及修补方法/open-server.png" alt="open-server"></p>
 <p><strong>攻击方法：在靶机的/root/.ssh/目录下写入自己ssh的公钥，使用自己的私钥直接登录对方的机器</strong></p>
@@ -572,7 +572,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原理"><span class="toc-number">1.</span> <span class="toc-text">原理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#攻击方法"><span class="toc-number"></span> <span class="toc-text">攻击方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复现"><span class="toc-number"></span> <span class="toc-text">复现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修补方法"><span class="toc-number"></span> <span class="toc-text">修补方法</span></a>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#原理"><span class="toc-number">1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#攻击方法"><span class="toc-number">2.</span> <span class="toc-text">攻击方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复现"><span class="toc-number">3.</span> <span class="toc-text">复现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修补方法"><span class="toc-number">4.</span> <span class="toc-text">修补方法</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -585,6 +585,66 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -1706,11 +1766,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
     
-        <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
-    
         <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
     
         <span class="sidebar-tag-name" data-tags="SQLi"><span class="iconfont-archer">&#xe606;</span>SQLi</span>
+    
+        <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
         <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
