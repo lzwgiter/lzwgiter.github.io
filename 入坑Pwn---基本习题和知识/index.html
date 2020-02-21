@@ -271,7 +271,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">3,746</span> / Reading time: <span class="post-count">20 min</span></span>
+                        <span>Word count: <span class="post-count">3,740</span> / Reading time: <span class="post-count">20 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -405,7 +405,7 @@ height:50vh;
 </blockquote>
 <a id="more"></a>
 <h2 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h2><h2 id="要准备的工具-带后续补充"><a href="#要准备的工具-带后续补充" class="headerlink" title="要准备的工具(带后续补充)"></a>要准备的工具(带后续补充)</h2><p>　　逆向分析及动态调试用：IDAPro，Ollydbg<br>　　调试用：gdb，peda-gdb(或pwngdb这类基于gdb)，objdump<br>　　其他工具：ROPgadget，one_gadget，LibcSearcher, pwntools</p>
-<h2 id="Pwnable习题"><a href="#Pwnable习题" class="headerlink" title="Pwnable习题"></a>Pwnable习题</h2><h2 id="BUUCTF习题"><a href="#BUUCTF习题" class="headerlink" title="BUUCTF习题"></a>BUUCTF习题</h2><h2 id="简单示例习题"><a href="#简单示例习题" class="headerlink" title="简单示例习题"></a>简单示例习题</h2><p>　　<a href="https://www.anquanke.com/post/id/169554" target="_blank" rel="noopener">题目来源</a></p>
+<h2 id="简单示例习题"><a href="#简单示例习题" class="headerlink" title="简单示例习题"></a>简单示例习题</h2><p>　　<a href="https://www.anquanke.com/post/id/169554" target="_blank" rel="noopener">题目来源</a></p>
 <h3 id="Level0"><a href="#Level0" class="headerlink" title="Level0"></a>Level0</h3><p>　　题目源代码：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">volatile</span> <span class="keyword">int</span> modified;</span><br><span class="line">  <span class="keyword">char</span> buffer[<span class="number">64</span>];</span><br><span class="line"></span><br><span class="line">  modified = <span class="number">0</span>;</span><br><span class="line">  gets(buffer);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(modified != <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"you have changed the 'modified' variable\n"</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"Try again?\n"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>　　可以看到这个程序中有一个大小为64字节的buffer变量，以及一int型的变量modified。正常来说这个程序的执行肯定是输出”Try again?\n”。<br>　　<br>　　<img src="/img/入坑Pwn-基本习题和知识/1.png" alt=""><br>　　<br>　　但是这两个变量具有相同的栈底地址，并且buffer变量的输入是通过使用了一个不安全的函数gets()，这个函数之所以危险，是因为这个函数没有限制输入内容的上限，所以可以通过输入超过64字节的buffer变量来覆盖modified变量。<br>　　先扔进IDA里看一下反编译的代码：<br>　　<br>　　<img src="/img/入坑Pwn-基本习题和知识/2.png" alt=""><br>　　<br>　　可以看到变量数组和整型变量之间的地址相差<code>5CH - 10H = 4CH = 76字节</code>，所以用76个字节的数组输入之后，再填充一个非0的值就可以覆盖<code>modified</code>的变量值了。<br>　　<br>　　<img src="/img/入坑Pwn-基本习题和知识/3.png" alt="">
 　　</p>
@@ -582,7 +582,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本知识"><span class="toc-number">1.</span> <span class="toc-text">基本知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#要准备的工具-带后续补充"><span class="toc-number">2.</span> <span class="toc-text">要准备的工具(带后续补充)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pwnable习题"><span class="toc-number">3.</span> <span class="toc-text">Pwnable习题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BUUCTF习题"><span class="toc-number">4.</span> <span class="toc-text">BUUCTF习题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#简单示例习题"><span class="toc-number">5.</span> <span class="toc-text">简单示例习题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Level0"><span class="toc-number">5.1.</span> <span class="toc-text">Level0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level1"><span class="toc-number">5.2.</span> <span class="toc-text">Level1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level2"><span class="toc-number">5.3.</span> <span class="toc-text">Level2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level3"><span class="toc-number">5.4.</span> <span class="toc-text">Level3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level4"><span class="toc-number">5.5.</span> <span class="toc-text">Level4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level5"><span class="toc-number">5.6.</span> <span class="toc-text">Level5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level6"><span class="toc-number">5.7.</span> <span class="toc-text">Level6</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level7"><span class="toc-number">5.8.</span> <span class="toc-text">Level7</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本知识"><span class="toc-number">1.</span> <span class="toc-text">基本知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#要准备的工具-带后续补充"><span class="toc-number">2.</span> <span class="toc-text">要准备的工具(带后续补充)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#简单示例习题"><span class="toc-number">3.</span> <span class="toc-text">简单示例习题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Level0"><span class="toc-number">3.1.</span> <span class="toc-text">Level0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level1"><span class="toc-number">3.2.</span> <span class="toc-text">Level1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level2"><span class="toc-number">3.3.</span> <span class="toc-text">Level2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level3"><span class="toc-number">3.4.</span> <span class="toc-text">Level3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level4"><span class="toc-number">3.5.</span> <span class="toc-text">Level4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level5"><span class="toc-number">3.6.</span> <span class="toc-text">Level5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level6"><span class="toc-number">3.7.</span> <span class="toc-text">Level6</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Level7"><span class="toc-number">3.8.</span> <span class="toc-text">Level7</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -1429,9 +1429,26 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 58
+        Total : 59
         </div>
         <!-- search  -->
         
@@ -1444,6 +1461,11 @@ top:50vh;
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span><a class="archive-post-title" href= "/内存取证原理学习及Volatility-篇三/" >内存取证原理学习及Volatility-篇三</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1760,15 +1782,15 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
+        <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
+    
         <span class="sidebar-tag-name" data-tags="渗透测试"><span class="iconfont-archer">&#xe606;</span>渗透测试</span>
     
-        <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
+        <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
         <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
     
         <span class="sidebar-tag-name" data-tags="SQLi"><span class="iconfont-archer">&#xe606;</span>SQLi</span>
-    
-        <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
         <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
     
@@ -1776,25 +1798,25 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
     
+        <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
+    
         <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
     
         <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
     
         <span class="sidebar-tag-name" data-tags="PHP"><span class="iconfont-archer">&#xe606;</span>PHP</span>
     
-        <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
-    
         <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
-    
-        <span class="sidebar-tag-name" data-tags="电子取证"><span class="iconfont-archer">&#xe606;</span>电子取证</span>
     
         <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
     
         <span class="sidebar-tag-name" data-tags="漏洞挖掘"><span class="iconfont-archer">&#xe606;</span>漏洞挖掘</span>
     
-        <span class="sidebar-tag-name" data-tags="C编程"><span class="iconfont-archer">&#xe606;</span>C编程</span>
+        <span class="sidebar-tag-name" data-tags="电子取证"><span class="iconfont-archer">&#xe606;</span>电子取证</span>
     
         <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
+    
+        <span class="sidebar-tag-name" data-tags="C编程"><span class="iconfont-archer">&#xe606;</span>C编程</span>
     
         <span class="sidebar-tag-name" data-tags="school"><span class="iconfont-archer">&#xe606;</span>school</span>
     
