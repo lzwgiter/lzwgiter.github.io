@@ -5,16 +5,16 @@
 
 
 
-<head>
+<head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="author" content="float">
     <meta name="renderer" content="webkit">
     <meta name="copyright" content="float">
     <meta name="keywords" content="Hexo | float">
     <meta name="description" content="">
     <meta name="Cache-Control" content="no-cache">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>CSS基础2--应用 · float&#39;s blog</title>
     <style type="text/css">
     @font-face {
@@ -68,10 +68,10 @@
 
 </style>
 
-    <link rel="preload" href= /css/style.css?v=20180721 as="style" onload="this.onload=null;this.rel='stylesheet'" />
-    <link rel="stylesheet" href= /css/mobile.css?v=20180721 media="(max-width: 980px)">
+    <link rel="preload" href="/css/style.css?v=20180721" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="/css/mobile.css?v=20180721" media="(max-width: 980px)">
     
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
@@ -180,12 +180,12 @@
 }( typeof global !== "undefined" ? global : this ) );
 </script>
 
-    <link rel="icon" href= "/assets/shell.ico" />
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
-    <link rel="preload" href="/scripts/main.js" as="script" />
-    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
-    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    <link rel="icon" href="/assets/shell.ico">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin="">
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin="">
     
     <!-- fancybox -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
@@ -411,7 +411,7 @@ height:50vh;
 <blockquote>
 <p><strong>2.内嵌式:</strong></p>
 </blockquote>
-<p>内嵌式通过将CSS写在网页源文件的头部，即在<head>与</head>间，通过使用HTML标签中的style标签将其包围，其特点是：该样式只能在此页使用，但解决了行内样式多次书写的弊端，减少了代码量。</p>
+<p>内嵌式通过将CSS写在网页源文件的头部，即在<head><meta name="generator" content="Hexo 3.9.0">与</head>间，通过使用HTML标签中的style标签将其包围，其特点是：该样式只能在此页使用，但解决了行内样式多次书写的弊端，减少了代码量。</p>
 <p>例：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span>内嵌式<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span> <span class="attr">title</span>=<span class="string">"字体18号"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">p &#123;</span></span><br><span class="line"><span class="css"><span class="selector-tag">text-align</span>: <span class="selector-tag">left</span>; <span class="comment">/* 文本左对齐 */</span></span></span><br><span class="line"><span class="css"><span class="selector-tag">font-size</span>: 18<span class="selector-tag">px</span>; <span class="comment">/* 字体大小18像素 */</span></span></span><br><span class="line"><span class="css"><span class="selector-tag">line-height</span>: 25<span class="selector-tag">px</span>; <span class="comment">/* 行高25像素 */</span></span></span><br><span class="line"><span class="css"><span class="selector-tag">text-indent</span>: 2<span class="selector-tag">em</span>; <span class="comment">/* 首行缩进2个文字大小空间 */</span></span></span><br><span class="line"><span class="css"><span class="selector-tag">width</span>: 500<span class="selector-tag">px</span>; <span class="comment">/* 段落宽度500像素 */</span></span></span><br><span class="line"><span class="css"><span class="selector-tag">margin</span>: 0 <span class="selector-tag">auto</span>; <span class="comment">/* 浏览器居中 */</span></span></span><br><span class="line"><span class="css"><span class="selector-tag">margin-bottom</span>: 20<span class="selector-tag">px</span>; <span class="comment">/* 段落下边距20像素 */</span>&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span> <span class="attr">title</span>=<span class="string">"字体14号"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">p &#123;</span></span><br><span class="line"><span class="css"><span class="selector-tag">text-align</span>: <span class="selector-tag">left</span>; <span class="comment">/* 文本左对齐 */</span></span></span><br><span class="line"><span class="css"><span class="selector-tag">font-size</span>: 14<span class="selector-tag">px</span>; <span class="comment">/* 字体大小14像素 */</span></span></span><br><span class="line"><span class="css"><span class="selector-tag">line-height</span>: 25<span class="selector-tag">px</span>; <span class="comment">/* 行高25像素 */</span></span></span><br><span class="line"><span class="css"><span class="selector-tag">text-indent</span>: 2<span class="selector-tag">em</span>; <span class="comment">/* 首行缩进2个文字大小空间 */</span></span></span><br><span class="line"><span class="css"><span class="selector-tag">width</span>: 500<span class="selector-tag">px</span>; <span class="comment">/* 段落宽度500像素 */</span></span></span><br><span class="line"><span class="css"><span class="selector-tag">margin</span>: 0 <span class="selector-tag">auto</span>; <span class="comment">/* 浏览器居中 */</span></span></span><br><span class="line"><span class="css"><span class="selector-tag">margin-bottom</span>: 20<span class="selector-tag">px</span>; <span class="comment">/* 段落下边距20像素 */</span>&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>北京小米科技有限责任公司成立于2010年3月3日 [1]</span><br><span class="line">，是一家专注于智能硬件和电子产品研发的移动互联网公司，同时也是一家专注于高端智能手机、互联网电视以及智能家居生态链建设的创新型科技企业。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>为发烧而生”是小米的产品概念。小米公司创造了用互联网模式开发手机操作系统、发烧友参与开发改进的模式。小米还是继苹果、三星、华为之后第四家拥有手机芯片自研能力的科技公司。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>让每个人都能享受科技的乐趣”是小米公司的愿景。小米公司应用了互联网开发模式开发产品的模式，用极客精神做产品，用互联网模式干掉中间环节，致力让全球每个人，都能享用来自中国的优质科技产品。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>小米已经建成了全球最大消费类IoT物联网平台，连接超过1亿台智能设备，MIUI月活跃用户达到1.9亿。</span><br><span class="line"></span><br><span class="line">小米系投资的公司接近400家，覆盖智能硬件、生活消费用品、教育、游戏、社交网络、文化娱乐、医疗健康、汽车交通、金融等领域。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>style标签不仅可以定义CSS样式，还可以定义JavaScript样式，当style的type属性值为text/css时内部编写css样式；为text/javascript时，内部编写JavaScript脚本。</p>
 <p>同时，title属性可以标记不同字号，但只有在firefox的查看菜单中可以调节使用该功能。（如图）</p>
@@ -443,9 +443,9 @@ height:50vh;
     
         <div class="license-wrapper">
             <p>原文作者: <a href="http://lzwgiter.github.io">float</a>
-            <p>原文链接: <a href="http://lzwgiter.github.io/CSS基础2--应用/">http://lzwgiter.github.io/CSS基础2--应用/</a>
-            <p>发表日期: <a href="http://lzwgiter.github.io/CSS基础2--应用/">August 1st 2018, 7:30:35 pm</a>
-            <p>版权声明: 本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+            </p><p>原文链接: <a href="http://lzwgiter.github.io/CSS基础2--应用/">http://lzwgiter.github.io/CSS基础2--应用/</a>
+            </p><p>发表日期: <a href="http://lzwgiter.github.io/CSS基础2--应用/">August 1st 2018, 7:30:35 pm</a>
+            </p><p>版权声明: 本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
     <!-- paginator  -->
@@ -453,7 +453,7 @@ height:50vh;
         <li class="next">
             
                 <div class="nextSlogan">Next Post</div>
-                <a href= "/CSS基础3.1--特性之层叠性/" title= CSS基础3.1--特性之层叠性 >
+                <a href="/CSS基础3.1--特性之层叠性/" title="CSS基础3.1--特性之层叠性">
                     <div class="nextTitle">CSS基础3.1--特性之层叠性</div>
                 </a>
             
@@ -461,7 +461,7 @@ height:50vh;
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href= "/CSS基础1--样式/" title= CSS基础1--样式 >
+                <a href="/CSS基础1--样式/" title="CSS基础1--样式">
                     <div class="prevTitle">CSS基础1--样式</div>
                 </a>
             
@@ -481,7 +481,7 @@ height:50vh;
     
     
     <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
     <div id="comment"></div>
     <script>
     new Valine({
@@ -579,6 +579,24 @@ height:50vh;
     
     </div>
     
+    <!-- 新增访客统计代码 -->
+    <div class="busuanzi-count">
+        <script async="" src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+        <span class="site-uv">
+        <i class="fa fa-user"></i>
+        访问用户： <span class="busuanzi-value" id="busuanzi_value_site_uv"></span> 人
+        </span>
+    <div class="powered-by"></div>
+        <span class="site-uv">
+         <i class="fa fa-eye"></i>
+        访问次数： <span class="busuanzi-value" id="busuanzi_value_site_pv"></span> 次
+        </span>
+        <!-- 博客字数统计 -->
+        <span class="site-pv">
+        <i class="fa fa-pencil"></i>
+        博客全站共： <span class="post-count">{{ totalcount(site) }}</span> 字
+        </span>
+    </div>
 </footer>
     </div>
     <!-- toc -->
@@ -1926,7 +1944,7 @@ jsonContent:
     
         <script src="/scripts/share.js" async></script>    
      
-    <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+    <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/miku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>
 
 
