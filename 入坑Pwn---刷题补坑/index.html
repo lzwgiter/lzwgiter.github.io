@@ -271,7 +271,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">11,027</span> / Reading time: <span class="post-count">51 min</span></span>
+                        <span>Word count: <span class="post-count">11,077</span> / Reading time: <span class="post-count">51 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -628,7 +628,7 @@ height:50vh;
 <p><img src="/img/入坑Pwn-刷题补坑/image-20200222230715817.png" alt="image-20200222230715817"></p>
 <p><img src="/img/入坑Pwn-刷题补坑/image-20200222230514611.png" alt="image-20200222230514611"></p>
 <p>​    下面这张是swith的逻辑，如果等于1的话，就调用<code>v13+8</code>地址的函数，以及<code>v14+8</code>地址的函数。那对应的就是调用了Man对象和Woman对象的introduce方法了，这里的v13和v14变量也就不难猜出是give_shell函数的地址了，而v3和v5则是vtable的基址。</p>
-<p>​    源代码中这里调用了introduce方法，<strong>所以得出结论</strong>，introduce的偏移量相对give_shell函数为8，<strong>而从刚才Man的反编译代码也可以看出，二者确实差8，得以再次验证。</strong>至此，得出二者差为8。这里有个细节，vtables的基址是<code>0x401560</code>而实际上调用introduce方法的时候，使用give_shell的函数地址<code>0x401570</code>加8得到的，所以这里我有一个结论，使用函数的时候是用第一项进行偏移地址定位的，如有错误请大佬指出。</p>
+<p>​    源代码中这里调用了introduce方法，<strong>所以得出结论</strong>，introduce的偏移量相对give_shell函数为8，<strong>而从刚才Man的反编译代码也可以看出，二者确实差8，得以再次验证。</strong>至此，得出二者差为8。这里有个细节，vtables的基址是<code>0x401560</code>而实际上调用introduce方法的时候，使用give_shell的函数地址<code>0x401570</code>加8得到的，但是在Man的初始化方法中将传入的a1，也就是v3进行了一系列的处理，传出的v3就变成give_shell函数的地址了，具体怎么处理的这里不再讨论，只需要这么形象理解：传入一个单链表的表头，返回其第一个节点(其第一个虚函数地址)。</p>
 <p>​    那么为了使调用<code>vtable第一项+8</code>这个地址函数的时候实际调用的是<code>vtale第一项</code>这个函数，只需要把vtable第一项减8就可以了，所以我们的第二个参数就有了 — <code>0x401570 - 0x8  = 0x401568</code>。下面我们进行实践：</p>
 <p><img src="/img/入坑Pwn-刷题补坑/image-20200222232920951.png" alt="image-20200222232920951" style="zoom:67%;"></p>
 <p>​    成功！</p>
