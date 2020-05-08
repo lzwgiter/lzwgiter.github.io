@@ -269,7 +269,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">974</span> / Reading time: <span class="post-count">4 min</span></span>
+                        <span>Word count: <span class="post-count">4,083</span> / Reading time: <span class="post-count">17 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -409,6 +409,97 @@ height:50vh;
 <p>其中对于Spring Framework本身：</p>
 <p><img src="/img/JavaEE基础-Spring学习-IOC机制/image-20200506171705128.png" alt="image-20200506171705128"></p>
 <p>底层中核心有AOP(Aspect-Oriented Programming, 面向切面编程)和IOC(Inverse of Control，控制反转)，这两者是Spring的两大特性，知乎前辈指导先把这俩学清楚。</p>
+<h2 id="Spring的所有包模块"><a href="#Spring的所有包模块" class="headerlink" title="Spring的所有包模块"></a>Spring的所有包模块</h2><p>Spring模块本质就是多个jar文件，其中打包了该模块所需的代码，从Spring5版本开始Spring提供了21个模块，使用的时候如Maven，只需要引入依赖即可。下面的总结表格来自《Spring5高级编程(第五版)》。</p>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>aop</td>
+<td>该模块包含在应用程序中使用 Spring的AOP 功能时所需的所有类。如果打算在 Spring 中使用其他使用了 AOP 的功能， 例如声明式事务管理， 则需要在应用程序中包含此JAR 文件。 此外，支持与 AspectJ 集成的类也封装在此模块中</td>
+</tr>
+<tr>
+<td>aspects</td>
+<td>该模块包含与 AspecU AOP 库进行高级集成的所有类。 例如， 如果为完成 Spring 配置而使用 Java 类，并且需要 Asp创 风格的注解驱动的事务管理，则需要使用此模块</td>
+</tr>
+<tr>
+<td>beans</td>
+<td>该模块包含所有支持 Spring 对 Spring bean进行操作的类。 该模块中的大多数类都支持 Spring 的阳bean工厂实现。例如， 处理 Spring XML 配置文件和 Java 注解所需的类被封装到此模块中</td>
+</tr>
+<tr>
+<td>beans-groovy</td>
+<td>此模块包含用于支持 Spring 对 Spring bean 进行操作的 Groovy 类</td>
+</tr>
+<tr>
+<td>context</td>
+<td>该模块包含为 Spring Core 提供许多扩展的类。所有类都需要使用 Spring 的 ApplicationContext功能以及 Enterprise JavaBeans(EJB)、Java Naming and Directory lnterface(JNDI)和 Java Management Extensions(JMX) 集成的类。此模块中还包含 Spring 远程处理类，与动态脚本语言（例如 JRuby 、Groovy 和 BeanShe ll）、 JSR-303(Bean Validation）、调度和任务执行等集成的类</td>
+</tr>
+<tr>
+<td>context-indexer</td>
+<td>该模块包含一个索引器实现，它提供对META-INF/spring.components 中定义的候选项的访问功能。但核心类 CandidateComponentslndex并不能在外部使用</td>
+</tr>
+<tr>
+<td>context-support</td>
+<td>该模块包含对 spring-context模块的进一步扩展。 在用户界面方面，有一些用于支持邮件并与模板引擎（例如Velocity、FreeMarker和JasperReports）集成的类。 此外，还包括与各种任务执行和调度库（包括 CommonJ和Quatz的集成</td>
+</tr>
+<tr>
+<td>core</td>
+<td>这是每个 Spring 应用程序都需要的主要模块。在该 JAR 文件中，可以找到所有其他 Spring 模块｛例如，用于访问配置文件的类）所共享的所有类。另外，在该 JAR 文件中，会发现在整个 Spring 代码库中都使用的非常有用的实用程 序类，可以在自己的应用程序中使用它们</td>
+</tr>
+<tr>
+<td>expression</td>
+<td>该模块包含 Spring Expression Language(SpEL)的所有支持类</td>
+</tr>
+<tr>
+<td>instrument</td>
+<td>该模块包含用于JVM启动的Spring工具代理。 如果在 Spring 应用程序中使用 AspectJ 实现加载时植入，那么该模块是必需的</td>
+</tr>
+<tr>
+<td>jdbc</td>
+<td>该模块包含所有的 JDBC 支持类。对于需要数据库访问的所有应用程序，都需要此模块。支持数据源、 JDBC 数据 类型、 JDBC 模板、本地 JDBC 连接等的类都被打包在此模块中</td>
+</tr>
+<tr>
+<td>jms</td>
+<td>该模块包含川S 支持的所有类</td>
+</tr>
+<tr>
+<td>orm</td>
+<td>该模块扩展了 Spring 的标准 JDBC 功能集，支持流行的 ORM 工具，包括 Hibemate、JDO、JPA 和数据映射器 iBATIS。该 JAR 文件中的许多类都依赖于 spring-jdbc JAR 文件中所包含的类， 因此也需要把它包含在应用程序中。</td>
+</tr>
+<tr>
+<td>oxm</td>
+<td>该模块为Object/XML映射（OXM）提供支持。 用于抽象 XML 编组和解组以及支持Castor、JAXB、XMLBeans和XStream等常用工具的类都包含在此模块中</td>
+</tr>
+<tr>
+<td>test</td>
+<td>Spring 提供一组模拟类来帮助测试应用程序，并且许多模拟类都在 Spring 测试套件中使用，所以它们都经过了很好 的测试，从而使测试应用程序变得更简单。 在对 Web 应用程序进行单元测试时会发现模拟HttpServletRequest和 HttpServletResponse类所带来的好处。 另一方面，Spring提供了与 JUnit 单元测试框架的紧密集成， 并且在该模块中 提供了许多支持 JUnit 测试用例开发的类：例如：SpringJUnit4ClassRunner提供了一种在单元测试环境中引导Spring ApplicationContext的简单方法</td>
+</tr>
+<tr>
+<td>tx</td>
+<td>该模块提供支持Spring事务基础架构的所有类。 可以从事务抽象层找到相应的类来支持Java Transaction APl(JT A) 以及与主要供应商的应用程序服务器的集成</td>
+</tr>
+<tr>
+<td>web</td>
+<td>此模块包含在 Web 应用程序中使用Spring所需的核心类，包括用于自动加载 ApplicationContext 功能的类、文件上传支持类以及一些用于执行重复任务（比如从查询字符中解忻整数值）的有用类</td>
+</tr>
+<tr>
+<td>web-reactive</td>
+<td>该模块包含SpringWeb Reactive模型的核心接口和类</td>
+</tr>
+<tr>
+<td>wev-mvc</td>
+<td>该模块包含Spring自己的 MVC 框架的所有类。 如果想要为应用程使用单独的 MVC框架，则不需要此 JAR 文件中的任何类。</td>
+</tr>
+<tr>
+<td>webfsocket</td>
+<td>该模块提供对 J SR-356仰ebSocket 的 Java API）的支持</td>
+</tr>
+</tbody>
+</table>
 <h2 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h2><p>控制反转，<strong>本质就是将创建对象的控制权交给SpringFramework</strong>。简单来说我们一般新建一个对象：<code>Person person = new Person()</code>使用了new关键字来进行操作，现在将这个工作交给SpringFramework的意思。</p>
 <blockquote>
 <p>IoC Implementation Strategies</p>
@@ -423,16 +514,68 @@ height:50vh;
 <li>依赖注入(DL)。组件不需要取查找依赖，而是将java方法提供给容器来解决依赖。容器完全负责连接组件，将解析的对象传递给JavaBean属性或构造函数。其中使用JavaBean属性称为Setter注入，使用构造函数参数称为构造器注入。</li>
 </ul>
 <p>其中第二种方法表现更好。这里的<code>容器 - container</code>指的是IOC容器。</p>
-<p>Spring依赖注入的方式有四种：基于注解、set注入、构造器注入、静态工厂注入。基于注解更常见，因为配置少。</p>
-<h3 id="基于注解的依赖注入"><a href="#基于注解的依赖注入" class="headerlink" title="基于注解的依赖注入"></a>基于注解的依赖注入</h3><p>我们首先定义一个服务：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyService</span> </span>&#123;</span><br><span class="line">    <span class="comment">//code</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这个<code>@Service</code>注解就将这个类标记为了业务层(M)的一个组件。</p>
-<p>定义控制器：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@Scope</span>(<span class="string">"prototype"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyController</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MyService myService;</span><br><span class="line">    <span class="comment">//code</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>@Controller</code>注解将这个类标记为了一个控制器层(C)的组件，<code>@Scope(&quot;prototype&quot;)</code>将组件的范围设置为多例的，保证每一个请求有一个单独的action来处理，避免action的线程问题。我们重点关注的是<code>@Autowired</code>注解。这个注解会按照类型进行自动装配，在容器内查找匹配的Bean，当且仅有一个Bean时，就会将它注入到Autowired标记的变量中。</p>
-<h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><p>面向切面编程（AOP）就是纵向的编程。比如业务A和业务B现在需要一个相同的操作，传统方法我们可能需要在A、B中都加入相关操作代码，而应用AOP就可以只写一遍代码，A、B共用这段代码，这样提高了代码的重用性。</p>
-<p>AOP主要一般应用于<strong>签名验签、参数校验、日志记录、事务控制、权限控制、性能统计、异常处理等。</strong></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://blog.csdn.net/ricky73999/article/details/56683920/" target="_blank" rel="noopener">浅谈MVC</a></p>
+<p>下面是根据体的对于IOC机制的解释：</p>
+<blockquote>
+<p>Spring框架的核心是基于控制反转（Inversion of Control, IoC)的原理。 IoC 是一种将组件依赖项的创建和管理外部化的技术。请参考一个示例，比如类 Foo 依赖于 Bar 类的一个实例来执行某种处理。 传统上， Foo 通过使用 new 操作符来创建 Bar 实例或从某个工厂类中获取 Bar 实例。 而如果使用 IoC 方法， Bar 的一个实例（或一个子类）在运行时由某个外部进程提供给 Foo。这种在运行时注入依赖项的行为促使 Martin Fowler将 IoC 重命名为更具描述性的依赖注入ρependency Injection, DI) 。 </p>
+<p>​                                                                                                        ——《Spring5高级编程(第五版)》</p>
+</blockquote>
+<p>DI其实是Martin Fowler对IOC的另一种更具体的解释。<strong>即Spring通过DI来实现在程序运行的时候，动态的向某个对象提供他所需要的其他对象。</strong></p>
+<p>Spring的DI实现基于两个核心的Java概念：JavaBeans和接口，JavaBean也叫做Plain Ordinary Java Object(POJO，简单普通Java对象)，它概念这里不做解释，下面的代码会说到它的特点。当使用Spring作为DI提供程序时，可以通过不同的方式来在应用程序中灵活定义依赖项配置，如：</p>
+<ul>
+<li>XML文件</li>
+<li>Java配置类</li>
+<li>注解</li>
+</ul>
+<p>而<strong>JavaBean提供了一种创建Java资源的标准机制</strong>，这些资源可以通过多种方式进行配置，这个配置的过程叫做<strong>注入</strong>，这也就是依赖注入名字的意思了，下面我们把<code>配置</code>这个动词换为<code>注入</code>。那么使用DI的好处是什么呢？</p>
+<ul>
+<li>减少粘合代码，这是DI的最大优点之一。</li>
+<li>简化应用程序配置</li>
+<li>能够在单个存储库中管理常见依赖项</li>
+<li>可测试性</li>
+<li>良好的程序设计</li>
+</ul>
+<p>Spring依赖注入的方式有四种：setter注入、构造器注入、基于注解、静态工厂注入。下面一个个的进行进行解释。首先我们先来了解什么是JavaBean，并通过一个例子来理解为啥需要这种IOC机制。</p>
+<h2 id="JavaBean"><a href="#JavaBean" class="headerlink" title="JavaBean"></a>JavaBean</h2><p>其实但是我看到这个名字就很好奇，javabean，bean？豆子？啥意思？想比喻啥？专门查了以下才知道…好吧javabean是咖啡豆哈哈哈，那侧面也能看出来他的地位了可能。</p>
+<p>这里我不想抛出太多的专业解释，只放出我的理解。JavaBean又叫POJO，是简单Java对象的意思，简单对象嘛，那就是很简单的对象喽….</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">getName</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">setName</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面这个类就是javabean，好了我说完了。</p>
+<p>哈哈哈你是不有点懵，其实<strong>JavaBean就是一个提供了getter、setter方法的对象</strong>，可以就如同一个黑盒子，你甭管我咋写的，你就知道可以get和set就完事了。对于Spring，这就是DI的一个<strong>最小管理单元</strong>，用来由Spring在合适的时候动态的向其中提供类或取出类，那我们下面一个例子就知道JavaBean的作用了。</p>
+<h3 id="一个实例"><a href="#一个实例" class="headerlink" title="一个实例"></a>一个实例</h3><p>我们现在考虑这样的经典场景，消费者和生产者，生产者生产消息、消费者输出消息：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> demo1;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 消息提供者</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MessageProvider</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">getMessage</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> demo1;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 消息渲染者(消费者)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MessageRender</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    输出消息</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">render</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    设置生产者</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setMessageProvider</span><span class="params">(MessageProvider messageProvider)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    获取生产者</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">MessageProvider <span class="title">getMessageProvider</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对应的实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> demo1;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorldMessageProvider</span> <span class="keyword">implements</span> <span class="title">MessageProvider</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getMessage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello, World"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> demo1;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StandardOutMessageRender</span> <span class="keyword">implements</span> <span class="title">MessageRender</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> MessageProvider messageProvider;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">render</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (messageProvider == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(</span><br><span class="line">                    <span class="string">"your must set the property messageProvider of class:"</span></span><br><span class="line">                            + StandardOutMessageRender.class.getName());</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="keyword">this</span>.messageProvider.getMessage());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMessageProvider</span><span class="params">(MessageProvider messageProvider)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.messageProvider = messageProvider;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> MessageProvider <span class="title">getMessageProvider</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.messageProvider;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在想一想，如果我们要使用的话，main函数是不是这么写？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> demo1;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorldcoupled</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        MessageProvider msgP = <span class="keyword">new</span> HelloWorldMessageProvider();</span><br><span class="line">        MessageRender msgR = <span class="keyword">new</span> StandardOutMessageRender();</span><br><span class="line">        msgR.setMessageProvider(msgP);</span><br><span class="line">        msgR.render();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>即我们需要手动new对象，再进行对应的操作。</p>
+<p><img src="/img/JavaEE基础-Spring学习-IOC机制/image-20200508205050264.png" alt="image-20200508205050264"></p>
+<p>这是因为我们的应用程序比较简单，你这么搞没人说你错，但是想一想，如果我要增加一个生产者呢？我是不是还得修改对应的类？修改main方法？假如你这是个编写好的程序，你不还得重新打包、重新发布？</p>
+<p>换句话说：<strong>代码的耦合性很高，难于维护。</strong></p>
+<p>那好了有人说用工厂类，再加个配置文件，用反射机制动态获取类，可以：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> demo1;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Properties;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MessageSupportedFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> MessageSupportedFactory instance;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Properties props;</span><br><span class="line">    <span class="keyword">private</span> MessageRender renderer;</span><br><span class="line">    <span class="keyword">private</span> MessageProvider provider;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        instance = <span class="keyword">new</span> MessageSupportedFactory();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">MessageSupportedFactory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        props = <span class="keyword">new</span> Properties();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            props.load(<span class="keyword">this</span>.getClass().getResourceAsStream(<span class="string">"/msf.properties"</span>));</span><br><span class="line">            String rendererClassName = props.getProperty(<span class="string">"renderer.class"</span>);</span><br><span class="line">            String providerClassName = props.getProperty(<span class="string">"provider.class"</span>);</span><br><span class="line"></span><br><span class="line">            renderer = (MessageRender)Class.forName(rendererClassName).newInstance();</span><br><span class="line">            provider = (MessageProvider)Class.forName(providerClassName).newInstance();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">            ex.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> MessageSupportedFactory <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> MessageRender <span class="title">getRenderer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> renderer;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> MessageProvider <span class="title">getProvider</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> provider;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>配置文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">renderer.class = demo1.StandardOutMessageRender</span><br><span class="line">provider.class = demo1.HelloWorldMessageProvider</span><br></pre></td></tr></table></figure>
+<p>再修改以下main函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> demo1;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorldDecoupled</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        MessageProvider msgP = MessageSupportedFactory.getInstance().getProvider();</span><br><span class="line">        MessageRender msgR = MessageSupportedFactory.getInstance().getRenderer();</span><br><span class="line">        msgR.setMessageProvider(msgP);</span><br><span class="line">        msgR.render();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>OK，不需要new对象了，直接在工厂类里用反射机制动态获取配置文件中的类，再操作就行了。那其实你还是需要用set方法来进行配置，如果你这个类有一堆setter呢？还是需要修改main函数的。那么下来我们使用Spring进行重构。</p>
+<h3 id="使用Spring重构实例"><a href="#使用Spring重构实例" class="headerlink" title="使用Spring重构实例"></a>使用Spring重构实例</h3><p>明确问题：解决手动调用set方法进行对象的依赖管理。</p>
+<p>我们首先写一个spring.xml，名字无所谓</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span><span class="meta">?&gt;</span></span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"demo1.HelloWorldMessageProvider"</span> <span class="attr">id</span>=<span class="string">"provider"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"demo1.StandardOutMessageRender"</span> <span class="attr">id</span>=<span class="string">"render"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"messageProvider"</span> <span class="attr">ref</span>=<span class="string">"provider"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>我来解释以下这个文件的内容，那几行xmlns是自动生成的，作用是充当命名空间，你下面使用的标签都是上面这些命名空间里定义的，也有其他的如<code>http://www.springframework.org/schema/p</code>等可以实现如简写的功能，这里不用管他，后面我会说到常用命名空间的使用，下面的<code>&lt;bean&gt;</code>标签是我们的重点。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"demo1.HelloWorldMessageProvider"</span> <span class="attr">id</span>=<span class="string">"provider"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>对于这一个bean对象，它对应的是刚才HelloWorldMessageProvider这个类，id属性是我们对这个bean的标识。这就是一个bean了，其实就如同一个单元，交给了spring的上下文。另一个是一样的，但是多了个property属性，什么意思呢？</p>
+<p>在StandardOutMessageRender这个类中我们有一个Setter方法以及一个私有属性messageProvider：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> MessageProvider messageProvider;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMessageProvider</span><span class="params">(MessageProvider messageProvider)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.messageProvider = messageProvider;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ok，messageprovider是属性吧？行，那这个标签叫property你就理解了，ref是什么鬼？ref对应的就是这个setter方法，它的属性值就是这个setter方法的参数类型(MessageProvider)。</p>
+<p>即这个bean指向HelloWorldMessageProvider对象，这个对象有一个messageProvider属性，他的setter方法里参数填充为<code>provider</code>，<code>provider</code>是谁？– &gt; <code>HelloWorldMessageProvider</code>，这就是id的作用了。</p>
+<p>我们再重新写一下main函数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> demo1;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorldSpringDI</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"spring.xml"</span>);</span><br><span class="line">        MessageRender mr = context.getBean(<span class="string">"render"</span>, MessageRender.class);</span><br><span class="line">        mr.render();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>ApplicationContext</code>是一个上下文接口类，<code>ClassPathXmlApplicationContext</code>类可以用来读取xml文档，这里读取的就是我们的bean定义文档。通过这个函数我们可以获取到Spring的上下文，这个上下文里就包含了我们定义的beans(那两个类)，再通过getBean方法来获取指定的对象，这里我们获取id为<code>render</code>的类，即StandardOutMessageRender类对象，最后调用render()方法进行输出。</p>
+<p>没有new吧？(上下文那个不算…)，我没调用setter方法吧？那运行一下。</p>
+<p><img src="/img/JavaEE基础-Spring学习-IOC机制/image-20200508211307583.png" alt="image-20200508211307583"></p>
+<p>可以这就是IOC的魅力，Spring通过IOC机制在合适的时候创建需要的对象(StandardOutMessageRender和HelloWorldMessageProvider)，并自动调用其中的setter方法，将HelloWorldMessageProvider对象自动注入到了StandardOutMessageRender类对象中，这个过程过程我们叫<strong>依赖注入</strong>。</p>
+<h2 id="DI的类型"><a href="#DI的类型" class="headerlink" title="DI的类型"></a>DI的类型</h2><h2 id="基于注解的依赖注入"><a href="#基于注解的依赖注入" class="headerlink" title="基于注解的依赖注入"></a>基于注解的依赖注入</h2><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://blog.csdn.net/ricky73999/article/details/56683920/" target="_blank" rel="noopener">浅谈MVC</a></p>
 <p><a href="https://www.cnblogs.com/best/p/5653916.html" target="_blank" rel="noopener">https://www.cnblogs.com/best/p/5653916.html</a></p>
 <p><a href="https://zhuanlan.zhihu.com/p/64001753" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/64001753</a></p>
 <p><a href="https://blog.csdn.net/dkbnull/article/details/87219562" target="_blank" rel="noopener">https://blog.csdn.net/dkbnull/article/details/87219562</a></p>
@@ -592,7 +735,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-全家桶"><span class="toc-number">1.</span> <span class="toc-text">Spring 全家桶</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IOC"><span class="toc-number">2.</span> <span class="toc-text">IOC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基于注解的依赖注入"><span class="toc-number">2.1.</span> <span class="toc-text">基于注解的依赖注入</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AOP"><span class="toc-number">3.</span> <span class="toc-text">AOP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring-全家桶"><span class="toc-number">1.</span> <span class="toc-text">Spring 全家桶</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring的所有包模块"><span class="toc-number">2.</span> <span class="toc-text">Spring的所有包模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IOC"><span class="toc-number">3.</span> <span class="toc-text">IOC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JavaBean"><span class="toc-number">4.</span> <span class="toc-text">JavaBean</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一个实例"><span class="toc-number">4.1.</span> <span class="toc-text">一个实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用Spring重构实例"><span class="toc-number">4.2.</span> <span class="toc-text">使用Spring重构实例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DI的类型"><span class="toc-number">5.</span> <span class="toc-text">DI的类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于注解的依赖注入"><span class="toc-number">6.</span> <span class="toc-text">基于注解的依赖注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -605,18 +748,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -1854,29 +1985,31 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
+    
         <span class="sidebar-tag-name" data-tags="渗透测试"><span class="iconfont-archer">&#xe606;</span>渗透测试</span>
     
         <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
     
-        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
-    
         <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
-    
-        <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
         <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
     
         <span class="sidebar-tag-name" data-tags="SQLi"><span class="iconfont-archer">&#xe606;</span>SQLi</span>
     
-        <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
+        <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
         <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
         <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
     
+        <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
+    
         <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
     
         <span class="sidebar-tag-name" data-tags="JavaEE"><span class="iconfont-archer">&#xe606;</span>JavaEE</span>
+    
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
     
         <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
     
@@ -1884,21 +2017,19 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
     
-        <span class="sidebar-tag-name" data-tags="电子取证"><span class="iconfont-archer">&#xe606;</span>电子取证</span>
-    
         <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
     
         <span class="sidebar-tag-name" data-tags="漏洞挖掘"><span class="iconfont-archer">&#xe606;</span>漏洞挖掘</span>
+    
+        <span class="sidebar-tag-name" data-tags="电子取证"><span class="iconfont-archer">&#xe606;</span>电子取证</span>
+    
+        <span class="sidebar-tag-name" data-tags="微服务"><span class="iconfont-archer">&#xe606;</span>微服务</span>
     
         <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
     
         <span class="sidebar-tag-name" data-tags="C编程"><span class="iconfont-archer">&#xe606;</span>C编程</span>
     
-        <span class="sidebar-tag-name" data-tags="微服务"><span class="iconfont-archer">&#xe606;</span>微服务</span>
-    
         <span class="sidebar-tag-name" data-tags="school"><span class="iconfont-archer">&#xe606;</span>school</span>
-    
-        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
