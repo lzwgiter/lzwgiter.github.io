@@ -514,7 +514,7 @@ height:50vh;
 <li>依赖注入(DI)。组件不需要取查找依赖，而是将java方法提供给容器来解决依赖。容器完全负责连接组件，将解析的对象传递给JavaBean属性或构造函数。其中使用JavaBean属性称为Setter注入，使用构造函数参数称为构造器注入。</li>
 </ul>
 <p>这里的<code>容器 - container</code>指的是IOC容器。</p>
-<p>下面是根据体的对于IOC机制的解释：</p>
+<p>下面是更具体的对于IOC机制的解释：</p>
 <blockquote>
 <p>Spring框架的核心是基于控制反转（Inversion of Control, IoC)的原理。 IoC 是一种将组件依赖项的创建和管理外部化的技术。请参考一个示例，比如类 Foo 依赖于 Bar 类的一个实例来执行某种处理。 传统上， Foo 通过使用 new 操作符来创建 Bar 实例或从某个工厂类中获取 Bar 实例。 而如果使用 IoC 方法， Bar 的一个实例（或一个子类）在运行时由某个外部进程提供给 Foo。这种在运行时注入依赖项的行为促使 Martin Fowler将 IoC 重命名为更具描述性的依赖注入ρependency Injection, DI) 。 </p>
 <p>​                                                                                                        ——<em>《Spring5高级编程(第五版)》</em></p>
@@ -892,10 +892,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
-    
-    
     
     
     
