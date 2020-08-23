@@ -267,7 +267,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">2,444</span> / Reading time: <span class="post-count">9 min</span></span>
+                        <span>Word count: <span class="post-count">2,484</span> / Reading time: <span class="post-count">10 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -411,7 +411,7 @@ height:50vh;
 <p>​    看似概念很多，实际上我们可以很形象的比作买票的过程：你(Client)今天想去游乐场玩，那么你来到了游乐场门口(域环境)，<strong>用你的身份证</strong>在售票处(AS)买了一张<strong>通票</strong>，这张通票允许你去换成任何你可以体验的设施的票。你开心地拿着这张票来到了你最爱的过山车门口(TGS)，用这张<strong>通票</strong>换得了过山车的票，最终你坐上了过山车(Server)。这就是Kerberos认证的过程，它主要目的就是证明你的身份(因为是用身份证买的)，且你具有做过山车的权限(通票可以换任何票)。</p>
 <p>​    那我们简单画一个图来示意：</p>
 <p><img src="/img/Kerberos认证过程原理及攻击手段/过程.png" alt="image-20200414135558815"></p>
-<h4 id="为什么需要kerberos？"><a href="#为什么需要kerberos？" class="headerlink" title="为什么需要kerberos？"></a>为什么需要kerberos？</h4><p>​    Kerberos协议主要用于域环境下身份的认证，其本质解决问题是证明<strong>你确实是你本人</strong>这个问题，以此来判断你是否有权限来访问其他服务器上的资源。</p>
+<h4 id="为什么需要kerberos？"><a href="#为什么需要kerberos？" class="headerlink" title="为什么需要kerberos？"></a>为什么需要kerberos？</h4><p>​    Kerberos协议主要用于域环境下身份的认证，其本质解决问题是证明<strong>你确实是你本人</strong>这个问题，以此来判断你是否有权限来访问其他服务器上的资源。同时Kerberos提供了一种凭证管理方式，用票据来为用户授权，如果类比一下的话，票据就相当于web中的Cookie。</p>
 <h4 id="什么是域？"><a href="#什么是域？" class="headerlink" title="什么是域？"></a>什么是域？</h4><p>​    域的出现是为了解决企业内部的资源管理问题，比如一个公司可以在公司的内网中创建各个部门的来方便内部资源的管理。在一个域中有域控、域管理员、普通用户、主机等等资源。</p>
 <p>​    你可以设想，如果你在公司中的另一台计算机上要登陆你的账号，那你就得在另一台计算机上的SAM数据库中加入你的账户信息，那要是有100台、1000台、10000台计算机呢？所以我们就就要定义<strong>一个有安全边界的计算机集合</strong>，这个集合就是域。下面简单澄清几个概念：</p>
 <ul>
@@ -656,8 +656,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
     
     
     
@@ -1989,11 +1987,11 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
     
-        <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
-    
         <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
     
         <span class="sidebar-tag-name" data-tags="SQLi"><span class="iconfont-archer">&#xe606;</span>SQLi</span>
+    
+        <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
         <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
     
@@ -2017,15 +2015,15 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
     
-        <span class="sidebar-tag-name" data-tags="电子取证"><span class="iconfont-archer">&#xe606;</span>电子取证</span>
-    
         <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
+    
+        <span class="sidebar-tag-name" data-tags="电子取证"><span class="iconfont-archer">&#xe606;</span>电子取证</span>
     
         <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
     
-        <span class="sidebar-tag-name" data-tags="C编程"><span class="iconfont-archer">&#xe606;</span>C编程</span>
-    
         <span class="sidebar-tag-name" data-tags="微服务"><span class="iconfont-archer">&#xe606;</span>微服务</span>
+    
+        <span class="sidebar-tag-name" data-tags="C编程"><span class="iconfont-archer">&#xe606;</span>C编程</span>
     
         <span class="sidebar-tag-name" data-tags="school"><span class="iconfont-archer">&#xe606;</span>school</span>
     
