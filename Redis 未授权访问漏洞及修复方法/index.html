@@ -404,28 +404,35 @@ height:50vh;
 <a id="more"></a>
 <h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>  这个漏洞的主要原因是没有正确的配置Redis的配置文件，主要的错误配置有一下几点(redis.conf)：</p>
 <ul>
-<li><code>protected-mode no</code> 关闭了保护模式，允许外部的客户端使用redis-cli进行连接</li>
-<li>将<code>bind 127.0.0.1</code> 注释掉，导致redis服务暴露在外部</li>
+<li><p><code>protected-mode no</code> 关闭了保护模式，允许外部的客户端使用redis-cli进行连接</p>
+</li>
+<li><p>将<code>bind 127.0.0.1</code> 注释掉，导致redis服务暴露在外部</p>
+</li>
 <li><p>没有设置密码</p>
 <p>默认的Redis安装好后，默认是会bind 本地地址的，并开启了protected-mode，因为他的角色定位就是配合平常的数据库软件来使用的，是一种快速的缓存的键值型数据库，所以如果将它暴露在因特网上，并没有正确的配置就会有风险。</p>
 </li>
 </ul>
 <h3 id="攻击方法"><a href="#攻击方法" class="headerlink" title="攻击方法"></a>攻击方法</h3><p>  错误配置后，攻击者可以访问Redis服务，利用Redis自身提供的<code>config</code>命令进行写文件的操作，并将自己的SSH公钥写入目标服务器的/root/.ssh目录下，然后使用私钥直接登录目标服务器</p>
 <h3 id="复现"><a href="#复现" class="headerlink" title="复现"></a>复现</h3><p>  清单</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">攻击机 ： kali 10.10.10.12</span><br><span class="line">靶机 ：CentOS7 10.10.10.11</span><br><span class="line">Redis版本： 3.2.0</span><br></pre></td></tr></table></figure>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">攻击机 ： kali 10.10.10.12</span><br><span class="line">靶机 ：CentOS7 10.10.10.11</span><br><span class="line">Redis版本： 3.2.0</span><br></pre></td></tr></table></figure>
+
 <p>  下载好源码后编译，并修改redis.conf文件部分如下：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> IF YOU ARE SURE YOU WANT YOUR INSTANCE TO LISTEN TO ALL THE INTERFACES</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> JUST COMMENT THE FOLLOWING LINE.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">bind</span> 127.0.0.1		//此处将<span class="built_in">bind</span> 127.0.0.1进行了注释</span></span><br><span class="line"></span><br><span class="line">......</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> By default protected mode is enabled. You should <span class="built_in">disable</span> it only <span class="keyword">if</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> you are sure you want clients from other hosts to connect to Redis</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> even <span class="keyword">if</span> no authentication is configured, nor a specific <span class="built_in">set</span> of interfaces</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> are explicitly listed using the <span class="string">"bind"</span> directive.</span></span><br><span class="line">protected-mode no		//修改为no</span><br><span class="line"></span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> IF YOU ARE SURE YOU WANT YOUR INSTANCE TO LISTEN TO ALL THE INTERFACES</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> JUST COMMENT THE FOLLOWING LINE.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">bind</span> 127.0.0.1		//此处将<span class="built_in">bind</span> 127.0.0.1进行了注释</span></span><br><span class="line"></span><br><span class="line">......</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> By default protected mode is enabled. You should <span class="built_in">disable</span> it only <span class="keyword">if</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> you are sure you want clients from other hosts to connect to Redis</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> even <span class="keyword">if</span> no authentication is configured, nor a specific <span class="built_in">set</span> of interfaces</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> are explicitly listed using the <span class="string">&quot;bind&quot;</span> directive.</span></span><br><span class="line">protected-mode no		//修改为no</span><br><span class="line"></span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
 <p>  使用src下的<code>redis-server</code>可执行文件 + 指定的配置文件运行Redis服务：</p>
-<p><img src="/img/Redis未授权访问漏洞及修补方法/open-server.png" alt="open-server"></p>
+<p><img src="/img/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%8F%8A%E4%BF%AE%E8%A1%A5%E6%96%B9%E6%B3%95/open-server.png" alt="open-server"></p>
 <p><strong>攻击方法：在靶机的/root/.ssh/目录下写入自己ssh的公钥，使用自己的私钥直接登录对方的机器</strong></p>
 <p>条件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1. 靶机的Redis服务是使用root账号启动的</span><br><span class="line">2. 靶机开启了ssh服务，允许使用秘钥登录</span><br></pre></td></tr></table></figure>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1. 靶机的Redis服务是使用root账号启动的</span><br><span class="line">2. 靶机开启了ssh服务，允许使用秘钥登录</span><br></pre></td></tr></table></figure>
+
+
+
 <p> 在kali中生成自己的SSH公私钥对：</p>
-<p><img src="/img/Redis未授权访问漏洞及修补方法/key-gen.png" alt="image-20200109192855717"></p>
+<p><img src="/img/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%8F%8A%E4%BF%AE%E8%A1%A5%E6%96%B9%E6%B3%95/key-gen.png" alt="image-20200109192855717"></p>
 <p>  登录到Redis服务，切换路径并写入公钥内容保存，退出</p>
-<p><img src="/img/Redis未授权访问漏洞及修补方法/write_pub.png" alt="image-20200109194431365"></p>
+<p><img src="/img/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%8F%8A%E4%BF%AE%E8%A1%A5%E6%96%B9%E6%B3%95/write_pub.png" alt="image-20200109194431365"></p>
 <p>  直接使用私钥登录</p>
-<p><img src="/img/Redis未授权访问漏洞及修补方法/logon.png" alt="image-20200109194551921"></p>
+<p><img src="/img/Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E%E5%8F%8A%E4%BF%AE%E8%A1%A5%E6%96%B9%E6%B3%95/logon.png" alt="image-20200109194551921"></p>
 <p><strong>其他攻击方法：</strong></p>
 <p>也可以向对方机器中写入一个crond任务，内容为反弹一个shell给自己或者向其web目录下写webshell，菜刀等直连即可</p>
 <h3 id="修补方法"><a href="#修补方法" class="headerlink" title="修补方法"></a>修补方法</h3><ul>
@@ -608,6 +615,10 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
     
     
     
@@ -1953,29 +1964,29 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
     
-        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
-    
-        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
-    
         <span class="sidebar-tag-name" data-tags="JavaEE"><span class="iconfont-archer">&#xe606;</span>JavaEE</span>
-    
-        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
     
         <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
     
         <span class="sidebar-tag-name" data-tags="PHP"><span class="iconfont-archer">&#xe606;</span>PHP</span>
     
-        <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
+        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
     
-        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
+        <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
     
         <span class="sidebar-tag-name" data-tags="电子取证"><span class="iconfont-archer">&#xe606;</span>电子取证</span>
     
+        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
+    
         <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
     
-        <span class="sidebar-tag-name" data-tags="微服务"><span class="iconfont-archer">&#xe606;</span>微服务</span>
-    
         <span class="sidebar-tag-name" data-tags="C编程"><span class="iconfont-archer">&#xe606;</span>C编程</span>
+    
+        <span class="sidebar-tag-name" data-tags="微服务"><span class="iconfont-archer">&#xe606;</span>微服务</span>
     
         <span class="sidebar-tag-name" data-tags="school"><span class="iconfont-archer">&#xe606;</span>school</span>
     

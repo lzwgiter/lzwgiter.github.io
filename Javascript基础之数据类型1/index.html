@@ -397,21 +397,33 @@ height:50vh;
             <main class="main post-page">
     <article class="article-entry">
         <blockquote>
-<p>Javascript属于一种弱类型语言，定义变量时不需要指定类型，一个变量可以储存任何类型的值，但在运算时，JavaScript还是会把它转换成相应的数据类型。<br><a id="more"></a></p>
+<p>Javascript属于一种弱类型语言，定义变量时不需要指定类型，一个变量可以储存任何类型的值，但在运算时，JavaScript还是会把它转换成相应的数据类型。</p>
 </blockquote>
+<a id="more"></a>
+
 <p>Javascript中，数据存在着两种不同的储存方式，<strong>直接储存数据和间接储存数据</strong>，前者成为值类型数据；而后者通过储存数据的空间地址来间接保存数据，称为引用型数据。</p>
-<p><img src="/img/Javascript基础之数据类型/Javascript数据类型.bmp" alt=""><br><a href="https://www.w3cschool.cn/javascript/javascript-skillmap.html" target="_blank" rel="noopener">图片来源</a></p>
-<h2 id="三种基本数据类型：数值、字符串和布尔型。"><a href="#三种基本数据类型：数值、字符串和布尔型。" class="headerlink" title="三种基本数据类型：数值、字符串和布尔型。"></a>三种基本数据类型：数值、字符串和布尔型。</h2><h3 id="数值型"><a href="#数值型" class="headerlink" title="数值型"></a>数值型</h3><p>Javascript数值不区分整数和浮点数，所遇到额数都能为浮点型数值来表示。除了基本的算术运算外，Javascript还提供了大量的算数函数，均包含在Math内置对象中。<br>如：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">var</span> c = a.toString()             <span class="comment">//转换为字符串</span></span><br><span class="line">alert(<span class="keyword">typeof</span>(c));</span><br></pre></td></tr></table></figure></p>
-<p><strong>快捷方法：使用数值与空字符串，即可把数值转换为字符串，如下</strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">var</span> c = a + <span class="string">""</span>                  <span class="comment">//转换为字符串</span></span><br><span class="line">alert(<span class="keyword">typeof</span>(c));               <span class="comment">//返回值为string类型</span></span><br></pre></td></tr></table></figure></p>
-<p><img src="/img/Javascript基础之数据类型/1.png" alt=""><br>(推荐使用可以使用firebug的版本的firefox浏览器，在firebug的控制台中可以进行代码的运行查看，或者在开发者工具里的代码草稿纸中直接运行或者在HTML代码中用script标签，在网页中查看)<br><img src="/img/Javascript基础之数据类型/2.png" alt=""></p>
-<h3 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a>字符串类型</h3><p>字符串由Unicode字符、数字、标点符号等组成的字符序列，字符串出必须使用单引号或双引号包括。<br>如：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"abcdefg"</span>      <span class="comment">//简单字符串</span></span><br><span class="line"><span class="keyword">var</span> str = <span class="string">"'JavaScript'"</span>  <span class="comment">//包含单引号的字符串</span></span><br><span class="line"><span class="keyword">var</span> str = <span class="string">'&lt;meta charset="utf-8"&gt;'</span>      <span class="comment">//HTML字符换</span></span><br><span class="line"><span class="keyword">var</span> str = <span class="number">1</span>;               <span class="comment">//test</span></span><br><span class="line">alert(str);</span><br></pre></td></tr></table></figure></p>
-<p><img src="/img/Javascript基础之数据类型/3.png" alt="">    从结果中也可以看出JavaScript 拥有动态类型。这意味着相同的变量可用作不同的类型：<br>使用parseInt()和parseFloat()方法可以将字符串变为整数。<br>如：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"123.30"</span>;</span><br><span class="line"><span class="keyword">var</span> a = <span class="built_in">parseInt</span>(str);        <span class="comment">//返回值为123</span></span><br><span class="line"><span class="keyword">var</span> b = <span class="built_in">parseFloat</span>(str);      <span class="comment">//返回值为123.3</span></span><br></pre></td></tr></table></figure></p>
-<p><strong>便捷方法：让一个字符串与1相乘就可以将字符串转换为数值。</strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">"123.30"</span>;</span><br><span class="line"><span class="keyword">var</span> a = str * <span class="number">1</span>;</span><br><span class="line">alert(typof(a))           <span class="comment">//返回nunmber类型</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="布尔型"><a href="#布尔型" class="headerlink" title="布尔型"></a>布尔型</h3><p>布尔类型仅包括两个值true和false。分别表示逻辑的真和假。布尔值多用在逻辑运算，比较运算中的条件语句或运算符的条件而使用。<br><strong>使用两个<code>!!</code>就可以将任何值转为布尔型数据</strong><br>如：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">var</span> c = !!a;</span><br><span class="line">alert(c);</span><br><span class="line">alert(<span class="keyword">typeof</span>(c));</span><br></pre></td></tr></table></figure></p>
-<p><img src="/img/Javascript基础之数据类型/4.png" alt=""><img src="/img/Javascript基础之数据类型/5.png" alt=""><br><strong>任何非空字符转换为布尔值为true，空格转换后为false<br>如将布尔值转换为字符串，则true为’true’，false为’false’。</strong></p>
-<p>注意：以下为一组不同类型的假值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 0              //Number</span><br><span class="line">2. NaN            //Number</span><br><span class="line">3. ’’             //String</span><br><span class="line">4. false          //boolean</span><br><span class="line">5. null           //Object</span><br><span class="line">6. undefined      //Undefined</span><br></pre></td></tr></table></figure></p>
-<h2 id="两个特殊值"><a href="#两个特殊值" class="headerlink" title="两个特殊值"></a>两个特殊值</h2><p>除了上面的简单的三个数据类型，js中还有两个特殊的数据类型的值：<strong>null和undefined</strong><br>null是Null类型的值，且Null类型只有一个值，即null，表示空值。当对象为空，挥着变量没有引用任何对象，其返回值就为null。当一个变量的值为null时，那么他的值就不是有效的对象、数组、数值、字符串和布尔型等。如果用以下代码测试其类型：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="literal">null</span>;</span><br><span class="line">alert(<span class="keyword">typeof</span>(a));</span><br></pre></td></tr></table></figure></p>
-<p>会得到这个结果：<br><img src="/img/Javascript基础之数据类型/6.png" alt=""><br>是一种特殊的对象。<br>undefined表示未定义的值，当变量未初始化时，会默认他的值为undefined。它区别任何对象、数组、数值、字符串和布尔型，使用typeof检测返回值为undefined。</p>
+<p><img src="/img/Javascript%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/Javascript%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.bmp"><br><a href="https://www.w3cschool.cn/javascript/javascript-skillmap.html">图片来源</a></p>
+<h2 id="三种基本数据类型：数值、字符串和布尔型。"><a href="#三种基本数据类型：数值、字符串和布尔型。" class="headerlink" title="三种基本数据类型：数值、字符串和布尔型。"></a>三种基本数据类型：数值、字符串和布尔型。</h2><h3 id="数值型"><a href="#数值型" class="headerlink" title="数值型"></a>数值型</h3><p>Javascript数值不区分整数和浮点数，所遇到额数都能为浮点型数值来表示。除了基本的算术运算外，Javascript还提供了大量的算数函数，均包含在Math内置对象中。<br>如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">var</span> c = a.toString()             <span class="comment">//转换为字符串</span></span><br><span class="line">alert(<span class="keyword">typeof</span>(c));</span><br></pre></td></tr></table></figure>
+<p><strong>快捷方法：使用数值与空字符串，即可把数值转换为字符串，如下</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">var</span> c = a + <span class="string">&quot;&quot;</span>                  <span class="comment">//转换为字符串</span></span><br><span class="line">alert(<span class="keyword">typeof</span>(c));               <span class="comment">//返回值为string类型</span></span><br></pre></td></tr></table></figure>
+<p><img src="/img/Javascript%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/1.png"><br>(推荐使用可以使用firebug的版本的firefox浏览器，在firebug的控制台中可以进行代码的运行查看，或者在开发者工具里的代码草稿纸中直接运行或者在HTML代码中用script标签，在网页中查看)<br><img src="/img/Javascript%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/2.png"></p>
+<h3 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a>字符串类型</h3><p>字符串由Unicode字符、数字、标点符号等组成的字符序列，字符串出必须使用单引号或双引号包括。<br>如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">&quot;abcdefg&quot;</span>      <span class="comment">//简单字符串</span></span><br><span class="line"><span class="keyword">var</span> str = <span class="string">&quot;&#x27;JavaScript&#x27;&quot;</span>  <span class="comment">//包含单引号的字符串</span></span><br><span class="line"><span class="keyword">var</span> str = <span class="string">&#x27;&lt;meta charset=&quot;utf-8&quot;&gt;&#x27;</span>      <span class="comment">//HTML字符换</span></span><br><span class="line"><span class="keyword">var</span> str = <span class="number">1</span>;               <span class="comment">//test</span></span><br><span class="line">alert(str);</span><br></pre></td></tr></table></figure>
+<p><img src="/img/Javascript%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/3.png">    从结果中也可以看出JavaScript 拥有动态类型。这意味着相同的变量可用作不同的类型：<br>使用parseInt()和parseFloat()方法可以将字符串变为整数。<br>如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">&quot;123.30&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> a = <span class="built_in">parseInt</span>(str);        <span class="comment">//返回值为123</span></span><br><span class="line"><span class="keyword">var</span> b = <span class="built_in">parseFloat</span>(str);      <span class="comment">//返回值为123.3</span></span><br></pre></td></tr></table></figure>
+<p><strong>便捷方法：让一个字符串与1相乘就可以将字符串转换为数值。</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">&quot;123.30&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> a = str * <span class="number">1</span>;</span><br><span class="line">alert(typof(a))           <span class="comment">//返回nunmber类型</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="布尔型"><a href="#布尔型" class="headerlink" title="布尔型"></a>布尔型</h3><p>布尔类型仅包括两个值true和false。分别表示逻辑的真和假。布尔值多用在逻辑运算，比较运算中的条件语句或运算符的条件而使用。<br><strong>使用两个<code>!!</code>就可以将任何值转为布尔型数据</strong><br>如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">var</span> c = !!a;</span><br><span class="line">alert(c);</span><br><span class="line">alert(<span class="keyword">typeof</span>(c));</span><br></pre></td></tr></table></figure>
+<p><img src="/img/Javascript%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/4.png"><img src="/img/Javascript%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/5.png"><br><strong>任何非空字符转换为布尔值为true，空格转换后为false<br>如将布尔值转换为字符串，则true为’true’，false为’false’。</strong></p>
+<p>注意：以下为一组不同类型的假值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 0              &#x2F;&#x2F;Number</span><br><span class="line">2. NaN            &#x2F;&#x2F;Number</span><br><span class="line">3. ’’             &#x2F;&#x2F;String</span><br><span class="line">4. false          &#x2F;&#x2F;boolean</span><br><span class="line">5. null           &#x2F;&#x2F;Object</span><br><span class="line">6. undefined      &#x2F;&#x2F;Undefined</span><br></pre></td></tr></table></figure>
+
+<h2 id="两个特殊值"><a href="#两个特殊值" class="headerlink" title="两个特殊值"></a>两个特殊值</h2><p>除了上面的简单的三个数据类型，js中还有两个特殊的数据类型的值：<strong>null和undefined</strong><br>null是Null类型的值，且Null类型只有一个值，即null，表示空值。当对象为空，挥着变量没有引用任何对象，其返回值就为null。当一个变量的值为null时，那么他的值就不是有效的对象、数组、数值、字符串和布尔型等。如果用以下代码测试其类型：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="literal">null</span>;</span><br><span class="line">alert(<span class="keyword">typeof</span>(a));</span><br></pre></td></tr></table></figure>
+<p>会得到这个结果：<br><img src="/img/Javascript%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/6.png"><br>是一种特殊的对象。<br>undefined表示未定义的值，当变量未初始化时，会默认他的值为undefined。它区别任何对象、数组、数值、字符串和布尔型，使用typeof检测返回值为undefined。</p>
 <h2 id="三个引用型数据"><a href="#三个引用型数据" class="headerlink" title="三个引用型数据"></a>三个引用型数据</h2><p>引用型数据包括数组(Array)、对象(Object)和函数(Function)等，详细请移步下一篇博客~~</p>
 
     </article>
@@ -587,6 +599,10 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
     
     
     
@@ -1932,29 +1948,29 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
     
-        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
-    
-        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
-    
         <span class="sidebar-tag-name" data-tags="JavaEE"><span class="iconfont-archer">&#xe606;</span>JavaEE</span>
-    
-        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
     
         <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
     
         <span class="sidebar-tag-name" data-tags="PHP"><span class="iconfont-archer">&#xe606;</span>PHP</span>
     
-        <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
+        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
     
-        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
+        <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
     
         <span class="sidebar-tag-name" data-tags="电子取证"><span class="iconfont-archer">&#xe606;</span>电子取证</span>
     
+        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
+    
         <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
     
-        <span class="sidebar-tag-name" data-tags="微服务"><span class="iconfont-archer">&#xe606;</span>微服务</span>
-    
         <span class="sidebar-tag-name" data-tags="C编程"><span class="iconfont-archer">&#xe606;</span>C编程</span>
+    
+        <span class="sidebar-tag-name" data-tags="微服务"><span class="iconfont-archer">&#xe606;</span>微服务</span>
     
         <span class="sidebar-tag-name" data-tags="school"><span class="iconfont-archer">&#xe606;</span>school</span>
     

@@ -398,9 +398,10 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <p>最近刷隐写的时候，zip这类格式的题型还是不少的，今天打算复习一下zip的文件格式内容。<br><a id="more"></a></p>
+        <p>最近刷隐写的时候，zip这类格式的题型还是不少的，今天打算复习一下zip的文件格式内容。</p>
+<a id="more"></a>
 <blockquote>
-<p><a href="https://blog.csdn.net/moxiajuzi/article/details/52752027" target="_blank" rel="noopener">参考文章1</a><br><a href="https://blog.csdn.net/wclxyn/article/details/7288994" target="_blank" rel="noopener">参考文章2</a></p>
+<p><a href="https://blog.csdn.net/moxiajuzi/article/details/52752027">参考文章1</a><br><a href="https://blog.csdn.net/wclxyn/article/details/7288994">参考文章2</a></p>
 </blockquote>
 <p>一个ZIP文件由三部分组成：</p>
 <ol>
@@ -408,10 +409,10 @@ height:50vh;
 <li>压缩源文件目录区</li>
 <li>压缩源文件目录结束标志</li>
 </ol>
-<p>如(Winhex下)：<br><strong>未加密</strong><br><img src="/img/ZIP结构/3.jpg" alt=""><br>1.第一个标记处:(压缩源文件数据区初始位置)50 4B 03 04(文件头标记 4bytes) <a href="https://blog.csdn.net/xiangshangbashaonian/article/details/80156865" target="_blank" rel="noopener">更多文件头标识</a>，14 00(解压文件所需pkware版本 2bytes)00 00(全局方式位标记 2bytes)<strong>有无加密标志</strong>后面紧跟的08 00则是加密方式,而画圈处则为CRC32值，图中为8A90ABA9。<br>2.第二个标记处：50 4B 01 02(目录中文件文件头标识 4bytes)<br>1F 00(压缩使用的pkware版本 2bytes)<br>3.第三个标记处：14 00(解压文件所需pkware版本 2bytes)<br>00 00(全局方式未标记 2bytes)</p>
-<p>那么如何判断一个文件是否加密码了呢？<br>1.无加密：<br>压缩源文件数据区的全局加密应当为00 00且压缩源文件目录区的全局方式位标记应当为00 00。如上图<br>2.假加密(伪加密)：<br>压缩源文件数据区的全局加密应当为00 00且压缩源文件目录区的全局方式位标记应当为09 00。如下图：<br><img src="/img/ZIP结构/伪加密.jpg" alt=""><br>3.加密：<br>压缩源文件数据区的全局加密应当为09 00且压缩源文件目录区的全局方式位标记应当为09 00。如下图：<br><img src="/img/ZIP结构/加密.jpg" alt=""></p>
+<p>如(Winhex下)：<br><strong>未加密</strong><br><img src="/img/ZIP%E7%BB%93%E6%9E%84/3.jpg"><br>1.第一个标记处:(压缩源文件数据区初始位置)50 4B 03 04(文件头标记 4bytes) <a href="https://blog.csdn.net/xiangshangbashaonian/article/details/80156865">更多文件头标识</a>，14 00(解压文件所需pkware版本 2bytes)00 00(全局方式位标记 2bytes)<strong>有无加密标志</strong>后面紧跟的08 00则是加密方式,而画圈处则为CRC32值，图中为8A90ABA9。<br>2.第二个标记处：50 4B 01 02(目录中文件文件头标识 4bytes)<br>1F 00(压缩使用的pkware版本 2bytes)<br>3.第三个标记处：14 00(解压文件所需pkware版本 2bytes)<br>00 00(全局方式未标记 2bytes)</p>
+<p>那么如何判断一个文件是否加密码了呢？<br>1.无加密：<br>压缩源文件数据区的全局加密应当为00 00且压缩源文件目录区的全局方式位标记应当为00 00。如上图<br>2.假加密(伪加密)：<br>压缩源文件数据区的全局加密应当为00 00且压缩源文件目录区的全局方式位标记应当为09 00。如下图：<br><img src="/img/ZIP%E7%BB%93%E6%9E%84/%E4%BC%AA%E5%8A%A0%E5%AF%86.jpg"><br>3.加密：<br>压缩源文件数据区的全局加密应当为09 00且压缩源文件目录区的全局方式位标记应当为09 00。如下图：<br><img src="/img/ZIP%E7%BB%93%E6%9E%84/%E5%8A%A0%E5%AF%86.jpg"></p>
 <p>全局方式位标记作用：共四个数字，前面我们看到有00 00,也有09 00。即四个数字中只有第二个数字对其有影响，为奇数时加密，偶数时未加密。其他无论为何值都不影响它的加密属性。</p>
-<p>放两张图以供参考<a href="https://blog.csdn.net/kajweb/article/details/76474476" target="_blank" rel="noopener">来源</a>：<br><img src="/img/ZIP结构/1.png" alt=""><br><img src="/img/ZIP结构/2.png" alt=""></p>
+<p>放两张图以供参考<a href="https://blog.csdn.net/kajweb/article/details/76474476">来源</a>：<br><img src="/img/ZIP%E7%BB%93%E6%9E%84/1.png"><br><img src="/img/ZIP%E7%BB%93%E6%9E%84/2.png"></p>
 
     </article>
     <!-- license  -->
@@ -586,6 +587,10 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
     
     
     
@@ -1931,29 +1936,29 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
     
-        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
-    
-        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
-    
         <span class="sidebar-tag-name" data-tags="JavaEE"><span class="iconfont-archer">&#xe606;</span>JavaEE</span>
-    
-        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
     
         <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
     
         <span class="sidebar-tag-name" data-tags="PHP"><span class="iconfont-archer">&#xe606;</span>PHP</span>
     
-        <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
+        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
     
-        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
+        <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
     
         <span class="sidebar-tag-name" data-tags="电子取证"><span class="iconfont-archer">&#xe606;</span>电子取证</span>
     
+        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
+    
         <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
     
-        <span class="sidebar-tag-name" data-tags="微服务"><span class="iconfont-archer">&#xe606;</span>微服务</span>
-    
         <span class="sidebar-tag-name" data-tags="C编程"><span class="iconfont-archer">&#xe606;</span>C编程</span>
+    
+        <span class="sidebar-tag-name" data-tags="微服务"><span class="iconfont-archer">&#xe606;</span>微服务</span>
     
         <span class="sidebar-tag-name" data-tags="school"><span class="iconfont-archer">&#xe606;</span>school</span>
     

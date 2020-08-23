@@ -397,24 +397,33 @@ height:50vh;
             <main class="main post-page">
     <article class="article-entry">
         <blockquote>
-<p>入坑第一天<br><img src="/img/Metasploit渗透测试魔鬼训练营-第一天/1.jpg" alt=""></p>
+<p>入坑第一天<br><img src="/img/Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%AD%94%E9%AC%BC%E8%AE%AD%E7%BB%83%E8%90%A5-%E7%AC%AC%E4%B8%80%E5%A4%A9/1.jpg"></p>
 </blockquote>
 <a id="more"></a>
+
 <h1 id="靶机环境的配置"><a href="#靶机环境的配置" class="headerlink" title="靶机环境的配置"></a>靶机环境的配置</h1><h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>　　该书中提供的例子由五个靶机构成：Back Track 5(我用的kali)、OWASP BWA v0.94、Win2003 Metasploitable、Linux Metasploitable、WinXP Metasploitable。<br>　　1. BT5(或kali)作为初始点攻击主机，其域名为<code>attacker.dvssc.com</code>，IP地址<code>10.10.10.128</code>（DHCP自动分配）<br>　　2. OWASP BWA 作为攻击目标的门户网站服务器。域名为<code>www.dvssc.com</code>，IP地址<code>10.10.10.129</code>（DHCP自动分配）<br>　　3. Win2k3 Metasploitable 作为攻击目标后台服务器，其域名为<code>service.dvssc.com</code>，IP地址为<code>10.10.10.130</code>（DHCP自动分配）<br>　　4. Linux Metasploitable 作为目标网关服务器，域名为<code>gate.dvssc.com</code>，IP地址为<code>10.10.10.254</code>，以及内网IP<code>192.168.10.254</code><br>　　5. WinXP Metasploitable 作为目标内网客户端主机，域名为<code>intranet1.dvssc.com</code>，内网IP为<code>192.168.10.128</code>(DHCP自动分配)
 　　</p>
-<h2 id="拓扑图"><a href="#拓扑图" class="headerlink" title="拓扑图"></a>拓扑图</h2><p>　　<img src="/img/Metasploit渗透测试魔鬼训练营-第一天/2.jpg" alt=""><br>　　首先大环境是我们的电脑，即使用VMware虚拟化。Linux Meta作为某公司的网关，其下内网中有一个WinXP的客户端主机。外部DMZ区(非军事区)存在着我们的攻击主机、公司门户网页服务器、以及后台服务器。</p>
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="VMware配置"><a href="#VMware配置" class="headerlink" title="VMware配置"></a>VMware配置</h4><p>　　在VM主页面点击菜单的编辑-&gt;编辑虚拟网络<br>　　<img src="/img/Metasploit渗透测试魔鬼训练营-第一天/3.png" alt=""><br>　　在选项卡中选择VMnet1，将子网IP地址段设为192.168.10.0<br>　　<img src="/img/Metasploit渗透测试魔鬼训练营-第一天/4.png" alt=""><br>　　在选项卡中选择VMnet8虚拟网络，将子网IP地址设为10.10.10.0<br>　　<img src="/img/Metasploit渗透测试魔鬼训练营-第一天/5.png" alt=""></p>
-<h4 id="kali-配置"><a href="#kali-配置" class="headerlink" title="kali 配置"></a>kali 配置</h4><p>　　1. 配置IP<br>　　修改/etc/network/interfaces配置文件，将IP地址改为10.10.10.128<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">auto eth0</span><br><span class="line">allow-hotplug eth0</span><br><span class="line">iface eth0 inet static</span><br><span class="line">address 10.10.10.128</span><br><span class="line">netmask 255.255.255.0</span><br><span class="line">gateway 10.10.10.2</span><br></pre></td></tr></table></figure></p>
-<p>　　之后重启服务<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service networking restart</span><br></pre></td></tr></table></figure></p>
-<p>　　如图：<br>　　<img src="/img/Metasploit渗透测试魔鬼训练营-第一天/6.png" alt=""><br>　　更改hosts文件，添加上面提到的域名映射关系<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">10.10.10.128 attacker.dvssc.com</span><br><span class="line">10.10.10.129 www.dvssc.com</span><br><span class="line">10.10.10.130 service.dvssc.com</span><br><span class="line">10.10.10.254 gate.dvssc.com</span><br></pre></td></tr></table></figure></p>
-<h4 id="OWASP-BWA"><a href="#OWASP-BWA" class="headerlink" title="OWASP BWA"></a>OWASP BWA</h4><p>　　该靶机的系统是<code>Ubuntu</code>，配置方法与kali相同，配置IP地址为10.10.10.129<br>。<br>　　如图：<br>　　<img src="/img/Metasploit渗透测试魔鬼训练营-第一天/7.png" alt=""><br>　　上面两个没有问题的话二者之间是可以<code>ping</code>通的。kali也可以访问到<code>www.dvssc.com</code>域名。</p>
-<h4 id="Win2K3"><a href="#Win2K3" class="headerlink" title="Win2K3"></a>Win2K3</h4><p>　　该靶机为后台服务器，部署在DMZ区。配置其IP为：10.10.10.130。检查是否可与kali之间<code>ping</code>通。<br>　　<img src="/img/Metasploit渗透测试魔鬼训练营-第一天/9.png" alt=""></p>
-<h4 id="Linux-Metasploitable"><a href="#Linux-Metasploitable" class="headerlink" title="Linux Metasploitable"></a>Linux Metasploitable</h4><p>　　在该靶机硬件配置中可以看到有两个网络适配器，一个<code>NAT</code>模式，一个<code>Host-only</code>模式。修改<code>/etc/network/interfaces</code>文件内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">auto lo</span><br><span class="line">iface lo inet loopback</span><br><span class="line"></span><br><span class="line">auto eth0</span><br><span class="line">iface eth0 inet static</span><br><span class="line">address 10.10.10.254</span><br><span class="line">netmask 255.255.255.0</span><br><span class="line">network 10.10.10.0</span><br><span class="line">broadcast 10.10.10.255</span><br><span class="line"></span><br><span class="line">auto eth1</span><br><span class="line">iface eth1 inet static</span><br><span class="line">adress 192.168.10.254</span><br><span class="line">netmask 255.255.255.0</span><br><span class="line">network 192.168.10.0</span><br><span class="line">broadcast 192.168.10.255</span><br></pre></td></tr></table></figure></p>
-<p>　　<img src="/img/Metasploit渗透测试魔鬼训练营-第一天/8.png" alt=""><br>　　因为该靶机作为网关，所以要配置其路由功能，修改<code>/etc/sysctl/conf</code>，打开数据包转发功能：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net.ipv4.ip_forward = 1        # 取消该行注释</span><br></pre></td></tr></table></figure></p>
-<p>　　再设置转发功能：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -t nat -A POSTROUTING -s 192.168.10.0/24 -o eth0 -j MASQUERADE</span><br></pre></td></tr></table></figure></p>
+<h2 id="拓扑图"><a href="#拓扑图" class="headerlink" title="拓扑图"></a>拓扑图</h2><p>　　<img src="/img/Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%AD%94%E9%AC%BC%E8%AE%AD%E7%BB%83%E8%90%A5-%E7%AC%AC%E4%B8%80%E5%A4%A9/2.jpg"><br>　　首先大环境是我们的电脑，即使用VMware虚拟化。Linux Meta作为某公司的网关，其下内网中有一个WinXP的客户端主机。外部DMZ区(非军事区)存在着我们的攻击主机、公司门户网页服务器、以及后台服务器。</p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="VMware配置"><a href="#VMware配置" class="headerlink" title="VMware配置"></a>VMware配置</h4><p>　　在VM主页面点击菜单的编辑-&gt;编辑虚拟网络<br>　　<img src="/img/Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%AD%94%E9%AC%BC%E8%AE%AD%E7%BB%83%E8%90%A5-%E7%AC%AC%E4%B8%80%E5%A4%A9/3.png"><br>　　在选项卡中选择VMnet1，将子网IP地址段设为192.168.10.0<br>　　<img src="/img/Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%AD%94%E9%AC%BC%E8%AE%AD%E7%BB%83%E8%90%A5-%E7%AC%AC%E4%B8%80%E5%A4%A9/4.png"><br>　　在选项卡中选择VMnet8虚拟网络，将子网IP地址设为10.10.10.0<br>　　<img src="/img/Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%AD%94%E9%AC%BC%E8%AE%AD%E7%BB%83%E8%90%A5-%E7%AC%AC%E4%B8%80%E5%A4%A9/5.png"></p>
+<h4 id="kali-配置"><a href="#kali-配置" class="headerlink" title="kali 配置"></a>kali 配置</h4><p>　　1. 配置IP<br>　　修改/etc/network/interfaces配置文件，将IP地址改为10.10.10.128</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">auto eth0</span><br><span class="line">allow-hotplug eth0</span><br><span class="line">iface eth0 inet static</span><br><span class="line">address 10.10.10.128</span><br><span class="line">netmask 255.255.255.0</span><br><span class="line">gateway 10.10.10.2</span><br></pre></td></tr></table></figure>
+<p>　　之后重启服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service networking restart</span><br></pre></td></tr></table></figure>
+<p>　　如图：<br>　　<img src="/img/Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%AD%94%E9%AC%BC%E8%AE%AD%E7%BB%83%E8%90%A5-%E7%AC%AC%E4%B8%80%E5%A4%A9/6.png"><br>　　更改hosts文件，添加上面提到的域名映射关系</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">10.10.10.128 attacker.dvssc.com</span><br><span class="line">10.10.10.129 www.dvssc.com</span><br><span class="line">10.10.10.130 service.dvssc.com</span><br><span class="line">10.10.10.254 gate.dvssc.com</span><br></pre></td></tr></table></figure>
+<h4 id="OWASP-BWA"><a href="#OWASP-BWA" class="headerlink" title="OWASP BWA"></a>OWASP BWA</h4><p>　　该靶机的系统是<code>Ubuntu</code>，配置方法与kali相同，配置IP地址为10.10.10.129<br>。<br>　　如图：<br>　　<img src="/img/Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%AD%94%E9%AC%BC%E8%AE%AD%E7%BB%83%E8%90%A5-%E7%AC%AC%E4%B8%80%E5%A4%A9/7.png"><br>　　上面两个没有问题的话二者之间是可以<code>ping</code>通的。kali也可以访问到<code>www.dvssc.com</code>域名。</p>
+<h4 id="Win2K3"><a href="#Win2K3" class="headerlink" title="Win2K3"></a>Win2K3</h4><p>　　该靶机为后台服务器，部署在DMZ区。配置其IP为：10.10.10.130。检查是否可与kali之间<code>ping</code>通。<br>　　<img src="/img/Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%AD%94%E9%AC%BC%E8%AE%AD%E7%BB%83%E8%90%A5-%E7%AC%AC%E4%B8%80%E5%A4%A9/9.png"></p>
+<h4 id="Linux-Metasploitable"><a href="#Linux-Metasploitable" class="headerlink" title="Linux Metasploitable"></a>Linux Metasploitable</h4><p>　　在该靶机硬件配置中可以看到有两个网络适配器，一个<code>NAT</code>模式，一个<code>Host-only</code>模式。修改<code>/etc/network/interfaces</code>文件内容如下：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">auto lo</span><br><span class="line">iface lo inet loopback</span><br><span class="line"></span><br><span class="line">auto eth0</span><br><span class="line">iface eth0 inet static</span><br><span class="line">address 10.10.10.254</span><br><span class="line">netmask 255.255.255.0</span><br><span class="line">network 10.10.10.0</span><br><span class="line">broadcast 10.10.10.255</span><br><span class="line"></span><br><span class="line">auto eth1</span><br><span class="line">iface eth1 inet static</span><br><span class="line">adress 192.168.10.254</span><br><span class="line">netmask 255.255.255.0</span><br><span class="line">network 192.168.10.0</span><br><span class="line">broadcast 192.168.10.255</span><br></pre></td></tr></table></figure>
+<p>　　<img src="/img/Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%AD%94%E9%AC%BC%E8%AE%AD%E7%BB%83%E8%90%A5-%E7%AC%AC%E4%B8%80%E5%A4%A9/8.png"><br>　　因为该靶机作为网关，所以要配置其路由功能，修改<code>/etc/sysctl/conf</code>，打开数据包转发功能：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net.ipv4.ip_forward = 1        # 取消该行注释</span><br></pre></td></tr></table></figure>
+<p>　　再设置转发功能：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -t nat -A POSTROUTING -s 192.168.10.0/24 -o eth0 -j MASQUERADE</span><br></pre></td></tr></table></figure>
 <p>　　因为该规则重启后会失效，我们将其添加到<code>/etc/rc.local/</code>文件中。<br>　　检查kali和linux Meta是否可以<code>ping</code>通，正常说明eth0正常，eth1转发功能后续检查。</p>
-<h4 id="WinXP"><a href="#WinXP" class="headerlink" title="WinXP"></a>WinXP</h4><p>　　该靶机是公司内网中的客户机，配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">address	192.168.10.128</span><br><span class="line">netmask	255.255.255.0</span><br><span class="line">gateway	192.168.10.254</span><br></pre></td></tr></table></figure></p>
-<p>　　<img src="/img/Metasploit渗透测试魔鬼训练营-第一天/10.png" alt=""><br>　　更改<code>Hosts</code>文件(没有的话在<code>C:\windows\system32</code>下添加)，建立相应域名映射关系：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">192.168.10.128    intranet1.dvssc.com</span><br><span class="line">192.168.10.254    gate.dvssc.com</span><br><span class="line">10.10.10.128    attacker.dvssc.com</span><br><span class="line">10.10.10.129    www.dvssc.com</span><br><span class="line">10.10.10.130    service.dvssc.com</span><br><span class="line">10.10.10.254    gate.dvssc.com</span><br></pre></td></tr></table></figure></p>
+<h4 id="WinXP"><a href="#WinXP" class="headerlink" title="WinXP"></a>WinXP</h4><p>　　该靶机是公司内网中的客户机，配置如下：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">address	192.168.10.128</span><br><span class="line">netmask	255.255.255.0</span><br><span class="line">gateway	192.168.10.254</span><br></pre></td></tr></table></figure>
+<p>　　<img src="/img/Metasploit%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E9%AD%94%E9%AC%BC%E8%AE%AD%E7%BB%83%E8%90%A5-%E7%AC%AC%E4%B8%80%E5%A4%A9/10.png"><br>　　更改<code>Hosts</code>文件(没有的话在<code>C:\windows\system32</code>下添加)，建立相应域名映射关系：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">192.168.10.128    intranet1.dvssc.com</span><br><span class="line">192.168.10.254    gate.dvssc.com</span><br><span class="line">10.10.10.128    attacker.dvssc.com</span><br><span class="line">10.10.10.129    www.dvssc.com</span><br><span class="line">10.10.10.130    service.dvssc.com</span><br><span class="line">10.10.10.254    gate.dvssc.com</span><br></pre></td></tr></table></figure>
 <p>　　打开IE浏览器，访问<code>www.dvssc.com</code>如果以上配置正确，该请求就会通过网关(Linux Meta)的路由转发功能，请求到门户网站(OWASP BWA靶机)的页面。</p>
 
     </article>
@@ -590,6 +599,10 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
     
     
     
@@ -1935,29 +1948,29 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
     
-        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
-    
-        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
-    
         <span class="sidebar-tag-name" data-tags="JavaEE"><span class="iconfont-archer">&#xe606;</span>JavaEE</span>
-    
-        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
     
         <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
     
         <span class="sidebar-tag-name" data-tags="PHP"><span class="iconfont-archer">&#xe606;</span>PHP</span>
     
-        <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
+        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
     
-        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
+        <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
     
         <span class="sidebar-tag-name" data-tags="电子取证"><span class="iconfont-archer">&#xe606;</span>电子取证</span>
     
+        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
+    
         <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
     
-        <span class="sidebar-tag-name" data-tags="微服务"><span class="iconfont-archer">&#xe606;</span>微服务</span>
-    
         <span class="sidebar-tag-name" data-tags="C编程"><span class="iconfont-archer">&#xe606;</span>C编程</span>
+    
+        <span class="sidebar-tag-name" data-tags="微服务"><span class="iconfont-archer">&#xe606;</span>微服务</span>
     
         <span class="sidebar-tag-name" data-tags="school"><span class="iconfont-archer">&#xe606;</span>school</span>
     
