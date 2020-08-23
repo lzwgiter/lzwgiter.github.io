@@ -4,19 +4,6 @@
   
     
     <entry>
-      <title>SimpleTest</title>
-      <link href="/SimpleTest/"/>
-      <url>/SimpleTest/</url>
-      
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>DC-1靶机渗透</title>
       <link href="/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/"/>
       <url>/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/</url>
