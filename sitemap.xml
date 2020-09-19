@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://float311.gitee.io/about/index.html</loc>
+    
+    <lastmod>2020-09-19</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://float311.gitee.io/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/</loc>
     
     <lastmod>2020-08-23</lastmod>
@@ -12,13 +19,6 @@
     <loc>https://float311.gitee.io/Kerberos%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B%E5%8E%9F%E7%90%86%E5%8F%8A%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5/</loc>
     
     <lastmod>2020-08-23</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://float311.gitee.io/about/index.html</loc>
-    
-    <lastmod>2020-08-14</lastmod>
     
   </url>
   
