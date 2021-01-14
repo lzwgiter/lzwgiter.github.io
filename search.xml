@@ -8,7 +8,7 @@
       <link href="/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8F%8A%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E7%9A%84%E7%BC%96%E5%86%99%E4%B8%8E%E9%83%A8%E7%BD%B2/"/>
       <url>/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8F%8A%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E7%9A%84%E7%BC%96%E5%86%99%E4%B8%8E%E9%83%A8%E7%BD%B2/</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>这篇纪录一下智能合约开发环境(Remix-ide、Truffle、EthScan)的搭建以及对Solidity语言的简单总结，并使用Truffle来创建、编译、部署、测试一个简单的合约demo，并用区块链浏览器查看区块信息来进一步加深理解。</p></blockquote>]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>这篇纪录一下智能合约开发环境(Remix-ide、Truffle、EthScan)的搭建以及对Solidity语言的简单总结，并使用Truffle来创建、编译、部署、测试一个简单的合约demo，并用区块链浏览器查看区块信息来进一步加深理解。</p></blockquote><a id="more"></a>]]></content>
       
       
       
