@@ -270,7 +270,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">1.1k</span> / Reading time: <span class="post-count">4 min</span></span>
+                        <span>Word count: <span class="post-count">1.6k</span> / Reading time: <span class="post-count">6 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -444,6 +444,34 @@ height:50vh;
 
 <p>导入后就可以查看账户信息了：(导入过程还是挺慢的….我差不多用了6,7分钟)</p>
 <img src="/img/以太坊基本概念与实验环境搭建/image-20210112121123616.png" alt="image-20210112121123616" style="zoom:67%;">
+
+<h3 id="多个节点加入"><a href="#多个节点加入" class="headerlink" title="多个节点加入"></a>多个节点加入</h3><h4 id="实验环境拓扑图"><a href="#实验环境拓扑图" class="headerlink" title="实验环境拓扑图"></a>实验环境拓扑图</h4><img src="/img/以太坊基本概念与实验环境搭建/image-20210116210843972.png" alt="image-20210116210843972" style="zoom:80%;">
+
+<h4 id="实验具体步骤与结果"><a href="#实验具体步骤与结果" class="headerlink" title="实验具体步骤与结果"></a>实验具体步骤与结果</h4><p>这里我的用虚拟机当做另一个节点来加入我的私链网络，linux下的geth环境搭建这里不重复，只需要指定相同的<code>networkid</code>并指定<code>bootnodes</code>参数就可以了。</p>
+<p>首先先启动windows上的链，可以看到当前的网络中节点数量是0：</p>
+<p>启动命令：<code>geth --http --http.port 8545 --port 30300 --http.api eth,web3,personal,net --networkid 666 --nodiscover --datadir .\ --http.corsdomain &quot;*&quot; --allow-insecure-unlock console</code></p>
+<p><img src="/img/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/image-20210116183553159.png" alt="image-20210116183553159"></p>
+<p>这里要记下<code>enode</code>的信息，如我的（换一下ip地址），启动结果中就有，或者通过<code>admin.nodeIndo.enode</code>查看：<code>enode://d92a480108ab9b3c2cc57b32dd3e346eb3bcf8d76d4b68bb862cc44550e59d157daa20ed9f50107e1b1d1ada7ee2028d7b64117d9b242b0675ec61f918808a3e@192.168.10.1:30300</code></p>
+<p>然后去虚拟机里，首先使用相同的genesis.json文件，创建创世块：</p>
+<p><img src="/img/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/image-20210116184225345.png" alt="image-20210116184225345"></p>
+<p>启动，启动参数：</p>
+<p><code>geth --http --http.port &quot;8545&quot; --port &quot;30301&quot; --http.api &quot;eth,net,web3,personal&quot; --http.corsdomain &quot;*&quot; --nodiscover --networkid 666 console</code></p>
+<p><img src="/img/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/image-20210116204852825.png" alt="image-20210116204852825"></p>
+<p>然后我们通过console来手动添加节点，使用我们上面的enode信息就可以了，使用<code>admin.addPeer</code>函数：<img src="/img/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/image-20210116205257507.png" alt="image-20210116205257507"></p>
+<p><strong>这里注意，自己实验的时候请把windows防火墙关掉，或者像我这样允许geth通信：</strong></p>
+<p><img src="/img/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/image-20210116205439978.png" alt="image-20210116205439978"></p>
+<p>看你自己的实验环境了，我的虚拟机是桥接的方式连接到局域网里的，所以我勾选的是公用，这样你就可以添加节点了：</p>
+<p><img src="/img/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/image-20210116205602847.png" alt="image-20210116205602847"></p>
+<p>可以看到，这个节点在持续拉取新的信息，并且peerCount变为了1，我们在windows这边验证一下：</p>
+<p><img src="/img/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/image-20210116205702787.png" alt="image-20210116205702787"></p>
+<p>可以看到虚拟机的信息，说明已经成功加入到网络里了。</p>
+<p>我们尝试挖矿（先解锁账户），看看那边会不会同步信息，使用<code>miner.start()</code>，参数为线程数：</p>
+<p><img src="/img/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/image-20210116205819951.png" alt="image-20210116205819951"></p>
+<p>最后<code>miner.stop()</code>就可以停止挖矿了，我们在虚拟机这边查看结果：</p>
+<p><img src="/img/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/image-20210116210044083.png" alt="image-20210116210044083"></p>
+<p>在停止挖矿后，可以看到<code>Imported new block headers</code>的字样，说明同步成功，下面的仍旧是持续的等待数据的状态。</p>
+<h2 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h2><p>环境搭建好了以后，就是编写合约测试了，详细的见下一篇</p>
+
     </article>
     <!-- license  -->
     
@@ -600,7 +628,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number">2.</span> <span class="toc-text">实验环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Geth%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%8B%E8%BD%BD"><span class="toc-number">2.1.</span> <span class="toc-text">Geth客户端下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#geth%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">2.2.</span> <span class="toc-text">geth常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%B9%B6%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA%E7%A7%81%E9%93%BE"><span class="toc-number">2.3.</span> <span class="toc-text">创建并运行一个私链</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%A4%AA%E5%9D%8A%E9%92%B1%E5%8C%85%E5%92%8C%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="toc-number">2.4.</span> <span class="toc-text">使用以太坊钱包和浏览器</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number">2.</span> <span class="toc-text">实验环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Geth%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%8B%E8%BD%BD"><span class="toc-number">2.1.</span> <span class="toc-text">Geth客户端下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#geth%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">2.2.</span> <span class="toc-text">geth常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%B9%B6%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AA%E7%A7%81%E9%93%BE"><span class="toc-number">2.3.</span> <span class="toc-text">创建并运行一个私链</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%BB%A5%E5%A4%AA%E5%9D%8A%E9%92%B1%E5%8C%85%E5%92%8C%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="toc-number">2.4.</span> <span class="toc-text">使用以太坊钱包和浏览器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E4%B8%AA%E8%8A%82%E7%82%B9%E5%8A%A0%E5%85%A5"><span class="toc-number">2.5.</span> <span class="toc-text">多个节点加入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83%E6%8B%93%E6%89%91%E5%9B%BE"><span class="toc-number">2.5.1.</span> <span class="toc-text">实验环境拓扑图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E5%85%B7%E4%BD%93%E6%AD%A5%E9%AA%A4%E4%B8%8E%E7%BB%93%E6%9E%9C"><span class="toc-number">2.5.2.</span> <span class="toc-text">实验具体步骤与结果</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E7%BB%AD"><span class="toc-number">3.</span> <span class="toc-text">后续</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
