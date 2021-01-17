@@ -436,7 +436,7 @@ height:50vh;
 
 <p>我们这个网络名叫<code>development</code>，truffle编译的时候会默认使用这个网络的配置，我们也可以通过使用参数<code>--network</code>来指定网络，比如你定义了一个<code>test</code>网络，你就<code>--network test</code>就好了。不带参数就是使用的<code>development</code>。    </p>
 <h4 id="编写合约"><a href="#编写合约" class="headerlink" title="编写合约"></a>编写合约</h4><p>我们创建两个合约<code>first.sol</code>和<code>second.sol</code>：</p>
-<img src="/img/以太坊智能合约开发环境搭建及智能合约的编写与部署/image-20210117132345252.png" alt="image-20210117132345252" style="zoom:80%;">
+<img src="/img/以太坊智能合约开发环境搭建及智能合约的编写、部署、测试/image-20210117132345252.png" alt="image-20210117132345252" style="zoom:80%;">
 
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; SPDX-License-Identifier: MIT</span><br><span class="line">pragma solidity &gt;&#x3D;0.4.22 &lt;0.9.0;</span><br><span class="line"></span><br><span class="line">contract First &#123;</span><br><span class="line">    </span><br><span class="line">    int public myData &#x3D; 20;</span><br><span class="line">    </span><br><span class="line">    function get() public view returns (int) &#123;	&#x2F;&#x2F; 返回保存的数值</span><br><span class="line">        return myData;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
