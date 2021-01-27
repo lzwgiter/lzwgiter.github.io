@@ -15,7 +15,7 @@
     <meta name="description" content="St@y HuNgRy, St@y f00l1sh.">
     <meta name="Cache-Control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>float&#39;s blog</title>
+    <title>密码学应用-群签名(Group Signature) · float&#39;s blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -70,6 +70,8 @@
 
     <link rel="preload" href= /css/style.css?v=20180721 as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <link rel="stylesheet" href= /css/mobile.css?v=20180721 media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
@@ -191,9 +193,11 @@
     
     <!-- 谷歌统计  -->
     
-<link rel="alternate" href="/atom.xml" title="float's blog" type="application/atom+xml">
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="float's blog" type="application/atom+xml">
 </head>
 
+    
+        <body class="post-body">
     
     
 <header class="header">
@@ -201,6 +205,15 @@
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >float&#39;s blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">密码学应用-群签名(Group Signature)</a>
+            </div>
+    </div>
     
     <a class="home-link" href=/>float's blog</a>
 </header>
@@ -214,24 +227,74 @@
 
 
 
+height:50vh;
+
 >
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
+            
+            密码学应用-群签名(Group Signature)
+            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "密码学">密码学</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count">67</span> / Reading time: <span class="post-count">1 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2021/01/27</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
         
     </div>
 </div>
@@ -332,40 +395,67 @@
 </script>        
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
-            <main class="main index-page">
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B%E4%B9%8B%E5%8D%95%E7%BA%BF%E7%A8%8B%E5%A4%9A%E8%B7%AFI-O%E5%A4%8D%E7%94%A8-select/" >
-            
-                <span>并发模型之单线程多路I/O复用---select</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>最近在写网络程序设计的大作业，大概就是一个聊天室的功能，牵扯到并发的问题，开始尝试使用多线程进行编写，但是发现结构稍微复杂，后来从《高质量嵌入式 Linux C编程》一书中了解到，除了多线程、多进程之外，还有一种高并发的设计模式，那就是多路I/O复用技术(synchronous I/O multiplexing)，这个技术在特定条件下(I/O成本远远低于处理流程、单核CPU等)的情况下，效率是要比前两者高的，其实质就是在单线程的情况下同时监控多个I/O，最基本的机制就是<code>select()</code>机制，但是当然也有他的缺点以及优化版本(epoll等)<br></p></blockquote>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/10/20</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "C编程">C编程</a>
-    
-</div>
-            
-        </div>
+            <main class="main post-page">
+    <article class="article-entry">
+        <blockquote>
+<p>毕设这边在解决<code>如何保证区块链匿名性以及可溯源性？</code>这个问题上，得到了一个回答 — 使用群签名。这篇总结学习一下这个技术到底在干啥，顺便开一个密码学方向。</p>
+</blockquote>
+<a id="more"></a>
     </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者: <a href="https://float311.gitee.io">float</a>
+            <p>原文链接: <a href="https://float311.gitee.io/%E5%AF%86%E7%A0%81%E5%AD%A6%E5%BA%94%E7%94%A8-%E7%BE%A4%E7%AD%BE%E5%90%8D-Group-Signature/">https://float311.gitee.io/%E5%AF%86%E7%A0%81%E5%AD%A6%E5%BA%94%E7%94%A8-%E7%BE%A4%E7%AD%BE%E5%90%8D-Group-Signature/</a>
+            <p>发表日期: <a href="https://float311.gitee.io/%E5%AF%86%E7%A0%81%E5%AD%A6%E5%BA%94%E7%94%A8-%E7%BE%A4%E7%AD%BE%E5%90%8D-Group-Signature/">January 27th 2021, 4:17:08 pm</a>
+            <p>版权声明: 本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
     
     <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/%E4%B8%80%E4%B8%AA%E5%A4%8D%E4%B9%A0SpringBoot%E7%9A%84%E5%B0%8F%E9%A1%B9%E7%9B%AE/" title= 一个复习SpringBoot的小项目 >
+                    <div class="prevTitle">一个复习SpringBoot的小项目</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
     
+    
+    <!--PC和WAP自适应版-->
+
+    <!--PC版-->
+
+
+    
+    
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    <div id="comment"></div>
+    <script>
+    new Valine({
+        el: '#comment' ,
+        notify:false, 
+        verify:false, 
+        appId: "KADRlHg5xXyhKL0d6USDWfIB-gzGzoHsz",
+        appKey: "Ppj8kIdro2yDqXOvqWkTRxuW",
+        placeholder: "递茶就坐(　o=^•ェ•)o　┏━┓",
+        path:window.location.pathname, 
+        avatar:'mm' 
+    });
+    </script>
+
+
+    <!-- 评论 -->
 </main>
             <!-- profile -->
             
@@ -446,6 +536,24 @@
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        
+    </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
     <div class="sidebar sidebar-hide">
@@ -2134,6 +2242,8 @@ jsonContent:
     
     </div>
     <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
      
     </body>
 </html>

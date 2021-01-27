@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>密码学应用-群签名(Group Signature)</title>
+      <link href="/%E5%AF%86%E7%A0%81%E5%AD%A6%E5%BA%94%E7%94%A8-%E7%BE%A4%E7%AD%BE%E5%90%8D-Group-Signature/"/>
+      <url>/%E5%AF%86%E7%A0%81%E5%AD%A6%E5%BA%94%E7%94%A8-%E7%BE%A4%E7%AD%BE%E5%90%8D-Group-Signature/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>毕设这边在解决<code>如何保证区块链匿名性以及可溯源性？</code>这个问题上，得到了一个回答 — 使用群签名。这篇总结学习一下这个技术到底在干啥，顺便开一个密码学方向。</p></blockquote><a id="more"></a>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 密码学 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>一个复习SpringBoot的小项目</title>
       <link href="/%E4%B8%80%E4%B8%AA%E5%A4%8D%E4%B9%A0SpringBoot%E7%9A%84%E5%B0%8F%E9%A1%B9%E7%9B%AE/"/>
       <url>/%E4%B8%80%E4%B8%AA%E5%A4%8D%E4%B9%A0SpringBoot%E7%9A%84%E5%B0%8F%E9%A1%B9%E7%9B%AE/</url>
