@@ -6,7 +6,7 @@
   <link href="https://float311.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://float311.gitee.io/"/>
-  <updated>2021-01-29T08:44:54.984Z</updated>
+  <updated>2021-03-08T12:01:02.271Z</updated>
   <id>https://float311.gitee.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>近期工作小记&amp;关于Java多线程并发方面我之收货</title>
+    <link href="https://float311.gitee.io/%E8%BF%91%E6%9C%9F%E5%B7%A5%E4%BD%9C%E5%B0%8F%E8%AE%B0-%E5%85%B3%E4%BA%8EJava%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E6%96%B9%E9%9D%A2%E6%88%91%E4%B9%8B%E6%94%B6%E8%8E%B7/"/>
+    <id>https://float311.gitee.io/%E8%BF%91%E6%9C%9F%E5%B7%A5%E4%BD%9C%E5%B0%8F%E8%AE%B0-%E5%85%B3%E4%BA%8EJava%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E6%96%B9%E9%9D%A2%E6%88%91%E4%B9%8B%E6%94%B6%E8%8E%B7/</id>
+    <published>2021-03-08T11:55:26.000Z</published>
+    <updated>2021-03-08T12:01:02.271Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>最近毕设代码基本完成了80%了，这一个多月来接触到了很多新的问题与知识，拓展了我在Spring数据库操作、Java多线程并发控制方面的技能。具体来讲分为三个部分：JPA广泛的使用、多线程并发访问锁的类型与设计模式、第三方密码学组件BouncyCastle的使用。</p></blockquote><a id="more"></a>]]></content>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;最近毕设代码基本完成了80%了，这一个多月来接触到了很多新的问题与知识，拓展了我在Spring数据库操作、Java多线程并发控制方面的技能。具体来讲分为三个部分：JPA广泛的使用、多线程并发访问锁的类型与设计模式、第三方密码学组件BouncyCastle的使用。&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    
+    <category term="Java" scheme="https://float311.gitee.io/tags/Java/"/>
+    
+    <category term="多线程并发" scheme="https://float311.gitee.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="MySQL" scheme="https://float311.gitee.io/tags/MySQL/"/>
+    
+  </entry>
   
   <entry>
     <title>密码学应用-群签名(Group Signature)</title>
@@ -35,32 +60,6 @@
     
     
     <category term="密码学" scheme="https://float311.gitee.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>一个复习SpringBoot的小项目</title>
-    <link href="https://float311.gitee.io/%E4%B8%80%E4%B8%AA%E5%A4%8D%E4%B9%A0SpringBoot%E7%9A%84%E5%B0%8F%E9%A1%B9%E7%9B%AE/"/>
-    <id>https://float311.gitee.io/%E4%B8%80%E4%B8%AA%E5%A4%8D%E4%B9%A0SpringBoot%E7%9A%84%E5%B0%8F%E9%A1%B9%E7%9B%AE/</id>
-    <published>2021-01-26T04:46:11.000Z</published>
-    <updated>2021-01-29T08:42:52.255Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>好久没动Java了，一直在忙复试复习跟毕设，今天拿一个微人事的项目来复习一下SpringBoot，顺带用用Vue。项目来源:<a href="https://github.com/lenve/vhr%EF%BC%8C%E5%8F%82%E8%80%83%E4%B9%A6%E7%9B%AE%EF%BC%9A%E3%80%8ASpringBoot+Vue%E5%85%A8%E6%A0%88%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98%E3%80%8B">https://github.com/lenve/vhr，参考书目：《SpringBoot+Vue全栈开发实战》</a></p><p>（待更）</p></blockquote><a id="more"></a><h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><h3 id="初始化前端项目"><a href="#初始化前端项目" class="headerlink" title="初始化前端项目"></a>初始化前端项目</h3><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -g @vue/cli</span><br><span class="line">npm install -g @vue/cli-init</span><br></pre></td></tr></table></figure><p>首先初始化一个vue项目</p><img src="/%E4%B8%80%E4%B8%AA%E5%A4%8D%E4%B9%A0SpringBoot%E7%9A%84%E5%B0%8F%E9%A1%B9%E7%9B%AE/一个复习SpringBoot的小项目\image-20210126125219002.png" alt="image-20210126125219002" style="zoom:67%;"><p>然后使用命令<code>npm run dev</code>就可以看到页面了</p><p><img src="/img/%E4%B8%80%E4%B8%AA%E5%A4%8D%E4%B9%A0SpringBoot%E7%9A%84%E5%B0%8F%E9%A1%B9%E7%9B%AE/image-20210126142615384.png" alt="image-20210126142615384"></p><img src="/img/一个复习SpringBoot的小项目/image-20210126142712830.png" alt="image-20210126142712830" style="zoom:67%;"><h3 id="初始化后端项目"><a href="#初始化后端项目" class="headerlink" title="初始化后端项目"></a>初始化后端项目</h3><h2 id="参考学习"><a href="#参考学习" class="headerlink" title="参考学习"></a>参考学习</h2><p><a href="https://cn.vuejs.org/v2/guide">https://cn.vuejs.org/v2/guide</a></p><p><a href="https://learning.dcloud.io/">https://learning.dcloud.io/</a></p>]]></content>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;好久没动Java了，一直在忙复试复习跟毕设，今天拿一个微人事的项目来复习一下SpringBoot，顺带用用Vue。项目来源:&lt;a href=&quot;https://github.com/lenve/vhr%EF%BC%8C%E5%8F%82%E8%80%83%E4%B9%A6%E7%9B%AE%EF%BC%9A%E3%80%8ASpringBoot+Vue%E5%85%A8%E6%A0%88%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98%E3%80%8B&quot;&gt;https://github.com/lenve/vhr，参考书目：《SpringBoot+Vue全栈开发实战》&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;（待更）&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    
-    <category term="Java" scheme="https://float311.gitee.io/tags/Java/"/>
-    
-    <category term="Spring" scheme="https://float311.gitee.io/tags/Spring/"/>
-    
-    <category term="Vue" scheme="https://float311.gitee.io/tags/Vue/"/>
     
   </entry>
   
