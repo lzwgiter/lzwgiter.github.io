@@ -6,7 +6,7 @@
   <link href="https://float311.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://float311.gitee.io/"/>
-  <updated>2021-03-08T12:01:02.271Z</updated>
+  <updated>2021-03-08T12:04:18.163Z</updated>
   <id>https://float311.gitee.io/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>近期工作小记&amp;关于Java多线程并发方面我之收货</title>
+    <title>近期工作小记&amp;关于Java多线程并发方面我之收获</title>
     <link href="https://float311.gitee.io/%E8%BF%91%E6%9C%9F%E5%B7%A5%E4%BD%9C%E5%B0%8F%E8%AE%B0-%E5%85%B3%E4%BA%8EJava%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E6%96%B9%E9%9D%A2%E6%88%91%E4%B9%8B%E6%94%B6%E8%8E%B7/"/>
     <id>https://float311.gitee.io/%E8%BF%91%E6%9C%9F%E5%B7%A5%E4%BD%9C%E5%B0%8F%E8%AE%B0-%E5%85%B3%E4%BA%8EJava%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E6%96%B9%E9%9D%A2%E6%88%91%E4%B9%8B%E6%94%B6%E8%8E%B7/</id>
     <published>2021-03-08T11:55:26.000Z</published>
-    <updated>2021-03-08T12:01:02.271Z</updated>
+    <updated>2021-03-08T12:04:18.163Z</updated>
     
     <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>最近毕设代码基本完成了80%了，这一个多月来接触到了很多新的问题与知识，拓展了我在Spring数据库操作、Java多线程并发控制方面的技能。具体来讲分为三个部分：JPA广泛的使用、多线程并发访问锁的类型与设计模式、第三方密码学组件BouncyCastle的使用。</p></blockquote><a id="more"></a>]]></content>
     
