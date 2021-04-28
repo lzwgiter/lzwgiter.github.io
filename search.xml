@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>DevOps技术-简单了解与入门</title>
+      <link href="/DevOps%E6%8A%80%E6%9C%AF-%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3%E4%B8%8E%E5%85%A5%E9%97%A8/"/>
+      <url>/DevOps%E6%8A%80%E6%9C%AF-%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3%E4%B8%8E%E5%85%A5%E9%97%A8/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>n久没写博客了，前面还有好几篇没有补上，最近也是刚刚弄完了考研上岸的后续工作，以及写好了毕业论文的初稿，后面慢慢补坑吧哈哈哈。然后DevOps技术这个东西其实不是新东西了，前两年就已经出现了，一直没有搞清楚这东西在干啥，实习的时候也只是泛泛的听过大家说什么“持续集成”、“敏捷开发”不拉不拉的，不知道前辈们都在说甚么东西，刚好图书馆最近新进了一本《DevOps入门与实践》，拿来学习学习，满足下我的好奇心。</p></blockquote><a id="more"></a>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> DevOps </tag>
+            
+            <tag> 开发与运维 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>近期工作小记&amp;关于Java多线程并发方面我之收获</title>
       <link href="/%E8%BF%91%E6%9C%9F%E5%B7%A5%E4%BD%9C%E5%B0%8F%E8%AE%B0-%E5%85%B3%E4%BA%8EJava%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E6%96%B9%E9%9D%A2%E6%88%91%E4%B9%8B%E6%94%B6%E8%8E%B7/"/>
       <url>/%E8%BF%91%E6%9C%9F%E5%B7%A5%E4%BD%9C%E5%B0%8F%E8%AE%B0-%E5%85%B3%E4%BA%8EJava%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E6%96%B9%E9%9D%A2%E6%88%91%E4%B9%8B%E6%94%B6%E8%8E%B7/</url>
