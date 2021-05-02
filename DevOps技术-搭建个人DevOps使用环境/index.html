@@ -15,7 +15,7 @@
     <meta name="description" content="St@y HuNgRy, St@y f00l1sh.">
     <meta name="Cache-Control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>float&#39;s blog</title>
+    <title>DevOps技术-搭建个人DevOps使用环境 · float&#39;s blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -70,6 +70,8 @@
 
     <link rel="preload" href= /css/style.css?v=20180721 as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <link rel="stylesheet" href= /css/mobile.css?v=20180721 media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
@@ -191,9 +193,11 @@
     
     <!-- 谷歌统计  -->
     
-<link rel="alternate" href="/atom.xml" title="float's blog" type="application/atom+xml">
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="float's blog" type="application/atom+xml">
 </head>
 
+    
+        <body class="post-body">
     
     
 <header class="header">
@@ -201,6 +205,15 @@
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >float&#39;s blog</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">DevOps技术-搭建个人DevOps使用环境</a>
+            </div>
+    </div>
     
     <a class="home-link" href=/>float's blog</a>
 </header>
@@ -214,24 +227,68 @@
 
 
 
+height:50vh;
+
 >
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
+            
+            DevOps技术-搭建个人DevOps使用环境
+            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count">0</span> / Reading time: <span class="post-count">1 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2021/05/02</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
         
     </div>
 </div>
@@ -332,318 +389,64 @@
 </script>        
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
-            <main class="main index-page">
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/BOM-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B%E4%B9%8Bnavigator%E3%80%81location%E5%AF%B9%E8%B1%A1/" >
-            
-                <span>BOM 浏览器操作对象模型之navigator、location对象</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>　navigator对象中包含了浏览器的基本信息，如名称、版本和系统。可以通过window.navigator可以引用该对象，客户端并利用它的属性来读取客户端基本信息。</p>
-</blockquote>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/20</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Javascript">Javascript</a>
-    
-</div>
-            
-        </div>
+            <main class="main post-page">
+    <article class="article-entry">
+        
     </article>
+    <!-- license  -->
     
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/BOM-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B%E4%B9%8Bwindow%E5%AF%B9%E8%B1%A1/" >
-            
-                <span>BOM 浏览器操作对象模型之window对象</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>JavaScript的实现包括以下3个部分：</p>
-<ol>
-<li>核心（ECMAScript）：描述了JS的语法和基本对象。</li>
-<li>文档对象模型 ☆（DOM）：处理网页内容的方法和接口</li>
-<li>浏览器对象模型（BOM）：与浏览器交互的方法和接口</li></ol></blockquote>
+        <div class="license-wrapper">
+            <p>原文作者: <a href="https://float311.gitee.io">float</a>
+            <p>原文链接: <a href="https://float311.gitee.io/DevOps%E6%8A%80%E6%9C%AF-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BADevOps%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83/">https://float311.gitee.io/DevOps%E6%8A%80%E6%9C%AF-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BADevOps%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83/</a>
+            <p>发表日期: <a href="https://float311.gitee.io/DevOps%E6%8A%80%E6%9C%AF-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BADevOps%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83/">May 2nd 2021, 8:28:03 pm</a>
+            <p>版权声明: 本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/18</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Javascript">Javascript</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "BOM">BOM</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/Javascript%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B2/" >
-            
-                <span>Javascript基础之数据类型2</span>
-        </a>
-        <div class="abstract-content">
-            <p>今将学习上篇提到的数据类型中的三种引用型数据：<strong>数组(Array)、对象(Object)和函数(Function)</strong><br></p>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/16</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Javascript">Javascript</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/Javascript%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B1/" >
-            
-                <span>Javascript基础之数据类型1</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>Javascript属于一种弱类型语言，定义变量时不需要指定类型，一个变量可以储存任何类型的值，但在运算时，JavaScript还是会把它转换成相应的数据类型。<br></p></blockquote>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/15</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Javascript">Javascript</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/CTF%20ZIP%E7%BB%93%E6%9E%84/" >
-            
-                <span>CTF隐写术--关于ZIP</span>
-        </a>
-        <div class="abstract-content">
-            <p>最近刷隐写的时候，zip这类格式的题型还是不少的，今天打算复习一下zip的文件格式内容。<br></p>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/12</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "隐写术">隐写术</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/CSS%E5%9F%BA%E7%A1%804.4--%E9%80%89%E6%8B%A9%E5%99%A8%E4%B9%8B%E4%BC%AA%E7%B1%BB%E9%80%89%E6%8B%A9%E5%99%A8/" >
-            
-                <span>CSS样式基础4.4--选择器之伪类选择器</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>伪类选择器包括伪类和伪对象选择器，以符号<code>:</code>作为前缀标识符。冒号前可以添加选择符，以限定伪类应用的范围，冒号后为伪类和伪对象名，<strong>冒号前后无空格，否则会当做类选择器</strong>。</p>
-</blockquote>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/09</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CSS">CSS</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/%E7%8C%AB%E7%89%87/" >
-            
-                <span>Bugku的一道misc-----猫片</span>
-        </a>
-        <div class="abstract-content">
-            <p>翻bugku的时候看到了这道题，百思不得其解。属于流隐写的题，包含了一些隐写的基本技能，很不错的一道题。感谢冰皇师傅的指点迷津。<br></p>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/08</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Bugku">Bugku</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/CSS%E5%9F%BA%E7%A1%804.3--%E9%80%89%E6%8B%A9%E5%99%A8%E4%B9%8B%E5%B1%9E%E6%80%A7%E9%80%89%E6%8B%A9%E5%99%A8/" >
-            
-                <span>CSS基础4.3--选择器之属性选择器</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>CSS3在CSS2的基础上新增加了3个属性选择器，如：E[attr^=”value”]、E[attr$=”value”]、E[attr*=”value”]。与已定义的四个属性选择器为一体。</p>
-</blockquote>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/08</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CSS">CSS</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/CSS%E5%9F%BA%E7%A1%804.2--%E9%80%89%E6%8B%A9%E5%99%A8%E4%B9%8B%E7%BB%84%E5%90%88%E9%80%89%E6%8B%A9%E5%99%A8/" >
-            
-                <span>CSS基础4.2--选择器之组合选择器</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>当将多个基本组合器组合在一起，即组合选择器，组合选择器可以精确地匹配页面元素。<br></p></blockquote>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/05</span>
-            </div>
-            <!-- tags  -->
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/CSS%E5%9F%BA%E7%A1%804.1--%E9%80%89%E6%8B%A9%E5%99%A8%E4%B9%8B%E5%9F%BA%E6%9C%AC%E9%80%89%E6%8B%A9%E5%99%A8/" >
-            
-                <span>CSS基础4.1--选择器之基本选择器</span>
-        </a>
-        <div class="abstract-content">
-            <blockquote>
-<p>CSS通过选择器控制HTML元素，实现对网页对象一对一、多对一、一对多的匹配<br></p></blockquote>
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/03</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CSS">CSS</a>
-    
-</div>
-            
-        </div>
-    </article>
     
     <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/DevOps%E6%8A%80%E6%9C%AF-%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3%E4%B8%8E%E5%85%A5%E9%97%A8/" title= DevOps技术-简单了解与入门 >
+                    <div class="prevTitle">DevOps技术-简单了解与入门</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
     
-    <nav class="page-nav">
-        <a class="extend prev" rel="prev" href="/archives/page/6/">上一页</a><a class="page-number" href="/archives/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/5/">5</a><a class="page-number" href="/archives/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/archives/page/8/">8</a><a class="extend next" rel="next" href="/archives/page/8/">下一页</a>
-    </nav>
     
+    <!--PC和WAP自适应版-->
+
+    <!--PC版-->
+
+
+    
+    
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    <div id="comment"></div>
+    <script>
+    new Valine({
+        el: '#comment' ,
+        notify:false, 
+        verify:false, 
+        appId: "KADRlHg5xXyhKL0d6USDWfIB-gzGzoHsz",
+        appKey: "Ppj8kIdro2yDqXOvqWkTRxuW",
+        placeholder: "递茶就坐(　o=^•ェ•)o　┏━┓",
+        path:window.location.pathname, 
+        avatar:'mm' 
+    });
+    </script>
+
+
+    <!-- 评论 -->
 </main>
             <!-- profile -->
             
@@ -724,6 +527,24 @@
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        
+    </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
     <div class="sidebar sidebar-hide">
@@ -2452,6 +2273,8 @@ jsonContent:
     
     </div>
     <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
      
     </body>
 </html>
