@@ -401,57 +401,66 @@ height:50vh;
 <p>很简单的一个靶机</p>
 </blockquote>
 <a id="more"></a>
+
 <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>将靶机导入vmware就行了，开机后扔那里就可以了。目标为获取5个flag。</p>
-<h3 id="渗透过程"><a href="#渗透过程" class="headerlink" title="渗透过程"></a>渗透过程</h3><h4 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h4><p><img src="/img/DC-1靶机渗透/image-20200617095151727.png" alt="image-20200617095151727"></p>
+<h3 id="渗透过程"><a href="#渗透过程" class="headerlink" title="渗透过程"></a>渗透过程</h3><h4 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h4><p><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617095151727.png" alt="image-20200617095151727"></p>
 <p>首先判断本网段的主机存活情况，我这里直接使用ping扫描的方式，也就是三层扫描的方式，其他方法也可以，这里不存在发现的困难问题。</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617095526624.png" alt="image-20200617095526624"></p>
+<p><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617095526624.png" alt="image-20200617095526624"></p>
 <p>对目标主机端口开放情况已经其上运行的服务进行排查，结果如上图，80端口为web服务，111端口为rpc服务，对象为linux操作系统，内核版本为3.x。</p>
 <p>下面查看其web服务：</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617095604447.png" alt="image-20200617095604447" style="zoom:80%;"></p>
+<img src="/img/DC-1靶机渗透/image-20200617095604447.png" alt="image-20200617095604447" style="zoom:80%;">
+
 <p>可以看到是一个使用Drupal框架搭建的网站。对该网站进行扫描，部分结果如下：</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617095706797.png" alt="image-20200617095706797" style="zoom:80%;"></p>
-<p><img src="/img/DC-1靶机渗透/image-20200617095716668.png" alt="image-20200617095716668" style="zoom:80%;"></p>
-<p><img src="/img/DC-1靶机渗透/image-20200617095729575.png" alt="image-20200617095729575" style="zoom:80%;"></p>
-<p><img src="/img/DC-1靶机渗透/image-20200617095742102.png" alt="image-20200617095742102" style="zoom:80%;"></p>
+<img src="/img/DC-1靶机渗透/image-20200617095706797.png" alt="image-20200617095706797" style="zoom:80%;">
+
+<img src="/img/DC-1靶机渗透/image-20200617095716668.png" alt="image-20200617095716668" style="zoom:80%;">
+
+<img src="/img/DC-1靶机渗透/image-20200617095729575.png" alt="image-20200617095729575" style="zoom:80%;">
+
+<img src="/img/DC-1靶机渗透/image-20200617095742102.png" alt="image-20200617095742102" style="zoom:80%;">
+
 <p>查看robots.txt未发现与flag相关信息(本靶机的目标是找flag)，上述结果中也未包含敏感信息。</p>
-<h4 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h4><p>经过上述信息，先将主要路径集中在web服务上，已知使用了drupal框架，查找一下该框架的漏洞：<br><img src="/img/DC-1靶机渗透/image-20200617100822064.png" alt="image-20200617100822064"></p>
+<h4 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h4><p>经过上述信息，先将主要路径集中在web服务上，已知使用了drupal框架，查找一下该框架的漏洞：<br><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617100822064.png" alt="image-20200617100822064"></p>
 <p>这里是使用drupal_drupageddon，该漏洞原理(SA-CORE-2014-005)这里不做说明。</p>
 <p>下面是配置以及payload：</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617101131439.png" alt="image-20200617101131439"></p>
+<p><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617101131439.png" alt="image-20200617101131439"></p>
 <p>运行后可以得到meterpreter会话：</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617101243964.png" alt="image-20200617101243964"></p>
+<p><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617101243964.png" alt="image-20200617101243964"></p>
 <p>可以得到flag1.txt，其内容提示我们去看该框架的配置文件，查一下可以得到该文件位于sites目录下的default里：</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617101450200.png" alt="image-20200617101450200"></p>
+<p><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617101450200.png" alt="image-20200617101450200"></p>
 <p>查看settings.php文件，并发现flag2的信息，提示如下关键信息：</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617101529848.png" alt="image-20200617101529848"></p>
+<p><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617101529848.png" alt="image-20200617101529848"></p>
 <p>得到数据库的用户名和密码后，登录其数据库：</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617103315288.png" alt="image-20200617103315288" style="zoom:80%;"></p>
+<img src="/img/DC-1靶机渗透/image-20200617103315288.png" alt="image-20200617103315288" style="zoom:80%;">
+
 <p>在如下表中可以看到flag3的信息，其uid为1。</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617103702492.png" alt="image-20200617103702492"></p>
+<p><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617103702492.png" alt="image-20200617103702492"></p>
 <p>我们再看一下user表：</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617103859933.png" alt="image-20200617103859933"></p>
+<p><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617103859933.png" alt="image-20200617103859933"></p>
 <p>可以看到uid为1对应的是admin，下面的uid=3的float是我在上面注册的，可以看到密码做了加密处理。</p>
 <p>尝试查一下有没有重置管理员密码的方法，一般都有的。百度一下就有了：</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617104141763.png" alt="image-20200617104141763"></p>
+<p><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617104141763.png" alt="image-20200617104141763"></p>
 <p>我们去运行scripts下的password-hash.sh来设置新密码，先获取对应hash值：</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617104616789.png" alt="image-20200617104616789"></p>
+<p><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617104616789.png" alt="image-20200617104616789"></p>
 <p>然后我们将这个值替换到数据库里：</p>
 <p>更改前：</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617104727401.png" alt="image-20200617104727401"></p>
-<p>更改后：<br><img src="/img/DC-1靶机渗透/image-20200617104832742.png" alt="image-20200617104832742"></p>
+<p><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617104727401.png" alt="image-20200617104727401"></p>
+<p>更改后：<br><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617104832742.png" alt="image-20200617104832742"></p>
 <p>然后我们尝试登录进去，可以看到登录成功：</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617104913425.png" alt="image-20200617104913425" style="zoom:80%;"></p>
+<img src="/img/DC-1靶机渗透/image-20200617104913425.png" alt="image-20200617104913425" style="zoom:80%;">
+
 <p>最终flag3如下：</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617105024230.png" alt="image-20200617105024230" style="zoom:80%;"></p>
-<p>flag3提示我们去看密码，并且用大写提示我们使用find命令，那我们先看/etc/passwd：<br><img src="/img/DC-1靶机渗透/image-20200617105113406.png" alt="image-20200617105113406"></p>
+<img src="/img/DC-1靶机渗透/image-20200617105024230.png" alt="image-20200617105024230" style="zoom:80%;">
+
+<p>flag3提示我们去看密码，并且用大写提示我们使用find命令，那我们先看/etc/passwd：<br><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617105113406.png" alt="image-20200617105113406"></p>
 <p>可以看到存在一个用户flag4，去家目录下查看，其下有flag4.txt：</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617105544245.png" alt="image-20200617105544245"></p>
+<p><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617105544245.png" alt="image-20200617105544245"></p>
 <p>接下来提示我们需要提权到root了，根据flag3的提示，我们可以使用find进行提权，find命令是有一个exec参数的，进行尝试：</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617110610272.png" alt="image-20200617110610272"></p>
-<p><img src="/img/DC-1靶机渗透/image-20200617110904200.png" alt="image-20200617110904200"></p>
+<p><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617110610272.png" alt="image-20200617110610272"></p>
+<p><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617110904200.png" alt="image-20200617110904200"></p>
 <p>可以看到成功提权，我们查看/root下的flag，题目结束。</p>
-<p><img src="/img/DC-1靶机渗透/image-20200617110932975.png" alt="image-20200617110932975"></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.jianshu.com/p/0c22c450f971" target="_blank" rel="noopener">https://www.jianshu.com/p/0c22c450f971</a> Linux的SUID提权</p>
+<p><img src="/img/DC-1%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F/image-20200617110932975.png" alt="image-20200617110932975"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/0c22c450f971">https://www.jianshu.com/p/0c22c450f971</a> Linux的SUID提权</p>
 
     </article>
     <!-- license  -->
@@ -1759,6 +1768,68 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 73
@@ -1777,6 +1848,11 @@ top:50vh;
     
     
         <li class="archive-post-item">
+            <span class="archive-post-date">05/09</span><a class="archive-post-title" href= "/Spring%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF-Spring-Security%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/" >Spring安全技术-Spring Security使用及总结（一）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
             <span class="archive-post-date">05/02</span><a class="archive-post-title" href= "/DevOps%E6%8A%80%E6%9C%AF-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BADevOps%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83/" >DevOps技术-搭建个人DevOps使用环境</a>
         </li>
     
@@ -1787,12 +1863,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/Spring%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E6%8A%80%E6%9C%AF-Spring%20Security/" >Spring安全管理技术-Spring Security</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/Spring%E6%8C%81%E4%B9%85%E5%B1%82%E6%8A%80%E6%9C%AF-JPA%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%80%BB%E7%BB%93/" >Spring持久层技术-Sping Data JPA使用及总结</a>
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/Spring%E6%8C%81%E4%B9%85%E5%B1%82%E6%8A%80%E6%9C%AF-Sping%20Data%20JPA%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/" >Spring持久层技术-Sping Data JPA使用及总结（一）</a>
         </li>
     
     
@@ -1841,12 +1912,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/06</span><a class="archive-post-title" href= "/JavaEE%E5%9F%BA%E7%A1%80%20-%20Servlet/" >JavaEE基础 - Servlet</a>
+            <span class="archive-post-date">05/06</span><a class="archive-post-title" href= "/JavaEE%E5%9F%BA%E7%A1%80-Spring%E5%AD%A6%E4%B9%A0%20-%20IOC%E6%9C%BA%E5%88%B6/" >JavaEE基础-Spring学习 - IOC机制</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/06</span><a class="archive-post-title" href= "/JavaEE%E5%9F%BA%E7%A1%80-Spring%E5%AD%A6%E4%B9%A0%20-%20IOC%E6%9C%BA%E5%88%B6/" >JavaEE基础-Spring学习 - IOC机制</a>
+            <span class="archive-post-date">05/06</span><a class="archive-post-title" href= "/JavaEE%E5%9F%BA%E7%A1%80%20-%20Servlet/" >JavaEE基础 - Servlet</a>
         </li>
     
     
@@ -2014,12 +2085,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---%E6%A1%86%E6%9E%B6%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%A1%86%E6%9E%B6%E9%85%8D%E7%BD%AE/" >ThinkPHP框架学习---框架目录及框架配置</a>
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---config%E7%B1%BB%E5%92%8Cconfig%E5%8A%A9%E6%89%8B%E5%87%BD%E6%95%B0/" >ThinkPHP框架学习---config类和config助手函数</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---config%E7%B1%BB%E5%92%8Cconfig%E5%8A%A9%E6%89%8B%E5%87%BD%E6%95%B0/" >ThinkPHP框架学习---config类和config助手函数</a>
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---%E6%A1%86%E6%9E%B6%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%A1%86%E6%9E%B6%E9%85%8D%E7%BD%AE/" >ThinkPHP框架学习---框架目录及框架配置</a>
         </li>
     
     
@@ -2172,11 +2243,11 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
-    
         <span class="sidebar-tag-name" data-tags="渗透测试"><span class="iconfont-archer">&#xe606;</span>渗透测试</span>
     
         <span class="sidebar-tag-name" data-tags="Java - 漏洞分析"><span class="iconfont-archer">&#xe606;</span>Java - 漏洞分析</span>
+    
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
         <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
     
@@ -2186,31 +2257,41 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
-        <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
-    
         <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
         <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
     
+        <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
+    
         <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
     
-        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+        <span class="sidebar-tag-name" data-tags="DevOps"><span class="iconfont-archer">&#xe606;</span>DevOps</span>
     
-        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
+        <span class="sidebar-tag-name" data-tags="开发与运维"><span class="iconfont-archer">&#xe606;</span>开发与运维</span>
     
         <span class="sidebar-tag-name" data-tags="JavaEE"><span class="iconfont-archer">&#xe606;</span>JavaEE</span>
     
-        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
-    
         <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
     
         <span class="sidebar-tag-name" data-tags="PHP"><span class="iconfont-archer">&#xe606;</span>PHP</span>
     
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
         <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
     
-        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
+        <span class="sidebar-tag-name" data-tags="区块链技术"><span class="iconfont-archer">&#xe606;</span>区块链技术</span>
+    
+        <span class="sidebar-tag-name" data-tags="以太坊"><span class="iconfont-archer">&#xe606;</span>以太坊</span>
+    
+        <span class="sidebar-tag-name" data-tags="智能合约"><span class="iconfont-archer">&#xe606;</span>智能合约</span>
     
         <span class="sidebar-tag-name" data-tags="电子取证"><span class="iconfont-archer">&#xe606;</span>电子取证</span>
+    
+        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
     
         <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
     
@@ -2219,16 +2300,6 @@ top:50vh;
         <span class="sidebar-tag-name" data-tags="微服务"><span class="iconfont-archer">&#xe606;</span>微服务</span>
     
         <span class="sidebar-tag-name" data-tags="school"><span class="iconfont-archer">&#xe606;</span>school</span>
-    
-        <span class="sidebar-tag-name" data-tags="区块链技术"><span class="iconfont-archer">&#xe606;</span>区块链技术</span>
-    
-        <span class="sidebar-tag-name" data-tags="以太坊"><span class="iconfont-archer">&#xe606;</span>以太坊</span>
-    
-        <span class="sidebar-tag-name" data-tags="智能合约"><span class="iconfont-archer">&#xe606;</span>智能合约</span>
-    
-        <span class="sidebar-tag-name" data-tags="DevOps"><span class="iconfont-archer">&#xe606;</span>DevOps</span>
-    
-        <span class="sidebar-tag-name" data-tags="开发与运维"><span class="iconfont-archer">&#xe606;</span>开发与运维</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>

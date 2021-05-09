@@ -268,7 +268,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">2k</span> / Reading time: <span class="post-count">8 min</span></span>
+                        <span>Word count: <span class="post-count">2k</span> / Reading time: <span class="post-count">9 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -398,50 +398,57 @@ height:50vh;
             <main class="main post-page">
     <article class="article-entry">
         <blockquote>
-<p>emmmmmm这次的Hackgame还是脑洞为主。。。我只做出来了6道题，这里结合官方wp总结一下，题目现在还是可以做的(<a href="https://hack2018.lug.ustc.edu.cn/" target="_blank" rel="noopener">https://hack2018.lug.ustc.edu.cn/</a>)</p>
+<p>emmmmmm这次的Hackgame还是脑洞为主。。。我只做出来了6道题，这里结合官方wp总结一下，题目现在还是可以做的(<a target="_blank" rel="noopener" href="https://hack2018.lug.ustc.edu.cn/">https://hack2018.lug.ustc.edu.cn/</a>)</p>
 </blockquote>
 <a id="more"></a>
-<h3 id="签到题"><a href="#签到题" class="headerlink" title="签到题"></a>签到题</h3><p>　　打开页面后得到信息：<br>　　<img src="/img/Hackergame-2018-wp/1.png" alt=""><br>　　要求提交指定字符串。查看网页源码中表单名称：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;Key: &lt;input type="text" name="key" maxlength="13"/&gt;&lt;/p&gt;</span><br></pre></td></tr></table></figure></p>
-<p>　　get上去：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://202.38.95.46:12002/?key=hackergame2018</span><br></pre></td></tr></table></figure></p>
-<p>　　得到flag:<code>flag{Hackergame2018_Have_Fun!}</code>
+
+<h3 id="签到题"><a href="#签到题" class="headerlink" title="签到题"></a>签到题</h3><p>　　打开页面后得到信息：<br>　　<img src="/img/Hackergame-2018-wp/1.png"><br>　　要求提交指定字符串。查看网页源码中表单名称：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;Key: &lt;input type=&quot;text&quot; name=&quot;key&quot; maxlength=&quot;13&quot;/&gt;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+<p>　　get上去：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;202.38.95.46:12002&#x2F;?key&#x3D;hackergame2018</span><br></pre></td></tr></table></figure>
+<p>　　得到flag:<code>flag&#123;Hackergame2018_Have_Fun!&#125;</code>
 　　</p>
-<h3 id="猫咪问答"><a href="#猫咪问答" class="headerlink" title="猫咪问答"></a>猫咪问答</h3><p>　　emmmmmm我不是中科大学生所以没做完这道。。不过也算是一个小社工吧，自己网上检索信息<br>　　flag:<code>flag{G00G1E-is-always-YOUR-FRIEND}</code>
+<h3 id="猫咪问答"><a href="#猫咪问答" class="headerlink" title="猫咪问答"></a>猫咪问答</h3><p>　　emmmmmm我不是中科大学生所以没做完这道。。不过也算是一个小社工吧，自己网上检索信息<br>　　flag:<code>flag&#123;G00G1E-is-always-YOUR-FRIEND&#125;</code>
 　　</p>
-<h3 id="游园会的集章卡片"><a href="#游园会的集章卡片" class="headerlink" title="游园会的集章卡片"></a>游园会的集章卡片</h3><p>　　这个题就不细说了。。。主要是给了一堆图片拼图，自行拼就行了<br>　　flag:<code>flag{H4PPY_1M4GE_PR0CE551NG}</code>
+<h3 id="游园会的集章卡片"><a href="#游园会的集章卡片" class="headerlink" title="游园会的集章卡片"></a>游园会的集章卡片</h3><p>　　这个题就不细说了。。。主要是给了一堆图片拼图，自行拼就行了<br>　　flag:<code>flag&#123;H4PPY_1M4GE_PR0CE551NG&#125;</code>
 　　</p>
-<h3 id="猫咪和键盘"><a href="#猫咪和键盘" class="headerlink" title="猫咪和键盘"></a>猫咪和键盘</h3><p>　　打开后是一份乱的C++代码，需要还原。可以看出代码按列打乱了。<br>　　使用vim编辑器，列编辑模式还原后：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">name: typed_printf.cpp</span><br><span class="line">compile: g++ -std=c++17 typed_printf.cpp</span><br><span class="line">title: type safe printf</span><br><span class="line">author: nicekingwei</span><br><span class="line">url: aHR0cHM6Ly96anUtbGFtYmRhLnRlY2gvY3BwZHQtcHJpbnRmLw==</span><br><span class="line">related knowledge:</span><br><span class="line"> - value and type</span><br><span class="line">     value-&gt;value: function</span><br><span class="line">     type-&gt;value: parametric polymorphism</span><br><span class="line">     type-&gt;type: generic</span><br><span class="line">     value-&gt;type: dependent type</span><br><span class="line"> - auto</span><br><span class="line"> - if constexpr</span><br></pre></td></tr></table></figure></p>
+<h3 id="猫咪和键盘"><a href="#猫咪和键盘" class="headerlink" title="猫咪和键盘"></a>猫咪和键盘</h3><p>　　打开后是一份乱的C++代码，需要还原。可以看出代码按列打乱了。<br>　　使用vim编辑器，列编辑模式还原后：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">name: typed_printf.cpp</span><br><span class="line">compile: g++ -std&#x3D;c++17 typed_printf.cpp</span><br><span class="line">title: type safe printf</span><br><span class="line">author: nicekingwei</span><br><span class="line">url: aHR0cHM6Ly96anUtbGFtYmRhLnRlY2gvY3BwZHQtcHJpbnRmLw&#x3D;&#x3D;</span><br><span class="line">related knowledge:</span><br><span class="line"> - value and type</span><br><span class="line">     value-&gt;value: function</span><br><span class="line">     type-&gt;value: parametric polymorphism</span><br><span class="line">     type-&gt;type: generic</span><br><span class="line">     value-&gt;type: dependent type</span><br><span class="line"> - auto</span><br><span class="line"> - if constexpr</span><br></pre></td></tr></table></figure>
 <p>　　编译运行后得到flag(待实验…)</p>
-<h3 id="Word文档"><a href="#Word文档" class="headerlink" title="Word文档"></a>Word文档</h3><p>　　还真不知道docx文档结构是这样的<br>　　拖进winhex里：<br>　　<img src="/img/Hackergame-2018-wp/2.png" alt=""><br>　　可以看出为zip文件，该后缀打开后里面就有flag文本文件了<br>　　flag:<code>flag{xlsx,pptx,docx_are_just_zip_files}</code>
+<h3 id="Word文档"><a href="#Word文档" class="headerlink" title="Word文档"></a>Word文档</h3><p>　　还真不知道docx文档结构是这样的<br>　　拖进winhex里：<br>　　<img src="/img/Hackergame-2018-wp/2.png"><br>　　可以看出为zip文件，该后缀打开后里面就有flag文本文件了<br>　　flag:<code>flag&#123;xlsx,pptx,docx_are_just_zip_files&#125;</code>
 　　</p>
-<h3 id="猫咪银行"><a href="#猫咪银行" class="headerlink" title="猫咪银行"></a>猫咪银行</h3><p>　　这道题开始以为要在js脚本上做文章，后来发现好像没用。。。然后买1/4的flag也没啥用。<br>　　后来存钱时，随便输了个很大的数字，发现结果不对劲，才反应过来是溢出问题。<br>　　输入一个大数，且收入不为负，时间在现在时间点前面就行(可以直接取出)，多试几个数就可以了。<br>　　<img src="/img/Hackergame-2018-wp/3.png" alt=""><br>　　flag:<code>flag{Evil_Integer._Evil_Overflow.}</code>
+<h3 id="猫咪银行"><a href="#猫咪银行" class="headerlink" title="猫咪银行"></a>猫咪银行</h3><p>　　这道题开始以为要在js脚本上做文章，后来发现好像没用。。。然后买1/4的flag也没啥用。<br>　　后来存钱时，随便输了个很大的数字，发现结果不对劲，才反应过来是溢出问题。<br>　　输入一个大数，且收入不为负，时间在现在时间点前面就行(可以直接取出)，多试几个数就可以了。<br>　　<img src="/img/Hackergame-2018-wp/3.png"><br>　　flag:<code>flag&#123;Evil_Integer._Evil_Overflow.&#125;</code>
 　　</p>
-<h3 id="黑曜石浏览器"><a href="#黑曜石浏览器" class="headerlink" title="黑曜石浏览器"></a>黑曜石浏览器</h3><p>　　这道题费了我好几天都没搞出来。。<br>　　抓包后是这样的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: 202.38.95.46:12001</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Cookie: PHPSESSID=2e76eef44e3dd8842a479aa79f7f6396</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Cache-Control: max-age=0</span><br></pre></td></tr></table></figure></p>
-<p>　　返回提示说要使用最新的黑曜石浏览器(HEICORE)，即我们需要知道最新的HEICORE浏览器的版本号，遂百度了一下，没东西。。试了各种手段没结果，于是懵逼了几天<br>　　肿么办呢？just google!google HEICORE会看到有一个HEICORE的官网(明显是中科大搭的。。。。)进去后什么都点不了。。下面有个v0.0.2以为是最新版本号，试了也没用。<br>　　<img src="/img/Hackergame-2018-wp/4 .png" alt=""><br>　　后来查看了<a href="http://heicore.com的代码(不是index.php那个页面！)，可以看到下载文件的名称，里面附带的有版本号49.1.2623.213，这才有结果了。。" target="_blank" rel="noopener">http://heicore.com的代码(不是index.php那个页面！)，可以看到下载文件的名称，里面附带的有版本号49.1.2623.213，这才有结果了。。</a><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">"#download_link"</span>).click(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">   <span class="keyword">if</span> (!<span class="built_in">window</span>.loggedIn) &#123;</span><br><span class="line">       alert(<span class="string">"仅差一步！请于登录后下载黑曜石浏览器。"</span>);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">else</span> &#123;</span><br><span class="line">       <span class="built_in">window</span>.location.href=<span class="string">"HEICORE.49.1.2623.213_installer_latest.exe"</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
-<p>　　bp改User-Agent后：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:56.0) Gecko/20100101 HEICORE/49.1.2623.213</span><br></pre></td></tr></table></figure></p>
-<p>　　返回结果：<br>　　<img src="/img/Hackergame-2018-wp/5.png" alt=""><br>　　ps:官槽：<code>除了百度以外的所有搜索引擎几乎都能找到该浏览器的官网：heicore.com</code><br>　　emmmmmmmmmmmmmmmmmmmmmmmmmm以后还是google吧<br>　　得到flag:<code>flag{H3ic0re_49.1.2623.213_sai_kou}</code>
+<h3 id="黑曜石浏览器"><a href="#黑曜石浏览器" class="headerlink" title="黑曜石浏览器"></a>黑曜石浏览器</h3><p>　　这道题费了我好几天都没搞出来。。<br>　　抓包后是这样的：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: 202.38.95.46:12001</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Cookie: PHPSESSID=2e76eef44e3dd8842a479aa79f7f6396</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Cache-Control: max-age=0</span><br></pre></td></tr></table></figure>
+<p>　　返回提示说要使用最新的黑曜石浏览器(HEICORE)，即我们需要知道最新的HEICORE浏览器的版本号，遂百度了一下，没东西。。试了各种手段没结果，于是懵逼了几天<br>　　肿么办呢？just google!google HEICORE会看到有一个HEICORE的官网(明显是中科大搭的。。。。)进去后什么都点不了。。下面有个v0.0.2以为是最新版本号，试了也没用。<br>　　![](/img/Hackergame-2018-wp/4 .png)<br>　　后来查看了<a target="_blank" rel="noopener" href="http://heicore.com的代码(不是index.php那个页面!),可以看到下载文件的名称,里面附带的有版本号49.1.2623.213,这才有结果了../">http://heicore.com的代码(不是index.php那个页面！)，可以看到下载文件的名称，里面附带的有版本号49.1.2623.213，这才有结果了。。</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&quot;#download_link&quot;</span>).click(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">   <span class="keyword">if</span> (!<span class="built_in">window</span>.loggedIn) &#123;</span><br><span class="line">       alert(<span class="string">&quot;仅差一步！请于登录后下载黑曜石浏览器。&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">else</span> &#123;</span><br><span class="line">       <span class="built_in">window</span>.location.href=<span class="string">&quot;HEICORE.49.1.2623.213_installer_latest.exe&quot;</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>　　bp改User-Agent后：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:56.0) Gecko/20100101 HEICORE/49.1.2623.213</span><br></pre></td></tr></table></figure>
+<p>　　返回结果：<br>　　<img src="/img/Hackergame-2018-wp/5.png"><br>　　ps:官槽：<code>除了百度以外的所有搜索引擎几乎都能找到该浏览器的官网：heicore.com</code><br>　　emmmmmmmmmmmmmmmmmmmmmmmmmm以后还是google吧<br>　　得到flag:<code>flag&#123;H3ic0re_49.1.2623.213_sai_kou&#125;</code>
 　　</p>
-<h3 id="回到过去"><a href="#回到过去" class="headerlink" title="回到过去"></a>回到过去</h3><p>　　这道题只要熟悉unix/linux下的ed编辑器命令就好了。<br>　　题目也给出来了具体步骤，虚拟机里敲一遍即可。<br>　　flag:<code>flag{t4a2b8c44039f93345a3d9b2}</code>
+<h3 id="回到过去"><a href="#回到过去" class="headerlink" title="回到过去"></a>回到过去</h3><p>　　这道题只要熟悉unix/linux下的ed编辑器命令就好了。<br>　　题目也给出来了具体步骤，虚拟机里敲一遍即可。<br>　　flag:<code>flag&#123;t4a2b8c44039f93345a3d9b2&#125;</code>
 　　</p>
-<h3 id="我是谁"><a href="#我是谁" class="headerlink" title="我是谁"></a>我是谁</h3><p>　　第一问：burp刷新了几次截包后，会在返回头里看到teapot，即关键字，得到flag:<code>flag{i_canN0t_BReW_c0ffEE!}</code><br>　　打开链接来到第二问，提示需要换一种请求方式：<br>　　<img src="/img/Hackergame-2018-wp/6.png" alt=""><br>　　我们在burp换为POST形式：<br>　　<img src="/img/Hackergame-2018-wp/7.png" alt=""><br>　　提示POST也不行，emmmmmmmmmm????当时做到这里就不会了，后面提到的BREW请求也没见过，所以没出来。。。<br>　　查看提示的文档<br>　　<img src="/img/Hackergame-2018-wp/9.png" alt=""><br>　　得知还有BREW这种请求。。。<br>　　<img src="/img/Hackergame-2018-wp/8.png" alt=""><br>　　还要带上一个参数<code>Content-Type: message/teapot&#39;，返回结果：
-　　![](/img/Hackergame-2018-wp/10.png)
-　　从返回头中看到下一个链接，同样的方式访问：
-　　![](/img/Hackergame-2018-wp/11.png)
-　　得到flag:</code>flag{delivering_tea_to_DaLa0}`
+<h3 id="我是谁"><a href="#我是谁" class="headerlink" title="我是谁"></a>我是谁</h3><p>　　第一问：burp刷新了几次截包后，会在返回头里看到teapot，即关键字，得到flag:<code>flag&#123;i_canN0t_BReW_c0ffEE!&#125;</code><br>　　打开链接来到第二问，提示需要换一种请求方式：<br>　　<img src="/img/Hackergame-2018-wp/6.png"><br>　　我们在burp换为POST形式：<br>　　<img src="/img/Hackergame-2018-wp/7.png"><br>　　提示POST也不行，emmmmmmmmmm????当时做到这里就不会了，后面提到的BREW请求也没见过，所以没出来。。。<br>　　查看提示的文档<br>　　<img src="/img/Hackergame-2018-wp/9.png"><br>　　得知还有BREW这种请求。。。<br>　　<img src="/img/Hackergame-2018-wp/8.png"><br>　　还要带上一个参数<code>Content-Type: message/teapot&#39;，返回结果： 　　![](/img/Hackergame-2018-wp/10.png) 　　从返回头中看到下一个链接，同样的方式访问： 　　![](/img/Hackergame-2018-wp/11.png) 　　得到flag:</code>flag{delivering_tea_to_DaLa0}`
 　　</p>
 <h3 id="家里有矿"><a href="#家里有矿" class="headerlink" title="家里有矿"></a>家里有矿</h3><p>　　
 　　</p>
 <h3 id="秘籍残篇"><a href="#秘籍残篇" class="headerlink" title="秘籍残篇"></a>秘籍残篇</h3><p>　　
 　　</p>
-<h3 id="猫咪遥控器"><a href="#猫咪遥控器" class="headerlink" title="猫咪遥控器"></a>猫咪遥控器</h3><p>　　下载下来一个文本，内容全部为D、R、L、U的组合，可以联想到up,down,left,right四个方向。即这是是一个图片，可由这个步骤画出。<br>　　这里使用HTML中的<code>canvas</code>标签，该标签相当于一个图形容器，可以根据js脚本来绘制相应的图形。(当然pyhton的Turtle也是可以画出来的)下面是脚本：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Cat Controller<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">        <span class="selector-id">#path</span> &#123;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">border</span>: 1<span class="selector-tag">px</span> <span class="selector-tag">solid</span> <span class="selector-id">#000000</span>;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">canvas</span> <span class="attr">id</span>=<span class="string">"path"</span> <span class="attr">width</span>=<span class="string">"1200"</span> <span class="attr">height</span>=<span class="string">"300"</span>&gt;</span><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> seq = <span class="string">"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRDDDDDDDDDDDDDDDDDDDDLLLLLLLLLLLLLLLLLLDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLLLLLRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRLLLLLLLLLLLLLLLLLLLLLLLLRRRRDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUUUUUUDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRUUUUUUUULLLLLLLLLLLLLLLLRRRRRRRRRRRRRRRRRRRRLLLLDDDDDDDDDDDDDDDDDDDDDDDDDDDDLLLLLLLLLLLLLLLLLLLLUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUULLLLLLLLLLLLLLLLLLLLRRRRRRRRRRRRRRRRRRRRRRRRLLLLDDDDDDDDRRRRRRRRRRRRRRRRDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLLLLLLLLLLLLLDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUURRRRRRRRRRRRRRRRRRRRRRRRLLLLDDDDDDDDDDDDLLLLLLLLLLLLLLLLLLLLLLLLRRRRRRRRRRRRRRRRRRRRRRRRRRRRLLLLUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUUUUUURRRRRRRRLLLLLLLLDDDDDDDDDDDDDDDDDDDDDDDDLLLLLLLLDDDDRRRRRRRRDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRLLLLLLLLUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLUUUURRRRRRRRUUUURRRRRRRRRRRRRRRRRRRRRRRRDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUURRRRDDDDRRRRDDDDRRRRDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUURRRRRRRRUUUUUUUURRRRDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRUUUURRRRUUUURRRRRRRRRRRRRRRRDDDDRRRRDDDDRRRRDDDDDDDDLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLUUUURRRRUUUUDDDDLLLLDDDDDDDDRRRRDDDDRRRRDDDDRRRRRRRRRRRRUUUURRRRRRRRUUUUDDDDLLLLLLLLDDDDLLLLLLLLLLLLUUUULLLLUUUULLLLUUUUUUUURRRRUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLLLLLLLLLLLLLLLLLLLLLDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUURRRRRRRRUUUULLLLUUUUDDDDRRRRDDDDRRRRDDDDDDDDDDDDDDDDDDDDRRRRUUUUUUUUUUUURRRRUUUUUUUUDDDDDDDDRRRRDDDDDDDDDDDDRRRRUUUUUUUUUUUUUUUUUUUURRRRUUUURRRRUUUUDDDDLLLLDDDDRRRRRRRRRRRRUUUUUUUUUUUUUUUUDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUURRRRDDDDRRRRDDDDRRRRDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUURRRRUUUURRRRUUUURRRRDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUUDDDDUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRLLLLLLLLLLLLLLLLUUUULLLLUUUULLLLLLLLDDDDLLLLDDDDLLLLDDDDDDDDDDDDRRRRDDDDRRRRDDDDRRRRRRRRUUUURRRRRRRRUUUUDDDDLLLLLLLLDDDDLLLLLLLLUUUULLLLUUUULLLLUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRUUUULLLLUUUUDDDDRRRRRRRRRRRRRRRRRRRRDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUUUUUULLLLLLLLLLLLLLLLLLLLDDDDDDDDUUUUUUUURRRRRRRRRRRRRRRRRRRRDDDDRRRRRRRRRRRRUUUULLLLUUUUDDDDRRRRDDDDRRRRDDDDDDDDDDDDDDDDDDDDRRRRUUUUUUUUUUUUUUUURRRRUUUUUUUUDDDDDDDDRRRRDDDDDDDDDDDDDDDDRRRRRRRRUUUUUUUUUUUUUUUURRRRUUUUUUUURRRRUUUUDDDDLLLLDDDDRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUULLLLLLLLRRRRRRRRDDDDDDDDDDDDDDDDDDDDRRRRRRRRDDDDLLLLLLLLDDDDDDDDDDDDDDDDDDDDLLLLLLLL"</span>; </span></span><br><span class="line"><span class="javascript">    <span class="comment">// 题目中的序列</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> ctx = <span class="built_in">document</span>.getElementById(<span class="string">'path'</span>).getContext(<span class="string">'2d'</span>);</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> x = <span class="number">0</span>, y = <span class="number">0</span>;</span></span><br><span class="line"><span class="undefined">    </span></span><br><span class="line"><span class="javascript">    <span class="function"><span class="keyword">function</span> <span class="title">move</span>(<span class="params">type</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">switch</span> (type) &#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">case</span> <span class="string">'U'</span>: y -= <span class="number">1</span>; <span class="keyword">break</span>;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">case</span> <span class="string">'D'</span>: y += <span class="number">1</span>; <span class="keyword">break</span>;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">case</span> <span class="string">'L'</span>: x -= <span class="number">1</span>; <span class="keyword">break</span>;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">case</span> <span class="string">'R'</span>: x += <span class="number">1</span>; <span class="keyword">break</span>;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">        ctx.fillRect(x, y, 1, 1);</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">    </span></span><br><span class="line"><span class="javascript">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; seq.length; i++) &#123;</span></span><br><span class="line"><span class="undefined">        move(seq[i]);</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">//</span><br></pre></td></tr></table></figure></p>
-<p>　　打开即可得到flag:<code>flag{MeowMeow}</code><br>　<img src="/img/Hackergame-2018-wp/12.png" alt="">
+<h3 id="猫咪遥控器"><a href="#猫咪遥控器" class="headerlink" title="猫咪遥控器"></a>猫咪遥控器</h3><p>　　下载下来一个文本，内容全部为D、R、L、U的组合，可以联想到up,down,left,right四个方向。即这是是一个图片，可由这个步骤画出。<br>　　这里使用HTML中的<code>canvas</code>标签，该标签相当于一个图形容器，可以根据js脚本来绘制相应的图形。(当然pyhton的Turtle也是可以画出来的)下面是脚本：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Cat Controller<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">        <span class="selector-id">#path</span> &#123;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">border</span>: 1<span class="selector-tag">px</span> <span class="selector-tag">solid</span> <span class="selector-id">#000000</span>;</span></span><br><span class="line">        &#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">canvas</span> <span class="attr">id</span>=<span class="string">&quot;path&quot;</span> <span class="attr">width</span>=<span class="string">&quot;1200&quot;</span> <span class="attr">height</span>=<span class="string">&quot;300&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> seq = <span class="string">&quot;DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRDDDDDDDDDDDDDDDDDDDDLLLLLLLLLLLLLLLLLLDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLLLLLRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRLLLLLLLLLLLLLLLLLLLLLLLLRRRRDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUUUUUUDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRUUUUUUUULLLLLLLLLLLLLLLLRRRRRRRRRRRRRRRRRRRRLLLLDDDDDDDDDDDDDDDDDDDDDDDDDDDDLLLLLLLLLLLLLLLLLLLLUUUUUUUUUUUUUUUURRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUULLLLLLLLLLLLLLLLLLLLRRRRRRRRRRRRRRRRRRRRRRRRLLLLDDDDDDDDRRRRRRRRRRRRRRRRDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLLLLLLLLLLLLLDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUURRRRRRRRRRRRRRRRRRRRRRRRLLLLDDDDDDDDDDDDLLLLLLLLLLLLLLLLLLLLLLLLRRRRRRRRRRRRRRRRRRRRRRRRRRRRLLLLUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUUUUUURRRRRRRRLLLLLLLLDDDDDDDDDDDDDDDDDDDDDDDDLLLLLLLLDDDDRRRRRRRRDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRLLLLLLLLUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLUUUURRRRRRRRUUUURRRRRRRRRRRRRRRRRRRRRRRRDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUURRRRDDDDRRRRDDDDRRRRDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUURRRRRRRRUUUUUUUURRRRDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUURRRRRRRRRRRRUUUURRRRUUUURRRRRRRRRRRRRRRRDDDDRRRRDDDDRRRRDDDDDDDDLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLUUUURRRRUUUUDDDDLLLLDDDDDDDDRRRRDDDDRRRRDDDDRRRRRRRRRRRRUUUURRRRRRRRUUUUDDDDLLLLLLLLDDDDLLLLLLLLLLLLUUUULLLLUUUULLLLUUUUUUUURRRRUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLLLLLLLLLLLLLLLLLLLLLDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUURRRRRRRRUUUULLLLUUUUDDDDRRRRDDDDRRRRDDDDDDDDDDDDDDDDDDDDRRRRUUUUUUUUUUUURRRRUUUUUUUUDDDDDDDDRRRRDDDDDDDDDDDDRRRRUUUUUUUUUUUUUUUUUUUURRRRUUUURRRRUUUUDDDDLLLLDDDDRRRRRRRRRRRRUUUUUUUUUUUUUUUUDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUURRRRDDDDRRRRDDDDRRRRDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUURRRRUUUURRRRUUUURRRRDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUUDDDDUUUURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRLLLLLLLLLLLLLLLLUUUULLLLUUUULLLLLLLLDDDDLLLLDDDDLLLLDDDDDDDDDDDDRRRRDDDDRRRRDDDDRRRRRRRRUUUURRRRRRRRUUUUDDDDLLLLLLLLDDDDLLLLLLLLUUUULLLLUUUULLLLUUUUUUUURRRRRRRRRRRRRRRRRRRRRRRRUUUULLLLUUUUDDDDRRRRRRRRRRRRRRRRRRRRDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUUUUUULLLLLLLLLLLLLLLLLLLLDDDDDDDDUUUUUUUURRRRRRRRRRRRRRRRRRRRDDDDRRRRRRRRRRRRUUUULLLLUUUUDDDDRRRRDDDDRRRRDDDDDDDDDDDDDDDDDDDDRRRRUUUUUUUUUUUUUUUURRRRUUUUUUUUDDDDDDDDRRRRDDDDDDDDDDDDDDDDRRRRRRRRUUUUUUUUUUUUUUUURRRRUUUUUUUURRRRUUUUDDDDLLLLDDDDRRRRRRRRRRRRRRRRRRRRUUUUUUUUUUUUUUUULLLLLLLLRRRRRRRRDDDDDDDDDDDDDDDDDDDDRRRRRRRRDDDDLLLLLLLLDDDDDDDDDDDDDDDDDDDDLLLLLLLL&quot;</span>; </span></span><br><span class="line"><span class="javascript">    <span class="comment">// 题目中的序列</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> ctx = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;path&#x27;</span>).getContext(<span class="string">&#x27;2d&#x27;</span>);</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> x = <span class="number">0</span>, y = <span class="number">0</span>;</span></span><br><span class="line">    </span><br><span class="line"><span class="javascript">    <span class="function"><span class="keyword">function</span> <span class="title">move</span>(<span class="params">type</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">switch</span> (type) &#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">case</span> <span class="string">&#x27;U&#x27;</span>: y -= <span class="number">1</span>; <span class="keyword">break</span>;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">case</span> <span class="string">&#x27;D&#x27;</span>: y += <span class="number">1</span>; <span class="keyword">break</span>;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">case</span> <span class="string">&#x27;L&#x27;</span>: x -= <span class="number">1</span>; <span class="keyword">break</span>;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">case</span> <span class="string">&#x27;R&#x27;</span>: x += <span class="number">1</span>; <span class="keyword">break</span>;</span></span><br><span class="line">        &#125;</span><br><span class="line">        ctx.fillRect(x, y, 1, 1);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"><span class="javascript">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; seq.length; i++) &#123;</span></span><br><span class="line">        move(seq[i]);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">//</span><br></pre></td></tr></table></figure>
+<p>　　打开即可得到flag:<code>flag&#123;MeowMeow&#125;</code><br>　<img src="/img/Hackergame-2018-wp/12.png">
 　</p>
-<h3 id="她的诗"><a href="#她的诗" class="headerlink" title="她的诗"></a>她的诗</h3><p>　　下载附件，为一个文本和一个py文件。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># This script helps you decode "her poem"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> codecs <span class="keyword">import</span> decode</span><br><span class="line"></span><br><span class="line">fin = open(<span class="string">"poem.txt"</span>, <span class="string">"r"</span>)</span><br><span class="line">fout = open(<span class="string">"poem.out"</span>, <span class="string">"w"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> fin:</span><br><span class="line">    data = <span class="string">"begin 666 &lt;data&gt;\n"</span> + i + <span class="string">" \nend\n"</span></span><br><span class="line">    decode_data = decode(data.encode(<span class="string">"ascii"</span>), <span class="string">"uu"</span>)</span><br><span class="line">    print(decode_data)</span><br><span class="line">    fout.write(decode_data.decode(<span class="string">"ascii"</span>) + <span class="string">"\n"</span>)</span><br><span class="line"></span><br><span class="line">fin.close()</span><br><span class="line">fout.close()</span><br></pre></td></tr></table></figure></p>
-<p>　　　跑后将poem文本文件解析为了明文，但是文件中没有flag，说明有猫腻。。。<br>　　　注意到py脚本中有一行<code>begin 666&lt;data&gt;</code>，百度后：<br>　　　<img src="/img/Hackergame-2018-wp/13.png" alt=""><br>　　　得知加密方式为uuencode，<a href="http://web.chacuo.net/charsetuuencode" target="_blank" rel="noopener">在线解密</a>后得结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">---------There is something in this worldfthat no one has ever seen before.It is gentle and sweet.lMaybe if it could be seen,aeveryone would fight over it.gThat is why the world hid it,&#123;so that no one could get their handson it so easily.STHowever, someday, someone will find it.The person who deserves it the mostewill definitely find it.---------Do you like this school?I really, really love it.gABut nothing can stay unchanged.n0Fun things... Happy things...gThey can&apos;t all possibly stay unchanged.Even so,rcan you go on loving this place?A---------Sometimes I wonder,Phwhat if this town was alive?y_What if it had thoughts and feelingslike one of us?If it did,w1I think it would want to make the peopletHwho live here happy._---------Expectations are what you havewhen you have given up.uExpectations are born fromUa despairingly large difference in skill.e---------A joke only lasts for a moment,Ncif it leaves a misunderstanding,0it becomes a lie.D---------If someone didn&apos;t have any pride,wouldn&apos;t they also be lackingEin self-confidence?_IIf someone was free of greed,5wouldn&apos;t they have trouble_supporting their family?And if people didn&apos;t envy one another,5wouldn&apos;t they stop inventing new things?0_---------If I don&apos;t have to do it, I won&apos;t.fuIf I have to do it, I&apos;ll make it.---------/* Here is the end of my poem.</span><br></pre></td></tr></table></figure></p>
-<p>　　可以看出与脚本解出来的是有区别的，部分单词多出了几个字母，组合(最后补上显而易见的字符。。。)即可得到flag:<code>flag{sSTegAn0grAPhy_w1tH_uUeNc0DE_I5_50_fun}</code>
+<h3 id="她的诗"><a href="#她的诗" class="headerlink" title="她的诗"></a>她的诗</h3><p>　　下载附件，为一个文本和一个py文件。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># This script helps you decode &quot;her poem&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> codecs <span class="keyword">import</span> decode</span><br><span class="line"></span><br><span class="line">fin = open(<span class="string">&quot;poem.txt&quot;</span>, <span class="string">&quot;r&quot;</span>)</span><br><span class="line">fout = open(<span class="string">&quot;poem.out&quot;</span>, <span class="string">&quot;w&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> fin:</span><br><span class="line">    data = <span class="string">&quot;begin 666 &lt;data&gt;\n&quot;</span> + i + <span class="string">&quot; \nend\n&quot;</span></span><br><span class="line">    decode_data = decode(data.encode(<span class="string">&quot;ascii&quot;</span>), <span class="string">&quot;uu&quot;</span>)</span><br><span class="line">    print(decode_data)</span><br><span class="line">    fout.write(decode_data.decode(<span class="string">&quot;ascii&quot;</span>) + <span class="string">&quot;\n&quot;</span>)</span><br><span class="line"></span><br><span class="line">fin.close()</span><br><span class="line">fout.close()</span><br></pre></td></tr></table></figure>
+<p>　　　跑后将poem文本文件解析为了明文，但是文件中没有flag，说明有猫腻。。。<br>　　　注意到py脚本中有一行<code>begin 666&lt;data&gt;</code>，百度后：<br>　　　<img src="/img/Hackergame-2018-wp/13.png"><br>　　　得知加密方式为uuencode，<a target="_blank" rel="noopener" href="http://web.chacuo.net/charsetuuencode">在线解密</a>后得结果：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">---------There is something in this worldfthat no one has ever seen before.It is gentle and sweet.lMaybe if it could be seen,aeveryone would fight over it.gThat is why the world hid it,&#123;so that no one could get their handson it so easily.STHowever, someday, someone will find it.The person who deserves it the mostewill definitely find it.---------Do you like this school?I really, really love it.gABut nothing can stay unchanged.n0Fun things... Happy things...gThey can&#x27;t all possibly stay unchanged.Even so,rcan you go on loving this place?A---------Sometimes I wonder,Phwhat if this town was alive?y_What if it had thoughts and feelingslike one of us?If it did,w1I think it would want to make the peopletHwho live here happy._---------Expectations are what you havewhen you have given up.uExpectations are born fromUa despairingly large difference in skill.e---------A joke only lasts for a moment,Ncif it leaves a misunderstanding,0it becomes a lie.D---------If someone didn&#x27;t have any pride,wouldn&#x27;t they also be lackingEin self-confidence?_IIf someone was free of greed,5wouldn&#x27;t they have trouble_supporting their family?And if people didn&#x27;t envy one another,5wouldn&#x27;t they stop inventing new things?0_---------If I don&#x27;t have to do it, I won&#x27;t.fuIf I have to do it, I&#x27;ll make it.---------/* Here is the end of my poem.</span><br></pre></td></tr></table></figure>
+<p>　　可以看出与脚本解出来的是有区别的，部分单词多出了几个字母，组合(最后补上显而易见的字符。。。)即可得到flag:<code>flag&#123;sSTegAn0grAPhy_w1tH_uUeNc0DE_I5_50_fun&#125;</code>
 　　</p>
-<h3 id="猫咪克星"><a href="#猫咪克星" class="headerlink" title="猫咪克星"></a>猫咪克星</h3><p>　　这道题属于一道基础题，即使用py脚本进行简单的网络编程。<br>　　题目提示：nc 202.38.95.47 12009<br>　　先cmd试验一下：<br>　　<img src="/img/Hackergame-2018-wp/14.png" alt=""><br>　　要求：快速运算一个算术式并在30s内返回结果<br>　　打开IDE直接输入式子，并将结果写进cmd发送，你会发现你源源不断的得到新的式子，这样的话手工运算30s内是肯定算不完的。<br>　　<img src="/img/Hackergame-2018-wp/14.png" alt=""><br>　　这是我们想到了python的<code>eval</code>函数—-执行一个算数表达式。<br>　　下面是eval函数的解释：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Help on built-in function eval in module builtins:</span><br><span class="line"></span><br><span class="line">eval(source, globals=None, locals=None, /)</span><br><span class="line">    Evaluate the given source in the context of globals and locals.</span><br><span class="line"></span><br><span class="line">    The source may be a string representing a Python expression</span><br><span class="line">    or a code object as returned by compile().</span><br><span class="line">    The globals must be a dictionary and locals can be any mapping,</span><br><span class="line">    defaulting to the current globals and locals.</span><br><span class="line">    If only globals is given, locals defaults to it.</span><br></pre></td></tr></table></figure></p>
-<p>　　如下脚本:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
-
+<h3 id="猫咪克星"><a href="#猫咪克星" class="headerlink" title="猫咪克星"></a>猫咪克星</h3><p>　　这道题属于一道基础题，即使用py脚本进行简单的网络编程。<br>　　题目提示：nc 202.38.95.47 12009<br>　　先cmd试验一下：<br>　　<img src="/img/Hackergame-2018-wp/14.png"><br>　　要求：快速运算一个算术式并在30s内返回结果<br>　　打开IDE直接输入式子，并将结果写进cmd发送，你会发现你源源不断的得到新的式子，这样的话手工运算30s内是肯定算不完的。<br>　　<img src="/img/Hackergame-2018-wp/14.png"><br>　　这是我们想到了python的<code>eval</code>函数—-执行一个算数表达式。<br>　　下面是eval函数的解释：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Help on built-in function eval in module builtins:</span><br><span class="line"></span><br><span class="line">eval(source, globals=None, locals=None, /)</span><br><span class="line">    Evaluate the given source in the context of globals and locals.</span><br><span class="line"></span><br><span class="line">    The source may be a string representing a Python expression</span><br><span class="line">    or a code object as returned by compile().</span><br><span class="line">    The globals must be a dictionary and locals can be any mapping,</span><br><span class="line">    defaulting to the current globals and locals.</span><br><span class="line">    If only globals is given, locals defaults to it.</span><br></pre></td></tr></table></figure>
+<p>　　如下脚本:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
     </article>
     <!-- license  -->
     
@@ -1748,6 +1755,68 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 73
@@ -1766,6 +1835,11 @@ top:50vh;
     
     
         <li class="archive-post-item">
+            <span class="archive-post-date">05/09</span><a class="archive-post-title" href= "/Spring%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF-Spring-Security%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/" >Spring安全技术-Spring Security使用及总结（一）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
             <span class="archive-post-date">05/02</span><a class="archive-post-title" href= "/DevOps%E6%8A%80%E6%9C%AF-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BADevOps%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83/" >DevOps技术-搭建个人DevOps使用环境</a>
         </li>
     
@@ -1776,12 +1850,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/Spring%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E6%8A%80%E6%9C%AF-Spring%20Security/" >Spring安全管理技术-Spring Security</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/Spring%E6%8C%81%E4%B9%85%E5%B1%82%E6%8A%80%E6%9C%AF-JPA%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%80%BB%E7%BB%93/" >Spring持久层技术-Sping Data JPA使用及总结</a>
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/Spring%E6%8C%81%E4%B9%85%E5%B1%82%E6%8A%80%E6%9C%AF-Sping%20Data%20JPA%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/" >Spring持久层技术-Sping Data JPA使用及总结（一）</a>
         </li>
     
     
@@ -1830,12 +1899,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/06</span><a class="archive-post-title" href= "/JavaEE%E5%9F%BA%E7%A1%80%20-%20Servlet/" >JavaEE基础 - Servlet</a>
+            <span class="archive-post-date">05/06</span><a class="archive-post-title" href= "/JavaEE%E5%9F%BA%E7%A1%80-Spring%E5%AD%A6%E4%B9%A0%20-%20IOC%E6%9C%BA%E5%88%B6/" >JavaEE基础-Spring学习 - IOC机制</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/06</span><a class="archive-post-title" href= "/JavaEE%E5%9F%BA%E7%A1%80-Spring%E5%AD%A6%E4%B9%A0%20-%20IOC%E6%9C%BA%E5%88%B6/" >JavaEE基础-Spring学习 - IOC机制</a>
+            <span class="archive-post-date">05/06</span><a class="archive-post-title" href= "/JavaEE%E5%9F%BA%E7%A1%80%20-%20Servlet/" >JavaEE基础 - Servlet</a>
         </li>
     
     
@@ -2003,12 +2072,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---%E6%A1%86%E6%9E%B6%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%A1%86%E6%9E%B6%E9%85%8D%E7%BD%AE/" >ThinkPHP框架学习---框架目录及框架配置</a>
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---config%E7%B1%BB%E5%92%8Cconfig%E5%8A%A9%E6%89%8B%E5%87%BD%E6%95%B0/" >ThinkPHP框架学习---config类和config助手函数</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---config%E7%B1%BB%E5%92%8Cconfig%E5%8A%A9%E6%89%8B%E5%87%BD%E6%95%B0/" >ThinkPHP框架学习---config类和config助手函数</a>
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---%E6%A1%86%E6%9E%B6%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%A1%86%E6%9E%B6%E9%85%8D%E7%BD%AE/" >ThinkPHP框架学习---框架目录及框架配置</a>
         </li>
     
     
@@ -2161,11 +2230,11 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
-    
         <span class="sidebar-tag-name" data-tags="渗透测试"><span class="iconfont-archer">&#xe606;</span>渗透测试</span>
     
         <span class="sidebar-tag-name" data-tags="Java - 漏洞分析"><span class="iconfont-archer">&#xe606;</span>Java - 漏洞分析</span>
+    
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
         <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
     
@@ -2175,31 +2244,41 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
-        <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
-    
         <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
         <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
     
+        <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
+    
         <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
     
-        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+        <span class="sidebar-tag-name" data-tags="DevOps"><span class="iconfont-archer">&#xe606;</span>DevOps</span>
     
-        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
+        <span class="sidebar-tag-name" data-tags="开发与运维"><span class="iconfont-archer">&#xe606;</span>开发与运维</span>
     
         <span class="sidebar-tag-name" data-tags="JavaEE"><span class="iconfont-archer">&#xe606;</span>JavaEE</span>
     
-        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
-    
         <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
     
         <span class="sidebar-tag-name" data-tags="PHP"><span class="iconfont-archer">&#xe606;</span>PHP</span>
     
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
         <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
     
-        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
+        <span class="sidebar-tag-name" data-tags="区块链技术"><span class="iconfont-archer">&#xe606;</span>区块链技术</span>
+    
+        <span class="sidebar-tag-name" data-tags="以太坊"><span class="iconfont-archer">&#xe606;</span>以太坊</span>
+    
+        <span class="sidebar-tag-name" data-tags="智能合约"><span class="iconfont-archer">&#xe606;</span>智能合约</span>
     
         <span class="sidebar-tag-name" data-tags="电子取证"><span class="iconfont-archer">&#xe606;</span>电子取证</span>
+    
+        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
     
         <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
     
@@ -2208,16 +2287,6 @@ top:50vh;
         <span class="sidebar-tag-name" data-tags="微服务"><span class="iconfont-archer">&#xe606;</span>微服务</span>
     
         <span class="sidebar-tag-name" data-tags="school"><span class="iconfont-archer">&#xe606;</span>school</span>
-    
-        <span class="sidebar-tag-name" data-tags="区块链技术"><span class="iconfont-archer">&#xe606;</span>区块链技术</span>
-    
-        <span class="sidebar-tag-name" data-tags="以太坊"><span class="iconfont-archer">&#xe606;</span>以太坊</span>
-    
-        <span class="sidebar-tag-name" data-tags="智能合约"><span class="iconfont-archer">&#xe606;</span>智能合约</span>
-    
-        <span class="sidebar-tag-name" data-tags="DevOps"><span class="iconfont-archer">&#xe606;</span>DevOps</span>
-    
-        <span class="sidebar-tag-name" data-tags="开发与运维"><span class="iconfont-archer">&#xe606;</span>开发与运维</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>

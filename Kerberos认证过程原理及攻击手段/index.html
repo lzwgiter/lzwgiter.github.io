@@ -268,7 +268,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">2.4k</span> / Reading time: <span class="post-count">9 min</span></span>
+                        <span>Word count: <span class="post-count">2.5k</span> / Reading time: <span class="post-count">9 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -401,9 +401,10 @@ height:50vh;
 <p>Kerberos认证协议流程与攻击手段</p>
 </blockquote>
 <a id="more"></a>
+
 <h3 id="Kerberos简介与认证过程"><a href="#Kerberos简介与认证过程" class="headerlink" title="Kerberos简介与认证过程"></a>Kerberos简介与认证过程</h3><p>​    kerberos使用中由MIT大学提出的一种<strong>网络身份验证协议</strong>，旨在通过使用密钥加密技术为C/S应用程序提供强身份验证。其实现涉及到密钥分发与密钥共享的概念。</p>
 <p>​    kerberos基于对称加密体制(Needham-Schroeder认证协议)，拥有两个版本v4和v5，kerberos本身主要由两大部分组成：AS(Authentication Server)和TGS(Ticket Granting Server)。</p>
-<p><img src="/img/Kerberos认证过程原理及攻击手段/定位.png" alt=""></p>
+<p><img src="/img/Kerberos%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B%E5%8E%9F%E7%90%86%E5%8F%8A%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5/%E5%AE%9A%E4%BD%8D.png"></p>
 <p>​    整个kerberos协议中共有两个<strong>基本角色</strong>：<strong>KDC Client</strong>和<strong>KDC Center</strong>，KDC即(Key Distribution Center)，整体其实还是C/S架构，那么在C(Client)这一方有两个角色：Client用户和Server提供应用程序的服务器；而S(Server)的一方就是我们的kerberos了(AS和TGS)。简单说一下他们的作用：</p>
 <ul>
 <li>AS(Autentication Server)：验证Client的身份，验证通过就会给一张TGT票(Ticket Granting Ticket)的票给Client</li>
@@ -411,7 +412,7 @@ height:50vh;
 </ul>
 <p>​    看似概念很多，实际上我们可以很形象的比作买票的过程：你(Client)今天想去游乐场玩，那么你来到了游乐场门口(域环境)，<strong>用你的身份证</strong>在售票处(AS)买了一张<strong>通票</strong>，这张通票允许你去换成任何你可以体验的设施的票。你开心地拿着这张票来到了你最爱的过山车门口(TGS)，用这张<strong>通票</strong>换得了过山车的票，最终你坐上了过山车(Server)。这就是Kerberos认证的过程，它主要目的就是证明你的身份(因为是用身份证买的)，且你具有做过山车的权限(通票可以换任何票)。</p>
 <p>​    那我们简单画一个图来示意：</p>
-<p><img src="/img/Kerberos认证过程原理及攻击手段/过程.png" alt="image-20200414135558815"></p>
+<p><img src="/img/Kerberos%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B%E5%8E%9F%E7%90%86%E5%8F%8A%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5/%E8%BF%87%E7%A8%8B.png" alt="image-20200414135558815"></p>
 <h4 id="为什么需要kerberos？"><a href="#为什么需要kerberos？" class="headerlink" title="为什么需要kerberos？"></a>为什么需要kerberos？</h4><p>​    Kerberos协议主要用于域环境下身份的认证，其本质解决问题是证明<strong>你确实是你本人</strong>这个问题，以此来判断你是否有权限来访问其他服务器上的资源。同时Kerberos提供了一种凭证管理方式，用票据来为用户授权，如果类比一下的话，票据就相当于web中的Cookie。</p>
 <h4 id="什么是域？"><a href="#什么是域？" class="headerlink" title="什么是域？"></a>什么是域？</h4><p>​    域的出现是为了解决企业内部的资源管理问题，比如一个公司可以在公司的内网中创建各个部门的来方便内部资源的管理。在一个域中有域控、域管理员、普通用户、主机等等资源。</p>
 <p>​    你可以设想，如果你在公司中的另一台计算机上要登陆你的账号，那你就得在另一台计算机上的SAM数据库中加入你的账户信息，那要是有100台、1000台、10000台计算机呢？所以我们就就要定义<strong>一个有安全边界的计算机集合</strong>，这个集合就是域。下面简单澄清几个概念：</p>
@@ -426,22 +427,22 @@ height:50vh;
 </li>
 <li><p>独立服务器</p>
 <p>可以参考下面这张图，这是我实验环境中DC的用户列表：</p>
-<p><img src="/img/Kerberos认证过程原理及攻击手段/image-20200414152017927.png" alt="image-20200414152017927"></p>
+<p><img src="/img/Kerberos%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B%E5%8E%9F%E7%90%86%E5%8F%8A%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5/image-20200414152017927.png" alt="image-20200414152017927"></p>
 <p>可以看到有krbtgt这一个用户，该用户KDC自动创建的，他的用途下面认证流程中看到。</p>
 </li>
 </ul>
 <h4 id="Kerberos认证流程"><a href="#Kerberos认证流程" class="headerlink" title="Kerberos认证流程"></a>Kerberos认证流程</h4><p>​    我们假设这里只有一个用户、一个服务器、以及一个AS和TGS，版本为v4</p>
 <h4 id="第一阶段"><a href="#第一阶段" class="headerlink" title="第一阶段"></a>第一阶段</h4><p>​    用户向AS发送信息，该信息是用<strong>用户密钥加密了的时间戳、Client ID、网络地址、加密类型等</strong>数据。</p>
 <p>​    因为在KDC Server中储存了所有用户的密码hash，所以AS收到信息后会从数据库中取出Client ID对应的密码来解密，解密后验证信息，验证成功就返回信息，该信息为用<strong>Client密码加密的sessionkey-as和TGT(用Krbtgt的密钥Hash加密的sessionkey-as和时间戳等信息)</strong></p>
-<p><img src="/img/Kerberos认证过程原理及攻击手段/image-20200414152726343.png" alt="image-20200414152726343"></p>
+<p><img src="/img/Kerberos%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B%E5%8E%9F%E7%90%86%E5%8F%8A%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5/image-20200414152726343.png" alt="image-20200414152726343"></p>
 <h4 id="第二阶段"><a href="#第二阶段" class="headerlink" title="第二阶段"></a>第二阶段</h4><p>​    用户收到第一阶段的信息后，用自己的密码解密得到sessionkey-as，TGT是无法解密的，因为他是AS使用krbtgt账户的密码加密的，此时用户<strong>使用sessionkey-as将时间戳进行加密后与TGT和一并发送给TGS</strong>。</p>
 <p>​    TGS收到这条消息后会检查是是否存在Client请求的服务，若存在，使用krbtgt解密TGT，检查时间是是否过期，且原始地址和TGT中信息是否相同。若成功，则<strong>将用sessionkey-as加密session-tgs和用请求服务的Server的密码hash值加密的session-key-tgs — ST一起发送回去。</strong></p>
-<p><img src="/img/Kerberos认证过程原理及攻击手段/image-20200414152737511.png" alt="image-20200414152737511"></p>
+<p><img src="/img/Kerberos%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B%E5%8E%9F%E7%90%86%E5%8F%8A%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5/image-20200414152737511.png" alt="image-20200414152737511"></p>
 <h4 id="第三阶段"><a href="#第三阶段" class="headerlink" title="第三阶段"></a>第三阶段</h4><p>​    用户收到第二阶段的sessionkey-tgs和ST之后，因为ST必须使用Server的密码解密，而用户是不能解密的，所以<strong>用sessionkey-tgs加密的时间戳和原始ST</strong>一并发送给Server。</p>
 <p>​    Server使用自己的密钥解密sessionkey-tgs后，验证成功就返回正确。</p>
-<p><img src="/img/Kerberos认证过程原理及攻击手段/image-20200414153029187.png" alt="image-20200414153029187"></p>
+<p><img src="/img/Kerberos%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B%E5%8E%9F%E7%90%86%E5%8F%8A%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5/image-20200414153029187.png" alt="image-20200414153029187"></p>
 <h3 id="实验环境说明"><a href="#实验环境说明" class="headerlink" title="实验环境说明"></a>实验环境说明</h3><p>​    本实验环境中域为lab.com，共三台机器：Windows2k3(DC)、Windows7SP1、Windows XPSP3。以及攻击机kali，拓扑图如下：</p>
-<p>​    <img src="/img/Kerberos认证过程原理及攻击手段/image-20200414150713973.png" alt="image-20200414150713973"></p>
+<p>​    <img src="/img/Kerberos%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B%E5%8E%9F%E7%90%86%E5%8F%8A%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5/image-20200414150713973.png" alt="image-20200414150713973"></p>
 <h3 id="黄金票据与白银票据"><a href="#黄金票据与白银票据" class="headerlink" title="黄金票据与白银票据"></a>黄金票据与白银票据</h3><h4 id="黄金票据-MS14068"><a href="#黄金票据-MS14068" class="headerlink" title="黄金票据 MS14068"></a>黄金票据 MS14068</h4><blockquote>
 <p>所需工具：Pykek、mimikatz</p>
 </blockquote>
@@ -451,23 +452,27 @@ height:50vh;
 <li>域的KRBTGT账户密码HASH</li>
 <li>伪造用户名，可以是任意的</li>
 </ul>
-<p>​    该漏洞的修复补丁为KB3011780，具体的攻击步骤可以看我的<a href="[https://lzwgiter.github.io/%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83%E4%B8%8E%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/#MS14-068](https://lzwgiter.github.io/本地提权与漏洞提权/#MS14-068">这篇博客</a>)，实验环境是一样的，这里不再赘述，这里补充一下具体具体的原因，我们使用抓包的方式来说明。</p>
+<p>​    该漏洞的修复补丁为KB3011780，具体的攻击步骤可以看我的<a href="%5Bhttps://lzwgiter.github.io/%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83%E4%B8%8E%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/#MS14-068%5D(https://lzwgiter.github.io/%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83%E4%B8%8E%E6%BC%8F%E6%B4%9E%E6%8F%90%E6%9D%83/#MS14-068)">这篇博客</a>，实验环境是一样的，这里不再赘述，这里补充一下具体具体的原因，我们使用抓包的方式来说明。</p>
 <p>​    下面是抓包的结果：</p>
-<p><img src="/img/Kerberos认证过程原理及攻击手段/image-20200414160648700.png" alt="image-20200414160648700"></p>
-<h4 id="第一阶段-1"><a href="#第一阶段-1" class="headerlink" title="第一阶段"></a>第一阶段</h4><p><img src="/img/Kerberos认证过程原理及攻击手段/image-20200414161241761.png" alt="image-20200414161241761"></p>
+<p><img src="/img/Kerberos%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B%E5%8E%9F%E7%90%86%E5%8F%8A%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5/image-20200414160648700.png" alt="image-20200414160648700"></p>
+<h4 id="第一阶段-1"><a href="#第一阶段-1" class="headerlink" title="第一阶段"></a>第一阶段</h4><p><img src="/img/Kerberos%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B%E5%8E%9F%E7%90%86%E5%8F%8A%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5/image-20200414161241761.png" alt="image-20200414161241761"></p>
 <p>​    Kerberos是应用层协议，我们直接看这部分。对AS请求的内容为两个数据：<strong>PA-ENC-TIMESTAMP和PA-PAC-REQUEST</strong>，前者加密了的时间戳，后者是请求数据。这一个请求会从AS处获得一个不包含PAC的TGT票据，上图中可以看到<strong>第二部分数据的include-pac字段值为False，这是造成漏洞的第一个因素。</strong>可以从代码看出来不包含PAC策略：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sys.stderr.write(<span class="string">'  [+] Building AS-REQ for %s...'</span> % kdc_a)</span><br><span class="line">    sys.stderr.flush()</span><br><span class="line">    nonce = getrandbits(<span class="number">31</span>)</span><br><span class="line">    current_time = time()</span><br><span class="line">    as_req = build_as_req(user_realm, user_name, user_key, current_time, nonce, pac_request=<span class="keyword">False</span>) <span class="comment"># pac_request选项为False</span></span><br><span class="line">    sys.stderr.write(<span class="string">' Done!\n'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sys.stderr.write(<span class="string">&#x27;  [+] Building AS-REQ for %s...&#x27;</span> % kdc_a)</span><br><span class="line">    sys.stderr.flush()</span><br><span class="line">    nonce = getrandbits(<span class="number">31</span>)</span><br><span class="line">    current_time = time()</span><br><span class="line">    as_req = build_as_req(user_realm, user_name, user_key, current_time, nonce, pac_request=<span class="literal">False</span>) <span class="comment"># pac_request选项为False</span></span><br><span class="line">    sys.stderr.write(<span class="string">&#x27; Done!\n&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <p>​    接着AS收到后会返回值：</p>
-<p><img src="/img/Kerberos认证过程原理及攻击手段/image-20200414161854510.png" alt="image-20200414161854510"></p>
+<p><img src="/img/Kerberos%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B%E5%8E%9F%E7%90%86%E5%8F%8A%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5/image-20200414161854510.png" alt="image-20200414161854510"></p>
 <p>​    可以看到ticket字段中说明了域为lab.com，给予对象为win7，在ticket这一项的enc-part中，cipher(0f3bc…)这一项就是不包含PAC的TGT票据。</p>
 <h4 id="第二阶段-1"><a href="#第二阶段-1" class="headerlink" title="第二阶段"></a>第二阶段</h4><p>​    攻击机收到这个TGT票据后，在请求TGS前先构造PAC部分：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">sys.stderr.write(<span class="string">'  [+] Building TGS-REQ for %s...'</span> % kdc_a)</span><br><span class="line">    sys.stderr.flush()</span><br><span class="line">    subkey = generate_subkey()</span><br><span class="line">    nonce = getrandbits(<span class="number">31</span>)</span><br><span class="line">    current_time = time()</span><br><span class="line">    pac = (AD_WIN2K_PAC, build_pac(user_realm, user_name, user_sid, logon_time))</span><br><span class="line">    tgs_req = build_tgs_req(user_realm, <span class="string">'krbtgt'</span>, target_realm, user_realm, user_name,</span><br><span class="line">                            tgt_a, session_key, subkey, nonce, current_time, pac, pac_request=<span class="keyword">False</span>)</span><br><span class="line">    sys.stderr.write(<span class="string">' Done!\n'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">sys.stderr.write(<span class="string">&#x27;  [+] Building TGS-REQ for %s...&#x27;</span> % kdc_a)</span><br><span class="line">    sys.stderr.flush()</span><br><span class="line">    subkey = generate_subkey()</span><br><span class="line">    nonce = getrandbits(<span class="number">31</span>)</span><br><span class="line">    current_time = time()</span><br><span class="line">    pac = (AD_WIN2K_PAC, build_pac(user_realm, user_name, user_sid, logon_time))</span><br><span class="line">    tgs_req = build_tgs_req(user_realm, <span class="string">&#x27;krbtgt&#x27;</span>, target_realm, user_realm, user_name,</span><br><span class="line">                            tgt_a, session_key, subkey, nonce, current_time, pac, pac_request=<span class="literal">False</span>)</span><br><span class="line">    sys.stderr.write(<span class="string">&#x27; Done!\n&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <p>​    pac这个值是一个元组，第一项AD_WIN2K_PAC是一个常数128，定义在krb5.py中，第二项是pac的内容，将域名、用户名、sid、登录时间填进去，这些信息都是从第一阶段的返回数据包中解析出来的。我们看一下这个build_pac函数：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_pac</span><span class="params">(user_realm, user_name, user_sid, logon_time, server_key=<span class="params">(RSA_MD5, None)</span>, kdc_key=<span class="params">(RSA_MD5, None)</span>)</span>:</span></span><br><span class="line">    logon_time = epoch2filetime(logon_time)</span><br><span class="line">    domain_sid, user_id = user_sid.rsplit(<span class="string">'-'</span>, <span class="number">1</span>)<span class="comment"># 获取域sid和用户sid</span></span><br><span class="line">    user_id = int(user_id)</span><br><span class="line">    <span class="comment"># 假如传入S-1-5-21-2925046018-4036314451-2137527233-1111</span></span><br><span class="line">    <span class="comment"># 则user_id 为1111， domain_sid为S-1-5-21-2925046018-4036314451-2137527233</span></span><br><span class="line">	</span><br><span class="line">    <span class="comment"># 这里构造出来的DOMAIN USERS是513管理员权限组</span></span><br><span class="line">    elements.append((PAC_LOGON_INFO, _build_pac_logon_info(domain_sid, user_realm, user_id, user_name, logon_time)))</span><br><span class="line"></span><br><span class="line">    ......</span><br><span class="line"></span><br><span class="line">    <span class="comment">###################################################</span></span><br><span class="line">    chksum1 = checksum(server_key[<span class="number">0</span>], buf, server_key[<span class="number">1</span>])</span><br><span class="line">    chksum2 = checksum(kdc_key[<span class="number">0</span>], chksum1, kdc_key[<span class="number">1</span>])</span><br><span class="line">    <span class="comment">###################################################</span></span><br><span class="line">    buf = buf[:ch_offset1] + chksum1 + buf[ch_offset1+len(chksum1):ch_offset2] + chksum2 + buf[ch_offset2+len(chksum2):]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> buf</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_pac</span>(<span class="params">user_realm, user_name, user_sid, logon_time, server_key=(<span class="params">RSA_MD5, None</span>), kdc_key=(<span class="params">RSA_MD5, None</span>)</span>):</span></span><br><span class="line">    logon_time = epoch2filetime(logon_time)</span><br><span class="line">    domain_sid, user_id = user_sid.rsplit(<span class="string">&#x27;-&#x27;</span>, <span class="number">1</span>)<span class="comment"># 获取域sid和用户sid</span></span><br><span class="line">    user_id = int(user_id)</span><br><span class="line">    <span class="comment"># 假如传入S-1-5-21-2925046018-4036314451-2137527233-1111</span></span><br><span class="line">    <span class="comment"># 则user_id 为1111， domain_sid为S-1-5-21-2925046018-4036314451-2137527233</span></span><br><span class="line">	</span><br><span class="line">    <span class="comment"># 这里构造出来的DOMAIN USERS是513管理员权限组</span></span><br><span class="line">    elements.append((PAC_LOGON_INFO, _build_pac_logon_info(domain_sid, user_realm, user_id, user_name, logon_time)))</span><br><span class="line"></span><br><span class="line">    ......</span><br><span class="line"></span><br><span class="line">    <span class="comment">###################################################</span></span><br><span class="line">    chksum1 = checksum(server_key[<span class="number">0</span>], buf, server_key[<span class="number">1</span>])</span><br><span class="line">    chksum2 = checksum(kdc_key[<span class="number">0</span>], chksum1, kdc_key[<span class="number">1</span>])</span><br><span class="line">    <span class="comment">###################################################</span></span><br><span class="line">    buf = buf[:ch_offset1] + chksum1 + buf[ch_offset1+len(chksum1):ch_offset2] + chksum2 + buf[ch_offset2+len(chksum2):]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> buf</span><br></pre></td></tr></table></figure>
+
 <p>​    注意最后两行的chksum计算，传入的第一个参数为server_key[0]和kdc_key[0]，这两个参数是位置参数，并没有传入，分别为：<code>server_key=(RSA_MD5, None)</code>, <code>kdc_key=(RSA_MD5, None)</code>。我们再看看checksum函数：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">checksum</span><span class="params">(cksumtype, data, key=None)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> cksumtype == RSA_MD5:</span><br><span class="line">        <span class="keyword">return</span> MD5.new(data).digest()</span><br><span class="line">    <span class="keyword">elif</span> cksumtype == HMAC_MD5:</span><br><span class="line">        <span class="keyword">return</span> HMAC.new(key, data).digest()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">raise</span> NotImplementedError(<span class="string">'Only MD5 supported!'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">checksum</span>(<span class="params">cksumtype, data, key=None</span>):</span></span><br><span class="line">    <span class="keyword">if</span> cksumtype == RSA_MD5:</span><br><span class="line">        <span class="keyword">return</span> MD5.new(data).digest()</span><br><span class="line">    <span class="keyword">elif</span> cksumtype == HMAC_MD5:</span><br><span class="line">        <span class="keyword">return</span> HMAC.new(key, data).digest()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">raise</span> NotImplementedError(<span class="string">&#x27;Only MD5 supported!&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <p>​    所以均使用的是MD5的加密方式。<strong>这是漏洞的第二个原因。</strong>至此数据包构造完毕发送给TGS。</p>
-<p><img src="/img/Kerberos认证过程原理及攻击手段/image-20200414172631965.png" alt="image-20200414172631965"></p>
+<p><img src="/img/Kerberos%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B%E5%8E%9F%E7%90%86%E5%8F%8A%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5/image-20200414172631965.png" alt="image-20200414172631965"></p>
 <p>​    TGS收到数据包后在根据对伪造的PAC验证成功之后，返回给Client端一有新的TGT，并且这个TGT会将Pykek生成的PAC包含在其中，返回的用于发送给Server端做认证的ST票据。这样我们就获得了一张拥有<strong>域内最高权限</strong>(域管理员权限)的票据，又叫黄金票据。</p>
 <h3 id="白银票据"><a href="#白银票据" class="headerlink" title="白银票据"></a>白银票据</h3><p>​    白银票据伪造的ST(Service Ticket)，因为在TGT已经在PAC里限定了给Client授权的服务（通过SID的值），所以银票只能访问指定服务。</p>
 <h4 id="利用条件-1"><a href="#利用条件-1" class="headerlink" title="利用条件"></a>利用条件</h4><ul>
@@ -481,8 +486,8 @@ height:50vh;
 <p>与黄金票据相比利用条件就是省区了krbgt用户的密码，其他都一样</p>
 </li>
 </ul>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://www.anquanke.com/post/id/171552#h3-3" target="_blank" rel="noopener">https://www.anquanke.com/post/id/171552#h3-3</a></p>
-<p><a href="https://tools.ietf.org/html/rfc4120.html" target="_blank" rel="noopener">https://tools.ietf.org/html/rfc4120.html</a></p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/171552#h3-3">https://www.anquanke.com/post/id/171552#h3-3</a></p>
+<p><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc4120.html">https://tools.ietf.org/html/rfc4120.html</a></p>
 
     </article>
     <!-- license  -->
@@ -1790,6 +1795,68 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 73
@@ -1808,6 +1875,11 @@ top:50vh;
     
     
         <li class="archive-post-item">
+            <span class="archive-post-date">05/09</span><a class="archive-post-title" href= "/Spring%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF-Spring-Security%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/" >Spring安全技术-Spring Security使用及总结（一）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
             <span class="archive-post-date">05/02</span><a class="archive-post-title" href= "/DevOps%E6%8A%80%E6%9C%AF-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BADevOps%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83/" >DevOps技术-搭建个人DevOps使用环境</a>
         </li>
     
@@ -1818,12 +1890,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/Spring%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E6%8A%80%E6%9C%AF-Spring%20Security/" >Spring安全管理技术-Spring Security</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/Spring%E6%8C%81%E4%B9%85%E5%B1%82%E6%8A%80%E6%9C%AF-JPA%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%80%BB%E7%BB%93/" >Spring持久层技术-Sping Data JPA使用及总结</a>
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/Spring%E6%8C%81%E4%B9%85%E5%B1%82%E6%8A%80%E6%9C%AF-Sping%20Data%20JPA%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/" >Spring持久层技术-Sping Data JPA使用及总结（一）</a>
         </li>
     
     
@@ -1872,12 +1939,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/06</span><a class="archive-post-title" href= "/JavaEE%E5%9F%BA%E7%A1%80%20-%20Servlet/" >JavaEE基础 - Servlet</a>
+            <span class="archive-post-date">05/06</span><a class="archive-post-title" href= "/JavaEE%E5%9F%BA%E7%A1%80-Spring%E5%AD%A6%E4%B9%A0%20-%20IOC%E6%9C%BA%E5%88%B6/" >JavaEE基础-Spring学习 - IOC机制</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/06</span><a class="archive-post-title" href= "/JavaEE%E5%9F%BA%E7%A1%80-Spring%E5%AD%A6%E4%B9%A0%20-%20IOC%E6%9C%BA%E5%88%B6/" >JavaEE基础-Spring学习 - IOC机制</a>
+            <span class="archive-post-date">05/06</span><a class="archive-post-title" href= "/JavaEE%E5%9F%BA%E7%A1%80%20-%20Servlet/" >JavaEE基础 - Servlet</a>
         </li>
     
     
@@ -2045,12 +2112,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---%E6%A1%86%E6%9E%B6%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%A1%86%E6%9E%B6%E9%85%8D%E7%BD%AE/" >ThinkPHP框架学习---框架目录及框架配置</a>
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---config%E7%B1%BB%E5%92%8Cconfig%E5%8A%A9%E6%89%8B%E5%87%BD%E6%95%B0/" >ThinkPHP框架学习---config类和config助手函数</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---config%E7%B1%BB%E5%92%8Cconfig%E5%8A%A9%E6%89%8B%E5%87%BD%E6%95%B0/" >ThinkPHP框架学习---config类和config助手函数</a>
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---%E6%A1%86%E6%9E%B6%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%A1%86%E6%9E%B6%E9%85%8D%E7%BD%AE/" >ThinkPHP框架学习---框架目录及框架配置</a>
         </li>
     
     
@@ -2203,11 +2270,11 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
-    
         <span class="sidebar-tag-name" data-tags="渗透测试"><span class="iconfont-archer">&#xe606;</span>渗透测试</span>
     
         <span class="sidebar-tag-name" data-tags="Java - 漏洞分析"><span class="iconfont-archer">&#xe606;</span>Java - 漏洞分析</span>
+    
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
         <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
     
@@ -2217,31 +2284,41 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
-        <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
-    
         <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
         <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
     
+        <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
+    
         <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
     
-        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+        <span class="sidebar-tag-name" data-tags="DevOps"><span class="iconfont-archer">&#xe606;</span>DevOps</span>
     
-        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
+        <span class="sidebar-tag-name" data-tags="开发与运维"><span class="iconfont-archer">&#xe606;</span>开发与运维</span>
     
         <span class="sidebar-tag-name" data-tags="JavaEE"><span class="iconfont-archer">&#xe606;</span>JavaEE</span>
     
-        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
-    
         <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
     
         <span class="sidebar-tag-name" data-tags="PHP"><span class="iconfont-archer">&#xe606;</span>PHP</span>
     
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
         <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
     
-        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
+        <span class="sidebar-tag-name" data-tags="区块链技术"><span class="iconfont-archer">&#xe606;</span>区块链技术</span>
+    
+        <span class="sidebar-tag-name" data-tags="以太坊"><span class="iconfont-archer">&#xe606;</span>以太坊</span>
+    
+        <span class="sidebar-tag-name" data-tags="智能合约"><span class="iconfont-archer">&#xe606;</span>智能合约</span>
     
         <span class="sidebar-tag-name" data-tags="电子取证"><span class="iconfont-archer">&#xe606;</span>电子取证</span>
+    
+        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
     
         <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
     
@@ -2250,16 +2327,6 @@ top:50vh;
         <span class="sidebar-tag-name" data-tags="微服务"><span class="iconfont-archer">&#xe606;</span>微服务</span>
     
         <span class="sidebar-tag-name" data-tags="school"><span class="iconfont-archer">&#xe606;</span>school</span>
-    
-        <span class="sidebar-tag-name" data-tags="区块链技术"><span class="iconfont-archer">&#xe606;</span>区块链技术</span>
-    
-        <span class="sidebar-tag-name" data-tags="以太坊"><span class="iconfont-archer">&#xe606;</span>以太坊</span>
-    
-        <span class="sidebar-tag-name" data-tags="智能合约"><span class="iconfont-archer">&#xe606;</span>智能合约</span>
-    
-        <span class="sidebar-tag-name" data-tags="DevOps"><span class="iconfont-archer">&#xe606;</span>DevOps</span>
-    
-        <span class="sidebar-tag-name" data-tags="开发与运维"><span class="iconfont-archer">&#xe606;</span>开发与运维</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>

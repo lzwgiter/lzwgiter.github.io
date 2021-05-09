@@ -398,10 +398,11 @@ height:50vh;
             <main class="main post-page">
     <article class="article-entry">
         <blockquote>
-<p>层叠和继承是CSS最基本的两个特性，本篇将对层叠性相关内容简单介绍。<br><a id="more"></a></p>
+<p>层叠和继承是CSS最基本的两个特性，本篇将对层叠性相关内容简单介绍。</p>
 </blockquote>
+<a id="more"></a>
 <h1 id="CSS层叠性"><a href="#CSS层叠性" class="headerlink" title="CSS层叠性:"></a>CSS层叠性:</h1><h2 id="1-gt-CSS-样式表的优先级："><a href="#1-gt-CSS-样式表的优先级：" class="headerlink" title="1&gt; CSS 样式表的优先级："></a>1&gt; CSS 样式表的优先级：</h2><p>  按照CSS 的起源可以将网页定义的样式分为4种：HTML、作者、用户、浏览器。HTML表示元素的默认样式； 作者就是创建人，即创建网站所编辑的CSS； 用户也就是浏览网页的人所设置的样式； 浏览器就是指浏览器默认的样式。<br>  原则上讲，作者定义的样式会优先于用户设置的样式，用户设置的样式优先于浏览器的默认样式，而浏览器的默认样式会优先于HTML的默认样式。<br>  特别的，在CSS2中，当用户设置的样式使用了<code>!important</code>命令声明之后，用户的<code>!important</code>的命令会优先于作者声明的<code>!important</code>命令。</p>
-<h2 id="2-gt-CSS样式的优先级"><a href="#2-gt-CSS样式的优先级" class="headerlink" title="2&gt;CSS样式的优先级"></a>2&gt;CSS样式的优先级</h2><p>  对于相同CSS起源来说，不同位置的样式器优先级也是不同的。一般来说，行内样式会优先于内嵌式样式表，内部样式表会优先于外部样式表。即<code>行内 &gt; 内嵌式 &gt; 外部</code>。而被附加了<code>!important</code>关键字的声明会拥有最高的优先级。<br>  如在实际开发中，如果作者设计网页字体颜色为14号黑色字体，而用户在浏览器中利用firefox的firebug插件修改字体为18号红色字体，浏览器如何处理呢？<br>  <img src="/img/层叠性/2.png" alt="更改"><br>  <img src="/img/层叠性/3.png" alt="结果"><br>  根据CSS层叠规则：<strong>作者设计的样式能够覆盖浏览器默认设置的样式，而用户在浏览器里设置的样式可以覆盖作者的样式。</strong>(上图所示)<strong>同时，CSS根据样式的远近关系来决定层叠样式的优先级：在同等条件下，距离应用对象(也就是标签)的距离越近就越有较大的优先权，因而行内样式的优先权大于内部样式和外部样式。</strong><br>  如果多个不同类型的选择器同时对一个对象设置样式时，该对象最终样式由一个优先级加权值决定，下面是计算方法：</p>
+<h2 id="2-gt-CSS样式的优先级"><a href="#2-gt-CSS样式的优先级" class="headerlink" title="2&gt;CSS样式的优先级"></a>2&gt;CSS样式的优先级</h2><p>  对于相同CSS起源来说，不同位置的样式器优先级也是不同的。一般来说，行内样式会优先于内嵌式样式表，内部样式表会优先于外部样式表。即<code>行内 &gt; 内嵌式 &gt; 外部</code>。而被附加了<code>!important</code>关键字的声明会拥有最高的优先级。<br>  如在实际开发中，如果作者设计网页字体颜色为14号黑色字体，而用户在浏览器中利用firefox的firebug插件修改字体为18号红色字体，浏览器如何处理呢？<br>  <img src="/img/%E5%B1%82%E5%8F%A0%E6%80%A7/2.png" alt="更改"><br>  <img src="/img/%E5%B1%82%E5%8F%A0%E6%80%A7/3.png" alt="结果"><br>  根据CSS层叠规则：<strong>作者设计的样式能够覆盖浏览器默认设置的样式，而用户在浏览器里设置的样式可以覆盖作者的样式。</strong>(上图所示)<strong>同时，CSS根据样式的远近关系来决定层叠样式的优先级：在同等条件下，距离应用对象(也就是标签)的距离越近就越有较大的优先权，因而行内样式的优先权大于内部样式和外部样式。</strong><br>  如果多个不同类型的选择器同时对一个对象设置样式时，该对象最终样式由一个优先级加权值决定，下面是计算方法：</p>
 <ol>
 <li>标签选择器：优先级加权值为1；</li>
 <li>伪元素或伪对象选择器：优先级加权值为1；</li>
@@ -412,9 +413,8 @@ height:50vh;
 <li>统计选择器中的ID选择器个数，然后乘于100；</li>
 <li>统计选择器中类选择器的个数，然后乘以10；</li>
 <li>统计选择器中的标签选择器的个数，然后乘于1；<br>最后将所有加权指数相加，即可得到当前选择器的总加权值。以此来判断哪个样式的优先级大。<br>对于多个选择器组合而成的复合型选择器，首先分别计算每个组成选择器的加权值，接着相加得出当前选择器的总分，哪个分值高则选择哪个所设置的样式。对于分值相等的情况，则按上述的位置关系判断。<br>如：<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">h3</span>&#123;<span class="attribute">color</span>: <span class="number">#ff7300</span>;&#125;        <span class="comment">/*加权值=1*/</span></span><br><span class="line"><span class="selector-class">.fl4</span>&#123;<span class="attribute">font-size</span>: <span class="number">14px</span>;&#125;     <span class="comment">/*加权值=10*/</span></span><br><span class="line"><span class="selector-id">#head</span>&#123;<span class="attribute">width</span>: <span class="number">960px</span>;&#125;       <span class="comment">/*加权值=1+10=11*/</span></span><br><span class="line"><span class="selector-id">#head</span> <span class="selector-tag">h2</span>&#123;<span class="attribute">border</span>: <span class="number">1px</span> soild <span class="number">#ff73</span>;&#125;    <span class="comment">/*加权值=100+1=101*/</span></span><br></pre></td></tr></table></figure>
-</li>
+如果调整样式的优先级，还可以使用<code>!important</code>命令，它表示最大优先级，<strong>注意：该命令必须放在生命语句和分号之间，否则无效。</strong><br>这里附上<a target="_blank" rel="noopener" href="https://www.w3cschool.cn/cssref/53s812dp.html">CSS选择器</a>的详细。</li>
 </ol>
-<p>如果调整样式的优先级，还可以使用<code>!important</code>命令，它表示最大优先级，<strong>注意：该命令必须放在生命语句和分号之间，否则无效。</strong><br>这里附上<a href="https://www.w3cschool.cn/cssref/53s812dp.html" target="_blank" rel="noopener">CSS选择器</a>的详细。</p>
 
     </article>
     <!-- license  -->
@@ -1722,6 +1722,68 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 73
@@ -1740,6 +1802,11 @@ top:50vh;
     
     
         <li class="archive-post-item">
+            <span class="archive-post-date">05/09</span><a class="archive-post-title" href= "/Spring%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF-Spring-Security%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/" >Spring安全技术-Spring Security使用及总结（一）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
             <span class="archive-post-date">05/02</span><a class="archive-post-title" href= "/DevOps%E6%8A%80%E6%9C%AF-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BADevOps%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83/" >DevOps技术-搭建个人DevOps使用环境</a>
         </li>
     
@@ -1750,12 +1817,7 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/24</span><a class="archive-post-title" href= "/Spring%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E6%8A%80%E6%9C%AF-Spring%20Security/" >Spring安全管理技术-Spring Security</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/Spring%E6%8C%81%E4%B9%85%E5%B1%82%E6%8A%80%E6%9C%AF-JPA%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%80%BB%E7%BB%93/" >Spring持久层技术-Sping Data JPA使用及总结</a>
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/Spring%E6%8C%81%E4%B9%85%E5%B1%82%E6%8A%80%E6%9C%AF-Sping%20Data%20JPA%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/" >Spring持久层技术-Sping Data JPA使用及总结（一）</a>
         </li>
     
     
@@ -1804,12 +1866,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/06</span><a class="archive-post-title" href= "/JavaEE%E5%9F%BA%E7%A1%80%20-%20Servlet/" >JavaEE基础 - Servlet</a>
+            <span class="archive-post-date">05/06</span><a class="archive-post-title" href= "/JavaEE%E5%9F%BA%E7%A1%80-Spring%E5%AD%A6%E4%B9%A0%20-%20IOC%E6%9C%BA%E5%88%B6/" >JavaEE基础-Spring学习 - IOC机制</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">05/06</span><a class="archive-post-title" href= "/JavaEE%E5%9F%BA%E7%A1%80-Spring%E5%AD%A6%E4%B9%A0%20-%20IOC%E6%9C%BA%E5%88%B6/" >JavaEE基础-Spring学习 - IOC机制</a>
+            <span class="archive-post-date">05/06</span><a class="archive-post-title" href= "/JavaEE%E5%9F%BA%E7%A1%80%20-%20Servlet/" >JavaEE基础 - Servlet</a>
         </li>
     
     
@@ -1977,12 +2039,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---%E6%A1%86%E6%9E%B6%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%A1%86%E6%9E%B6%E9%85%8D%E7%BD%AE/" >ThinkPHP框架学习---框架目录及框架配置</a>
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---config%E7%B1%BB%E5%92%8Cconfig%E5%8A%A9%E6%89%8B%E5%87%BD%E6%95%B0/" >ThinkPHP框架学习---config类和config助手函数</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---config%E7%B1%BB%E5%92%8Cconfig%E5%8A%A9%E6%89%8B%E5%87%BD%E6%95%B0/" >ThinkPHP框架学习---config类和config助手函数</a>
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/ThinkPHP%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0---%E6%A1%86%E6%9E%B6%E7%9B%AE%E5%BD%95%E5%8F%8A%E6%A1%86%E6%9E%B6%E9%85%8D%E7%BD%AE/" >ThinkPHP框架学习---框架目录及框架配置</a>
         </li>
     
     
@@ -2135,11 +2197,11 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
-    
         <span class="sidebar-tag-name" data-tags="渗透测试"><span class="iconfont-archer">&#xe606;</span>渗透测试</span>
     
         <span class="sidebar-tag-name" data-tags="Java - 漏洞分析"><span class="iconfont-archer">&#xe606;</span>Java - 漏洞分析</span>
+    
+        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
     
         <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
     
@@ -2149,31 +2211,41 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="CSS"><span class="iconfont-archer">&#xe606;</span>CSS</span>
     
-        <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
-    
         <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
         <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
     
+        <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
+    
         <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
     
-        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+        <span class="sidebar-tag-name" data-tags="DevOps"><span class="iconfont-archer">&#xe606;</span>DevOps</span>
     
-        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
+        <span class="sidebar-tag-name" data-tags="开发与运维"><span class="iconfont-archer">&#xe606;</span>开发与运维</span>
     
         <span class="sidebar-tag-name" data-tags="JavaEE"><span class="iconfont-archer">&#xe606;</span>JavaEE</span>
     
-        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
-    
         <span class="sidebar-tag-name" data-tags="Mysql"><span class="iconfont-archer">&#xe606;</span>Mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="漏洞分析"><span class="iconfont-archer">&#xe606;</span>漏洞分析</span>
     
         <span class="sidebar-tag-name" data-tags="PHP"><span class="iconfont-archer">&#xe606;</span>PHP</span>
     
+        <span class="sidebar-tag-name" data-tags="Spring"><span class="iconfont-archer">&#xe606;</span>Spring</span>
+    
+        <span class="sidebar-tag-name" data-tags="Java"><span class="iconfont-archer">&#xe606;</span>Java</span>
+    
         <span class="sidebar-tag-name" data-tags="信息收集"><span class="iconfont-archer">&#xe606;</span>信息收集</span>
     
-        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
+        <span class="sidebar-tag-name" data-tags="区块链技术"><span class="iconfont-archer">&#xe606;</span>区块链技术</span>
+    
+        <span class="sidebar-tag-name" data-tags="以太坊"><span class="iconfont-archer">&#xe606;</span>以太坊</span>
+    
+        <span class="sidebar-tag-name" data-tags="智能合约"><span class="iconfont-archer">&#xe606;</span>智能合约</span>
     
         <span class="sidebar-tag-name" data-tags="电子取证"><span class="iconfont-archer">&#xe606;</span>电子取证</span>
+    
+        <span class="sidebar-tag-name" data-tags="pwn"><span class="iconfont-archer">&#xe606;</span>pwn</span>
     
         <span class="sidebar-tag-name" data-tags="安恒月赛"><span class="iconfont-archer">&#xe606;</span>安恒月赛</span>
     
@@ -2182,16 +2254,6 @@ top:50vh;
         <span class="sidebar-tag-name" data-tags="微服务"><span class="iconfont-archer">&#xe606;</span>微服务</span>
     
         <span class="sidebar-tag-name" data-tags="school"><span class="iconfont-archer">&#xe606;</span>school</span>
-    
-        <span class="sidebar-tag-name" data-tags="区块链技术"><span class="iconfont-archer">&#xe606;</span>区块链技术</span>
-    
-        <span class="sidebar-tag-name" data-tags="以太坊"><span class="iconfont-archer">&#xe606;</span>以太坊</span>
-    
-        <span class="sidebar-tag-name" data-tags="智能合约"><span class="iconfont-archer">&#xe606;</span>智能合约</span>
-    
-        <span class="sidebar-tag-name" data-tags="DevOps"><span class="iconfont-archer">&#xe606;</span>DevOps</span>
-    
-        <span class="sidebar-tag-name" data-tags="开发与运维"><span class="iconfont-archer">&#xe606;</span>开发与运维</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
