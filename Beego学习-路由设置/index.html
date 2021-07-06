@@ -270,7 +270,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">91</span> / Reading time: <span class="post-count">1 min</span></span>
+                        <span>Word count: <span class="post-count">415</span> / Reading time: <span class="post-count">1 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -400,10 +400,29 @@ height:50vh;
             <main class="main post-page">
     <article class="article-entry">
         <blockquote>
-<p>最近刚刚入门了Go语言，因为之前主要使用Java语言，相比之下Go语言去掉了一些如extend、implement这种东西，更加的简洁，并且保留了指针等底层的操作，感觉还是可以的。Beego算是go语言web框架中比较流行的，这篇记录一下Beego的路由机制学习。</p>
+<p>最近刚刚入门了Go语言，因为之前主要使用Java语言，相比之下Go语言去掉了一些如extend、implement这种东西，更加的简洁，并且保留了指针等底层的操作，并且在容器操作支持这方面还挺好。Beego算是go语言web框架中比较流行的，这篇记录一下Beego的路由机制学习。</p>
 </blockquote>
 <a id="more"></a>
 
+<h2 id="Beego整体框架"><a href="#Beego整体框架" class="headerlink" title="Beego整体框架"></a>Beego整体框架</h2><p>Beego的整体设计架构如下图：</p>
+<img src="/img/Beego学习-路由设置/architecture.png" alt="architecture" style="zoom:80%;">
+
+<p>目前beego已经到了v2的版本<code>https://github.com/beego/beego/releases/tag/v2.0.1</code>，所以从上图中可以看到主要有八个模块：task、ORM、httplib、cache、web、log、config、admin。这八个模块可以独立使用。</p>
+<p>下图是其MVC架构的执行逻辑图</p>
+<p><img src="/img/Beego%E5%AD%A6%E4%B9%A0-%E8%B7%AF%E7%94%B1%E8%AE%BE%E7%BD%AE/flow.png" alt="flow"></p>
+<h2 id="Beego路由"><a href="#Beego路由" class="headerlink" title="Beego路由"></a>Beego路由</h2><p>我们先建立一个demo项目，这里推荐使用<code>bee</code>命令来完成，安装：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get -u github.com/beego/bee/v2</span><br></pre></td></tr></table></figure>
+
+<p>记得把你的<code>$GOPATH\bin</code>路径加入环境变量，如果是开发web项目，那么使用bee new  [项目名称]就可以了：</p>
+<p><img src="/img/Beego%E5%AD%A6%E4%B9%A0-%E8%B7%AF%E7%94%B1%E8%AE%BE%E7%BD%AE/image-20210706120201114.png" alt="image-20210706120201114"></p>
+<p>如果是开发api项目，如restful api，使用<code>bee api [项目名称]</code>就可以了。下面是web项目初始化后的目录。可以看到结构很清晰，<code>controllers</code>放控制器，<code>models</code>放模型，<code>views和static</code>放置视图层代码，<code>routers</code>放路由，入口是<code>main.go</code>，<code>go.mod</code>记录依赖。非常的清晰。</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">│  go.mod</span><br><span class="line">│  main.go</span><br><span class="line">├─conf</span><br><span class="line">│      app.conf</span><br><span class="line">├─controllers</span><br><span class="line">│      default.go</span><br><span class="line">├─models</span><br><span class="line">├─routers</span><br><span class="line">│      router.go</span><br><span class="line">├─static</span><br><span class="line">│  ├─css</span><br><span class="line">│  ├─img</span><br><span class="line">│  └─js</span><br><span class="line">│          reload.min.js</span><br><span class="line">├─tests</span><br><span class="line">│      default_test.go</span><br><span class="line">└─views</span><br><span class="line">        index.tpl</span><br></pre></td></tr></table></figure>
+
+<p>new之后可以使用``bee run`命令一键执行，免去了前面的环节：</p>
+<p><img src="/img/Beego%E5%AD%A6%E4%B9%A0-%E8%B7%AF%E7%94%B1%E8%AE%BE%E7%BD%AE/image-20210706121108832.png" alt="image-20210706121108832"></p>
+<img src="/img/Beego学习-路由设置/image-20210706121130509.png" alt="image-20210706121130509" style="zoom:80%;">
+
+<h3 id="基本GET、POST路由"><a href="#基本GET、POST路由" class="headerlink" title="基本GET、POST路由"></a>基本GET、POST路由</h3><h3 id=""><a href="#" class="headerlink" title=""></a></h3><h2 id="参考学习"><a href="#参考学习" class="headerlink" title="参考学习"></a>参考学习</h2><p>[Beego Framework](<a target="_blank" rel="noopener" href="https://beego.me/">首页 - beego: 简约 &amp; 强大并存的 Go 应用框架</a>)</p>
 
     </article>
     <!-- license  -->
@@ -561,7 +580,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Beego%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6"><span class="toc-number">1.</span> <span class="toc-text">Beego整体框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Beego%E8%B7%AF%E7%94%B1"><span class="toc-number">2.</span> <span class="toc-text">Beego路由</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%ACGET%E3%80%81POST%E8%B7%AF%E7%94%B1"><span class="toc-number">2.1.</span> <span class="toc-text">基本GET、POST路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text"></span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0"><span class="toc-number">3.</span> <span class="toc-text">参考学习</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
