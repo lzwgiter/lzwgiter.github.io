@@ -4,6 +4,46 @@
   
     
     <entry>
+      <title>docker-compose及dockerfile总结</title>
+      <link href="/docker-compose%E5%8F%8Adockerfile%E6%80%BB%E7%BB%93/"/>
+      <url>/docker-compose%E5%8F%8Adockerfile%E6%80%BB%E7%BB%93/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>原来虽然也用用docker，但一直都局限于docker pull、docker run完事，没有细致的去了解docker的运行机制以及docker-compose、dockerfile的编写等等，所以如何快速构建镜像、同时部署多个容器这一块始终是空白，这篇主要来填补一下这块空白。</p></blockquote><a id="more"></a>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> docker </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Beego学习-路由设置</title>
+      <link href="/Beego%E5%AD%A6%E4%B9%A0-%E8%B7%AF%E7%94%B1%E8%AE%BE%E7%BD%AE/"/>
+      <url>/Beego%E5%AD%A6%E4%B9%A0-%E8%B7%AF%E7%94%B1%E8%AE%BE%E7%BD%AE/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>最近刚刚入门了Go语言，因为之前主要使用Java语言，相比之下Go语言去掉了一些如extend、implement这种东西，更加的简洁，并且保留了指针等底层的操作，感觉还是可以的。Beego算是go语言web框架中比较流行的，这篇记录一下Beego的路由机制学习。</p></blockquote><a id="more"></a>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Go语言 </tag>
+            
+            <tag> Go Web </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Spring安全技术-Spring Security使用及总结（一）</title>
       <link href="/Spring%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF-Spring-Security%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/"/>
       <url>/Spring%E5%AE%89%E5%85%A8%E6%8A%80%E6%9C%AF-Spring-Security%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E4%B8%80%EF%BC%89/</url>
