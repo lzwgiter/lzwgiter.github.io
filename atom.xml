@@ -6,7 +6,7 @@
   <link href="https://float311.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://float311.gitee.io/"/>
-  <updated>2021-07-06T03:43:11.745Z</updated>
+  <updated>2021-07-09T09:53:00.084Z</updated>
   <id>https://float311.gitee.io/</id>
   
   <author>
@@ -21,13 +21,14 @@
     <link href="https://float311.gitee.io/docker-compose%E5%8F%8Adockerfile%E6%80%BB%E7%BB%93/"/>
     <id>https://float311.gitee.io/docker-compose%E5%8F%8Adockerfile%E6%80%BB%E7%BB%93/</id>
     <published>2021-07-06T03:37:26.000Z</published>
-    <updated>2021-07-06T03:43:11.745Z</updated>
+    <updated>2021-07-09T09:53:00.084Z</updated>
     
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>原来虽然也用用docker，但一直都局限于docker pull、docker run完事，没有细致的去了解docker的运行机制以及docker-compose、dockerfile的编写等等，所以如何快速构建镜像、同时部署多个容器这一块始终是空白，这篇主要来填补一下这块空白。</p></blockquote><a id="more"></a>]]></content>
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote><p>原来虽然也用用docker，但一直都局限于docker pull、docker run完事，没有细致的去了解docker的运行机制以及docker-compose、dockerfile的编写等等，所以如何快速构建镜像、同时部署多个容器这一块始终是空白，这篇主要来填补一下这块空白。</p><p>(待)</p></blockquote><a id="more"></a>]]></content>
     
     
     <summary type="html">&lt;blockquote&gt;
 &lt;p&gt;原来虽然也用用docker，但一直都局限于docker pull、docker run完事，没有细致的去了解docker的运行机制以及docker-compose、dockerfile的编写等等，所以如何快速构建镜像、同时部署多个容器这一块始终是空白，这篇主要来填补一下这块空白。&lt;/p&gt;
+&lt;p&gt;(待)&lt;/p&gt;
 &lt;/blockquote&gt;</summary>
     
     
