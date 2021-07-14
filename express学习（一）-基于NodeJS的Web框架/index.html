@@ -272,7 +272,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">0</span> / Reading time: <span class="post-count">1 min</span></span>
+                        <span>Word count: <span class="post-count">2.1k</span> / Reading time: <span class="post-count">9 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -401,7 +401,124 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        
+        <blockquote>
+<p>哎前端，自己就没踏踏实实学过前端的玩意儿，嚷嚷着要学vue要学angular，结果都是接触个皮毛，完后屁颠屁颠回去学Java了…，今天项目需要，学学express，一个基于NodeJS的快速开发web应用的框架(<strong>属于Nodejs的后端框架</strong>)，目的是学会基本使用。vue这些前端框架回头专门记录学学(我也好想会做好看的前端呜呜呜)</p>
+<img src="/img/express学习（一）-基于NodeJS的Web框架/express-title.png" alt="express-title" style="zoom:80%;">
+</blockquote>
+<span id="more"></span>
+
+<h2 id="入门demo"><a href="#入门demo" class="headerlink" title="入门demo"></a>入门demo</h2><p>首先新建一个目录然后<code>npm init</code>来初始化这个工程，主要是生成<code>package.json</code>这个依赖管理文件，然后我们<code>npm install express --save</code>来安装express，可以自定义入口为app.js(一般的习惯)，然后代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> app = express()</span><br><span class="line"><span class="keyword">const</span> port = <span class="number">9999</span></span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&#x27;/&#x27;</span>, <span class="function">(<span class="params">req, res</span>)=&gt;</span>&#123;</span><br><span class="line">    res.send(<span class="string">&quot;express!&quot;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">app.listen(port, <span class="function">()=&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`express is listening on port: <span class="subst">$&#123;port&#125;</span>`</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>然后<code>node app.js</code>就可以启动应用了，访问根目录就可以看到我们绑定的路由以及对应的handler函数了。</p>
+<p>当然一般可以使用<code>express-generator</code>来完成这个工作，安装：<code>npm install -g express-generator</code>。然后就可以新建工程了，比如：</p>
+<img src="/img/express学习（一）-基于NodeJS的Web框架/image-20210714122920878.png" alt="image-20210714122920878" style="zoom:80%;">
+
+<p>然后在其目录下<code>npm install</code>安装依赖就可以了。最后的目录结构如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">├── app.js</span><br><span class="line">├── bin</span><br><span class="line">    └──www</span><br><span class="line">├── node_modules</span><br><span class="line">├── public</span><br><span class="line">│   ├─images</span><br><span class="line">│   ├─javascripts</span><br><span class="line">│   └─stylesheets</span><br><span class="line">│     └── style.css</span><br><span class="line">├── routes</span><br><span class="line">│   ├── index.js</span><br><span class="line">│   └── users.js</span><br><span class="line">└── views</span><br><span class="line">    ├── error.pug</span><br><span class="line">    ├── index.pug</span><br><span class="line">    └── layout.pug</span><br></pre></td></tr></table></figure>
+
+<p>**如果你要在视图层使用html作为模板文件的话，需要在app.js中修改他的默认模板引擎，并且要安装ejs模块(npm install ejs –save)**，修改后的代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// view engine setup</span></span><br><span class="line"><span class="comment">// 修改视图层引擎为html</span></span><br><span class="line">app.set(<span class="string">&#x27;views&#x27;</span>, path.join(__dirname, <span class="string">&#x27;views&#x27;</span>));</span><br><span class="line">app.engine(<span class="string">&#x27;.html&#x27;</span>, <span class="built_in">require</span>(<span class="string">&#x27;ejs&#x27;</span>).__express)</span><br><span class="line">app.set(<span class="string">&#x27;view engine&#x27;</span>, <span class="string">&#x27;html&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以使用html文件了。</p>
+<h2 id="路由设置"><a href="#路由设置" class="headerlink" title="路由设置"></a>路由设置</h2><p>首先我们来确立几个基本概念，就照着上面的demo（这里再粘贴一下）：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> app = express()</span><br><span class="line"><span class="keyword">const</span> port = <span class="number">9999</span></span><br></pre></td></tr></table></figure>
+
+<p>首先<code>app</code>这个变量，它是express的一个实例，下面我们定义了一条路由规则：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">app.get(<span class="string">&#x27;/&#x27;</span>, <span class="function">(<span class="params">req, res</span>)=&gt;</span>&#123;</span><br><span class="line">    res.send(<span class="string">&quot;express!&quot;</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>定义路由规则的语法是这样的：<code>app.METHOD(URL, HANDLER)</code>，其中Handler由请求和响应组成，比如上面的代码中就用响应变量<code>res</code>回执了一个字符串。</p>
+<h3 id="URL路径"><a href="#URL路径" class="headerlink" title="URL路径"></a>URL路径</h3><p>官方给了几个例子，分别对应不同的HTTP请求：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 请求根</span></span><br><span class="line">app.get(<span class="string">&#x27;/&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">&#x27;root&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 请求/about页面</span></span><br><span class="line">app.get(<span class="string">&#x27;/about&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">&#x27;about&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 请求/random.text</span></span><br><span class="line">app.get(<span class="string">&#x27;/random.text&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">&#x27;random.text&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 附带规则</span></span><br><span class="line"><span class="comment">// 请求abd或者abcd，b?意思就是有没有?前面这个b都可以</span></span><br><span class="line">app.get(<span class="string">&#x27;/ab?cd&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">&#x27;ab?cd&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 类似上面，意思中间可以是一堆b，比如abbbbcd</span></span><br><span class="line">app.get(<span class="string">&#x27;/ab+cd&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">&#x27;ab+cd&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 和上面一个意思，只不过中间可以不是b，比如abq345281cd</span></span><br><span class="line">app.get(<span class="string">&#x27;/ab*cd&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">&#x27;ab*cd&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 和ab?cd一个意思，即cd这俩可有可无=&gt;abe或者abcde</span></span><br><span class="line">app.get(<span class="string">&#x27;/ab(cd)?e&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">&#x27;ab(cd)?e&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 正则</span></span><br><span class="line"><span class="comment">// 只要带个a就可以访问</span></span><br><span class="line">app.get(<span class="regexp">/a/</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">&#x27;/a/&#x27;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 以fly结尾就可以，比如butterfly</span></span><br><span class="line">app.get(<span class="regexp">/.*fly$/</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">&#x27;/.*fly$/&#x27;</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="路由参数"><a href="#路由参数" class="headerlink" title="路由参数"></a>路由参数</h3><p>当然我们也要处理用户传递的数据的，老规矩，get的参数或者post的参数呗。先看get的，处理方法类似go语言：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">app.get(<span class="string">&#x27;/users/:userId/books/:bookId&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  res.send(req.params)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>上面这个url传递过来后，就可以拿到userId和bookId这两个变量</p>
+<p>当然，你也可以用这种骚气一点的处理方式：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 带个&#x27;-&#x27;来匹配get的参数</span></span><br><span class="line">Route path: <span class="regexp">/flights/</span>:<span class="keyword">from</span>-:to</span><br><span class="line">Request URL: http:<span class="comment">//localhost:3000/flights/LAX-SFO</span></span><br><span class="line">req.params: &#123; <span class="string">&quot;from&quot;</span>: <span class="string">&quot;LAX&quot;</span>, <span class="string">&quot;to&quot;</span>: <span class="string">&quot;SFO&quot;</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 同理，也可以用&#x27;.&#x27;来分隔匹配参数</span></span><br><span class="line">Route path: <span class="regexp">/plantae/</span>:genus.:species</span><br><span class="line">Request URL: http:<span class="comment">//localhost:3000/plantae/Prunus.persica</span></span><br><span class="line">req.params: &#123; <span class="string">&quot;genus&quot;</span>: <span class="string">&quot;Prunus&quot;</span>, <span class="string">&quot;species&quot;</span>: <span class="string">&quot;persica&quot;</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 当然，还有正则</span></span><br><span class="line">Route path: <span class="regexp">/user/</span>:userId(\d+)</span><br><span class="line">Request URL: http:<span class="comment">//localhost:3000/user/42</span></span><br><span class="line">req.params: &#123;<span class="string">&quot;userId&quot;</span>: <span class="string">&quot;42&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="处理程序-Handler"><a href="#处理程序-Handler" class="headerlink" title="处理程序(Handler)"></a>处理程序(Handler)</h3><p>上面demo的例子只有一个handler函数，实际上也可以组合使用多个handler函数进行跳转，比如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> app = express()</span><br><span class="line"><span class="keyword">const</span> port = <span class="number">9999</span></span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&#x27;/test&#x27;</span>, <span class="function">(<span class="params">req, res, next</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;this request will be handled by next!&quot;</span>)</span><br><span class="line">    next()	<span class="comment">// 交由下一个handler处理</span></span><br><span class="line">&#125;, <span class="function">(<span class="params">req, res</span>)=&gt;</span> &#123;</span><br><span class="line">    res.send(<span class="string">&quot;ok&quot;</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">app.listen(port, <span class="function">()=&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`express is listening on port: <span class="subst">$&#123;port&#125;</span>`</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>我们就可以在控制台看到跳转，以及最终回显的结果</p>
+<p><img src="/img/express%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89-%E5%9F%BA%E4%BA%8ENodeJS%E7%9A%84Web%E6%A1%86%E6%9E%B6/image-20210714142325049.png" alt="image-20210714142325049"></p>
+<p><img src="/img/express%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89-%E5%9F%BA%E4%BA%8ENodeJS%E7%9A%84Web%E6%A1%86%E6%9E%B6/image-20210714142212956.png" alt="image-20210714142212956"></p>
+<p>当然你也可以单独独立定义函数，然后组成数组，交由app来进行管理：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> app = express()</span><br><span class="line"><span class="keyword">const</span> port = <span class="number">9999</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> func1 = <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;this is func1&quot;</span>)</span><br><span class="line">    next()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> func2 = <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;this is func2&quot;</span>)</span><br><span class="line">    next()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> func3 = <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">    res.send(<span class="string">&quot;hello!&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">&#x27;/test&#x27;</span>, [func1, func2, func3])</span><br><span class="line"></span><br><span class="line">app.listen(port, <span class="function">()=&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`express is listening on port: <span class="subst">$&#123;port&#125;</span>`</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/img/express%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89-%E5%9F%BA%E4%BA%8ENodeJS%E7%9A%84Web%E6%A1%86%E6%9E%B6/image-20210714142724475.png" alt="image-20210714142724475"></p>
+<p><img src="/img/express%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89-%E5%9F%BA%E4%BA%8ENodeJS%E7%9A%84Web%E6%A1%86%E6%9E%B6/image-20210714142731697.png" alt="image-20210714142731697"></p>
+<p>上面的例子是都绑定到了get方法，此外，你也可以将这些方法绑定到不同的方法里：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">app.route(<span class="string">&#x27;/book&#x27;</span>)</span><br><span class="line">  .get(<span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    res.send(<span class="string">&#x27;Get a random book&#x27;</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">  .post(<span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    res.send(<span class="string">&#x27;Add a book&#x27;</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">  .put(<span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    res.send(<span class="string">&#x27;Update the book&#x27;</span>)</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>比如上面的代码就把不同的处理程序绑定到了<code>/book</code>路径下的不同请求方法中。</p>
+<h3 id="响应可执行的方法-Method"><a href="#响应可执行的方法-Method" class="headerlink" title="响应可执行的方法(Method)"></a>响应可执行的方法(Method)</h3><p>如果以下的方法没有被调用的话，服务端和客户端的通信将一直挂起。比如我们demo里的send方法就可以结束一次请求-响应的循环。</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a target="_blank" rel="noopener" href="https://www.expressjs.com.cn/en/4x/api.html#res.download">res.download()</a></td>
+<td>Prompt a file to be downloaded.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.expressjs.com.cn/en/4x/api.html#res.end">res.end()</a></td>
+<td>End the response process.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.expressjs.com.cn/en/4x/api.html#res.json">res.json()</a></td>
+<td>Send a JSON response.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.expressjs.com.cn/en/4x/api.html#res.jsonp">res.jsonp()</a></td>
+<td>Send a JSON response with JSONP support.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.expressjs.com.cn/en/4x/api.html#res.redirect">res.redirect()</a></td>
+<td>Redirect a request.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.expressjs.com.cn/en/4x/api.html#res.render">res.render()</a></td>
+<td>Render a view template.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.expressjs.com.cn/en/4x/api.html#res.send">res.send()</a></td>
+<td>Send a response of various types.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.expressjs.com.cn/en/4x/api.html#res.sendFile">res.sendFile()</a></td>
+<td>Send a file as an octet stream.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.expressjs.com.cn/en/4x/api.html#res.sendStatus">res.sendStatus()</a></td>
+<td>Set the response status code and send its string representation as the response body.</td>
+</tr>
+</tbody></table>
+<h3 id="express-Router"><a href="#express-Router" class="headerlink" title="express.Router()"></a>express.Router()</h3><p>定义Handler的方式可能有点乱，还有一种模块化的管理路由的方式就是使用<code>express.Router</code>，我们单独在一个文件中写路由规则，然后导出这个模块使用即可。一个例子如下：</p>
+<p>首先我们使用express初始化后的工程，在<code>routers/index.js</code>文件中写我们的规则：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> router = express.Router();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* GET home page. */</span></span><br><span class="line">router.get(<span class="string">&#x27;/&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  res.render(<span class="string">&#x27;index.html&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = router;</span><br></pre></td></tr></table></figure>
+
+<p>然后 <code>views</code>下写我们的视图层文件：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Hello Express<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">href</span>=<span class="string">&quot;stylesheets/style.css&quot;</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Hello Express<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>默认express应用的监听端口是3000，这里使用<code>npm start app.js</code>来启动我们的应用，其本质就是调用了bin目录下的www脚本，其实还是node调用，只不过定义了端口等信息。然后访问网页就可以看到内容了(304是因为我访问过了)：</p>
+<p><img src="/img/express%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89-%E5%9F%BA%E4%BA%8ENodeJS%E7%9A%84Web%E6%A1%86%E6%9E%B6/image-20210714171804025.png" alt="image-20210714171804025"></p>
+<h2 id="静态资源注册"><a href="#静态资源注册" class="headerlink" title="静态资源注册"></a>静态资源注册</h2><p>比如图片这些东西直接使用express自带的static函数就可以注册了，例子如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.use(express.static(<span class="string">&#x27;public&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码就把public目录下的所有静态资源都开放给外界使用，比如<code>http://localhost:3000/css/style.css</code>就可以被访问到。如果你还有其他目录的资源想要开放，那么也是使用上面的函数进行注册就可以了。</p>
+<p>此外，你也可以将资源挂在到一个虚拟的路径下面，比如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.use(<span class="string">&#x27;/static&#x27;</span>, express.static(<span class="string">&#x27;public&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>那么上面那个css文件的访问路径就变成了<code>http://localhost:3000/static/css/style.css</code>。上面这种注册方式是因为你的注册语句是写在app.js里面的，如果说你写到其他文件里，express是找不到这个public文件夹的，所以建议这样注册，其中<code>__dirname</code>就是你的项目根目录。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.use(<span class="string">&#x27;/static&#x27;</span>, express.static(path.join(__dirname, <span class="string">&#x27;public&#x27;</span>)))</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考学习"><a href="#参考学习" class="headerlink" title="参考学习"></a>参考学习</h2><p><a target="_blank" rel="noopener" href="https://www.expressjs.com.cn/">Express - 基于 Node.js 平台的 web 应用开发框架 - Express 中文文档 | Express 中文网 (expressjs.com.cn)</a></p>
+
     </article>
     <!-- license  -->
     
@@ -553,7 +670,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A5%E9%97%A8demo"><span class="toc-number">1.</span> <span class="toc-text">入门demo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">路由设置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#URL%E8%B7%AF%E5%BE%84"><span class="toc-number">2.1.</span> <span class="toc-text">URL路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E5%8F%82%E6%95%B0"><span class="toc-number">2.2.</span> <span class="toc-text">路由参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F-Handler"><span class="toc-number">2.3.</span> <span class="toc-text">处理程序(Handler)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%8D%E5%BA%94%E5%8F%AF%E6%89%A7%E8%A1%8C%E7%9A%84%E6%96%B9%E6%B3%95-Method"><span class="toc-number">2.4.</span> <span class="toc-text">响应可执行的方法(Method)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#express-Router"><span class="toc-number">2.5.</span> <span class="toc-text">express.Router()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E6%B3%A8%E5%86%8C"><span class="toc-number">3.</span> <span class="toc-text">静态资源注册</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0"><span class="toc-number">4.</span> <span class="toc-text">参考学习</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -2266,8 +2383,6 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="渗透测试"><span class="iconfont-archer">&#xe606;</span>渗透测试</span>
     
-        <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
-    
         <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
     
         <span class="sidebar-tag-name" data-tags="SQLi"><span class="iconfont-archer">&#xe606;</span>SQLi</span>
@@ -2279,8 +2394,6 @@ top:50vh;
         <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
     
         <span class="sidebar-tag-name" data-tags="隐写术"><span class="iconfont-archer">&#xe606;</span>隐写术</span>
-    
-        <span class="sidebar-tag-name" data-tags="DOM"><span class="iconfont-archer">&#xe606;</span>DOM</span>
     
         <span class="sidebar-tag-name" data-tags="DevOps"><span class="iconfont-archer">&#xe606;</span>DevOps</span>
     
@@ -2323,8 +2436,6 @@ top:50vh;
         <span class="sidebar-tag-name" data-tags="Go Web"><span class="iconfont-archer">&#xe606;</span>Go Web</span>
     
         <span class="sidebar-tag-name" data-tags="docker"><span class="iconfont-archer">&#xe606;</span>docker</span>
-    
-        <span class="sidebar-tag-name" data-tags="渗透测试 - Java - 漏洞分析"><span class="iconfont-archer">&#xe606;</span>渗透测试 - Java - 漏洞分析</span>
     
         <span class="sidebar-tag-name" data-tags="前端"><span class="iconfont-archer">&#xe606;</span>前端</span>
     
