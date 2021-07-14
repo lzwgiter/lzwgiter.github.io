@@ -262,7 +262,7 @@ height:50vh;
                 
                     <div class= post-intro-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Javascript">Javascript</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "前端">前端</a>
     
 </div>
                 
@@ -400,7 +400,7 @@ height:50vh;
         <blockquote>
 <p>　navigator对象中包含了浏览器的基本信息，如名称、版本和系统。可以通过window.navigator可以引用该对象，客户端并利用它的属性来读取客户端基本信息。</p>
 </blockquote>
-<a id="more"></a>
+<span id="more"></span>
 
 <p>　　navigator对象属性表如下：<br>　　<img src="/img/BOM-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B%E4%B9%8Bnavigator%E3%80%81location%E5%AF%B9%E8%B1%A1/1.png"></p>
 <h3 id="浏览器检测方法"><a href="#浏览器检测方法" class="headerlink" title="浏览器检测方法"></a>浏览器检测方法</h3><p>　　浏览器检测的方法有多种，常用方法包括两种：特征检测法和字符串检测法。<br>　　前者是根据浏览器是否支持特定功能来决定操作的方式，属于非精确判断法，但也是最安全的检测方法。如果不关心浏览器的身份，仅仅在意它的能力，就可以使用该方法。<br>后者则可以判断浏览器身份。<br>　　1. 特征检测法：</p>
@@ -410,7 +410,7 @@ height:50vh;
 <p>　　user-agent包含了大量的Web浏览器信息，不同浏览器各不相同。<br>　　当然了，考虑安全的话，navigator对象的信息是具有误导性，不应该被用于检测浏览器版本。原因如下：<br>　　1&gt; navigator 数据可被浏览器使用者更改<br>　　2&gt; 一些浏览器对测试站点会识别错误<br>　　3&gt; 浏览器无法报告晚于浏览器发布的新操作系统<br>　　<br><a target="_blank" rel="noopener" href="http://www.cnblogs.com/egger/archive/2013/04/20/3032070.html">这里有一篇关于user-Agent字段的讲解</a></p>
 <h3 id="检测浏览器类型和型号"><a href="#检测浏览器类型和型号" class="headerlink" title="检测浏览器类型和型号"></a>检测浏览器类型和型号</h3><p>　　下面的方法可以用来判断当前主流浏览器的类型，包括IE、Opera、Safari、Chrome和Firefox。</p>
 <ol>
-<li>判断类型<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ua = navigator.userAgent.toLowerCase();		<span class="comment">// 获取用户端信息</span></span><br><span class="line"><span class="keyword">var</span> info =&#123;</span><br><span class="line">    ie : <span class="regexp">/msie/</span>.test(ua) &amp;&amp; !<span class="regexp">/opera/</span>.test(ua),		<span class="comment">// 匹配IE浏览器</span></span><br><span class="line">    op : <span class="regexp">/opera/</span>.test(ua), 							<span class="comment">// 匹配Opera浏览器</span></span><br><span class="line">    sa : <span class="regexp">/version.*safari/</span>.test(ua), 				<span class="comment">// 匹配Safari浏览器</span></span><br><span class="line">    ch : <span class="regexp">/chrome/</span>.test(ua), 						<span class="comment">// 匹配Chrome浏览器</span></span><br><span class="line">    ff : <span class="regexp">/gecko/</span>.test(ua) &amp;&amp; !<span class="regexp">/webkit/</span>.test(ua) 	<span class="comment">// 匹配Firefox浏览器</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">(info.ie) &amp;&amp; alert(<span class="string">&quot;IE浏览器&quot;</span>);</span><br><span class="line">(info.op) &amp;&amp; alert(<span class="string">&quot;Opera浏览器&quot;</span>);</span><br><span class="line">(info.sa) &amp;&amp; alert(<span class="string">&quot;Safari浏览器&quot;</span>);</span><br><span class="line">(info.ff) &amp;&amp; alert(<span class="string">&quot;Firefox浏览器&quot;</span>);</span><br><span class="line">(info.ch) &amp;&amp; alert(<span class="string">&quot;Chrome浏览器&quot;</span>);</span><br></pre></td></tr></table></figure>
+<li>判断类型<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ua = navigator.userAgent.toLowerCase();		<span class="comment">// 获取用户端信息</span></span><br><span class="line"><span class="keyword">var</span> info =&#123;</span><br><span class="line">    <span class="attr">ie</span> : <span class="regexp">/msie/</span>.test(ua) &amp;&amp; !<span class="regexp">/opera/</span>.test(ua),		<span class="comment">// 匹配IE浏览器</span></span><br><span class="line">    <span class="attr">op</span> : <span class="regexp">/opera/</span>.test(ua), 							<span class="comment">// 匹配Opera浏览器</span></span><br><span class="line">    <span class="attr">sa</span> : <span class="regexp">/version.*safari/</span>.test(ua), 				<span class="comment">// 匹配Safari浏览器</span></span><br><span class="line">    <span class="attr">ch</span> : <span class="regexp">/chrome/</span>.test(ua), 						<span class="comment">// 匹配Chrome浏览器</span></span><br><span class="line">    <span class="attr">ff</span> : <span class="regexp">/gecko/</span>.test(ua) &amp;&amp; !<span class="regexp">/webkit/</span>.test(ua) 	<span class="comment">// 匹配Firefox浏览器</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">(info.ie) &amp;&amp; alert(<span class="string">&quot;IE浏览器&quot;</span>);</span><br><span class="line">(info.op) &amp;&amp; alert(<span class="string">&quot;Opera浏览器&quot;</span>);</span><br><span class="line">(info.sa) &amp;&amp; alert(<span class="string">&quot;Safari浏览器&quot;</span>);</span><br><span class="line">(info.ff) &amp;&amp; alert(<span class="string">&quot;Firefox浏览器&quot;</span>);</span><br><span class="line">(info.ch) &amp;&amp; alert(<span class="string">&quot;Chrome浏览器&quot;</span>);</span><br></pre></td></tr></table></figure>
 　　检测方法也很简单，即判断navigator.userAgent返回的字符串中是否含有特定浏览器的字段。</li>
 <li>判断版本号<br>　　通过解析navigator对象的userAgent属性，可以获得浏览器完整的。比如针对Firefox，它的版本号跟在Firefox字段后面：<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getFirefox</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> ua = navigator.userAgent;</span><br><span class="line">    <span class="keyword">var</span> b = ua.indexOf(<span class="string">&quot;Firefox/&quot;</span>)        <span class="comment">//检测特殊位置</span></span><br><span class="line">    <span class="keyword">if</span> (b &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">parseFloat</span>(ua.substring(b + <span class="number">8</span>,)); <span class="comment">//截取版本字符串 </span></span><br><span class="line">&#125;</span><br><span class="line">alert(getFirefox());   <span class="comment">//返回版本号</span></span><br></pre></td></tr></table></figure></li>
 <li>检测客户操作系统<br>　　userAgent的返回值中一般都会包含操作系统的基本信息，我们可以检测一些更为通用的信息，比如：windows系统、UNIX系统或Macintosh系统等。这些通用信息透视具有特征的，比如window操作系统会带有”win”字符串，UNIX版本操作系统都包含”X11”字符串等等。<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> isWin = (navigator.userAgent.indexOf(<span class="string">&quot;Win&quot;</span>) != - <span class="number">1</span>);  </span><br><span class="line"><span class="keyword">if</span>(isWin)&#123;         <span class="comment">// 如果是Windows系统，则返回true</span></span><br><span class="line">    alert(<span class="string">&quot;windows&quot;</span>);      </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> isMac = (navigator.userAgent.indexOf(<span class="string">&quot;Mac&quot;</span>) != - <span class="number">1</span>); </span><br><span class="line"><span class="keyword">if</span>(isMac)&#123;         <span class="comment">// 如果是Macintosh系统，则返回true </span></span><br><span class="line">    alert(<span class="string">&quot;Macintosh&quot;</span>);      </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> isUnix = (navigator.userAgent.indexOf(<span class="string">&quot;X11&quot;</span>) != - <span class="number">1</span>); </span><br><span class="line"><span class="keyword">if</span>(isUnix)&#123;         <span class="comment">// 如果是UNIX系统，则返回true</span></span><br><span class="line">    alert(<span class="string">&quot;UNIX&quot;</span>);      </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> isLinux = (navigator.userAgent.indexOf(<span class="string">&quot;Linux&quot;</span>) != - <span class="number">1</span>); </span><br><span class="line"><span class="keyword">if</span>(isLinux)&#123;         <span class="comment">// 如果是Linux系统，则返回true</span></span><br><span class="line">    alert(<span class="string">&quot;Linux&quot;</span>);      </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -1813,9 +1813,52 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 76
+        Total : 77
         </div>
         <!-- search  -->
         
@@ -1831,17 +1874,22 @@ top:50vh;
     
     
         <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span><a class="archive-post-title" href= "/express%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89-%E5%9F%BA%E4%BA%8ENodeJS%E7%9A%84Web%E6%A1%86%E6%9E%B6/" >express学习（一）-基于NodeJS的Web框架</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
             <span class="archive-post-date">07/10</span><a class="archive-post-title" href= "/Beego%E5%AD%A6%E4%B9%A0-ORM/" >Beego学习-ORM</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/06</span><a class="archive-post-title" href= "/Beego%E5%AD%A6%E4%B9%A0-%E8%B7%AF%E7%94%B1%E8%AE%BE%E7%BD%AE/" >Beego学习-路由设置</a>
+            <span class="archive-post-date">07/06</span><a class="archive-post-title" href= "/docker-compose%E5%8F%8Adockerfile%E6%80%BB%E7%BB%93/" >docker-compose及dockerfile总结</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/06</span><a class="archive-post-title" href= "/docker-compose%E5%8F%8Adockerfile%E6%80%BB%E7%BB%93/" >docker-compose及dockerfile总结</a>
+            <span class="archive-post-date">07/06</span><a class="archive-post-title" href= "/Beego%E5%AD%A6%E4%B9%A0-%E8%B7%AF%E7%94%B1%E8%AE%BE%E7%BD%AE/" >Beego学习-路由设置</a>
         </li>
     
     
@@ -2243,11 +2291,7 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="渗透测试"><span class="iconfont-archer">&#xe606;</span>渗透测试</span>
     
-        <span class="sidebar-tag-name" data-tags="Java - 漏洞分析"><span class="iconfont-archer">&#xe606;</span>Java - 漏洞分析</span>
-    
         <span class="sidebar-tag-name" data-tags="Javascript"><span class="iconfont-archer">&#xe606;</span>Javascript</span>
-    
-        <span class="sidebar-tag-name" data-tags="BOM"><span class="iconfont-archer">&#xe606;</span>BOM</span>
     
         <span class="sidebar-tag-name" data-tags="Bugku"><span class="iconfont-archer">&#xe606;</span>Bugku</span>
     
@@ -2304,6 +2348,14 @@ top:50vh;
         <span class="sidebar-tag-name" data-tags="Go Web"><span class="iconfont-archer">&#xe606;</span>Go Web</span>
     
         <span class="sidebar-tag-name" data-tags="docker"><span class="iconfont-archer">&#xe606;</span>docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="渗透测试 - Java - 漏洞分析"><span class="iconfont-archer">&#xe606;</span>渗透测试 - Java - 漏洞分析</span>
+    
+        <span class="sidebar-tag-name" data-tags="前端"><span class="iconfont-archer">&#xe606;</span>前端</span>
+    
+        <span class="sidebar-tag-name" data-tags="NodeJS"><span class="iconfont-archer">&#xe606;</span>NodeJS</span>
+    
+        <span class="sidebar-tag-name" data-tags="express"><span class="iconfont-archer">&#xe606;</span>express</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
