@@ -1,0 +1,3346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!-- title -->
+
+
+    
+
+<!-- keywords -->
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="lzwgiter">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="lzwgiter">
+    
+        <meta name="keywords" content="lzwgiter,float311,float's blog">
+    
+    <meta name="description" content="blogs from f10@t">
+    <meta name="description" content="这篇继续学习Beego框架，主要学习一下Beego自带的的ORM框架，并学习其他的ORM框架如XORM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Beego学习-ORM">
+<meta property="og:url" content="https://lzwgiter.github.io/posts/8a9b0b34.html">
+<meta property="og:site_name" content="f10@t&#39;s blog">
+<meta property="og:description" content="这篇继续学习Beego框架，主要学习一下Beego自带的的ORM框架，并学习其他的ORM框架如XORM">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Beego%E5%AD%A6%E4%B9%A0-ORM/33c2806b5f91142b652527c3edafc114.jpeg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Beego%E5%AD%A6%E4%B9%A0-ORM/image-20210710194121221.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Beego%E5%AD%A6%E4%B9%A0-ORM/image-20210710190431432.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Beego%E5%AD%A6%E4%B9%A0-ORM/image-20210710194236049.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Beego%E5%AD%A6%E4%B9%A0-ORM/image-20210710194242879.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Beego%E5%AD%A6%E4%B9%A0-ORM/image-20210710194249760.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Beego%E5%AD%A6%E4%B9%A0-ORM/image-20210710190453057.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Beego%E5%AD%A6%E4%B9%A0-ORM/image-20210711175558003.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/%E8%AF%B7%E6%88%91%E5%96%9D%E6%9D%AF%E5%92%96%E5%95%A1%E5%90%A7.jpg">
+<meta property="article:published_time" content="2021-07-10T11:58:06.000Z">
+<meta property="article:modified_time" content="2023-04-19T13:42:03.944Z">
+<meta property="article:author" content="lzwgiter">
+<meta property="article:tag" content="Go语言">
+<meta property="article:tag" content="Go Web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lzwgiter.github.io/img/Beego%E5%AD%A6%E4%B9%A0-ORM/33c2806b5f91142b652527c3edafc114.jpeg">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/hello.svg">
+    
+    <title>Beego学习-ORM · float&#39;s blog</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
+    <link rel="stylesheet" href="/css/dark.css">
+    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
+    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    
+    <!-- 百度统计  -->
+    
+        <script>
+            var _hmt = _hmt || [];
+            (function () {
+                var hm = document.createElement("script");
+                hm.src = "https://hm.baidu.com/hm.js?9ef67111f9ae4eefa278780655f0c1e3";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
+    
+    <!-- 谷歌统计  -->
+    
+        <script>
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+            ga('create', 'G-8DFDYFMQP8', 'auto');
+            ga('send', 'pageview');
+        </script>
+    
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="f10@t's blog" type="application/atom+xml">
+</head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+    
+        <body class="post-body">
+    
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress read-progress-feature"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        
+            <div class="header-sidebar-menu header-sidebar-menu-rounded">
+        
+            
+                <i class="fas fa-bars"></i>
+            
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href=/>float's blog</a>
+        </span>
+    </div>
+    <!-- toggle banner for post layout -->
+    
+        
+            <div class="banner">
+        
+            <div class="blog-title header-element">
+                <a href="/">float&#39;s blog</a>
+            </div>
+            <div class="post-title header-element">
+                <a href="#" class="post-name">Beego学习-ORM</a>
+            </div>
+        </div>
+    
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- back to top button -->
+    <div class="footer-fixed-element">
+        
+            <div class="back-top back-top-hidden back-top-rounded">
+        
+        
+            <i class="fas fa-chevron-up"></i>
+        
+        </div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="
+
+
+
+
+
+
+
+    height:50vh;
+
+">
+    
+    <!-- 主页  -->
+    
+        
+    <!-- 404页  -->
+    
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+                Beego学习-ORM
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+                
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页 meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        
+        
+            
+        
+        
+        <span class="post-category" data-categories="开发技术"">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                开发技术
+            </span>
+        </span>
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="Go语言">Go语言</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="Go Web">Go Web</a>
+    
+</div>
+
+                
+                <!-- 文章字数统计 -->
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">2.4k</span>阅读时长: <span class="post-count reading-time">10 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2021/07/10</span>
+                    <!-- busuanzi -->
+                    
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <blockquote>
+<p>这篇继续学习Beego框架，主要学习一下Beego自带的的<strong>ORM</strong>框架，并学习其他的ORM框架如<strong>XORM</strong></p>
+<p><img src="/img/Beego学习-ORM/33c2806b5f91142b652527c3edafc114.jpeg" alt="33c2806b5f91142b652527c3edafc114" style="zoom: 67%;" /></p>
+</blockquote>
+<span id="more"></span>
+<h2 id="beego-orm">Beego ORM</h2>
+<h3 id="demo">Demo</h3>
+<p>这部分直接上代码。ORM其实就是持久化技术，即把对象持久化到数据库中，比如spring的JPA等，Beego自己也有自己的ORM框架。按照常例，我们在model中去定义我们的数据结构就可以了：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /models/post.go</span></span><br><span class="line"><span class="keyword">package</span> models</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/beego/beego/v2/client/orm&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Post <span class="keyword">struct</span> &#123;</span><br><span class="line">    Id      <span class="type">int</span>      <span class="string">`orm:&quot;pk;auto;column(post_name)&quot;`</span></span><br><span class="line">    Title   <span class="type">string</span>   <span class="string">`orm:&quot;column(title)&quot;`</span></span><br><span class="line">    Student *Student <span class="string">`orm:&quot;rel(fk)&quot;`</span>    <span class="comment">// 定义外键</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">    orm.RegisterModel(<span class="built_in">new</span>(Post))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /models/student.go</span></span><br><span class="line"><span class="keyword">package</span> models</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/beego/beego/v2/client/orm&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">    Id      <span class="type">int</span>     <span class="string">`orm:&quot;pk;auto;unique;column(student_id)&quot;`</span></span><br><span class="line">    Name    <span class="type">string</span>  <span class="string">`orm:&quot;column(name);size(20)&quot;`</span></span><br><span class="line">    ClassId *Class  <span class="string">`orm:&quot;rel(fk);column(class_id)&quot;`</span>    <span class="comment">// 定义外键，教室的ID</span></span><br><span class="line">    Post    []*Post <span class="string">`orm:&quot;reverse(many)&quot;`</span>    <span class="comment">// 定义一对多关系，即一个学生可能有多个论文</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 在init中注册定义好的model</span></span><br><span class="line">    orm.RegisterModel(<span class="built_in">new</span>(Student))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *Student)</span></span> AddPost(p ...*Post) &#123;</span><br><span class="line">    s.Post = <span class="built_in">append</span>(s.Post, p...)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /models/class.go</span></span><br><span class="line"><span class="keyword">package</span> models</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/beego/beego/v2/client/orm&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Class <span class="keyword">struct</span> &#123;</span><br><span class="line">    Id       <span class="type">int</span>        <span class="string">`orm:&quot;pk;unique;auto;column(class_id)&quot;`</span></span><br><span class="line">    students []*Student <span class="string">`orm:&quot;reverse(many)&quot;`</span>    <span class="comment">// 定义一对多关系，即一个班级有多个学生</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Class)</span></span> Join(s ...*Student) &#123;</span><br><span class="line">    c.students = <span class="built_in">append</span>(c.students, s...)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">    orm.RegisterModel(<span class="built_in">new</span>(Class))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后我们去写main函数，在main函数中注册数据库驱动并插入数据。首先我们去新建一个数据库<code>beego_orm</code>以及用户<code>beego</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">create database beego_orm;</span><br><span class="line">create user beego@localhost identified by &#x27;beegogood&#x27;;</span><br><span class="line">grant all on beego_orm.* to beego@localhost;</span><br></pre></td></tr></table></figure>
+<p>然后我们链接数据库、新建两条记录分别插入两个表中：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;ORMDemo/models&quot;</span></span><br><span class="line">    _ <span class="string">&quot;ORMDemo/routers&quot;</span></span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/beego/beego/v2/client/orm&quot;</span></span><br><span class="line">    beego <span class="string">&quot;github.com/beego/beego/v2/server/web&quot;</span></span><br><span class="line">    _ <span class="string">&quot;github.com/go-sql-driver/mysql&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">    err1 := orm.RegisterDriver(<span class="string">&quot;mysql&quot;</span>, orm.DRMySQL)</span><br><span class="line">    <span class="keyword">if</span> err1 != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Printf(<span class="string">&quot;Error: %v&quot;</span>, err1)</span><br><span class="line">    &#125;</span><br><span class="line">    err2 := orm.RegisterDataBase(<span class="string">&quot;default&quot;</span>, <span class="string">&quot;mysql&quot;</span>,</span><br><span class="line">        <span class="string">&quot;beego:beegogood@/beego_orm?charset=utf8&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> err2 != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Printf(<span class="string">&quot;Error: %v&quot;</span>, err2)</span><br><span class="line">    &#125;</span><br><span class="line">    orm.RunSyncdb(<span class="string">&quot;default&quot;</span>, <span class="literal">false</span>, <span class="literal">true</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 默认使用default数据库，也可以指定为其他的数据库</span></span><br><span class="line">    o := orm.NewOrm()</span><br><span class="line"></span><br><span class="line">    student1 := <span class="built_in">new</span>(models.Student)</span><br><span class="line">    student2 := <span class="built_in">new</span>(models.Student)</span><br><span class="line">    class := <span class="built_in">new</span>(models.Class)</span><br><span class="line">    post1 := <span class="built_in">new</span>(models.Post)</span><br><span class="line">    post2 := <span class="built_in">new</span>(models.Post)</span><br><span class="line"></span><br><span class="line">    student1.Id = <span class="number">1</span></span><br><span class="line">    student1.Name = <span class="string">&quot;Alice&quot;</span></span><br><span class="line">    student2.Id = <span class="number">2</span></span><br><span class="line">    student2.Name = <span class="string">&quot;Bob&quot;</span></span><br><span class="line"></span><br><span class="line">    post1.Title = <span class="string">&quot;Hello World&quot;</span></span><br><span class="line">    post2.Title = <span class="string">&quot;Beego orm&quot;</span></span><br><span class="line">    post1.Student = student1</span><br><span class="line">    post2.Student = student1</span><br><span class="line">    student1.AddPost(post1, post2)</span><br><span class="line"></span><br><span class="line">    class.Id = <span class="number">1</span></span><br><span class="line">    student1.ClassId = class</span><br><span class="line">    student2.ClassId = class</span><br><span class="line">    class.Join(student1, student2)</span><br><span class="line"></span><br><span class="line">    o.Insert(student1)</span><br><span class="line">    o.Insert(student2)</span><br><span class="line">    o.Insert(post1)</span><br><span class="line">    o.Insert(post2)</span><br><span class="line">    o.Insert(class)</span><br><span class="line"></span><br><span class="line">    beego.Run()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>启动后我们看一下数据库的内容：</p>
+<figure>
+<img src="/img/Beego学习-ORM/image-20210710194121221.png"
+alt="image-20210710194121221" />
+<figcaption aria-hidden="true">image-20210710194121221</figcaption>
+</figure>
+<figure>
+<img src="/img/Beego学习-ORM/image-20210710190431432.png"
+alt="image-20210710190431432" />
+<figcaption aria-hidden="true">image-20210710190431432</figcaption>
+</figure>
+<p>我们的数据也插进去了：</p>
+<figure>
+<img src="/img/Beego学习-ORM/image-20210710194236049.png"
+alt="image-20210710194236049" />
+<figcaption aria-hidden="true">image-20210710194236049</figcaption>
+</figure>
+<figure>
+<img src="/img/Beego学习-ORM/image-20210710194242879.png"
+alt="image-20210710194242879" />
+<figcaption aria-hidden="true">image-20210710194242879</figcaption>
+</figure>
+<figure>
+<img src="/img/Beego学习-ORM/image-20210710194249760.png"
+alt="image-20210710194249760" />
+<figcaption aria-hidden="true">image-20210710194249760</figcaption>
+</figure>
+<p>这里注意下，官方的教程里是有问题的，在注册了数据库驱动和数据库后，还要进行一个同步的操作：<code>orm.RunSyncdb("default", false, true)</code>，否则你可能会提示表不存在什么的。控制台我们也可以看到后台的建表语句：</p>
+<figure>
+<img src="/img/Beego学习-ORM/image-20210710190453057.png"
+alt="image-20210710190453057" />
+<figcaption aria-hidden="true">image-20210710190453057</figcaption>
+</figure>
+<p>beego默认是使用结构体中的<code>Id</code>字段来作为主键的。</p>
+<h3 id="重要字段">重要字段</h3>
+<p>从上面的Demo中可以看出，Beego
+ORM在处理字段映射关系的时候，使用的是两个反引号包括的形式，里面使用键值的方式来进行设置，每个属性使用<code>;</code>来进行分隔如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">`orm:&quot;pk;auto;column(student_id)&quot;`</span></span><br></pre></td></tr></table></figure>
+<p>这就好比JPA里的一些字段注解：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Id</span></span><br><span class="line"><span class="keyword">private</span> String Id;</span><br><span class="line"><span class="meta">@Column</span></span><br><span class="line"><span class="keyword">private</span> String name;</span><br></pre></td></tr></table></figure>
+<p>通过上述的方式就可以实现对字段进行一些设置，如<code>pk</code>代表<code>Primary Key</code>，<code>auto</code>代表自增长等等，也是比较方便的。</p>
+<p>具体每一个字段的含义，请查看<a
+target="_blank" rel="noopener" href="https://beego.me/docs/mvc/model/models.md">官方文档</a></p>
+<h2 id="xorm">XORM</h2>
+<h3 id="基本概念">基本概念</h3>
+<blockquote>
+<p>官方中文指导文档：<a
+target="_blank" rel="noopener" href="https://gobook.io/read/gitea.com/xorm/manual-zh-CN/">首页 |
+(gobook.io)</a></p>
+</blockquote>
+<p>xorm的使用方法其实与beego
+orm大同小异，只不过在列<code>Column</code>--也就是结构体的字段定义上有一点区别，使用<code>xorm:xxx xxx xx</code>来进行定义（注意是空格而不是分号）。官方给出的所有可用的选项如下所示：</p>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 69%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>字段</strong></td>
+<td><strong>作用</strong></td>
+</tr>
+<tr class="even">
+<td>name</td>
+<td>当前field对应的字段的名称，可选，如不写，则自动根据field名字和转换规则命名，如与其它关键字冲突，请使用单引号括起来。</td>
+</tr>
+<tr class="odd">
+<td>pk</td>
+<td>是否是Primary
+Key，如果在一个struct中有多个字段都使用了此标记，则这多个字段构成了复合主键，单主键当前支持int32,int,int64,uint32,uint,uint64,string这7种Go的数据类型，复合主键支持这7种Go的数据类型的组合。</td>
+</tr>
+<tr class="even">
+<td>autoincr</td>
+<td>是否是自增</td>
+</tr>
+<tr class="odd">
+<td>[not ]null 或 notnull</td>
+<td>是否可以为空</td>
+</tr>
+<tr class="even">
+<td>unique或unique(uniquename)</td>
+<td>是否是唯一，如不加括号则该字段不允许重复；如加上括号，则括号中为联合唯一索引的名字，此时如果有另外一个或多个字段和本unique的uniquename相同，则这些uniquename相同的字段组成联合唯一索引</td>
+</tr>
+<tr class="odd">
+<td>index或index(indexname)</td>
+<td>是否是索引，如不加括号则该字段自身为索引，如加上括号，则括号中为联合索引的名字，此时如果有另外一个或多个字段和本index的indexname相同，则这些indexname相同的字段组成联合索引</td>
+</tr>
+<tr class="even">
+<td>extends</td>
+<td>应用于一个匿名成员结构体或者非匿名成员结构体之上，表示此结构体的所有成员也映射到数据库中，extends可加载无限级</td>
+</tr>
+<tr class="odd">
+<td>-</td>
+<td>这个Field将不进行字段映射</td>
+</tr>
+<tr class="even">
+<td>-&gt;</td>
+<td>这个Field将只写入到数据库而不从数据库读取</td>
+</tr>
+<tr class="odd">
+<td>&lt;-</td>
+<td>这个Field将只从数据库读取，而不写入到数据库</td>
+</tr>
+<tr class="even">
+<td>created</td>
+<td>这个Field将在Insert时自动赋值为当前时间</td>
+</tr>
+<tr class="odd">
+<td>updated</td>
+<td>这个Field将在Insert或Update时自动赋值为当前时间</td>
+</tr>
+<tr class="even">
+<td>deleted</td>
+<td>这个Field将在Delete时设置为当前时间，并且当前记录不删除</td>
+</tr>
+<tr class="odd">
+<td>version</td>
+<td>这个Field将会在insert时默认为1，每次更新自动加1</td>
+</tr>
+<tr class="even">
+<td>default 0或default(0)</td>
+<td>设置默认值，紧跟的内容如果是Varchar等需要加上单引号</td>
+</tr>
+<tr class="odd">
+<td>json</td>
+<td>表示内容将先转成Json格式，然后存储到数据库中，数据库中的字段类型可以为Text或者二进制</td>
+</tr>
+<tr class="even">
+<td>comment</td>
+<td>设置字段的注释（当前仅支持mysql）</td>
+</tr>
+</tbody>
+</table>
+<p>此外，xorm还有几个自动映射的规则：</p>
+<ul>
+<li><strong>如果field名称为<code>Id</code>而且类型为<code>int64</code>并且没有定义tag，则会被xorm视为主键，并且拥有自增属性。</strong>如果想用<code>Id</code>以外的名字或非int64类型做为主键名，必须在对应的Tag上加上<code>xorm:"pk"</code>来定义主键，加上<code>xorm:"autoincr"</code>作为自增。这里需要注意的是，有些数据库并不允许非主键的自增属性。</li>
+<li><strong>string类型默认映射为<code>varchar(255)</code></strong>，如果需要不同的定义，可以在tag中自定义，如：<code>varchar(1024)</code></li>
+<li><strong>支持<code>type MyString string</code>等自定义的field，支持Slice,
+Map等field成员，这些成员默认存储为Text类型，</strong>并且默认将使用Json格式来序列化和反序列化。也支持数据库字段类型为Blob类型。如果是Blob类型，则先使用Json格式序列化再转成[]byte格式。如果是[]byte或者[]uint8，则不做转换二十直接以二进制方式存储。</li>
+<li><strong>实现了Conversion接口的类型或者结构体，将根据接口的转换方式在类型和数据库记录之间进行相互转换，这个接口的优先级是最高的。</strong>接口定义如下：</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Conversion <span class="keyword">interface</span> &#123;</span><br><span class="line">    FromDB([]<span class="type">byte</span>) <span class="type">error</span></span><br><span class="line">    ToDB() ([]<span class="type">byte</span>, <span class="type">error</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果一个结构体包含一个 Conversion
+的接口类型，那么在获取数据时，必须要预先设置一个实现此接口的struct或者struct的指针。此时可以在此struct中实现<code>BeforeSet(name string, cell xorm.Cell)</code>方法来进行预先给Conversion赋值。</li>
+</ul>
+<p>另外，结构体自动转换为对应的数据库类型时，下表显示了转换关系：</p>
+<table>
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 35%" />
+<col style="width: 13%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>go type's kind</strong></td>
+<td><strong>value method</strong></td>
+<td><strong>xorm type</strong></td>
+</tr>
+<tr class="even">
+<td>implemented Conversion</td>
+<td>Conversion.ToDB / Conversion.FromDB</td>
+<td>Text</td>
+</tr>
+<tr class="odd">
+<td>int, int8, int16, int32, uint, uint8, uint16, uint32</td>
+<td></td>
+<td>Int</td>
+</tr>
+<tr class="even">
+<td>int64, uint64</td>
+<td></td>
+<td>BigInt</td>
+</tr>
+<tr class="odd">
+<td>float32</td>
+<td></td>
+<td>Float</td>
+</tr>
+<tr class="even">
+<td>float64</td>
+<td></td>
+<td>Double</td>
+</tr>
+<tr class="odd">
+<td>complex64, complex128</td>
+<td>json.Marshal / json.UnMarshal</td>
+<td>Varchar(64)</td>
+</tr>
+<tr class="even">
+<td>[]uint8</td>
+<td></td>
+<td>Blob</td>
+</tr>
+<tr class="odd">
+<td>array, slice, map except []uint8</td>
+<td>json.Marshal / json.UnMarshal</td>
+<td>Text</td>
+</tr>
+<tr class="even">
+<td>bool</td>
+<td>1 or 0</td>
+<td>Bool</td>
+</tr>
+<tr class="odd">
+<td>string</td>
+<td></td>
+<td>Varchar(255)</td>
+</tr>
+<tr class="even">
+<td>time.Time</td>
+<td></td>
+<td>DateTime</td>
+</tr>
+<tr class="odd">
+<td>cascade struct</td>
+<td>primary key field value</td>
+<td>BigInt</td>
+</tr>
+<tr class="even">
+<td>struct</td>
+<td>json.Marshal / json.UnMarshal</td>
+<td>Text</td>
+</tr>
+<tr class="odd">
+<td>Others</td>
+<td></td>
+<td>Text</td>
+</tr>
+</tbody>
+</table>
+<h3 id="demo-1">Demo</h3>
+<p>直接上代码。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> models</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Book <span class="keyword">struct</span> &#123;</span><br><span class="line">    Id     <span class="type">int</span>    <span class="string">`xorm:&quot;pk autoincr&quot;`</span></span><br><span class="line">    Title  <span class="type">string</span> <span class="string">`xorm:&quot;varchar(30)&quot;`</span></span><br><span class="line">    Author <span class="type">string</span> <span class="string">`xorm:&quot;varchar(30)&quot;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;XormDemo/models&quot;</span></span><br><span class="line">    _ <span class="string">&quot;XormDemo/routers&quot;</span></span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    beego <span class="string">&quot;github.com/beego/beego/v2/server/web&quot;</span></span><br><span class="line">    _ <span class="string">&quot;github.com/go-sql-driver/mysql&quot;</span></span><br><span class="line">    <span class="string">&quot;xorm.io/xorm&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> engine *xorm.Engine</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> err <span class="type">error</span></span><br><span class="line">    <span class="comment">// 一般情况下只需要一个数据库使用一个engine来进行操作，并且是线程安全的</span></span><br><span class="line">    <span class="comment">// 并且无需显示关闭引擎，当程序退出时会自动关闭</span></span><br><span class="line">    engine, err = xorm.NewEngine(<span class="string">&quot;mysql&quot;</span>, <span class="string">&quot;beego:beegogood@/xorm_demo?charset=utf8&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Printf(<span class="string">&quot;database setup failed %v&quot;</span>, err)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 注册模型</span></span><br><span class="line">    err = engine.Sync(<span class="built_in">new</span>(models.Book))</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 新建几个对象</span></span><br><span class="line">    book := <span class="built_in">new</span>(models.Book)</span><br><span class="line">    book.Title = <span class="string">&quot;Beego&quot;</span></span><br><span class="line">    book.Author = <span class="string">&quot;astaxie&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 插入记录</span></span><br><span class="line">    affected, _ := engine.Insert(book)</span><br><span class="line">    fmt.Printf(<span class="string">&quot;result: %v&quot;</span>, affected)</span><br><span class="line">    beego.Run()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure>
+<img src="/img/Beego学习-ORM/image-20210711175558003.png"
+alt="image-20210711175558003" />
+<figcaption aria-hidden="true">image-20210711175558003</figcaption>
+</figure>
+<p><strong>这里有一个疑问，xorm怎么定义外键呢？比方说beego
+orm里的reverse和rel关键字这个问题我还没有找到解答，暂时留一个问题在这里，如果解决了我会将上面的代码修改为多个表的例子</strong></p>
+<h2 id="参考学习">参考学习</h2>
+<p><a
+target="_blank" rel="noopener" href="https://gitea.com/xorm/xorm/src/branch/master/README_CN.md">xorm/xorm:
+Simple and Powerful ORM for Go, support
+mysql,postgres,tidb,sqlite3,sqlite,mssql,oracle,cockroach - README_CN.md
+at master - xorm - Gitea: Git with a cup of tea</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://gobook.io/read/gitea.com/xorm/manual-zh-CN/chapter-01/index.html">|
+(gobook.io)</a></p>
+<p><img src="/img/请我喝杯咖啡吧.jpg" style="zoom:33%;" /></p>
+
+    </article>
+    <!-- license -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://lzwgiter.github.io">lzwgiter</a>
+            <p>原文链接：<a href="https://lzwgiter.github.io/posts/8a9b0b34.html">https://lzwgiter.github.io/posts/8a9b0b34.html</a>
+            <p>发表日期：<a href="https://lzwgiter.github.io/posts/8a9b0b34.html">July 10th 2021, 7:58:06 pm</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/8a9b0b34.html">April 19th 2023, 9:42:03 pm</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href="/posts/5893facf.html" title="express学习（一）-基于NodeJS的Web框架">
+                    <div class="nextTitle">express学习（一）-基于NodeJS的Web框架</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/posts/a9031312.html" title="docker-compose及dockerfile总结">
+                    <div class="prevTitle">docker-compose及dockerfile总结</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- comment -->
+    
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+
+            
+
+            
+
+            
+
+            <!-- utteranc评论 -->
+
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+
+            
+            
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    <div id="comment"></div>
+    <script>
+        new Valine({
+            el: '#comment',
+            notify:false,
+            verify:false,
+            appId: "KADRlHg5xXyhKL0d6USDWfIB-gzGzoHsz",
+            appKey: "Ppj8kIdro2yDqXOvqWkTRxuW",
+            placeholder: "递茶就坐(　o=^•ェ•)o　┏━┓",
+            path:window.location.pathname,
+            avatar:'mm'
+        });
+    </script>
+
+
+            
+
+        </div>
+    
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    
+    <!-- Mathjax -->
+    
+</main>
+
+                <!-- profile -->
+                
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+        <div class="social">
+            
+    
+        
+            
+                <a href="mailto:float311@163.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lzwgiter" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                    
+                    <img class="profile-qr" src="/assets/wechat.png" />
+                </span>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer qq" title=qq>
+                    
+                    <img class="profile-qr" src="/assets/qq.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title=rss></a>
+            
+        
+    
+
+
+        </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    
+    <!-- 不蒜子  -->
+    
+        <div class="busuanzi-container">
+            
+            
+                <span id="busuanzi_container_site_uv">做客的小伙伴数: <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    	
+</footer>
+
+        </div>
+        <!-- toc -->
+        
+            <div class="toc-wrapper toc-wrapper-loding" style=
+
+
+
+
+
+
+
+    top:50vh;
+
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#beego-orm"><span class="toc-number">1.</span> <span class="toc-text">Beego ORM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#demo"><span class="toc-number">1.1.</span> <span class="toc-text">Demo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E5%AD%97%E6%AE%B5"><span class="toc-number">1.2.</span> <span class="toc-text">重要字段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#xorm"><span class="toc-number">2.</span> <span class="toc-text">XORM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">2.1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#demo-1"><span class="toc-number">2.2.</span> <span class="toc-text">Demo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0"><span class="toc-number">3.</span> <span class="toc-text">参考学习</span></a></li></ol>
+            </div>
+        
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 91
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+        
+            
+            
+            <div class="archive-year"> 2023 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/03</span>
+            <a class="archive-post-title" href="/posts/479daa6d.html">gRPC简介与使用</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/30</span>
+            <a class="archive-post-title" href="/posts/b74b8800.html">fastjson反序列化漏洞学习（二）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span>
+            <a class="archive-post-title" href="/posts/undefined.html">Netty框架学习</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/04</span>
+            <a class="archive-post-title" href="/posts/d6b305b7.html">Java网络编程模型复习</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2022 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span>
+            <a class="archive-post-title" href="/posts/203767b8.html">python-Numpy库使用</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/20</span>
+            <a class="archive-post-title" href="/posts/f06096b.html">MATLAB - Wireless Communication Onramp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span>
+            <a class="archive-post-title" href="/posts/3041f265.html">Matlab编程基础</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2021 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/09</span>
+            <a class="archive-post-title" href="/posts/854030f4.html">Cuckoo哈希表以及Cuckoo过滤器</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/04</span>
+            <a class="archive-post-title" href="/posts/169c63d0.html">Bloom Filter概念原理</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span>
+            <a class="archive-post-title" href="/posts/85e98ef0.html">zk-SNARKs简洁的非交互式零知识证明学习(一)</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span>
+            <a class="archive-post-title" href="/posts/a8e0eb2d.html">Quarkus学习（一）概述以及编写REST服务</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/19</span>
+            <a class="archive-post-title" href="/posts/e88577c0.html">Cloud Programming Simplified:A Berkeley View on Serverless Computing</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span>
+            <a class="archive-post-title" href="/posts/99665dc1.html">闲聊一下Java中的DI和CDI</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span>
+            <a class="archive-post-title" href="/posts/ed901271.html">Kubernetes-集群环境搭建使用及问题记录（三）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/09</span>
+            <a class="archive-post-title" href="/posts/a08eb123.html">Kubernetes-集群环境搭建使用及问题记录（二）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span>
+            <a class="archive-post-title" href="/posts/eed4a979.html">Kubernetes 集群环境搭建使用及问题记录（一）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/24</span>
+            <a class="archive-post-title" href="/posts/2f0b60dd.html">闲聊一下Go语言的函数方法和多态机制特点</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span>
+            <a class="archive-post-title" href="/posts/5893facf.html">express学习（一）-基于NodeJS的Web框架</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/10</span>
+            <a class="archive-post-title" href="/posts/8a9b0b34.html">Beego学习-ORM</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/posts/84db08d3.html">Beego学习-路由设置</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/posts/a9031312.html">docker-compose及dockerfile总结</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/09</span>
+            <a class="archive-post-title" href="/posts/77d22b2a.html">Spring安全技术-Spring Security使用及总结（一）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/28</span>
+            <a class="archive-post-title" href="/posts/5e9eec21.html">DevOps技术-简单了解与入门</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span>
+            <a class="archive-post-title" href="/posts/27875254.html">Spring持久层技术-Sping Data JPA使用及总结（一）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/14</span>
+            <a class="archive-post-title" href="/posts/bec529bf.html">以太坊智能合约开发环境搭建及智能合约的编写、部署、测试</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span>
+            <a class="archive-post-title" href="/posts/2ff8a9fd.html">以太坊基本概念与实验环境搭建</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2020 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span>
+            <a class="archive-post-title" href="/posts/bcd864e2.html">DC-1靶机渗透</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span>
+            <a class="archive-post-title" href="/posts/c99165fd.html">fastjson反序列化漏洞学习（一）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/09</span>
+            <a class="archive-post-title" href="/posts/a9e6a25b.html">Spring基础学习 - AOP机制</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/06</span>
+            <a class="archive-post-title" href="/posts/b92dbb83.html">JavaEE基础 - Servlet</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/06</span>
+            <a class="archive-post-title" href="/posts/44088610.html">Spring基础学习 - IOC机制</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/01</span>
+            <a class="archive-post-title" href="/posts/662e1cfe.html">微服务入门-5W和微服务思想</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span>
+            <a class="archive-post-title" href="/posts/c75c5fc7.html">Java 反序列化漏洞与JNDI注入(下)</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/14</span>
+            <a class="archive-post-title" href="/posts/5dcfa8b5.html">Kerberos认证过程原理及攻击手段</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/26</span>
+            <a class="archive-post-title" href="/posts/1ccc94ff.html">内存布局与栈溢出&堆溢出原理</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/21</span>
+            <a class="archive-post-title" href="/posts/bc7cb7a1.html">入坑Pwn---刷题补坑</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/29</span>
+            <a class="archive-post-title" href="/posts/760e25d9.html">内存取证原理学习及Volatility - 篇二</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span>
+            <a class="archive-post-title" href="/posts/b0024cb7.html">Struts框架管窥以及几个漏洞的分析</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/09</span>
+            <a class="archive-post-title" href="/posts/8ce0a80d.html">Redis未授权访问漏洞及修补方法</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span>
+            <a class="archive-post-title" href="/posts/13fe3d9f.html">本地提权与漏洞提权</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2019 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/21</span>
+            <a class="archive-post-title" href="/posts/f8b67901.html">逆向工程课程小结</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span>
+            <a class="archive-post-title" href="/posts/4d8e0b70.html">内存取证原理学习及Volatility - 篇一</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span>
+            <a class="archive-post-title" href="/posts/82490df7.html">并发模型之单线程多路I/O复用---select</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/29</span>
+            <a class="archive-post-title" href="/posts/a715340f.html">入坑Pwn---基本习题和知识</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span>
+            <a class="archive-post-title" href="/posts/47dcecb9.html">Apache-Commons-Collections反序列化漏洞</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/03</span>
+            <a class="archive-post-title" href="/posts/de476e86.html">Java 反序列化漏洞与JNDI注入(上)</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span>
+            <a class="archive-post-title" href="/posts/7a9a17f3.html">记录一次对win2k3 Enterprise Edition的永恒之蓝利用</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/11</span>
+            <a class="archive-post-title" href="/posts/6f24bb1d.html">kali-渗透测试-信息收集3</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/10</span>
+            <a class="archive-post-title" href="/posts/18238b8b.html">kali-渗透测试-信息收集2</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/18</span>
+            <a class="archive-post-title" href="/posts/812ada31.html">kali-渗透测试-信息收集1</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span>
+            <a class="archive-post-title" href="/posts/fffcd997.html">Metasploit渗透测试魔鬼训练营-客户端渗透攻击</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/10</span>
+            <a class="archive-post-title" href="/posts/30b79e7d.html">Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/07</span>
+            <a class="archive-post-title" href="/posts/79017d0.html">Metasploit渗透测试魔鬼训练营-web应用渗透</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/posts/6c9a4aca.html">Metasploit渗透测试魔鬼训练营-服务扫描与查点</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/04</span>
+            <a class="archive-post-title" href="/posts/ed61533c.html">Metasploit渗透测试魔鬼训练营-信息收集</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span>
+            <a class="archive-post-title" href="/posts/ba8e1564.html">Metasploit渗透测试魔鬼训练营 第一天</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2018 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/posts/dd591816.html">小明的博客--Typecho 反序列化漏洞</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span>
+            <a class="archive-post-title" href="/posts/41159e88.html">Bugku的一道注入---多次</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span>
+            <a class="archive-post-title" href="/posts/26bacf07.html">Bugku的一道注入--INSERT INTO注入</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span>
+            <a class="archive-post-title" href="/posts/e1cf93ae.html">ThinkPHP框架学习---路由</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span>
+            <a class="archive-post-title" href="/posts/dec252e7.html">ThinkPHP框架学习---config类和config助手函数</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span>
+            <a class="archive-post-title" href="/posts/8405173.html">ThinkPHP框架学习---框架目录及框架配置</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/19</span>
+            <a class="archive-post-title" href="/posts/5d13a793.html">Nmap使用指南</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/12</span>
+            <a class="archive-post-title" href="/posts/e6caa5f0.html">SQL注入小记(二)</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span>
+            <a class="archive-post-title" href="/posts/78f948a4.html">PHP学习--超级全局变量</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/08</span>
+            <a class="archive-post-title" href="/posts/777d53bb.html">PHP学习--变量</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/03</span>
+            <a class="archive-post-title" href="/posts/f0bc436c.html">PHP框架MVC学习</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span>
+            <a class="archive-post-title" href="/posts/117580c0.html">CTF中的python脚本题小结（二）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span>
+            <a class="archive-post-title" href="/posts/21636c18.html">CTF中的python脚本题小结（一）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span>
+            <a class="archive-post-title" href="/posts/fc74b0ce.html">Hackergame 2018 wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span>
+            <a class="archive-post-title" href="/posts/8c800523.html">安恒九月题的misc和一道web</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span>
+            <a class="archive-post-title" href="/posts/49fb3e92.html">SQL注入小记(一)</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/27</span>
+            <a class="archive-post-title" href="/posts/21c35507.html">隐写术-LSB隐写</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span>
+            <a class="archive-post-title" href="/posts/59bc0c0.html">隐写术--NTFS流隐写</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span>
+            <a class="archive-post-title" href="/posts/c7cffe19.html">CTF常见隐写手段小结</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span>
+            <a class="archive-post-title" href="/posts/69896e9f.html">DOM 文档对象模型</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/21</span>
+            <a class="archive-post-title" href="/posts/20cf0786.html">BOM-浏览器操作对象模型之history和screen对象</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span>
+            <a class="archive-post-title" href="/posts/f92f304f.html">BOM 浏览器操作对象模型之navigator、location对象</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span>
+            <a class="archive-post-title" href="/posts/79f16c6a.html">BOM-浏览器操作对象模型之window对象</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/16</span>
+            <a class="archive-post-title" href="/posts/aa0a7b0a.html">Javascript基础之数据类型2</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span>
+            <a class="archive-post-title" href="/posts/33032ab0.html">Javascript基础之数据类型1</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span>
+            <a class="archive-post-title" href="/posts/b5fac929.html">CTF隐写术--关于ZIP</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/09</span>
+            <a class="archive-post-title" href="/posts/98736a90.html">CSS样式基础4.4--选择器之伪类选择器</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/posts/17442633.html">Bugku的一道misc-----猫片</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/posts/d4db3e56.html">CSS基础4.3--选择器之属性选择器</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/05</span>
+            <a class="archive-post-title" href="/posts/7b6c38ce.html">CSS基础4.2--选择器之组合选择器</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span>
+            <a class="archive-post-title" href="/posts/6027632.html">CSS基础4.1--选择器之CSS基础4.1-选择器之基本选择器</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/02</span>
+            <a class="archive-post-title" href="/posts/370eaad5.html">CSS基础3.2--特性之CSS基础3.2--特性之继承性</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/4655c16f.html">CSS基础3.1--特性之CSS基础3.1-特性之层叠性</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/ae68c748.html">CSS基础2--CSS基础2-应用</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/6b427aa1.html">CSS基础1--样式</a>
+        </li>
+    
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+        
+            <span class="sidebar-tag-name" data-tags="渗透测试">
+                <span class="iconfont-archer">&#xe606;</span>
+                渗透测试
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Java">
+                <span class="iconfont-archer">&#xe606;</span>
+                Java
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="漏洞分析">
+                <span class="iconfont-archer">&#xe606;</span>
+                漏洞分析
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="前端">
+                <span class="iconfont-archer">&#xe606;</span>
+                前端
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Go语言">
+                <span class="iconfont-archer">&#xe606;</span>
+                Go语言
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Go Web">
+                <span class="iconfont-archer">&#xe606;</span>
+                Go Web
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="论文阅读">
+                <span class="iconfont-archer">&#xe606;</span>
+                论文阅读
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="开发技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                开发技术
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="CTF">
+                <span class="iconfont-archer">&#xe606;</span>
+                CTF
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="SQL注入">
+                <span class="iconfont-archer">&#xe606;</span>
+                SQL注入
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="CSS">
+                <span class="iconfont-archer">&#xe606;</span>
+                CSS
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="隐写术">
+                <span class="iconfont-archer">&#xe606;</span>
+                隐写术
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="python">
+                <span class="iconfont-archer">&#xe606;</span>
+                python
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="web安全">
+                <span class="iconfont-archer">&#xe606;</span>
+                web安全
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="云技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                云技术
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="DevOps">
+                <span class="iconfont-archer">&#xe606;</span>
+                DevOps
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="开发与运维">
+                <span class="iconfont-archer">&#xe606;</span>
+                开发与运维
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="网络编程">
+                <span class="iconfont-archer">&#xe606;</span>
+                网络编程
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="分布式技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                分布式技术
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Kubernete">
+                <span class="iconfont-archer">&#xe606;</span>
+                Kubernete
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="MatLab">
+                <span class="iconfont-archer">&#xe606;</span>
+                MatLab
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="PHP">
+                <span class="iconfont-archer">&#xe606;</span>
+                PHP
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Quarkus">
+                <span class="iconfont-archer">&#xe606;</span>
+                Quarkus
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Spring">
+                <span class="iconfont-archer">&#xe606;</span>
+                Spring
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="NodeJS">
+                <span class="iconfont-archer">&#xe606;</span>
+                NodeJS
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="express">
+                <span class="iconfont-archer">&#xe606;</span>
+                express
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="docker">
+                <span class="iconfont-archer">&#xe606;</span>
+                docker
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="密码学">
+                <span class="iconfont-archer">&#xe606;</span>
+                密码学
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="区块链技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                区块链技术
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="以太坊">
+                <span class="iconfont-archer">&#xe606;</span>
+                以太坊
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="智能合约">
+                <span class="iconfont-archer">&#xe606;</span>
+                智能合约
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="pwn">
+                <span class="iconfont-archer">&#xe606;</span>
+                pwn
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="电子取证">
+                <span class="iconfont-archer">&#xe606;</span>
+                电子取证
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="C编程">
+                <span class="iconfont-archer">&#xe606;</span>
+                C编程
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="课程总结">
+                <span class="iconfont-archer">&#xe606;</span>
+                课程总结
+            </span>
+        
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="漏洞分析">
+            <span class="iconfont-archer">&#xe60a;</span>
+            漏洞分析
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="开发技术">
+            <span class="iconfont-archer">&#xe60a;</span>
+            开发技术
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="论文阅读">
+            <span class="iconfont-archer">&#xe60a;</span>
+            论文阅读
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="CTF">
+            <span class="iconfont-archer">&#xe60a;</span>
+            CTF
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="渗透测试">
+            <span class="iconfont-archer">&#xe60a;</span>
+            渗透测试
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="MATLAB">
+            <span class="iconfont-archer">&#xe60a;</span>
+            MATLAB
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="密码学">
+            <span class="iconfont-archer">&#xe60a;</span>
+            密码学
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="区块链技术">
+            <span class="iconfont-archer">&#xe60a;</span>
+            区块链技术
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="电子取证">
+            <span class="iconfont-archer">&#xe60a;</span>
+            电子取证
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="杂谈">
+            <span class="iconfont-archer">&#xe60a;</span>
+            杂谈
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="课程总结">
+            <span class="iconfont-archer">&#xe60a;</span>
+            课程总结
+        </span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "https://lzwgiter.github.io",
+        root: siteMetaRoot,
+        author: "lzwgiter"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+
+        <!-- main func -->
+        <script src="/scripts/main.js?v=20211217"></script>
+        <!-- dark mode -->
+        <script src="/scripts/dark.js?v=20211217"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+        <!-- algolia -->
+        
+        <!-- busuanzi -->
+        
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        
+        <!-- CNZZ -->
+        
+        <!-- async load share.js -->
+        
+            <script src="/scripts/share.js?v=20211217" async></script>
+        
+        <!-- mermaid -->
+        
+    </body>
+</html>

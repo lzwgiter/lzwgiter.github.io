@@ -1,0 +1,3387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!-- title -->
+
+
+    
+
+<!-- keywords -->
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="lzwgiter">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="lzwgiter">
+    
+        <meta name="keywords" content="lzwgiter,float311,float's blog">
+    
+    <meta name="description" content="blogs from f10@t">
+    <meta name="description" content="zk-SNARKs即&quot;zero knowledge Succinct Non-interactive Argument of Knowledge&quot;，第一次见到是在ZCash的介绍里 Zcash is the first widespread application of zk-SNARKs, a novel form of zero-knowledge cryptography. ...，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="zk-SNARKs简洁的非交互式零知识证明学习(一)">
+<meta property="og:url" content="https://lzwgiter.github.io/posts/85e98ef0.html">
+<meta property="og:site_name" content="f10@t&#39;s blog">
+<meta property="og:description" content="zk-SNARKs即&quot;zero knowledge Succinct Non-interactive Argument of Knowledge&quot;，第一次见到是在ZCash的介绍里 Zcash is the first widespread application of zk-SNARKs, a novel form of zero-knowledge cryptography. ...，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lzwgiter.github.io/img/zk-SNARKs-%E7%AE%80%E6%B4%81%E7%9A%84%E9%9D%9E%E4%BA%A4%E4%BA%92%E5%BC%8F%E9%9B%B6%E7%9F%A5%E8%AF%86%E8%AF%81%E6%98%8E%E5%AD%A6%E4%B9%A0(%E4%B8%80)/zk-snarks.jpg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/zk-SNARKs-%E7%AE%80%E6%B4%81%E7%9A%84%E9%9D%9E%E4%BA%A4%E4%BA%92%E5%BC%8F%E9%9B%B6%E7%9F%A5%E8%AF%86%E8%AF%81%E6%98%8E%E5%AD%A6%E4%B9%A0(%E4%B8%80)/20191029203605385.jpg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/zk-SNARKs-%E7%AE%80%E6%B4%81%E7%9A%84%E9%9D%9E%E4%BA%A4%E4%BA%92%E5%BC%8F%E9%9B%B6%E7%9F%A5%E8%AF%86%E8%AF%81%E6%98%8E%E5%AD%A6%E4%B9%A0(%E4%B8%80)/image-20210827202233893.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/zk-SNARKs-%E7%AE%80%E6%B4%81%E7%9A%84%E9%9D%9E%E4%BA%A4%E4%BA%92%E5%BC%8F%E9%9B%B6%E7%9F%A5%E8%AF%86%E8%AF%81%E6%98%8E%E5%AD%A6%E4%B9%A0(%E4%B8%80)/image-20210827213724273.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/zk-SNARKs-%E7%AE%80%E6%B4%81%E7%9A%84%E9%9D%9E%E4%BA%A4%E4%BA%92%E5%BC%8F%E9%9B%B6%E7%9F%A5%E8%AF%86%E8%AF%81%E6%98%8E%E5%AD%A6%E4%B9%A0(%E4%B8%80)/image-20210827194403264.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/zk-SNARKs-%E7%AE%80%E6%B4%81%E7%9A%84%E9%9D%9E%E4%BA%A4%E4%BA%92%E5%BC%8F%E9%9B%B6%E7%9F%A5%E8%AF%86%E8%AF%81%E6%98%8E%E5%AD%A6%E4%B9%A0(%E4%B8%80)/image-20210827194711274.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/%E8%AF%B7%E6%88%91%E5%96%9D%E6%9D%AF%E5%92%96%E5%95%A1%E5%90%A7.jpg">
+<meta property="article:published_time" content="2021-08-25T00:25:26.000Z">
+<meta property="article:modified_time" content="2023-03-29T16:05:56.000Z">
+<meta property="article:author" content="lzwgiter">
+<meta property="article:tag" content="密码学">
+<meta property="article:tag" content="区块链技术">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lzwgiter.github.io/img/zk-SNARKs-%E7%AE%80%E6%B4%81%E7%9A%84%E9%9D%9E%E4%BA%A4%E4%BA%92%E5%BC%8F%E9%9B%B6%E7%9F%A5%E8%AF%86%E8%AF%81%E6%98%8E%E5%AD%A6%E4%B9%A0(%E4%B8%80)/zk-snarks.jpg">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/hello.svg">
+    
+    <title>zk-SNARKs简洁的非交互式零知识证明学习(一) · float&#39;s blog</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
+    <link rel="stylesheet" href="/css/dark.css">
+    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
+    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    
+    <!-- 百度统计  -->
+    
+        <script>
+            var _hmt = _hmt || [];
+            (function () {
+                var hm = document.createElement("script");
+                hm.src = "https://hm.baidu.com/hm.js?9ef67111f9ae4eefa278780655f0c1e3";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
+    
+    <!-- 谷歌统计  -->
+    
+        <script>
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+            ga('create', 'G-8DFDYFMQP8', 'auto');
+            ga('send', 'pageview');
+        </script>
+    
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="f10@t's blog" type="application/atom+xml">
+</head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+    
+        <body class="post-body">
+    
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress read-progress-feature"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        
+            <div class="header-sidebar-menu header-sidebar-menu-rounded">
+        
+            
+                <i class="fas fa-bars"></i>
+            
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href=/>float's blog</a>
+        </span>
+    </div>
+    <!-- toggle banner for post layout -->
+    
+        
+            <div class="banner">
+        
+            <div class="blog-title header-element">
+                <a href="/">float&#39;s blog</a>
+            </div>
+            <div class="post-title header-element">
+                <a href="#" class="post-name">zk-SNARKs简洁的非交互式零知识证明学习(一)</a>
+            </div>
+        </div>
+    
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- back to top button -->
+    <div class="footer-fixed-element">
+        
+            <div class="back-top back-top-hidden back-top-rounded">
+        
+        
+            <i class="fas fa-chevron-up"></i>
+        
+        </div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="
+
+
+
+
+
+
+
+    height:50vh;
+
+">
+    
+    <!-- 主页  -->
+    
+        
+    <!-- 404页  -->
+    
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+                zk-SNARKs简洁的非交互式零知识证明学习(一)
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+                
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页 meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        
+        
+            
+        
+        
+        <span class="post-category" data-categories="密码学"">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                密码学
+            </span>
+        </span>
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="密码学">密码学</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="区块链技术">区块链技术</a>
+    
+</div>
+
+                
+                <!-- 文章字数统计 -->
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">4.6k</span>阅读时长: <span class="post-count reading-time">19 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2021/08/25</span>
+                    <!-- busuanzi -->
+                    
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <blockquote>
+<p>zk-SNARKs即"<strong>zero knowledge Succinct Non-interactive Argument
+of Knowledge</strong>"，第一次见到是在ZCash的介绍里
+<code>Zcash is the first widespread application of zk-SNARKs, a novel form of zero-knowledge cryptography. ...</code>，他给出了<strong>简洁</strong>的<strong>非交互式零知识证明</strong>的办法，属于零知识证明的一种。</p>
+<p>zk-SNARKs的第一个应用就是Zcash，可以做到毫秒级的验证效果，但是产生这个证明的过程较为复杂。这篇开始学习一下流程。大致上流程如下：</p>
+<p><strong>Computation计算问题 -&gt; Arithmetic Circuit代数电路 -&gt;
+R1CS -&gt; QAP -&gt; zk-SNARK</strong></p>
+<p><img src="/img/zk-SNARKs-简洁的非交互式零知识证明学习(一)/zk-snarks.jpg" style="zoom: 80%;" /></p>
+</blockquote>
+<span id="more"></span>
+<h1 id="基本概念">基本概念</h1>
+<h2 id="什么是零知识证明">什么是零知识证明</h2>
+<p>一句话就可以说明了：</p>
+<blockquote>
+<p>“Zero-knowledge” proofs allow one party (the prover) to prove to
+another (the verifier) that a statement is true, without revealing any
+information beyond the validity of the statement itself. For example,
+given the hash of a random number, the prover could convince the
+verifier that there indeed exists a number with this hash value, without
+revealing what it is.</p>
+</blockquote>
+<p>即实现在不泄露真实信息的情况下证明这个我确实拥有这个信息，比如上面提到的，我可以提供给你哈希值供校验，而无需提供秘密信息本身。</p>
+<h2 id="什么是zk-snarks">什么是zk-SNARKs？</h2>
+<p>zk-SNARKs全称是<code>Zero-knowledge Succinct Non-interactive Argument of Knowledge</code>，名字挺长的，我们分开来看一下都包含了哪些主体：</p>
+<ul>
+<li>Zero-knowledge：即零知识证明，zk-SNARKs属于零知识证明的一种</li>
+<li>Succinct：意为简洁的，zk-SNARKs的证明耗时为毫秒级，且证明的大小也仅为几百个字节</li>
+<li>Non-interactive：
+即非交互式的，而传统的零知识证明，证明者<code>prover</code>和验证者<code>vervifier</code>需要来回的交互，效率较低。zk-SNARKs属于非交互式的零知识证明，你只需要给验证者提供证明，正确与否之后的操作验证者会自行执行，不会有交互反馈。</li>
+<li>Argument of
+Knowledge：<strong>这个很多人都没有提到，官网也说没必要深入探讨，但是这里还是说一下。</strong>零知识证明是proof
+of knowledge，保证了一个假的prover不能成功证明一个错的结论，而Argument
+of
+knowledge在这个保证上加了一个条件--只针对计算有界的provers(computationally
+bounded provers)。</li>
+</ul>
+<h2
+id="为什么用zk-snarks以及future-application">为什么用zk-SNARKs以及Future
+Application？</h2>
+<p>所以这个东西它<strong>用起来</strong>效率比较高，<code>不过目前来看证明的实现比较复杂，产生证明效率较低，离实际应用还有一段距离[1]</code>。因为属于计算密集型，所以对很多应用不够友好，官方也叙述了这一缺点以及表示正在改进：</p>
+<blockquote>
+<p>Theoretically, you can use a zk-SNARK to verify any relation without
+disclosing inputs or leaking information.
+—<code>Generating proofs for complex functions is still too computationally intensive to be practical for many applications.</code>
+but the <a target="_blank" rel="noopener" href="https://z.cash/team">Zcash team</a> is pushing the
+boundaries for optimizing zk-SNARKs, and is already breaking new ground
+with more efficient implementations.</p>
+</blockquote>
+<p>官方指出zk-SNARKs可以作为一个组件添加到现存的区块链技术中，称为<a
+target="_blank" rel="noopener" href="https://electriccoin.co/blog/zsl/">ZSL</a>(Zero-knowledge Security
+Layer)。</p>
+<p>此外，zk-SNARKs在整个代数电路的运算过程中都是在椭圆曲线上的，且依赖于<strong>配对密码学(pairing-based
+cryptography)</strong>，关于配对密码学的概念、可使用的编程依赖库(比如jpbc)可以参考我兄弟的文章：<a
+target="_blank" rel="noopener" href="https://blank-vax.github.io/2021/07/05/基于配对的密码学——基础知识及JPBC库/">B1ank
+(blank-vax.github.io) - 基于配对的密码学-基础知识及JPBC库</a>。</p>
+<p>[1]李佩丽, 徐海霞. 区块链用户匿名与可追踪技术[J]. 电子与信息学报,
+2020, 42.</p>
+<h1 id="计算步骤概述">计算步骤概述</h1>
+<p>这里直接用一张图来总结，这张图包含了本篇文章的全部内容，具体的计算细节你可以对照我的文章来看。图片来源:<a
+target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43179764/article/details/102807826?spm=1001.2014.3001.5501">zk-snark之R1CS-&gt;QAP_江小白希的博客-CSDN博客</a></p>
+<p><img src="/img/zk-SNARKs-简洁的非交互式零知识证明学习(一)/20191029203605385.jpg" alt="20191029203605385"  /></p>
+<p>下面具体叙述一下重要概念以及计算步骤。</p>
+<h1 id="计算步骤">计算步骤</h1>
+<p>这里以V神的教程为基础，更为详尽的在计算方面复现一下整体思路流程。</p>
+<p>大体上来说我们的步骤如下：</p>
+<p><img src="/img/zk-SNARKs-简洁的非交互式零知识证明学习(一)/image-20210827202233893.png" alt="image-20210827202233893" style="zoom:80%;" /></p>
+<p>官方给出的例子是这样的一个函数，类似python代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">qeval</span>(<span class="params">x</span>)：</span><br><span class="line">    y = x ** <span class="number">3</span></span><br><span class="line">    <span class="keyword">return</span> x + y + <span class="number">5</span></span><br></pre></td></tr></table></figure>
+<p>接下来我们像上面那个图一样，将这个函数变为zk-SNARKs。</p>
+<h2
+id="计算问题转化为代数电路the-arithmetic-circuits">计算问题转化为代数电路(The
+Arithmetic Circuits)</h2>
+<h3 id="代数电路简介以及重点说明">代数电路简介以及重点说明</h3>
+<blockquote>
+<p>电路(Circuits)可以有效的来表示计算模型。一个电路的主体是<strong>线路(wires)</strong>和<strong>门(gate)</strong>，其中线路携带值，而门则代表对这些值所进行的操作。</p>
+</blockquote>
+<p>最简单好理解的就是逻辑电路：</p>
+<ul>
+<li>值只能为0或1</li>
+<li>门包含与(AND)、或(OR)、非(NOT)</li>
+</ul>
+<p><img src="/img/zk-SNARKs-简洁的非交互式零知识证明学习(一)/image-20210827213724273.png" alt="image-20210827213724273"  /></p>
+<p>而在zk-SNARKs的计算过程中，我们使用代数电路(Arithmetic
+circuits)，一个例子如上图，实际上就是一个代数电路的图，它是一种有向无环图，流动方向始终从输入到输出，<strong>其中的门实际上包括的就是模运算中的加减乘除(modular
+addtion and
+multiplication)。使用模运算是因为整个运算都是在椭圆曲线上完成的。</strong></p>
+<p>对于上图中的等式：<span
+class="math inline">\(a^2+ab-b=n\)</span>，实际上，可以将这个式子化为两个门，我们用var等变量名来代替：
+<span class="math display">\[
+\begin{align}
+var_3 = var_1 * var_2 \tag{1}\\
+var_6 = var_4 + var_5 \tag{2}
+\end{align}
+\]</span></p>
+<p>观察一下就可以发现a^2和ab实际上就是1式的类型，加减则是2式的类型，我们可以用伪代码来表示：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tmp_1 = a * a</span><br><span class="line">tmp_2 = a * b</span><br><span class="line">tmp_3 = tmp_1 + tmp_2</span><br><span class="line">tmp_4 = tmp_3 - b</span><br></pre></td></tr></table></figure>
+<p>最后我们的n值就保存在了tmp_4中。</p>
+<p>在零知识中，该电路实际上就相当于Verifier，对于一个正确的proof，prover输入有效的witness，电路应该返回1。</p>
+<h3 id="计算问题展开-flatttening">计算问题展开 (Flatttening)</h3>
+<blockquote>
+<p>这是第一步，我们要将原始的功能代码转变为基本算术单元，就像上一节那样。</p>
+</blockquote>
+<p>这里再看一下源代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">qeval</span>(<span class="params">x</span>)：</span><br><span class="line">    y = x ** <span class="number">3</span></span><br><span class="line">    <span class="keyword">return</span> x + y + <span class="number">5</span>	// 即返回c</span><br></pre></td></tr></table></figure>
+<p>这里有两种类型：加法和乘法，或者更为抽象一点，只有两种类型，也就是<strong>两种门</strong></p>
+<ul>
+<li>x = y，单纯的赋值</li>
+<li>x = y (opt) z，其中opt代表任意的一次计算，可能为加减乘除</li>
+</ul>
+<p>所以我们进行<strong>展开</strong>：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sym_1 = x * x</span><br><span class="line">y = sym_1 * x	// y = x**3</span><br><span class="line">sym_2 = y + x   // x^3 + x</span><br><span class="line">~out = sym_2 + 5 // x^3 + x + 5，完成计算</span><br></pre></td></tr></table></figure>
+<p>最后我们的输出就是<code>~out</code>变量了。其实思路很简单吧？到这里我们就生成了两种门。</p>
+<p>展开后的式子其实计算结果是一样的，好比我们x取3，那么最终return就是35，对于上面的式子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">x = 3</span><br><span class="line">sym_1 = 9</span><br><span class="line">y = 27</span><br><span class="line">sym_2 = 30</span><br><span class="line">~out = 35 -- 最终结果=</span><br></pre></td></tr></table></figure>
+<h2 id="r1csa-rank-1-constraint-system">R1CS(a rank-1 constraint
+system)</h2>
+<h3 id="r1cs简介以及重点说明">R1CS简介以及重点说明</h3>
+<p>上面也说到了，我们首先要将待计算的式子简化为一系列的基本计算，构成代数电路，其中每一条线都代表这一个数值的传递，门则代表一次基本计算。那么下一步就是生成<strong>一系列的约束(Constraints)，这些约束可以断言(assert)一个门计算已经正确执行，且内部的赋值是一致的。</strong>这样的约束保证了门计算的准确性，所以我们需要给每一个门都生成一个<code>rank-1</code>的约束，<code>rank-1</code>我也不知道怎么理解，姑且认为是一条约束吧。所有这些约束条件集合起来就是R1CS(<code>A Rank-1 Constraint System</code>)。</p>
+<p>具体有什么作用呢？<strong>如果一个假的prover向verifier进行证明的时候，由于他不知道正确的witness，并拿了个假的输出来糊弄verifier，因为他的输入就是错的，所以在代数电路中运算的时候，某一个门的输出就会导致该门的约束无效。</strong></p>
+<p>那么问题来了，实际中一个代数过于复杂怎么办？一个个去验证岂不是很花时间？所以<code>zk-SNARKs</code>将所有这些约束都封装到了三维向量中，以此来同时验证整个约束集。这三个多项式向量下一小节会看到，它们就是<strong>A、B、C</strong>。</p>
+<h3 id="门运算变换为r1cs">门运算变换为R1CS</h3>
+<p>上面说了<code>zk-SNARKs</code>将R1CS整理为了一个三维向量，其中每一个门我们也一样用一个三维向量来描述：<code>(a, b, c)</code>，最终所有门三维向量的组合我们用<code>(A, B, C)</code>表示，其中的A由所有的a组成，另外两个也类似。</p>
+<p>那为啥要用三元组呢？<strong>因为从上面我们简化后的计算来看，我们右边都最多只有两个数，并进行赋值，所以用三元组就可以表示这个等式了</strong>。</p>
+<p>那么这个三维向量的a、b、c有什么关系呢？我们首先定义这个R1CS的解是<code>s</code>，则有如下关系：
+<span class="math display">\[
+\begin{align}
+(s·a) * (s·b) - s·c = 0 \\
+or \\
+(s·a) * (s·b) = s·c
+\end{align}
+\]</span></p>
+<p>根据我们简化后的运算，我们可以看到需要如下几个变量，其中<code>~one</code>是常量1，用来得到我们需要的常量，比如等式中的5。</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[~one、x、~out、sym_1、y、sym_2] // 下标从0开始，可以看做一个数组</span><br></pre></td></tr></table></figure>
+<p>那么对于第一个门:</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sym_1 = x * x</span><br></pre></td></tr></table></figure>
+<p>它的三元组如下</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = [0, 1 ,0, 0, 0, 0] // 我们可以看到第二个元素也就是下标1的位置为1，代表输入x</span><br><span class="line">b = [0, 1, 0, 0, 0, 0] // 输入x</span><br><span class="line">c = [0, 0, 0, 1, 0, 0] // 代表得到sym_1，而sym_1的下标是3</span><br></pre></td></tr></table></figure>
+<p>是不是发现有点像往内存单元里面填数据的感觉？<strong>对号入座</strong>，那么剩下三个门及其三元组如下：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// y = sym_1 * x</span><br><span class="line">a = [0, 0, 0, 1, 0, 0] // 输入sym_1</span><br><span class="line">b = [0, 1, 0, 0, 0, 0] // 输入x</span><br><span class="line">c = [0, 0, 0, 0, 1, 0] // y = sym_1 * x</span><br><span class="line"></span><br><span class="line">// sym_2 = y + x</span><br><span class="line">a = [0, 1, 0, 0, 1, 0] // 输入y + x</span><br><span class="line">b = [1, 0, 0, 0, 0, 0] // 相当于1*y + 1*x，即x + y</span><br><span class="line">c = [0, 0, 0, 0, 0, 1] // sym_2 = y + x</span><br><span class="line"></span><br><span class="line">// ~out = sym_2 + 5</span><br><span class="line">a = [5, 0, 0, 0, 0, 1] // 输入sym_2 + 5</span><br><span class="line">b = [1, 0, 0, 0, 0, 0] // 相当于1*sym_2 + 1*5，即sym_2 + 5</span><br><span class="line">c = [0, 0, 1, 0, 0, 0] // ~out = sym_2 + 5</span><br></pre></td></tr></table></figure>
+<p><strong>然后我们把4个门的a放到一起就是A，剩下的一样</strong>。比如对于有k个门的R1CS，它的A：
+<span class="math display">\[
+A = \begin{bmatrix}
+    A_1[1]&amp;A_1[2]&amp;... &amp;A_1[n]\\
+    &amp;...\\
+    A_k[1]&amp;A_k[2]&amp;... &amp;A_k[n]\\
+    \end{bmatrix}
+\]</span> 所以我们就得到了最终的R1CS： <span class="math display">\[
+A = \begin{bmatrix}
+        0, &amp;1, &amp;0, &amp;0, &amp;0, &amp;0\\
+        0, &amp;0, &amp;0, &amp;1, &amp;0, &amp;0\\
+        0, &amp;1, &amp;0, &amp;0, &amp;1, &amp;0\\
+        5, &amp;0, &amp;0, &amp;0, &amp;0, &amp;1
+    \end{bmatrix}
+B = \begin{bmatrix}
+        0, &amp;1, &amp;0, &amp;0, &amp;0, &amp;0\\
+        0, &amp;1, &amp;0, &amp;0, &amp;0, &amp;0\\
+        1, &amp;0, &amp;0, &amp;0, &amp;0, &amp;0\\
+        1, &amp;0, &amp;0, &amp;0, &amp;0, &amp;0
+    \end{bmatrix}\\
+C = \begin{bmatrix}
+        0, &amp;0, &amp;0, &amp;1, &amp;0, &amp;0\\
+        0, &amp;0, &amp;0, &amp;0, &amp;1, &amp;0\\
+        0, &amp;0, &amp;0, &amp;0, &amp;0, &amp;1\\
+        0, &amp;0, &amp;1, &amp;0, &amp;0, &amp;0
+    \end{bmatrix}
+\]</span></p>
+<h2 id="qapquadratic-arithmetic-program">QAP(quadratic arithmetic
+program)</h2>
+<h3 id="概念">概念</h3>
+<p><code>Quadratic Arithmetic Program</code>简称QAP，我也不知道叫啥，应该是二次代数规划吧emmmm。他的作用如下：</p>
+<blockquote>
+<p>a way of representing any computational problem with a polynomial
+equation that is much more amenable to various forms of mathematical
+trickery.</p>
+</blockquote>
+<p>即他可以用多项式等式来表示一个可计算的问题，更便于数学计算。那为啥我们要把R1CS转变为QAP呢？这俩啥区别？</p>
+<p>实际上QAP和R1CS的逻辑是一样的，区别在于将向量的点积运算转变为了多项式。下面阐述一下过程。</p>
+<h3 id="r1cs计算qap">R1CS计算QAP</h3>
+<p>在上一章中我们得到了多项式<code>x^3 + x + 5</code>的R1CS，这个R1CS的内容Prover和Verifier双方都知道。接下来我们来构造QAP。</p>
+<ul>
+<li>我们都有什么？我们有四个门的对应的(a, b,
+c)三个向量，其中a，b，c长度均为6</li>
+<li>我们要做什么？我们要把这一共四个门的、每个门三组、每组包含长度为6的三个向量的数据，依旧转变为(A，B，C)，但是区别是A，B，C每个组包含了长度为4的6个向量，即6*4，而不是R1CS那样的4x6</li>
+</ul>
+<p>那我们怎么转换呢？这里要用到一个定理：拉格朗日插值法，这里很快过一下：</p>
+<blockquote>
+<p>拉格朗日插值法(Lagrange Interpolation
+Polynomial)指可以找到一个多项式，该多项式恰好在各个观测的点取到观测值，说人话就是找到一条过指定的一些点的一条曲线。</p>
+</blockquote>
+<p>公式内容如下： <span class="math display">\[
+\begin{align}
+现有点(x_0,y_0),(x_1, y_1),...,(x_{n-1},
+y_{n-1}),设D_n=\{0,...,n-1\}，B_k=\{k|k \ne i,i \in
+D_n\}。\\对于每一个x存在一个符合观测值的多项式p_k(x)，使p_k(x) = \prod
+\limits_{i \in
+B_k}\frac{x-x_i}{x_k-x_i}。\\则满足上述所有观测点的f(x)=\sum_{j=0}^{n-1}y_ip_j(x)\
+\end{align}
+\]</span></p>
+<p>看着比较复杂，实际上比较好记，<strong>即对于每一个点的多项式，它是这么来的：用未知数x减去其他点的x的乘积除以该点x减其他点的x的乘积，最后乘一个该点y，最后的最后把所有点多项式一加就可以了。</strong>给一个例子吧，过点(1,
+3)，(2, 2)，(3, 4)的函数：</p>
+<p><span class="math display">\[
+f(x) = \frac{(x-2)(x-3)}{(1-2)(1-3)}\cdot3 +
+\frac{(x-1)(x-3)}{(2-1)(2-3)}\cdot2 +
+\frac{(x-1)(x-2)}{(3-1)(3-2)}\cdot4=\frac{3}{2}x^2-\frac{11}{2}x+7
+\]</span></p>
+<p>该算法的时间复杂度为<code>O(n^3)</code>其中n代表点的个数，而每个点计算多项式需要<code>O(n^2)</code>的时间复杂度，我们可以利用快速傅里叶变化来降低时间复杂度，因为实际中会有成千个门。
+然后我们再来看怎么转换我们的R1CS，我们以A矩阵为例，B，C都要进行相同的操作。</p>
+<p><strong>这里重点来了，很多网上的文章都没有说这一部分是怎么来的，包括最开始那张总结全部流程的图，A是啥？可以看成矩阵，那我们要使用拉格朗日插值法得有点啊，纳闷了点哪来的啊？官网描述的我反正来来回回看了三四遍没看懂啥意思：</strong></p>
+<blockquote>
+<p>What we are going to do is take the first value out of every a
+vector, use Lagrange interpolation to make a polynomial out of
+that(where evaluating the polynomial at <code>i</code> gets you the
+first value of the ith <code>a</code> vector)</p>
+</blockquote>
+<p>然后<strong>从最后这句话</strong>自己试出来结论了，首先我们取A矩阵的第一列作为纵坐标，而横坐标则是行数，上面我们得到的A：
+<span class="math display">\[
+A = \begin{bmatrix}
+        0, &amp;1, &amp;0, &amp;0, &amp;0, &amp;0\\
+        0, &amp;0, &amp;0, &amp;1, &amp;0, &amp;0\\
+        0, &amp;1, &amp;0, &amp;0, &amp;1, &amp;0\\
+        5, &amp;0, &amp;0, &amp;0, &amp;0, &amp;1
+    \end{bmatrix}
+\]</span></p>
+<p>则四个点分别为：(1, 0)，(2, 0)，(3, 0)，(4,
+5)，然后对这四个点进行拉格朗日插值法得到多项式：</p>
+<p><span class="math display">\[
+f(x)=\frac{(x-1)(x-2)(x-3)}{(4-1)(4-2)(4-3)}\cdot5=\frac{5}{6}x^3-5x^2+\frac{55}{6}x-5
+\]</span>
+然后我们把这个多项式转成行向量，即从左到右依次是低次项到高次项的系数，实际上就是多项式的矩阵化。</p>
+<p>得(也就是V神的结果)，B，C同理：</p>
+<p><img src="/img/zk-SNARKs-简洁的非交互式零知识证明学习(一)/image-20210827194403264.png" alt="image-20210827194403264" style="zoom:80%;" /></p>
+<p>上述的数据就是QAP了，当然上述的过程只需要执行一次，一旦QAP参数生成后，就可以复用了。</p>
+<p>假如x取1，那么就可以得到如下结果(就是多项式赋值):</p>
+<p><img src="/img/zk-SNARKs-简洁的非交互式零知识证明学习(一)/image-20210827194711274.png" alt="image-20210827194711274" style="zoom:80%;" /></p>
+<p>这恰好和我们R1CS的A、B、C的第一行行向量对应，这也就是作者说的那句：
+&gt; where evaluating the polynomial at <code>i</code> gets you the
+first value of the ith <code>a</code> vector)</p>
+<p>你x取多少，A算出来的就是R1CS中第x个a，你比如x取<strong>1</strong>上面算出来是[0,
+1, 0, 0, 0,
+0]，这不就是我们R1CS的第1行吗？不就是<strong>第一个门的a</strong>吗？</p>
+<h3 id="qap正确性检查">QAP正确性检查</h3>
+<p>好了到这里其实本文主体就结束了，下来我们验证一下QAP，这样我们就不需要去验证我们的R1CS了。在验证过程中，如果每一个门(x=1,2,3,4)他的多项式计算出来是0，那就对了，否则就不对，比如<code>y = x * sym_1</code>结果<code>x=2和sym_1=2，y=5</code>，那显然输入输出是不匹配的。</p>
+<p>具体计算方法呢？</p>
+<p><span class="math display">\[
+h=\frac{(A \cdot s)*(B \cdot s) - C \cdot s}{Z}, Z=(x - 1)*(x - 2)*(x -
+3)..., t=(A \cdot s)*(B \cdot s) - C \cdot s
+\]</span></p>
+<p>其中Z是一个在任意门x都为零的多项式，即有k个门，则Z就乘到(x-k)。</p>
+<p>所以有：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">A . s = [43.0, -73.333, 38.5, -5.166]</span><br><span class="line">B . s = [-3.0, 10.333, -5.0, 0.666]</span><br><span class="line">C . s = [-41.0, 71.666, -24.5, 2.833]</span><br></pre></td></tr></table></figure>
+<p>这里我们就需要多项式矩阵化的乘法规则了，这个属于单另的知识，包括怎么矩阵化后进行多项式的乘法和除法，这部分请参考学习：<a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/58665745?utm_source=qq&amp;utm_medium=social&amp;utm_oi=894491492633182208">多项式的矩阵表示及乘法运算
+- 知乎 (zhihu.com)</a>。</p>
+<p>所以<code>(A·s)*(B·s)-C·s</code>：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">t=[-88.0, 592.666, -1063.777, 805.833, -294.777, 51.5, -3.444]</span><br></pre></td></tr></table></figure>
+<p>又因为<code>Z=(x - 1)*(x - 2)*(x - 3)(x - 4)</code>，所以</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Z = [24, -50, 35, -10, 1]</span><br></pre></td></tr></table></figure>
+<p>我们得到最终的h，且该结果无余数</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">h = t / Z = [-3.666, 17.055, -3.444]</span><br></pre></td></tr></table></figure>
+<p>还记得前面说过R1CS的解(solution)是<code>s</code>吗，对于x取3，记不记得我们的s是[1,
+3, 35, 9, 27,
+30]？如果说我们的solution是假的，比如把最后的30换成31，这就会导致当x=3的时候t算出来不是0(是-1)，且t/Z的结果也会有余数(结果是<code>[-5.0, 8.833, -4.5, 0.666]</code>)</p>
+<h1 id="后续内容安排">后续内容安排</h1>
+<p>这篇主要介绍了zk-SNARKs的基础概念，以及是怎么把计算问题转换为R1CS和QAP的、如何验证QAP，但是没有涉及协议本身的验证过程、目前可使用的库等，下一篇将详细讨论这些内容。</p>
+<h1 id="参考学习">参考学习</h1>
+<p>官方zcash中zk-SNARKs介绍：<a
+target="_blank" rel="noopener" href="https://z.cash/technology/zksnarks/">What are zk-SNARKs? |
+Zcash</a></p>
+<p>官方V神教程系列，建议按顺序学习</p>
+<ul>
+<li><a
+target="_blank" rel="noopener" href="https://medium.com/@VitalikButerin/quadratic-arithmetic-programs-from-zero-to-hero-f6d558cea649">Quadratic
+Arithmetic Programs: from Zero to Hero | by Vitalik Buterin |
+Medium</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://medium.com/@VitalikButerin/exploring-elliptic-curve-pairings-c73c1864e627">Exploring
+Elliptic Curve Pairings | by Vitalik Buterin | Medium</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://medium.com/@VitalikButerin/zk-snarks-under-the-hood-b33151a013f6">Zk-SNARKs:
+Under the Hood. This is the third part of a series of… | by Vitalik
+Buterin | Medium</a></li>
+</ul>
+<p>其他参考：</p>
+<p>这张流程图非常的赞：<a
+target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43179764/article/details/102807826?spm=1001.2014.3001.5501">zk-snark之R1CS-&gt;QAP_江小白希的博客-CSDN博客</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://www.cnblogs.com/linguanh/p/10892344.html">详细讲解：零知识证明
+之 zk-SNARK 开篇 - 指尖下的幽灵 - 博客园 (cnblogs.com)</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/58665745?utm_source=qq&amp;utm_medium=social&amp;utm_oi=894491492633182208">多项式的矩阵表示及乘法运算
+- 知乎 (zhihu.com)</a></p>
+<p><img src="/img/请我喝杯咖啡吧.jpg" style="zoom:33%;" /></p>
+
+    </article>
+    <!-- license -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://lzwgiter.github.io">lzwgiter</a>
+            <p>原文链接：<a href="https://lzwgiter.github.io/posts/85e98ef0.html">https://lzwgiter.github.io/posts/85e98ef0.html</a>
+            <p>发表日期：<a href="https://lzwgiter.github.io/posts/85e98ef0.html">August 25th 2021, 8:25:26 am</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/85e98ef0.html">March 30th 2023, 12:05:56 am</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href="/posts/169c63d0.html" title="Bloom Filter概念原理">
+                    <div class="nextTitle">Bloom Filter概念原理</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/posts/a8e0eb2d.html" title="Quarkus学习（一）概述以及编写REST服务">
+                    <div class="prevTitle">Quarkus学习（一）概述以及编写REST服务</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- comment -->
+    
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+
+            
+
+            
+
+            
+
+            <!-- utteranc评论 -->
+
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+
+            
+            
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    <div id="comment"></div>
+    <script>
+        new Valine({
+            el: '#comment',
+            notify:false,
+            verify:false,
+            appId: "KADRlHg5xXyhKL0d6USDWfIB-gzGzoHsz",
+            appKey: "Ppj8kIdro2yDqXOvqWkTRxuW",
+            placeholder: "递茶就坐(　o=^•ェ•)o　┏━┓",
+            path:window.location.pathname,
+            avatar:'mm'
+        });
+    </script>
+
+
+            
+
+        </div>
+    
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    
+    <!-- Mathjax -->
+    
+        
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
+
+
+    
+</main>
+
+                <!-- profile -->
+                
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+        <div class="social">
+            
+    
+        
+            
+                <a href="mailto:float311@163.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lzwgiter" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                    
+                    <img class="profile-qr" src="/assets/wechat.png" />
+                </span>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer qq" title=qq>
+                    
+                    <img class="profile-qr" src="/assets/qq.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title=rss></a>
+            
+        
+    
+
+
+        </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    
+    <!-- 不蒜子  -->
+    
+        <div class="busuanzi-container">
+            
+            
+                <span id="busuanzi_container_site_uv">做客的小伙伴数: <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    	
+</footer>
+
+        </div>
+        <!-- toc -->
+        
+            <div class="toc-wrapper toc-wrapper-loding" style=
+
+
+
+
+
+
+
+    top:50vh;
+
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%9B%B6%E7%9F%A5%E8%AF%86%E8%AF%81%E6%98%8E"><span class="toc-number">1.1.</span> <span class="toc-text">什么是零知识证明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFzk-snarks"><span class="toc-number">1.2.</span> <span class="toc-text">什么是zk-SNARKs？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8zk-snarks%E4%BB%A5%E5%8F%8Afuture-application"><span class="toc-number">1.3.</span> <span class="toc-text">为什么用zk-SNARKs以及Future
+Application？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%AD%A5%E9%AA%A4%E6%A6%82%E8%BF%B0"><span class="toc-number">2.</span> <span class="toc-text">计算步骤概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%AD%A5%E9%AA%A4"><span class="toc-number">3.</span> <span class="toc-text">计算步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E9%97%AE%E9%A2%98%E8%BD%AC%E5%8C%96%E4%B8%BA%E4%BB%A3%E6%95%B0%E7%94%B5%E8%B7%AFthe-arithmetic-circuits"><span class="toc-number">3.1.</span> <span class="toc-text">计算问题转化为代数电路(The
+Arithmetic Circuits)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E6%95%B0%E7%94%B5%E8%B7%AF%E7%AE%80%E4%BB%8B%E4%BB%A5%E5%8F%8A%E9%87%8D%E7%82%B9%E8%AF%B4%E6%98%8E"><span class="toc-number">3.1.1.</span> <span class="toc-text">代数电路简介以及重点说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E9%97%AE%E9%A2%98%E5%B1%95%E5%BC%80-flatttening"><span class="toc-number">3.1.2.</span> <span class="toc-text">计算问题展开 (Flatttening)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#r1csa-rank-1-constraint-system"><span class="toc-number">3.2.</span> <span class="toc-text">R1CS(a rank-1 constraint
+system)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#r1cs%E7%AE%80%E4%BB%8B%E4%BB%A5%E5%8F%8A%E9%87%8D%E7%82%B9%E8%AF%B4%E6%98%8E"><span class="toc-number">3.2.1.</span> <span class="toc-text">R1CS简介以及重点说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%A8%E8%BF%90%E7%AE%97%E5%8F%98%E6%8D%A2%E4%B8%BAr1cs"><span class="toc-number">3.2.2.</span> <span class="toc-text">门运算变换为R1CS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#qapquadratic-arithmetic-program"><span class="toc-number">3.3.</span> <span class="toc-text">QAP(quadratic arithmetic
+program)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">3.3.1.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#r1cs%E8%AE%A1%E7%AE%97qap"><span class="toc-number">3.3.2.</span> <span class="toc-text">R1CS计算QAP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#qap%E6%AD%A3%E7%A1%AE%E6%80%A7%E6%A3%80%E6%9F%A5"><span class="toc-number">3.3.3.</span> <span class="toc-text">QAP正确性检查</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%90%8E%E7%BB%AD%E5%86%85%E5%AE%B9%E5%AE%89%E6%8E%92"><span class="toc-number">4.</span> <span class="toc-text">后续内容安排</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0"><span class="toc-number">5.</span> <span class="toc-text">参考学习</span></a></li></ol>
+            </div>
+        
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 91
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+        
+            
+            
+            <div class="archive-year"> 2023 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/03</span>
+            <a class="archive-post-title" href="/posts/479daa6d.html">gRPC简介与使用</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/30</span>
+            <a class="archive-post-title" href="/posts/b74b8800.html">fastjson反序列化漏洞学习（二）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span>
+            <a class="archive-post-title" href="/posts/undefined.html">Netty框架学习</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/04</span>
+            <a class="archive-post-title" href="/posts/d6b305b7.html">Java网络编程模型复习</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2022 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span>
+            <a class="archive-post-title" href="/posts/203767b8.html">python-Numpy库使用</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/20</span>
+            <a class="archive-post-title" href="/posts/f06096b.html">MATLAB - Wireless Communication Onramp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span>
+            <a class="archive-post-title" href="/posts/3041f265.html">Matlab编程基础</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2021 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/09</span>
+            <a class="archive-post-title" href="/posts/854030f4.html">Cuckoo哈希表以及Cuckoo过滤器</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/04</span>
+            <a class="archive-post-title" href="/posts/169c63d0.html">Bloom Filter概念原理</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span>
+            <a class="archive-post-title" href="/posts/85e98ef0.html">zk-SNARKs简洁的非交互式零知识证明学习(一)</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span>
+            <a class="archive-post-title" href="/posts/a8e0eb2d.html">Quarkus学习（一）概述以及编写REST服务</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/19</span>
+            <a class="archive-post-title" href="/posts/e88577c0.html">Cloud Programming Simplified:A Berkeley View on Serverless Computing</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span>
+            <a class="archive-post-title" href="/posts/99665dc1.html">闲聊一下Java中的DI和CDI</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span>
+            <a class="archive-post-title" href="/posts/ed901271.html">Kubernetes-集群环境搭建使用及问题记录（三）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/09</span>
+            <a class="archive-post-title" href="/posts/a08eb123.html">Kubernetes-集群环境搭建使用及问题记录（二）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span>
+            <a class="archive-post-title" href="/posts/eed4a979.html">Kubernetes 集群环境搭建使用及问题记录（一）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/24</span>
+            <a class="archive-post-title" href="/posts/2f0b60dd.html">闲聊一下Go语言的函数方法和多态机制特点</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span>
+            <a class="archive-post-title" href="/posts/5893facf.html">express学习（一）-基于NodeJS的Web框架</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/10</span>
+            <a class="archive-post-title" href="/posts/8a9b0b34.html">Beego学习-ORM</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/posts/84db08d3.html">Beego学习-路由设置</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/posts/a9031312.html">docker-compose及dockerfile总结</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/09</span>
+            <a class="archive-post-title" href="/posts/77d22b2a.html">Spring安全技术-Spring Security使用及总结（一）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/28</span>
+            <a class="archive-post-title" href="/posts/5e9eec21.html">DevOps技术-简单了解与入门</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span>
+            <a class="archive-post-title" href="/posts/27875254.html">Spring持久层技术-Sping Data JPA使用及总结（一）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/14</span>
+            <a class="archive-post-title" href="/posts/bec529bf.html">以太坊智能合约开发环境搭建及智能合约的编写、部署、测试</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span>
+            <a class="archive-post-title" href="/posts/2ff8a9fd.html">以太坊基本概念与实验环境搭建</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2020 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span>
+            <a class="archive-post-title" href="/posts/bcd864e2.html">DC-1靶机渗透</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span>
+            <a class="archive-post-title" href="/posts/c99165fd.html">fastjson反序列化漏洞学习（一）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/09</span>
+            <a class="archive-post-title" href="/posts/a9e6a25b.html">Spring基础学习 - AOP机制</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/06</span>
+            <a class="archive-post-title" href="/posts/b92dbb83.html">JavaEE基础 - Servlet</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/06</span>
+            <a class="archive-post-title" href="/posts/44088610.html">Spring基础学习 - IOC机制</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/01</span>
+            <a class="archive-post-title" href="/posts/662e1cfe.html">微服务入门-5W和微服务思想</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span>
+            <a class="archive-post-title" href="/posts/c75c5fc7.html">Java 反序列化漏洞与JNDI注入(下)</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/14</span>
+            <a class="archive-post-title" href="/posts/5dcfa8b5.html">Kerberos认证过程原理及攻击手段</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/26</span>
+            <a class="archive-post-title" href="/posts/1ccc94ff.html">内存布局与栈溢出&堆溢出原理</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/21</span>
+            <a class="archive-post-title" href="/posts/bc7cb7a1.html">入坑Pwn---刷题补坑</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/29</span>
+            <a class="archive-post-title" href="/posts/760e25d9.html">内存取证原理学习及Volatility - 篇二</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span>
+            <a class="archive-post-title" href="/posts/b0024cb7.html">Struts框架管窥以及几个漏洞的分析</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/09</span>
+            <a class="archive-post-title" href="/posts/8ce0a80d.html">Redis未授权访问漏洞及修补方法</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span>
+            <a class="archive-post-title" href="/posts/13fe3d9f.html">本地提权与漏洞提权</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2019 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/21</span>
+            <a class="archive-post-title" href="/posts/f8b67901.html">逆向工程课程小结</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span>
+            <a class="archive-post-title" href="/posts/4d8e0b70.html">内存取证原理学习及Volatility - 篇一</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span>
+            <a class="archive-post-title" href="/posts/82490df7.html">并发模型之单线程多路I/O复用---select</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/29</span>
+            <a class="archive-post-title" href="/posts/a715340f.html">入坑Pwn---基本习题和知识</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span>
+            <a class="archive-post-title" href="/posts/47dcecb9.html">Apache-Commons-Collections反序列化漏洞</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/03</span>
+            <a class="archive-post-title" href="/posts/de476e86.html">Java 反序列化漏洞与JNDI注入(上)</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span>
+            <a class="archive-post-title" href="/posts/7a9a17f3.html">记录一次对win2k3 Enterprise Edition的永恒之蓝利用</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/11</span>
+            <a class="archive-post-title" href="/posts/6f24bb1d.html">kali-渗透测试-信息收集3</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/10</span>
+            <a class="archive-post-title" href="/posts/18238b8b.html">kali-渗透测试-信息收集2</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/18</span>
+            <a class="archive-post-title" href="/posts/812ada31.html">kali-渗透测试-信息收集1</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span>
+            <a class="archive-post-title" href="/posts/fffcd997.html">Metasploit渗透测试魔鬼训练营-客户端渗透攻击</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/10</span>
+            <a class="archive-post-title" href="/posts/30b79e7d.html">Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/07</span>
+            <a class="archive-post-title" href="/posts/79017d0.html">Metasploit渗透测试魔鬼训练营-web应用渗透</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/posts/6c9a4aca.html">Metasploit渗透测试魔鬼训练营-服务扫描与查点</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/04</span>
+            <a class="archive-post-title" href="/posts/ed61533c.html">Metasploit渗透测试魔鬼训练营-信息收集</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span>
+            <a class="archive-post-title" href="/posts/ba8e1564.html">Metasploit渗透测试魔鬼训练营 第一天</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2018 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/posts/dd591816.html">小明的博客--Typecho 反序列化漏洞</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span>
+            <a class="archive-post-title" href="/posts/41159e88.html">Bugku的一道注入---多次</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span>
+            <a class="archive-post-title" href="/posts/26bacf07.html">Bugku的一道注入--INSERT INTO注入</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span>
+            <a class="archive-post-title" href="/posts/e1cf93ae.html">ThinkPHP框架学习---路由</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span>
+            <a class="archive-post-title" href="/posts/dec252e7.html">ThinkPHP框架学习---config类和config助手函数</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span>
+            <a class="archive-post-title" href="/posts/8405173.html">ThinkPHP框架学习---框架目录及框架配置</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/19</span>
+            <a class="archive-post-title" href="/posts/5d13a793.html">Nmap使用指南</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/12</span>
+            <a class="archive-post-title" href="/posts/e6caa5f0.html">SQL注入小记(二)</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span>
+            <a class="archive-post-title" href="/posts/78f948a4.html">PHP学习--超级全局变量</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/08</span>
+            <a class="archive-post-title" href="/posts/777d53bb.html">PHP学习--变量</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/03</span>
+            <a class="archive-post-title" href="/posts/f0bc436c.html">PHP框架MVC学习</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span>
+            <a class="archive-post-title" href="/posts/117580c0.html">CTF中的python脚本题小结（二）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span>
+            <a class="archive-post-title" href="/posts/21636c18.html">CTF中的python脚本题小结（一）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span>
+            <a class="archive-post-title" href="/posts/fc74b0ce.html">Hackergame 2018 wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span>
+            <a class="archive-post-title" href="/posts/8c800523.html">安恒九月题的misc和一道web</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span>
+            <a class="archive-post-title" href="/posts/49fb3e92.html">SQL注入小记(一)</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/27</span>
+            <a class="archive-post-title" href="/posts/21c35507.html">隐写术-LSB隐写</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span>
+            <a class="archive-post-title" href="/posts/59bc0c0.html">隐写术--NTFS流隐写</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span>
+            <a class="archive-post-title" href="/posts/c7cffe19.html">CTF常见隐写手段小结</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span>
+            <a class="archive-post-title" href="/posts/69896e9f.html">DOM 文档对象模型</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/21</span>
+            <a class="archive-post-title" href="/posts/20cf0786.html">BOM-浏览器操作对象模型之history和screen对象</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span>
+            <a class="archive-post-title" href="/posts/f92f304f.html">BOM 浏览器操作对象模型之navigator、location对象</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span>
+            <a class="archive-post-title" href="/posts/79f16c6a.html">BOM-浏览器操作对象模型之window对象</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/16</span>
+            <a class="archive-post-title" href="/posts/aa0a7b0a.html">Javascript基础之数据类型2</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span>
+            <a class="archive-post-title" href="/posts/33032ab0.html">Javascript基础之数据类型1</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span>
+            <a class="archive-post-title" href="/posts/b5fac929.html">CTF隐写术--关于ZIP</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/09</span>
+            <a class="archive-post-title" href="/posts/98736a90.html">CSS样式基础4.4--选择器之伪类选择器</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/posts/17442633.html">Bugku的一道misc-----猫片</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/posts/d4db3e56.html">CSS基础4.3--选择器之属性选择器</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/05</span>
+            <a class="archive-post-title" href="/posts/7b6c38ce.html">CSS基础4.2--选择器之组合选择器</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span>
+            <a class="archive-post-title" href="/posts/6027632.html">CSS基础4.1--选择器之CSS基础4.1-选择器之基本选择器</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/02</span>
+            <a class="archive-post-title" href="/posts/370eaad5.html">CSS基础3.2--特性之CSS基础3.2--特性之继承性</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/4655c16f.html">CSS基础3.1--特性之CSS基础3.1-特性之层叠性</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/ae68c748.html">CSS基础2--CSS基础2-应用</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/6b427aa1.html">CSS基础1--样式</a>
+        </li>
+    
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+        
+            <span class="sidebar-tag-name" data-tags="渗透测试">
+                <span class="iconfont-archer">&#xe606;</span>
+                渗透测试
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Java">
+                <span class="iconfont-archer">&#xe606;</span>
+                Java
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="漏洞分析">
+                <span class="iconfont-archer">&#xe606;</span>
+                漏洞分析
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="前端">
+                <span class="iconfont-archer">&#xe606;</span>
+                前端
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Go语言">
+                <span class="iconfont-archer">&#xe606;</span>
+                Go语言
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Go Web">
+                <span class="iconfont-archer">&#xe606;</span>
+                Go Web
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="论文阅读">
+                <span class="iconfont-archer">&#xe606;</span>
+                论文阅读
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="开发技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                开发技术
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="CTF">
+                <span class="iconfont-archer">&#xe606;</span>
+                CTF
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="SQL注入">
+                <span class="iconfont-archer">&#xe606;</span>
+                SQL注入
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="CSS">
+                <span class="iconfont-archer">&#xe606;</span>
+                CSS
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="隐写术">
+                <span class="iconfont-archer">&#xe606;</span>
+                隐写术
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="python">
+                <span class="iconfont-archer">&#xe606;</span>
+                python
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="web安全">
+                <span class="iconfont-archer">&#xe606;</span>
+                web安全
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="云技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                云技术
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="DevOps">
+                <span class="iconfont-archer">&#xe606;</span>
+                DevOps
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="开发与运维">
+                <span class="iconfont-archer">&#xe606;</span>
+                开发与运维
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="网络编程">
+                <span class="iconfont-archer">&#xe606;</span>
+                网络编程
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="分布式技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                分布式技术
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Kubernete">
+                <span class="iconfont-archer">&#xe606;</span>
+                Kubernete
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="MatLab">
+                <span class="iconfont-archer">&#xe606;</span>
+                MatLab
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="PHP">
+                <span class="iconfont-archer">&#xe606;</span>
+                PHP
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Quarkus">
+                <span class="iconfont-archer">&#xe606;</span>
+                Quarkus
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Spring">
+                <span class="iconfont-archer">&#xe606;</span>
+                Spring
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="NodeJS">
+                <span class="iconfont-archer">&#xe606;</span>
+                NodeJS
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="express">
+                <span class="iconfont-archer">&#xe606;</span>
+                express
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="docker">
+                <span class="iconfont-archer">&#xe606;</span>
+                docker
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="密码学">
+                <span class="iconfont-archer">&#xe606;</span>
+                密码学
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="区块链技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                区块链技术
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="以太坊">
+                <span class="iconfont-archer">&#xe606;</span>
+                以太坊
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="智能合约">
+                <span class="iconfont-archer">&#xe606;</span>
+                智能合约
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="pwn">
+                <span class="iconfont-archer">&#xe606;</span>
+                pwn
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="电子取证">
+                <span class="iconfont-archer">&#xe606;</span>
+                电子取证
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="C编程">
+                <span class="iconfont-archer">&#xe606;</span>
+                C编程
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="课程总结">
+                <span class="iconfont-archer">&#xe606;</span>
+                课程总结
+            </span>
+        
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="漏洞分析">
+            <span class="iconfont-archer">&#xe60a;</span>
+            漏洞分析
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="开发技术">
+            <span class="iconfont-archer">&#xe60a;</span>
+            开发技术
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="论文阅读">
+            <span class="iconfont-archer">&#xe60a;</span>
+            论文阅读
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="CTF">
+            <span class="iconfont-archer">&#xe60a;</span>
+            CTF
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="渗透测试">
+            <span class="iconfont-archer">&#xe60a;</span>
+            渗透测试
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="MATLAB">
+            <span class="iconfont-archer">&#xe60a;</span>
+            MATLAB
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="密码学">
+            <span class="iconfont-archer">&#xe60a;</span>
+            密码学
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="区块链技术">
+            <span class="iconfont-archer">&#xe60a;</span>
+            区块链技术
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="电子取证">
+            <span class="iconfont-archer">&#xe60a;</span>
+            电子取证
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="杂谈">
+            <span class="iconfont-archer">&#xe60a;</span>
+            杂谈
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="课程总结">
+            <span class="iconfont-archer">&#xe60a;</span>
+            课程总结
+        </span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "https://lzwgiter.github.io",
+        root: siteMetaRoot,
+        author: "lzwgiter"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+
+        <!-- main func -->
+        <script src="/scripts/main.js?v=20211217"></script>
+        <!-- dark mode -->
+        <script src="/scripts/dark.js?v=20211217"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+        <!-- algolia -->
+        
+        <!-- busuanzi -->
+        
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        
+        <!-- CNZZ -->
+        
+        <!-- async load share.js -->
+        
+            <script src="/scripts/share.js?v=20211217" async></script>
+        
+        <!-- mermaid -->
+        
+    </body>
+</html>
