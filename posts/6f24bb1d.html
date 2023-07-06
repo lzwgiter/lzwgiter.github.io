@@ -19,26 +19,30 @@
         <meta name="keywords" content="lzwgiter,float311,float's blog">
     
     <meta name="description" content="blogs from f10@t">
-    <meta name="description" content="第三部分">
+    <meta name="description" content="第三部分。首先要明确这些都属于前期的被动信息收集，并没有与目标发生直接的网络接触。下面介绍常用的搜索引擎使用方法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="kali-渗透测试-信息收集3">
 <meta property="og:url" content="https://lzwgiter.github.io/posts/6f24bb1d.html">
 <meta property="og:site_name" content="f10@t&#39;s blog">
-<meta property="og:description" content="第三部分">
+<meta property="og:description" content="第三部分。首先要明确这些都属于前期的被动信息收集，并没有与目标发生直接的网络接触。下面介绍常用的搜索引擎使用方法">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%863/1.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%863/2.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%863/3.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%863/6.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%863/7.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%863/9.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%863/11.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%863/12.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%863/13.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%863/14.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/%E8%AF%B7%E6%88%91%E5%96%9D%E6%9D%AF%E5%92%96%E5%95%A1%E5%90%A7.jpg">
 <meta property="article:published_time" content="2019-05-11T06:34:32.000Z">
-<meta property="article:modified_time" content="2021-08-25T11:24:22.000Z">
+<meta property="article:modified_time" content="2023-07-06T12:48:02.656Z">
 <meta property="article:author" content="lzwgiter">
 <meta property="article:tag" content="渗透测试">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%863/6.png">
+<meta name="twitter:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%863/1.png">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="icon" href="/assets/hello.svg">
@@ -538,84 +542,110 @@
                 <main class="main post-page">
     <article class="article-entry">
         <blockquote>
-<p>第三部分</p>
+<p>第三部分。首先要明确这些都属于前期的被动信息收集，并没有与目标发生直接的网络接触。下面介绍常用的搜索引擎使用方法</p>
 </blockquote>
 <span id="more"></span>
-<blockquote>
-<p>首先要明确这些都属于前期的被动信息收集，并没有与目标发生直接的网络接触。下面介绍常用的搜索引擎使用方法</p>
-</blockquote>
-<h2 id="shodan">SHODAN</h2>
-<p>　　简介：<a
-target="_blank" rel="noopener" href="https://www.shodan.io/">SHODAN</a>是世界上第一个可以用于搜索物联网设备等的搜索引擎，它的返回信息十分丰富，包括IP地址Banner信息、实际的物理地址(有地图参考)、开放的端口、甚至标明了可能存在CVE等等。
-　　我们只需要使用指定的过滤器进行查询即可，下面列出了常用的几个过滤器：
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">基础：</span><br><span class="line">	·net (如192.168.0.100)</span><br><span class="line">	·city</span><br><span class="line">	·country(CN、US)</span><br><span class="line">	·port(80、21、22、23)</span><br><span class="line">	·os</span><br><span class="line">	·Hostname(主机或域名)</span><br><span class="line">	·server</span><br><span class="line">	</span><br><span class="line">实用：</span><br><span class="line">    ·200 OK cisco country:JP    //搜索日本的思科设备</span><br><span class="line">    ·user:admin pass:password   //搜索登录页面</span><br><span class="line">    ·linux upnp avtech        //搜索后台登录网页</span><br></pre></td></tr></table></figure> 　　示例：
-　　<strong>查找指定IP、可以搜索一个网段：</strong> 　　<img
-src="/img/kali-渗透测试-信息收集3/1.png" /> 　　
-　　<strong>指定国家来搜索：</strong> 　　<img
-src="/img/kali-渗透测试-信息收集3/2.png" /> 　　
-　　<strong>指定国家和城市，点击就可以查看到详细的信息</strong> 　　<img
-src="/img/kali-渗透测试-信息收集3/3.png" /> 　　<img
-src="/img/kali-渗透测试-信息收集3/4.png" /> 　　
-　　<strong>搜索一些后台登录网站</strong> 　　<img
-src="/img/kali-渗透测试-信息收集3/5.png" /> 　　
-　　<strong>再比如搜索中国北京的开放端口81的，返回200信息的查询</strong>
-　　<img src="/img/kali-渗透测试-信息收集3/6.png" /> 　　 　　 　　
-　　小结：SHODAN可以说是一个很可怕的引擎，从上面这些就可以看到大量的全球范围内的设备信息，通过指定查询一些城市国家名、系统的版本信息、域名、开放端口等等信息，如果牵扯到没有设防的，就是很不安全的行为。
-　　 ## Google Hacking
-　　如何高效使用搜索引擎来进行信息收集，这个就是一门大学问了。Google
+<h1 id="shodan">SHODAN</h1>
+<p>简介：<a
+target="_blank" rel="noopener" href="https://www.shodan.io/">SHODAN</a>是世界上第一个可以用于搜索物联网设备等的搜索引擎，它的返回信息十分丰富，包括IP地址Banner信息、实际的物理地址(有地图参考)、开放的端口、甚至标明了可能存在CVE等等。</p>
+<p>我们只需要使用指定的过滤器进行查询即可，下面列出了常用的几个过滤器：</p>
+<ul>
+<li>基础：
+<ul>
+<li>net (如192.168.0.100)</li>
+<li>city</li>
+<li>country(CN、US)</li>
+<li>port(80、21、22、23)</li>
+<li>os</li>
+<li>Hostname(主机或域名)</li>
+<li>server</li>
+</ul></li>
+<li>实用：
+<ul>
+<li>200 OK cisco country:JP //搜索日本的思科设备</li>
+<li>user:admin pass:password //搜索登录页面</li>
+<li>linux upnp avtech //搜索后台登录网页</li>
+</ul></li>
+</ul>
+<p>示例，<strong>查找指定IP、可以搜索一个网段：</strong></p>
+<p><img src="/img/kali-渗透测试-信息收集3/1.png" /></p>
+<p><strong>指定国家来搜索：</strong></p>
+<p><img src="/img/kali-渗透测试-信息收集3/2.png" /></p>
+<p><strong>指定国家和城市，点击就可以查看到详细的信息</strong></p>
+<p><img src="/img/kali-渗透测试-信息收集3/3.png" /> <img
+src="/img/kali-渗透测试-信息收集3/4.png" />
+<strong>搜索一些后台登录网站</strong> <img
+src="/img/kali-渗透测试-信息收集3/5.png" />　　
+<strong>再比如搜索中国北京的开放端口81的，返回200信息的查询</strong>
+<img src="/img/kali-渗透测试-信息收集3/6.png" /> 　　　　
+小结：SHODAN可以说是一个很可怕的引擎，从上面这些就可以看到大量的全球范围内的设备信息，通过指定查询一些城市国家名、系统的版本信息、域名、开放端口等等信息，如果牵扯到没有设防的，就是很不安全的行为。　　
+# Google Hacking</p>
+<p>如何高效使用搜索引擎来进行信息收集，这个就是一门大学问了。Google
 Hacking也是一个非常有效的手段，当然Bing也可以，百度也不是不行。
-　　原理很简单，Google的机器人每天都会爬取大量的网页信息，通过搜素这些信息，就有可能能获取到一些很有用的(比如社工方面)信息。下面几个例子。
-　　 ### intitle、intext
-　　通过指定intitle或者intext参数(对应HTML中的title标签)，可以搜索相应的信息，前者为标题，后者为网页内的信息：
-　　格式：intitle:xxx或intext:xxxx 　　
-　　比如搜索在北京做电子商务的法人的电话信息：
-　　<code>北京 intitle:电子商务 intext:法人 intext:电话</code> 　　 ###
-指定网站或URL中存在指定的信息 　　使用site参数：
-　　如搜索阿里巴巴的联系方式
-　　<code>site:alibaba.com inurl:contact</code> 　　
-　　也可以进行指定国家的查询：
-　　<code>xxxx site:cn</code>(中国的xxxx信息) ### 一些实例</p>
-<h5 id="思科交换机">思科交换机</h5>
-<p>　　cisco的交换机中存在着一个用户的管理界面，目录为'/level/15/exec/~show'，可以搜索这个信息：
-　　<img src="/img/kali-渗透测试-信息收集3/7.png" /> 　　
-　　进去看一眼(滑稽) 　　 　　<img
-src="/img/kali-渗透测试-信息收集3/8.png" /> 　　
-　　没太了解cisco的设备，不过这里是可以执行指令的，自己输入或者点击下面的指令都可以。
-　　 ##### 施耐德NetBotz机房用监视器
-　　这是一个用于机房监控的网络摄像头，通过这个可以看到实时的机房图像。　　使用搜索<code>intitle:"netbotz appliance" "ok"</code>
-　　 　　<img src="/img/kali-渗透测试-信息收集3/9.png" /> 　　
-　　可以看到最上面的那个就是了。 　　 　　进去看一下(滑稽) 　　 　　<img
-src="/img/kali-渗透测试-信息收集3/10.png" /> 　　
-　　可以看到很多的如温度、湿度等的信息(这是。。卧室???) 　　 #####
-寻找后台的登陆网站 　　找这个的目的就不用说了
-　　使用语句<code>inurl:/admin/login.php</code>
-　　当然自己也可以加一些其他的比如国家之类的参数。 　　 #####
-QQ账号和密码
-　　在一些搞黑产的遗留现场可能会有一些账号和密码的信息，使用语句<code>inurl:qq.txt</code>
-　　 　　如图： 　　<img src="/img/kali-渗透测试-信息收集3/11.png" />
-　　 ##### 搜索一些如ftp之类的登陆页面
-　　可以查：<code>inurl:ftp "password"  site:xxxx</code> 　　 #####
-frontpage漏洞
-　　这里会暴露这个网站的后台登录密码：<code>inurl:Service.pwd</code>
-　　 　　<img src="/img/kali-渗透测试-信息收集3/12.png" /> 　　
-　　还是很多的 　　 　　<img
-src="/img/kali-渗透测试-信息收集3/13.png" /> 　　
-　　甚至能找到它的根目录。。。<strong>注意管好自己别乱看！！</strong>
-　　 　　<img src="/img/kali-渗透测试-信息收集3/14.png" /> 　　 ####
-资源 　　上<a
-target="_blank" rel="noopener" href="http://exploit-db.com/google-dorks">exploit-db</a>即可。 　　 ##
-其他搜索方式 ###其他搜索引擎 　　比如世界第四大搜索引擎<a
-target="_blank" rel="noopener" href="https://www.yandex.com/">YANDEX</a> ### kali工具 #### theharvest
-　　说明文档： <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">sage: theharvester options </span><br><span class="line"></span><br><span class="line">       -d: Domain to search or company name</span><br><span class="line">       -b: data source: baidu, bing, bingapi, censys, crtsh, dogpile,</span><br><span class="line">                        google, google-certificates, googleCSE, googleplus, google-profiles,</span><br><span class="line">                        hunter, linkedin, netcraft, pgp, threatcrowd,</span><br><span class="line">                        twitter, vhost, virustotal, yahoo, all</span><br><span class="line">       -g: use Google dorking instead of normal Google search</span><br><span class="line">       -s: start in result number X (default: 0)</span><br><span class="line">       -v: verify host name via DNS resolution and search for virtual hosts</span><br><span class="line">       -f: save the results into an HTML and XML file (both)</span><br><span class="line">       -n: perform a DNS reverse query on all ranges discovered</span><br><span class="line">       -c: perform a DNS brute force for the domain name</span><br><span class="line">       -t: perform a DNS TLD expansion discovery</span><br><span class="line">       -e: use this DNS server</span><br><span class="line">       -p: port scan the detected hosts and check for Takeovers (80,443,22,21,8080)</span><br><span class="line">       -l: limit the number of results to work with(Bing goes from 50 to 50 results,</span><br><span class="line">            Google 100 to 100, and PGP doesn&#x27;t use this option)</span><br><span class="line">       -h: use SHODAN database to query discovered hosts</span><br><span class="line"></span><br><span class="line">Examples:</span><br><span class="line">        theharvester -d microsoft.com -l 500 -b google -f myresults.html</span><br><span class="line">        theharvester -d microsoft.com -b pgp, virustotal</span><br><span class="line">        theharvester -d microsoft -l 200 -b linkedin</span><br><span class="line">        theharvester -d microsoft.com -l 200 -g -b google</span><br><span class="line">        theharvester -d apple.com -b googleCSE -l 500 -s 300</span><br><span class="line">        theharvester -d cornell.edu -l 100 -b bing -h </span><br></pre></td></tr></table></figure>
-　　这是一个可以多个搜索引擎来进行综合搜索的工具(注意使用google等引擎需要翻，可以使用tor网络＋proxychains代理实现转发)，如果搜索量过大可能会被搜索引擎屏蔽。
-　　如：使用google引擎来搜索microsoft.com这个域的信息： <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~# theharvester -d microsoft.com -b bing -l 500</span><br><span class="line"></span><br><span class="line">Warning: Pycurl is not compiled against Openssl. Wfuzz might not work correctly when fuzzing SSL sites. Check Wfuzz&#x27;s documentation for more information.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">*******************************************************************</span><br><span class="line">*                                                                 *</span><br><span class="line">* | |_| |__   ___    /\  /\__ _ _ ____   _____  ___| |_ ___ _ __  *</span><br><span class="line">* | __| &#x27;_ \ / _ \  / /_/ / _` | &#x27;__\ \ / / _ \/ __| __/ _ \ &#x27;__| *</span><br><span class="line">* | |_| | | |  __/ / __  / (_| | |   \ V /  __/\__ \ ||  __/ |    *</span><br><span class="line">*  \__|_| |_|\___| \/ /_/ \__,_|_|    \_/ \___||___/\__\___|_|    *</span><br><span class="line">*                                                                 *</span><br><span class="line">* theHarvester Ver. 3.0.6                                         *</span><br><span class="line">* Coded by Christian Martorella                                   *</span><br><span class="line">* Edge-Security Research                                          *</span><br><span class="line">* cmartorella@edge-security.com                                   *</span><br><span class="line">*******************************************************************</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">found supported engines</span><br><span class="line">[-] Starting harvesting process for domain: microsoft.com</span><br><span class="line"></span><br><span class="line">[-] Searching in Bing:</span><br><span class="line">	Searching 50 results...</span><br><span class="line">	Searching 100 results...</span><br><span class="line">	Searching 150 results...</span><br><span class="line">	Searching 200 results...</span><br><span class="line">	Searching 250 results...</span><br><span class="line">	Searching 300 results...</span><br><span class="line">	Searching 350 results...</span><br><span class="line">	Searching 400 results...</span><br><span class="line">	Searching 450 results...</span><br><span class="line">	Searching 500 results...</span><br><span class="line"></span><br><span class="line">Harvesting results</span><br><span class="line">No IP addresses found</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[+] Emails found:</span><br><span class="line">------------------</span><br><span class="line">tomas@contosso.onmicrosoft.com</span><br><span class="line"> </span><br><span class="line">[+] Hosts found in search engines:</span><br><span class="line">------------------------------------</span><br><span class="line"></span><br><span class="line">Total hosts: 93</span><br><span class="line"></span><br><span class="line">[-] Resolving hostnames IPs... </span><br><span class="line"> </span><br><span class="line">about.ads.microsoft.com:40.112.143.134</span><br><span class="line">academy.microsoft.com:13.92.127.190</span><br><span class="line">account.microsoft.com:23.2.37.211</span><br><span class="line">admin-mva.microsoft.com:157.56.30.150</span><br><span class="line">admin.manage.microsoft.com:13.75.125.10</span><br><span class="line">advertise.bingads.microsoft.com:40.112.143.134</span><br><span class="line">aischool.microsoft.com:40.74.240.201</span><br><span class="line">answers.microsoft.com:23.2.2.76</span><br><span class="line">appsource.microsoft.com:104.215.148.113</span><br><span class="line">azure.microsoft.com:13.107.42.16</span><br><span class="line">bingads.microsoft.com:23.100.75.192</span><br><span class="line">blogs.microsoft.com:192.237.225.141</span><br><span class="line">blogs.msdn.microsoft.com:23.201.180.95</span><br><span class="line">blogs.technet.microsoft.com:184.26.242.47</span><br><span class="line">business.microsoft.com:23.99.110.192</span><br><span class="line">businessaccount.microsoft.com:23.220.189.174</span><br><span class="line">businesscenter.mbs.microsoft.com:137.135.13.53</span><br><span class="line">careers.microsoft.com:52.224.109.124</span><br><span class="line">catalog.update.microsoft.com:65.55.138.184</span><br><span class="line">channelincentives.microsoft.com:157.58.215.120</span><br><span class="line">cloudblogs.microsoft.com:45.64.65.97</span><br><span class="line">clt.partners.extranet.microsoft.com:65.54.13.64</span><br><span class="line">cmt.research.microsoft.com:40.112.211.35</span><br><span class="line">code.msdn.microsoft.com:23.2.141.39</span><br><span class="line"></span><br><span class="line">.......</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-　　结果显示了相关的邮件、域名信息以及其对应的IP地址。可以结合多个工具进行综合搜索。
-　　 #### metagoofil 　　首先这个工具是没有集成在kali中的，需要apt下载。
-　　说明文档： <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Usage: metagoofil options</span><br><span class="line"></span><br><span class="line">         -d: domain to search</span><br><span class="line">         -t: filetype to download (pdf,doc,xls,ppt,odp,ods,docx,xlsx,pptx)    //可以下文件</span><br><span class="line">         -l: limit of results to search (default 200)</span><br><span class="line">         -h: work with documents in directory (use &quot;yes&quot; for local analysis)</span><br><span class="line">         -n: limit of files to download</span><br><span class="line">         -o: working directory (location to save downloaded files)</span><br><span class="line">         -f: output file</span><br><span class="line"></span><br><span class="line"> Examples:</span><br><span class="line">  metagoofil.py -d apple.com -t doc,pdf -l 200 -n 50 -o applefiles -f results.html</span><br><span class="line">  metagoofil.py -h yes -o applefiles -f results.html (local dir analysis)</span><br></pre></td></tr></table></figure>
-　　这个比刚才的有一个优点就是他可以搜索到与你要的相关的文件，并下载下来，对于社工是个很有用的手段。
-　　 　　比如我搜索并下载关于adobe.com的信息，存到test的目录下：
-　　metagoofil -d adobe.com -l 800 -t pdf -o test -f 1.html
-　　但是实测没有什么结果，然而直接google搜还是有不少的hhh 　　</p>
+原理很简单，Google的机器人每天都会爬取大量的网页信息，通过搜素这些信息，就有可能能获取到一些很有用的(比如社工方面)信息。下面几个例子。　　</p>
+<h2 id="指定标题或包含信息">指定标题或包含信息</h2>
+<p>通过指定<code>intitle</code>或者<code>intext</code>参数(对应HTML中的title标签)，可以搜索相应的信息，前者为标题，后者为网页内的信息：</p>
+<blockquote>
+<p>格式：intitle:xxx或intext:xxxx　</p>
+</blockquote>
+<p>比如搜索在北京做电子商务的法人的电话信息：<code>北京 intitle:电子商务 intext:法人 intext:电话</code></p>
+<h2
+id="指定网站或url中存在指定的信息">指定网站或URL中存在指定的信息</h2>
+<ul>
+<li>使用site参数：</li>
+</ul>
+<p>如搜索阿里巴巴的联系方式：<code>site:alibaba.com inurl:contact</code></p>
+<ul>
+<li>也可以进行指定国家的查询：</li>
+</ul>
+<p><code>xxxx site:cn</code>(中国的xxxx信息)</p>
+<h2 id="一些实例">一些实例</h2>
+<h3 id="思科交换机">思科交换机</h3>
+<p>cisco的交换机中存在着一个用户的管理界面，目录为'/level/15/exec/~show'，可以搜索这个信息：</p>
+<p><img src="/img/kali-渗透测试-信息收集3/7.png" style="zoom:67%;" /></p>
+<p>进去看一眼(滑稽) <img
+src="/img/kali-渗透测试-信息收集3/8.png" />没太了解cisco的设备，不过这里是可以执行指令的，自己输入或者点击下面的指令都可以。　</p>
+<h3 id="施耐德netbotz机房用监视器">施耐德NetBotz机房用监视器</h3>
+<p>这是一个用于机房监控的网络摄像头，通过这个可以看到实时的机房图像。　　使用搜索<code>intitle:"netbotz appliance" "ok"</code></p>
+<p><img src="/img/kali-渗透测试-信息收集3/9.png" />
+可以看到最上面的那个就是了。进去看一下(滑稽)： <img
+src="/img/kali-渗透测试-信息收集3/10.png" />
+可以看到很多的如温度、湿度等的信息(这是。。卧室???)　　</p>
+<h3 id="寻找后台的登陆网站">寻找后台的登陆网站</h3>
+<p>找这个的目的就不用说了。使用语句<code>inurl:/admin/login.php</code>，当然自己也可以加一些其他的比如国家之类的参数。</p>
+<h3 id="qq账号和密码">QQ账号和密码</h3>
+<p>在一些搞黑产的遗留现场可能会有一些账号和密码的信息，使用语句<code>inurl:qq.txt</code>。如图：</p>
+<p><img src="/img/kali-渗透测试-信息收集3/11.png" style="zoom:80%;" /></p>
+<h3 id="ftp之类的登陆页面">ftp之类的登陆页面</h3>
+<p>可以查：<code>inurl:ftp "password"  site:xxxx</code>　　</p>
+<h3 id="frontpage漏洞">frontpage漏洞</h3>
+<p>这里会暴露这个网站的后台登录密码：<code>inurl:Service.pwd</code></p>
+<p><img src="/img/kali-渗透测试-信息收集3/12.png" /></p>
+<p>还是很多的：</p>
+<p><img src="/img/kali-渗透测试-信息收集3/13.png" /></p>
+<p>甚至能找到它的根目录。。。<strong>注意管好自己别乱看！！</strong></p>
+<p><img src="/img/kali-渗透测试-信息收集3/14.png" style="zoom:67%;" /></p>
+<h1 id="漏洞资源">漏洞资源</h1>
+<p>上<a
+target="_blank" rel="noopener" href="http://exploit-db.com/google-dorks">exploit-db</a>即可。　　</p>
+<h1 id="其他搜索方式">其他搜索方式</h1>
+<h2 id="其他搜索引擎">其他搜索引擎</h2>
+<p>比如世界第四大搜索引擎<a
+target="_blank" rel="noopener" href="https://www.yandex.com/">YANDEX</a></p>
+<h1 id="kali工具">kali工具</h1>
+<h2 id="theharvest">theharvest</h2>
+<p>说明文档：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">sage: theharvester options </span><br><span class="line"></span><br><span class="line">       -d: Domain to search or company name</span><br><span class="line">       -b: data <span class="built_in">source</span>: baidu, bing, bingapi, censys, crtsh, dogpile,</span><br><span class="line">                        google, google-certificates, googleCSE, googleplus, google-profiles,</span><br><span class="line">                        hunter, linkedin, netcraft, pgp, threatcrowd,</span><br><span class="line">                        twitter, vhost, virustotal, yahoo, all</span><br><span class="line">       -g: use Google dorking instead of normal Google search</span><br><span class="line">       -s: start <span class="keyword">in</span> result number X (default: 0)</span><br><span class="line">       -v: verify host name via DNS resolution and search <span class="keyword">for</span> virtual hosts</span><br><span class="line">       -f: save the results into an HTML and XML file (both)</span><br><span class="line">       -n: perform a DNS reverse query on all ranges discovered</span><br><span class="line">       -c: perform a DNS brute force <span class="keyword">for</span> the domain name</span><br><span class="line">       -t: perform a DNS TLD expansion discovery</span><br><span class="line">       -e: use this DNS server</span><br><span class="line">       -p: port scan the detected hosts and check <span class="keyword">for</span> Takeovers (80,443,22,21,8080)</span><br><span class="line">       -l: <span class="built_in">limit</span> the number of results to work with(Bing goes from 50 to 50 results,</span><br><span class="line">            Google 100 to 100, and PGP doesn<span class="string">&#x27;t use this option)</span></span><br><span class="line"><span class="string">       -h: use SHODAN database to query discovered hosts</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Examples:</span></span><br><span class="line"><span class="string">        theharvester -d microsoft.com -l 500 -b google -f myresults.html</span></span><br><span class="line"><span class="string">        theharvester -d microsoft.com -b pgp, virustotal</span></span><br><span class="line"><span class="string">        theharvester -d microsoft -l 200 -b linkedin</span></span><br><span class="line"><span class="string">        theharvester -d microsoft.com -l 200 -g -b google</span></span><br><span class="line"><span class="string">        theharvester -d apple.com -b googleCSE -l 500 -s 300</span></span><br><span class="line"><span class="string">        theharvester -d cornell.edu -l 100 -b bing -h </span></span><br></pre></td></tr></table></figure>
+<p>这是一个可以多个搜索引擎来进行综合搜索的工具(注意使用google等引擎需要翻，可以使用tor网络＋proxychains代理实现转发)，如果搜索量过大可能会被搜索引擎屏蔽。</p>
+<p>如：使用google引擎来搜索microsoft.com这个域的信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~<span class="comment"># theharvester -d microsoft.com -b bing -l 500</span></span><br><span class="line"></span><br><span class="line">Warning: Pycurl is not compiled against Openssl. Wfuzz might not work correctly when fuzzing SSL sites. Check Wfuzz<span class="string">&#x27;s documentation for more information.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">*******************************************************************</span></span><br><span class="line"><span class="string">*                                                                 *</span></span><br><span class="line"><span class="string">* | |_| |__   ___    /\  /\__ _ _ ____   _____  ___| |_ ___ _ __  *</span></span><br><span class="line"><span class="string">* | __| &#x27;</span>_ \ / _ \  / /_/ / _` | <span class="string">&#x27;__\ \ / / _ \/ __| __/ _ \ &#x27;</span>__| *</span><br><span class="line">* | |_| | | |  __/ / __  / (_| | |   \ V /  __/\__ \ ||  __/ |    *</span><br><span class="line">*  \__|_| |_|\___| \/ /_/ \__,_|_|    \_/ \___||___/\__\___|_|    *</span><br><span class="line">*                                                                 *</span><br><span class="line">* theHarvester Ver. 3.0.6                                         *</span><br><span class="line">* Coded by Christian Martorella                                   *</span><br><span class="line">* Edge-Security Research                                          *</span><br><span class="line">* cmartorella@edge-security.com                                   *</span><br><span class="line">*******************************************************************</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">found supported engines</span><br><span class="line">[-] Starting harvesting process <span class="keyword">for</span> domain: microsoft.com</span><br><span class="line"></span><br><span class="line">[-] Searching <span class="keyword">in</span> Bing:</span><br><span class="line">	Searching 50 results...</span><br><span class="line">	Searching 100 results...</span><br><span class="line">	Searching 150 results...</span><br><span class="line">	Searching 200 results...</span><br><span class="line">	Searching 250 results...</span><br><span class="line">	Searching 300 results...</span><br><span class="line">	Searching 350 results...</span><br><span class="line">	Searching 400 results...</span><br><span class="line">	Searching 450 results...</span><br><span class="line">	Searching 500 results...</span><br><span class="line"></span><br><span class="line">Harvesting results</span><br><span class="line">No IP addresses found</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[+] Emails found:</span><br><span class="line">------------------</span><br><span class="line">tomas@contosso.onmicrosoft.com</span><br><span class="line"> </span><br><span class="line">[+] Hosts found <span class="keyword">in</span> search engines:</span><br><span class="line">------------------------------------</span><br><span class="line"></span><br><span class="line">Total hosts: 93</span><br><span class="line"></span><br><span class="line">[-] Resolving hostnames IPs... </span><br><span class="line"> </span><br><span class="line">about.ads.microsoft.com:40.112.143.134</span><br><span class="line">academy.microsoft.com:13.92.127.190</span><br><span class="line">account.microsoft.com:23.2.37.211</span><br><span class="line">admin-mva.microsoft.com:157.56.30.150</span><br><span class="line">admin.manage.microsoft.com:13.75.125.10</span><br><span class="line">advertise.bingads.microsoft.com:40.112.143.134</span><br><span class="line">aischool.microsoft.com:40.74.240.201</span><br><span class="line">answers.microsoft.com:23.2.2.76</span><br><span class="line">appsource.microsoft.com:104.215.148.113</span><br><span class="line">azure.microsoft.com:13.107.42.16</span><br><span class="line">bingads.microsoft.com:23.100.75.192</span><br><span class="line">blogs.microsoft.com:192.237.225.141</span><br><span class="line">blogs.msdn.microsoft.com:23.201.180.95</span><br><span class="line">blogs.technet.microsoft.com:184.26.242.47</span><br><span class="line">business.microsoft.com:23.99.110.192</span><br><span class="line">businessaccount.microsoft.com:23.220.189.174</span><br><span class="line">businesscenter.mbs.microsoft.com:137.135.13.53</span><br><span class="line">careers.microsoft.com:52.224.109.124</span><br><span class="line">catalog.update.microsoft.com:65.55.138.184</span><br><span class="line">channelincentives.microsoft.com:157.58.215.120</span><br><span class="line">cloudblogs.microsoft.com:45.64.65.97</span><br><span class="line">clt.partners.extranet.microsoft.com:65.54.13.64</span><br><span class="line">cmt.research.microsoft.com:40.112.211.35</span><br><span class="line">code.msdn.microsoft.com:23.2.141.39</span><br><span class="line"></span><br><span class="line">.......</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>结果显示了相关的邮件、域名信息以及其对应的IP地址。可以结合多个工具进行综合搜索。　　
+## metagoofil</p>
+<p>首先这个工具是没有集成在kali中的，需要apt下载。说明文档：
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Usage: metagoofil options</span><br><span class="line"></span><br><span class="line">         -d: domain to search</span><br><span class="line">         -t: filetype to download (pdf,doc,xls,ppt,odp,ods,docx,xlsx,pptx)    //可以下文件</span><br><span class="line">         -l: <span class="built_in">limit</span> of results to search (default 200)</span><br><span class="line">         -h: work with documents <span class="keyword">in</span> directory (use <span class="string">&quot;yes&quot;</span> <span class="keyword">for</span> <span class="built_in">local</span> analysis)</span><br><span class="line">         -n: <span class="built_in">limit</span> of files to download</span><br><span class="line">         -o: working directory (location to save downloaded files)</span><br><span class="line">         -f: output file</span><br><span class="line"></span><br><span class="line"> Examples:</span><br><span class="line">  metagoofil.py -d apple.com -t doc,pdf -l 200 -n 50 -o applefiles -f results.html</span><br><span class="line">  metagoofil.py -h <span class="built_in">yes</span> -o applefiles -f results.html (<span class="built_in">local</span> <span class="built_in">dir</span> analysis)</span><br></pre></td></tr></table></figure>
+这个比刚才的有一个优点就是他可以搜索到与你要的相关的文件，并下载下来，对于社工是个很有用的手段。</p>
+<p>比如我搜索并下载关于adobe.com的信息，存到test的目录下：<code>metagoofil -d adobe.com -l 800 -t pdf -o test -f 1.html</code>。</p>
+<p>但是实测没有什么结果，然而直接google搜还是有不少的hhh　　</p>
 <p><img src="/img/请我喝杯咖啡吧.jpg" style="zoom:33%;" /></p>
 
     </article>
@@ -625,7 +655,7 @@ target="_blank" rel="noopener" href="https://www.yandex.com/">YANDEX</a> ### kal
             <p>原文作者：<a href="https://lzwgiter.github.io">lzwgiter</a>
             <p>原文链接：<a href="https://lzwgiter.github.io/posts/6f24bb1d.html">https://lzwgiter.github.io/posts/6f24bb1d.html</a>
             <p>发表日期：<a href="https://lzwgiter.github.io/posts/6f24bb1d.html">May 11th 2019, 2:34:32 pm</a>
-            <p>更新日期：<a href="https://lzwgiter.github.io/posts/6f24bb1d.html">August 25th 2021, 7:24:22 pm</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/6f24bb1d.html">July 6th 2023, 8:48:02 pm</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -810,7 +840,7 @@ target="_blank" rel="noopener" href="https://www.yandex.com/">YANDEX</a> ### kal
                 <div class="toc-catalog">
                     <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
                 </div>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#shodan"><span class="toc-number">1.</span> <span class="toc-text">SHODAN</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E7%A7%91%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="toc-number">1.0.0.1.</span> <span class="toc-text">思科交换机</span></a></li></ol></li></ol></li></ol></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#shodan"><span class="toc-number">1.</span> <span class="toc-text">SHODAN</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%AE%9A%E6%A0%87%E9%A2%98%E6%88%96%E5%8C%85%E5%90%AB%E4%BF%A1%E6%81%AF"><span class="toc-number">1.1.</span> <span class="toc-text">指定标题或包含信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%AE%9A%E7%BD%91%E7%AB%99%E6%88%96url%E4%B8%AD%E5%AD%98%E5%9C%A8%E6%8C%87%E5%AE%9A%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="toc-number">1.2.</span> <span class="toc-text">指定网站或URL中存在指定的信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E5%AE%9E%E4%BE%8B"><span class="toc-number">1.3.</span> <span class="toc-text">一些实例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E7%A7%91%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="toc-number">1.3.1.</span> <span class="toc-text">思科交换机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%BD%E8%80%90%E5%BE%B7netbotz%E6%9C%BA%E6%88%BF%E7%94%A8%E7%9B%91%E8%A7%86%E5%99%A8"><span class="toc-number">1.3.2.</span> <span class="toc-text">施耐德NetBotz机房用监视器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BB%E6%89%BE%E5%90%8E%E5%8F%B0%E7%9A%84%E7%99%BB%E9%99%86%E7%BD%91%E7%AB%99"><span class="toc-number">1.3.3.</span> <span class="toc-text">寻找后台的登陆网站</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#qq%E8%B4%A6%E5%8F%B7%E5%92%8C%E5%AF%86%E7%A0%81"><span class="toc-number">1.3.4.</span> <span class="toc-text">QQ账号和密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ftp%E4%B9%8B%E7%B1%BB%E7%9A%84%E7%99%BB%E9%99%86%E9%A1%B5%E9%9D%A2"><span class="toc-number">1.3.5.</span> <span class="toc-text">ftp之类的登陆页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#frontpage%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.3.6.</span> <span class="toc-text">frontpage漏洞</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E8%B5%84%E6%BA%90"><span class="toc-number">2.</span> <span class="toc-text">漏洞资源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%90%9C%E7%B4%A2%E6%96%B9%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">其他搜索方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E"><span class="toc-number">3.1.</span> <span class="toc-text">其他搜索引擎</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#kali%E5%B7%A5%E5%85%B7"><span class="toc-number">4.</span> <span class="toc-text">kali工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#theharvest"><span class="toc-number">4.1.</span> <span class="toc-text">theharvest</span></a></li></ol></li></ol>
             </div>
         
         <!-- sidebar -->
