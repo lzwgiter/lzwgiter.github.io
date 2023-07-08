@@ -19,20 +19,32 @@
         <meta name="keywords" content="lzwgiter,float311,float's blog">
     
     <meta name="description" content="blogs from f10@t">
-    <meta name="description" content="blogs from f10@t">
-<meta property="og:type" content="website">
-<meta property="og:title" content="f10@t&#39;s blog">
-<meta property="og:url" content="https://lzwgiter.github.io/archives/2021/01/index.html">
+    <meta name="description" content="Java Instrument机制于JDK 1.5版本引入，是一种Java中的字节码增强技术（Bytecode Instrumentation）。可以理解为一种JVM级别的AOP实现方式，可以实现向JVM中一个运行时程序加载一个jar包、并由该jar包对运行时程序进行字节码修改的效果。最初目的为实现JVM监控和类的动态修改。作为插桩技术，其在安全领域的应用包括不限于RASP、IAST等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Instrument机制及管窥IAST">
+<meta property="og:url" content="https://lzwgiter.github.io/posts/e2947908.html">
 <meta property="og:site_name" content="f10@t&#39;s blog">
-<meta property="og:description" content="blogs from f10@t">
+<meta property="og:description" content="Java Instrument机制于JDK 1.5版本引入，是一种Java中的字节码增强技术（Bytecode Instrumentation）。可以理解为一种JVM级别的AOP实现方式，可以实现向JVM中一个运行时程序加载一个jar包、并由该jar包对运行时程序进行字节码修改的效果。最初目的为实现JVM监控和类的动态修改。作为插桩技术，其在安全领域的应用包括不限于RASP、IAST等">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java-Instrument%E6%9C%BA%E5%88%B6%E5%8F%8A%E7%AE%A1%E7%AA%A5IAST/10934497-picture3.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java-Instrument%E6%9C%BA%E5%88%B6%E5%8F%8A%E7%AE%A1%E7%AA%A5IAST/image-20230708113322653-1688787210596-3.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java-Instrument%E6%9C%BA%E5%88%B6%E5%8F%8A%E7%AE%A1%E7%AA%A5IAST/image-20230708143930898-1688798375233-9.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java-Instrument%E6%9C%BA%E5%88%B6%E5%8F%8A%E7%AE%A1%E7%AA%A5IAST/image-20230708145005415-1688799008906-11.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java-Instrument%E6%9C%BA%E5%88%B6%E5%8F%8A%E7%AE%A1%E7%AA%A5IAST/image-20230708200319342.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java-Instrument%E6%9C%BA%E5%88%B6%E5%8F%8A%E7%AE%A1%E7%AA%A5IAST/image-20230708195437636-1688817280339-10.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java-Instrument%E6%9C%BA%E5%88%B6%E5%8F%8A%E7%AE%A1%E7%AA%A5IAST/image-20230708200148537-1688817709859-13.png">
+<meta property="article:published_time" content="2023-07-08T02:20:36.000Z">
+<meta property="article:modified_time" content="2023-07-08T13:01:02.777Z">
 <meta property="article:author" content="lzwgiter">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="DevSecOps">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lzwgiter.github.io/img/Java-Instrument%E6%9C%BA%E5%88%B6%E5%8F%8A%E7%AE%A1%E7%AA%A5IAST/10934497-picture3.png">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="icon" href="/assets/hello.svg">
     
-    <title>float&#39;s blog</title>
+    <title>Java Instrument机制及管窥IAST · float&#39;s blog</title>
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
 - testing support for link[rel=preload]
@@ -241,6 +253,8 @@
         }
     </script>
     
+        <body class="post-body">
+    
         <!-- header -->
         <header class="header header-mobile">
     <!-- top read progress line -->
@@ -270,6 +284,17 @@
     </div>
     <!-- toggle banner for post layout -->
     
+        
+            <div class="banner">
+        
+            <div class="blog-title header-element">
+                <a href="/">float&#39;s blog</a>
+            </div>
+            <div class="post-title header-element">
+                <a href="#" class="post-name">Java Instrument机制及管窥IAST</a>
+            </div>
+        </div>
+    
 </header>
 
         <!-- fixed footer -->
@@ -296,24 +321,94 @@
 
 
 
+    height:50vh;
+
 ">
     
     <!-- 主页  -->
     
+        
+    <!-- 404页  -->
+    
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
+            
+                Java Instrument机制及管窥IAST
+            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+                
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页 meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        
+        
+            
+        
+        
+        <span class="post-category" data-categories="DevSecOps"">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                DevSecOps
+            </span>
+        </span>
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="Java">Java</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="DevSecOps">DevSecOps</a>
+    
+</div>
+
+                
+                <!-- 文章字数统计 -->
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">2.6k</span>阅读时长: <span class="post-count reading-time">10 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2023/07/08</span>
+                    <!-- busuanzi -->
+                    
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
         
     </div>
 </div>
@@ -443,169 +538,263 @@
 
             <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
             <div class="container container-unloaded">
-                <main class="main index-page">
-    
-        
-        
-        
-        
-            
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/posts/27875254.html">
-                
-                <span class="abstract-title-text">Spring持久层技术-Sping Data JPA使用及总结（一）</span>
-            </a>
-            <div class="abstract-content">
-                <blockquote>
-<p>JAP(Java Persistence
-API)即Java持久技术API，用于进行数据库的操作，通过注解的方式极大的简化了对数据库的操作，实习的时候有用到过，这篇记录总结一下JPA的使用。</p>
-<p><img src="/img/Spring持久层技术-Sping Data JPA使用及总结（一）/title.jpg" style="zoom:67%;" /></p>
+                <main class="main post-page">
+    <article class="article-entry">
+        <blockquote>
+<ul>
+<li><p>Java Instrument机制于JDK
+1.5版本引入，是一种Java中的字节码增强技术（<em>Bytecode
+Instrumentation</em>）。可以理解为一种JVM级别的AOP实现方式，可以实现向JVM中一个运行时程序加载一个jar包、并由该jar包对运行时程序进行字节码修改的效果。最初目的为实现JVM监控和类的动态修改。作为插桩技术，其在安全领域的应用包括不限于RASP、IAST等。</p></li>
+<li><p>IAST（<em>Interactive application security
+testing</em>）交互式应用安全检测是一种应用安全测试方法，由Gartner公司与2012年提出。基于instrumentation机制，IAST可以与依赖库进行交互，并从内部对运行时应用进行分析，实现对代码漏洞的发现和诊断。（图片来源<a
+target="_blank" rel="noopener" href="https://dzone.com/refcardz/introduction-to-iast"
+title="Introduction to IAST - DZone Refcardz">[1]</a>）</p></li>
+</ul>
+<p><img src="/img/Java-Instrument机制及管窥IAST/10934497-picture3.png" style="zoom:80%;" /></p>
 </blockquote>
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2022/12/10">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/01/23</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-        
-        
-            
-        
-        
-        <span class="post-category" data-categories="开发技术"">
-            <i class="fas fa-folder post-category-icon"></i>
-            <span class="post-category-text">
-                开发技术
-            </span>
-        </span>
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="Java">Java</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="Spring">Spring</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/posts/bec529bf.html">
-                
-                <span class="abstract-title-text">以太坊智能合约开发环境搭建及智能合约的编写、部署、测试</span>
-            </a>
-            <div class="abstract-content">
-                <blockquote>
-<p>这篇纪录一下智能合约开发环境(Remix-ide、Truffle、EthScan)的搭建以及Solidity语言的简单使用，并使用Truffle来创建、编译、部署、测试一个简单的合约demo，并用区块链浏览器查看区块信息来进一步加深理解。参考书籍：《以太坊智能合约开发实战》、《Solidity编程》</p>
+<span id="more"></span>
+<h1 id="java字节码增强技术">Java字节码增强技术</h1>
+<h2 id="工作原理">工作原理</h2>
+<p>Java中的Instrumentation主要依赖于<code>java.lang.instrument</code>包，实现上有两种类型：</p>
+<ul>
+<li>静态（JDK 1.5）——*Load-Time Instrumentation<a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/platform/jvmti/jvmti.html"
+title="JVM Tool Interface version 1.2">[3]</a></li>
+<li>动态（JDK 1.6）——<em>Dynamic Instrumentation</em><a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/platform/jvmti/jvmti.html"
+title="JVM Tool Interface version 1.2">[3]</a></li>
+</ul>
+<p>区别在于，静态的方法可以通过<code>-javaagent</code>参数将要织入的代码以Jar包的方式传递给运行时程序：</p>
+<p><img src="/img/Java-Instrument机制及管窥IAST/image-20230708113322653-1688787210596-3.png" style="zoom:100%;" /></p>
+<p>但这种方式的缺点在于，该agent
+jar包必须在运行时程序的命令行处加载运行，即JVM开启时载入。现实情况中不一定可以做到通过命令行传入。因而也有了JDK
+1.6引入的动态的方法。</p>
+<p>动态的方法下，运行时程序可以随时attach一个给定的agent
+jar包，具有更灵活的特点。</p>
+<p>为了深入了解该机制的工作原理，那就需要先了解JVM中的JVM TI（<em>JVM
+tool interface</em>）——<strong>Java虚拟机工具接口</strong>。</p>
+<h3 id="jvm-ti">JVM TI</h3>
+<p>JVM TI的前身其实是JVMDI（JVM profiler interface）和JVMPI（JVM debug
+interface），二者分别用于Java程序的调试和调节性功能，后来分别于JDK
+6、JDK 7被弃用<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/fc40ac81730c"
+title="JVMTI基本介绍 - 简书 (jianshu.com)">[2]</a>。</p>
+<p>JVM
+TI是一套由虚拟机提供的<code>native</code>接口，通过这些接口可以实现对运行时Java程序的调试，且可以查看该程序的运行状态、<strong>设置回调函数</strong>、控制环境变量等，实现优化程序性能的目的。如Eclipse的调试器就是调用JVMTI实现的。</p>
+<p>该工具位于Java平台调试架构JPDA（Java platform debugger
+architechture）中的最底层，其中<code>Debugee</code>是<strong>被调试者</strong>，通过<code>JDWP</code>于<strong>调试者</strong><code>JDI</code>进行通信。</p>
+<p><img
+src="/img/Java-Instrument机制及管窥IAST/image-20230708142754896-1688797679309-7.png" /></p>
+<blockquote>
+<ul>
+<li>JVM TI is a two-way interface. A client of JVM TI, hereafter called
+an <em>agent</em>, can be notified of interesting occurrences through
+events. <a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/platform/jvmti/jvmti.html"
+title="JVM Tool Interface version 1.2">[3]</a></li>
+<li>Agents can be informed of many events that occur in application
+programs. <a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/platform/jvmti/jvmti.html"
+title="JVM Tool Interface version 1.2">[3]</a></li>
+</ul>
 </blockquote>
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2021/10/29">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/01/14</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-        
-        
-            
-        
-        
-        <span class="post-category" data-categories="区块链技术"">
-            <i class="fas fa-folder post-category-icon"></i>
-            <span class="post-category-text">
-                区块链技术
-            </span>
-        </span>
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="区块链技术">区块链技术</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="以太坊">以太坊</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="智能合约">智能合约</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/posts/2ff8a9fd.html">
-                
-                <span class="abstract-title-text">以太坊基本概念与实验环境搭建</span>
-            </a>
-            <div class="abstract-content">
-                <blockquote>
-<p>大学毕业设计的题目是<code>区块链中身份溯源技术的仿真与评估</code>，所以这个假期开始另开一个分支学习一下区块链的相关技术，这篇记录一下以太坊的基本概念与实验环境的搭建，很多区块链技术的基础概念以及重要知识可能会单独整理一篇(懒狗昨天没记录哈哈哈哈)。这篇先看看以太坊。</p>
+<p>为了调用JVM
+TI接口，我们需要传入一个客户端程序——<strong>agent</strong>，并注册一些我们感兴趣的JVM事件（<em>event</em>），当JVM发生了这些事件时，JVM
+TI服务端就会通过JDWP通知我们的客户端。</p>
+<p>这里也叫agent，但是和我们本文需要关注的、instrument机制的agent有所区别。我理解是包含关系，即instrument机制传入的agent是要比这里提到的更上层的（即jar包格式）。而这里的agent需要使用C/C++进行开发，在windows中为DLL、Linux下为so，并通过图中的方法进行传递，后者为绝对路径：</p>
+<p><img src="/img/Java-Instrument机制及管窥IAST/image-20230708143930898-1688798375233-9.png" style="zoom: 100%;" /></p>
+<blockquote>
+<p>The JVM TI specification supports the use of multiple simultaneous
+JVM TI agents. Each agent has its own JVM TI environment. That is, the
+JVM TI state is separate for each agent - changes to one environment do
+not affect the others<a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/platform/jvmti/jvmti.html"
+title="JVM Tool Interface version 1.2">[3]</a>.</p>
 </blockquote>
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2022/09/14">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/01/11</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-        
-        
-            
-        
-        
-        <span class="post-category" data-categories="区块链技术"">
-            <i class="fas fa-folder post-category-icon"></i>
-            <span class="post-category-text">
-                区块链技术
-            </span>
-        </span>
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="区块链技术">区块链技术</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="以太坊">以太坊</a>
-    
-</div>
+<p>当然，也支持传入多个agent，每个agent都有自己独立的JVM
+TI操作环境，互相独立不影响。但最终影响都会反应到JVM上，类似线程并发操作变量问题的感觉。</p>
+<p><strong>介绍就到这里</strong>，回到我们关心的instrument机制本身。</p>
+<p>这里我们需要关注的，就是JVM
+TI提供的<strong>设置回调函数</strong>的这个功能，JVM
+TI提供了大量的JVM事件供我们选择：</p>
+<p><img src="/img/Java-Instrument机制及管窥IAST/image-20230708145005415-1688799008906-11.png" style="zoom:70%;" /></p>
+<p>而这里我们需要了解两个事件：<code>JVMTI_EVENT_VM_INIT</code>和<code>JVMTI_EVENT_CLASS_FILE_LOAD_HOOK</code>。</p>
+<ul>
+<li><code>JVMTI_EVENT_VM_INIT</code>标志着JVM初始化的完成，若JVM初始化失败则不会触发该事件。当该事件发生后，agent就可以开始调用任意的JVM
+TI接口了。</li>
+<li><code>JVMTI_EVENT_CLASS_FILE_LOAD_HOOK</code>标志着JVM已经拿到了class文件，但是还没有将它加载到JVM的内存中去。</li>
+</ul>
+<p>看到第二个事件的含义，大概也就理解了Instrument机制的工作机制了，文档中也写的很清晰：</p>
+<blockquote>
+<p>The agent can instrument the existing class file data sent by the VM
+to include profiling/debugging hooks. See the description of <a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/platform/jvmti/jvmti.html#bci">bytecode
+instrumentation</a> for usage information<a
+target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/platform/jvmti/jvmti.html"
+title="JVM Tool Interface version 1.2">[3]</a>.</p>
+</blockquote>
+<p>即agent可以关注该事件，并对JVM要加载的class文件进行修改——即<strong>字节码增强技术</strong>。</p>
+<h3 id="流程">流程</h3>
+<p>了解了Instrument机制的底层原理、JVM
+TI的两个事件后，我们来看一下agent加载的不同阶段，以及整体的一个增强的过程。</p>
+<h4 id="agent生命周期">agent生命周期</h4>
+<p><img
+src="/img/Java-Instrument机制及管窥IAST/image-20230708162918423.png" /></p>
+<p>首先是start-Up阶段，根据agent是在JVM初始化时加载还是运行施加在，会执行不同的函数。</p>
+<p>对于前者，JVM首先会调用<code>Agent_OnLoad()</code>方法；而后者会调用<code>Agent_OnAttach()</code>方法。最终都会调用<code>Agent_OnUnload()</code>方法结束生命周期。</p>
+<h4 id="java-instrument流程">Java Instrument流程</h4>
+<p>这里以最常见的通过<code>-javaagent</code>加载agent的方式为例，也即静态方式加载。找到了其他大佬博客的一张图，非常清晰<a
+target="_blank" rel="noopener" href="http://rui0.cn/archives/1063"
+title="插桩技术在Java安全中的应用简述 - Ruilin (rui0.cn)">[4]</a>：</p>
+<p><img
+src="/img/Java-Instrument机制及管窥IAST/00218c2023a2ba140887543f88a4fd99.png" /></p>
+<ol type="1">
+<li>通过<code>-javaagent</code>参数传入agent，JVM初始化时调用<code>Agent_OnLoad()</code>函数。</li>
+<li>在<code>Agent_OnLoad()</code>函数中，通过JVM
+TI接口，注册<code>VMInit</code>和<code>ClassFileLoadHook</code>事件的<strong>回调函数</strong>。</li>
+<li>JVM启动初始化结束，触发<code>VMInit</code>事件的回调函数，agent<strong>开始执行自己的逻辑</strong>。</li>
+<li>在agent主函数<code>premain</code>中注册自己的字节码修改类<code>ClassFIleTransformer</code>实例。</li>
+<li>运行时程序执行main函数。</li>
+<li>JVM加载*.class文件，触发<code>ClassFileLoadHook</code>事件的回调函数。</li>
+<li>agent执行<code>transform</code>函数，对准备加载的*.class字节码文件进行修改，并返回给JVM。</li>
+</ol>
+<h2 id="一个demo">一个Demo</h2>
+<p>下面写一个Demo，学习一下基本的agent的代码编写方法并通过<code>-javaagent:</code>进行传递，也即<strong>静态的方法</strong>。另外的动态agent方法的编写方法可以参考<a
+target="_blank" rel="noopener" href="https://developer.aliyun.com/article/1093860"
+title="[java instrument机制分析与实践-阿里云开发者社区">[5]</a>。</p>
+<p>首先我们定义一个待被织入的对象类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> target;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lzwgiter</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@email</span> float311@163.com</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2023/7/8</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TargetClass</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">target</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(System.currentTimeMillis());</span><br><span class="line">        System.out.println(<span class="string">&quot;可以我好了&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">foo</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(System.currentTimeMillis());</span><br><span class="line">        System.out.println(<span class="string">&quot;得得得得得！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        foo();</span><br><span class="line">        target();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>该程序正常输出结果如下：</p>
+<p><img src="/img/Java-Instrument机制及管窥IAST/image-20230708200319342.png" style="zoom:75%;" /></p>
+<p>下面编写agent，常见的字节码操作工具除了java原生的，还有<code>ASM</code>、<code>Byte Buddy</code>等。ASM由于市面上采用的最多，这里以ASM为例，实现对上述代码输出的改变。</p>
+<p>我们需要借助<code>java.lang.instrument.ClassFileTransformer</code>类，通过实现该接口以编写agent，并通过<code>transform</code>方法来对加载的类进行增强。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> instrument;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> jdk.internal.org.objectweb.asm.*;</span><br><span class="line"><span class="keyword">import</span> jdk.internal.org.objectweb.asm.commons.AdviceAdapter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.instrument.ClassFileTransformer;</span><br><span class="line"><span class="keyword">import</span> java.lang.instrument.Instrumentation;</span><br><span class="line"><span class="keyword">import</span> java.security.ProtectionDomain;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lzwgiter</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@email</span> float311@163.com</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2023/7/8</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">InstrumentMain</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">MyClassFileTransformer</span> <span class="keyword">implements</span> <span class="title class_">ClassFileTransformer</span> &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="type">byte</span>[] transform(ClassLoader loader, String className, Class&lt;?&gt; classBeingRedefined,</span><br><span class="line">                                ProtectionDomain protectionDomain,</span><br><span class="line">                                <span class="type">byte</span>[] classfileBuffer) &#123;</span><br><span class="line">            <span class="type">ClassReader</span> <span class="variable">classReader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassReader</span>(classfileBuffer);</span><br><span class="line">            <span class="type">ClassWriter</span> <span class="variable">classWriter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassWriter</span>(classReader, ClassWriter.COMPUTE_FRAMES);</span><br><span class="line">            <span class="type">ClassVisitor</span> <span class="variable">classVisitor</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassVisitor</span>(Opcodes.ASM5, classWriter) &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">public</span> MethodVisitor <span class="title function_">visitMethod</span><span class="params">(<span class="type">int</span> access, String name, String descriptor,</span></span><br><span class="line"><span class="params">                                                 String signature, String[] exceptions)</span> &#123;</span><br><span class="line">                    <span class="type">MethodVisitor</span> <span class="variable">methodVisitor</span> <span class="operator">=</span> <span class="built_in">super</span>.visitMethod(access, name, descriptor, signature, exceptions);</span><br><span class="line">                    <span class="keyword">if</span> (<span class="string">&quot;target&quot;</span>.equals(name)) &#123;</span><br><span class="line">                        <span class="comment">// 对目标函数进行增强</span></span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">AdviceAdapter</span>(Opcodes.ASM5, methodVisitor, access, name, descriptor) &#123;</span><br><span class="line">                            <span class="meta">@Override</span></span><br><span class="line">                            <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onMethodEnter</span><span class="params">()</span> &#123;</span><br><span class="line">                                <span class="comment">// 进入方法时</span></span><br><span class="line">                                System.out.println(System.currentTimeMillis());</span><br><span class="line">                                System.out.println(<span class="string">&quot;@ agent @ 嗨嗨嗨！&quot;</span>);</span><br><span class="line">                            &#125;</span><br><span class="line"></span><br><span class="line">                            <span class="meta">@Override</span></span><br><span class="line">                            <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onMethodExit</span><span class="params">(<span class="type">int</span> i)</span> &#123;</span><br><span class="line">                                <span class="comment">// 退出方法时</span></span><br><span class="line">                                System.out.println(System.currentTimeMillis());</span><br><span class="line">                                System.out.println(<span class="string">&quot;@ agent @ 泰裤辣！&quot;</span>);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;;</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="keyword">return</span> methodVisitor;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            classReader.accept(classVisitor, ClassReader.SKIP_FRAMES | ClassReader.SKIP_DEBUG);</span><br><span class="line">            <span class="comment">// 返回增强后的字节数组，即字节码</span></span><br><span class="line">            <span class="keyword">return</span> classWriter.toByteArray();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">premain</span><span class="params">(String agentArgs, Instrumentation instrumentation)</span> &#123;</span><br><span class="line">        <span class="comment">// agent的主函数</span></span><br><span class="line">        System.out.println(<span class="string">&quot;@ agent @ premain方法已执行&quot;</span>);</span><br><span class="line">        instrumentation.addTransformer(<span class="keyword">new</span> <span class="title class_">MyClassFileTransformer</span>(), <span class="literal">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后在resources下写<code>MANIFEST.MF</code>，并将上述代码导出为jar包：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Manifest-Version:</span> <span class="number">1.0</span></span><br><span class="line"><span class="attr">Premain-Class:</span> <span class="string">instrument.InstrumentMain</span></span><br><span class="line"><span class="attr">Can-Redefine-Classes:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">Can-Retransform-Classes:</span> <span class="literal">true</span></span><br><span class="line"><span class="string">(注意这里是有一个空行的)</span></span><br></pre></td></tr></table></figure>
+<p>增加VM Option：</p>
+<p><img src="/img/Java-Instrument机制及管窥IAST/image-20230708195437636-1688817280339-10.png" style="zoom:80%;" /></p>
+<p>运行结果：</p>
+<p><img src="/img/Java-Instrument机制及管窥IAST/image-20230708200148537-1688817709859-13.png" style="zoom: 75%;" /></p>
+<p>从结果可以看出，agent的方法的执行事件均在目标类的方法执行之前，这说明：<strong>agent代码的织入是在目标程序运行之前的</strong>，且当目标程序开始执行函数时、才会触发agent的织入。<strong>这也对应上了在学习Java
+Instrument流程时的特点。</strong></p>
+<h1 id="iast">IAST</h1>
+<h2 id="要解决的问题">要解决的问题</h2>
+<p>IAST于2012年被提出，作为一种AST（Application Security
+Testing）方案，在他之前已经有了SAST、DAST了。那么IAST的必要性在哪里？要解决什么问题？</p>
+<p>我个人理解的总结：</p>
+<ul>
+<li><p>技术上，目前市面上SAST的<strong>误报率较高</strong>、DAST需要发送一些<strong>脏数据</strong>，且<strong>无法了解内部执行细节</strong>从而对漏洞真正成因的发现带来一定困难。而IAST无需发送脏数据来触发漏洞，而是通过Instrument机制对调用链进行追踪，从而可以对漏洞的成因得到更深层次的了解。</p></li>
+<li><p>场景上，随着DevOps的发展，为了追求更高效率的交付，DevSecOps的观念被提出、“安全左移”的思想也在不断推进。作为可以与流水线整合的安全测试方案，IAST是一个非常不错的选择。</p></li>
+</ul>
+<p>但是虽然有上述优点，但该基于由于依赖Instrument机制，而不同语言如Python等该机制实现都不一样，因而有100种语言就得设计100种IAST方案，而不像DAST这种更高层面的，与语言无关。抱有兴趣的人可以阅读该材料<a
+target="_blank" rel="noopener" href="https://www.contrastsecurity.com/whitepaper-iast-vs-dast"
+title="Revolutionize DAST with IAST | Application Security Testing | Contrast Security">[6]</a>。</p>
+<p>市面上已经有了很多开源产品如火线安全的洞态IAST<a
+target="_blank" rel="noopener" href="https://dongtai.io/"
+title="DongTai">[7]</a>、百度的OpenRASP-IAST[<a
+target="_blank" rel="noopener" href="https://rasp.baidu.com/doc/hacking/architect/iast.html"
+title="IAST 扫描器 - OpenRASP 官方文档 - 开源自适应安全产品">8</a>][]。商用的如Contrast
+Security的Contrast Assess<a
+target="_blank" rel="noopener" href="https://www.contrastsecurity.com/contrast-assess"
+title="Contrast Assess | IAST Security Testing | Contrast Security">[9]</a></p>
+<h2 id="iast分类及流程">IAST分类及流程</h2>
+<p>IAST从流量的性质上，通常认为，IAST可以分为主动式和被动式<a
+target="_blank" rel="noopener" href="https://doc.dongtai.io/docs/introduction/iast#%E7%B1%BB%E5%9E%8B"
+title="IAST | 洞态文档 (dongtai.io)">[10]</a><a
+target="_blank" rel="noopener" href="https://www.contrastsecurity.com/active-passive-iast-whitepaper"
+title="Active and Passive IAST | Contrast Security">[11]</a>：</p>
+<ul>
+<li><p>被动式：即只需要一个agent即可，使用正常的业务流量进行测试。</p>
+<blockquote>
+<p>Passive IAST is a security tool that requires a single agent to be
+run alongside an application<a
+target="_blank" rel="noopener" href="https://www.contrastsecurity.com/active-passive-iast-whitepaper"
+title="Active and Passive IAST | Contrast Security">[11]</a>.</p>
+</blockquote>
+<p><img
+src="/img/Java-Instrument机制及管窥IAST/zh_passive_iast-49d405526cb4b26c197f015028725f98-1688819976558-20.png" /></p></li>
+<li><p>主动式：不仅需要一个agent，还需要一个传统的DAST工具产生攻击流量，由IAST提供攻击的具体细节。</p>
+<blockquote>
+<p>This approach requires two main components — a DAST tool and a sensor
+that attaches to running applications<a
+target="_blank" rel="noopener" href="https://www.contrastsecurity.com/active-passive-iast-whitepaper"
+title="Active and Passive IAST | Contrast Security">[11]</a>.</p>
+</blockquote>
+<p><img
+src="/img/Java-Instrument机制及管窥IAST/zh_active_iast-25d4ed1046040d6cab6a59dce3338cbc.png" /></p></li>
+</ul>
+<h1 id="参考">参考</h1>
 
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
+    </article>
+    <!-- license -->
     
-    <!-- paginator  -->
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://lzwgiter.github.io">lzwgiter</a>
+            <p>原文链接：<a href="https://lzwgiter.github.io/posts/e2947908.html">https://lzwgiter.github.io/posts/e2947908.html</a>
+            <p>发表日期：<a href="https://lzwgiter.github.io/posts/e2947908.html">July 8th 2023, 10:20:36 am</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/e2947908.html">July 8th 2023, 9:01:02 pm</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/posts/479daa6d.html" title="gRPC简介与使用">
+                    <div class="prevTitle">gRPC简介与使用</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- comment -->
+    
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+
+            
+
+            
+
+            
+
+            <!-- utteranc评论 -->
+
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+
+            
+            
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    <div id="comment"></div>
+    <script>
+        new Valine({
+            el: '#comment',
+            notify:false,
+            verify:false,
+            appId: "KADRlHg5xXyhKL0d6USDWfIB-gzGzoHsz",
+            appKey: "Ppj8kIdro2yDqXOvqWkTRxuW",
+            placeholder: "递茶就坐(　o=^•ェ•)o　┏━┓",
+            path:window.location.pathname,
+            avatar:'mm'
+        });
+    </script>
+
+
+            
+
+        </div>
+    
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    
+    <!-- Mathjax -->
     
 </main>
 
@@ -707,6 +896,23 @@ API)即Java持久技术API，用于进行数据库的操作，通过注解的方
 
         </div>
         <!-- toc -->
+        
+            <div class="toc-wrapper toc-wrapper-loding" style=
+
+
+
+
+
+
+
+    top:50vh;
+
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#java%E5%AD%97%E8%8A%82%E7%A0%81%E5%A2%9E%E5%BC%BA%E6%8A%80%E6%9C%AF"><span class="toc-number">1.</span> <span class="toc-text">Java字节码增强技术</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text">工作原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#jvm-ti"><span class="toc-number">1.1.1.</span> <span class="toc-text">JVM TI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#agent%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">agent生命周期</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#java-instrument%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.2.2.</span> <span class="toc-text">Java Instrument流程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%B8%AAdemo"><span class="toc-number">1.2.</span> <span class="toc-text">一个Demo</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iast"><span class="toc-number">2.</span> <span class="toc-text">IAST</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A6%81%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.</span> <span class="toc-text">要解决的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iast%E5%88%86%E7%B1%BB%E5%8F%8A%E6%B5%81%E7%A8%8B"><span class="toc-number">2.2.</span> <span class="toc-text">IAST分类及流程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
+            </div>
         
         <!-- sidebar -->
         <div class="sidebar sidebar-hide">
@@ -3056,6 +3262,8 @@ API)即Java持久技术API，用于进行数据库的操作，通过注解的方
         <!-- CNZZ -->
         
         <!-- async load share.js -->
+        
+            <script src="/scripts/share.js?v=20211217" async></script>
         
         <!-- mermaid -->
         
