@@ -453,6 +453,67 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/posts/undefined.html">
+                
+                <span class="abstract-title-text">Java Instrument机制及管窥IAST</span>
+            </a>
+            <div class="abstract-content">
+                <blockquote>
+<ul>
+<li><p>Java Instrument机制于JDK
+1.5版本引入，是一种Java中的字节码增强技术（<em>Bytecode
+Instrumentation</em>）。可以理解为一种JVM级别的AOP实现方式，可以实现向JVM中一个运行时程序加载一个jar包、并由该jar包对运行时程序进行字节码修改的效果。最初目的为实现JVM监控和类的动态修改。作为插桩技术，其在安全领域的应用包括不限于RASP、IAST等。</p></li>
+<li><p>IAST（<em>Interactive application security
+testing</em>）交互式应用安全检测是一种应用安全测试方法，由Gartner公司与2012年提出。基于instrumentation机制，IAST可以与依赖库进行交互，并从内部对运行时应用进行分析，实现对代码漏洞的发现和诊断。（图片来源<a
+target="_blank" rel="noopener" href="https://dzone.com/refcardz/introduction-to-iast"
+title="Introduction to IAST - DZone Refcardz">[1]</a>）</p></li>
+</ul>
+<p><img src="/img/Java-Instrument机制及管窥IAST/10934497-picture3.png" style="zoom:80%;" /></p>
+</blockquote>
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2023/07/08">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/07/08</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+        
+        
+            
+        
+        
+        <span class="post-category" data-categories="DevSecOps"">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                DevSecOps
+            </span>
+        </span>
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="Java">Java</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="DevSecOps">DevSecOps</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/posts/479daa6d.html">
                 
                 <span class="abstract-title-text">gRPC简介与使用</span>
@@ -462,7 +523,7 @@
 <p>gRPC是谷歌设计的一个开源RPC（Remote Process
 Call）框架，其基于谷歌开发的<a
 target="_blank" rel="noopener" href="https://protobuf.dev/overview/">Protocol
-Buffer</a>（也支持其他数据结构如JSON、XML等），并充分吸收了提供了一种分布式系统内部各个微服务之间互相调用的方法，具有语言无关、平台无关、高效（HTTP/2）、安全（TLS）、可扩展性强的特点，已被广泛应用于诸多公司如：NetFlex、Square、Cisco等。</p>
+Buffer</a>（也支持其他数据结构如JSON、XML等），提供了一种分布式系统内部各个微服务之间互相调用的方法，具有语言无关、平台无关、高效（HTTP/2）、安全（TLS）、可扩展性强的特点，已被广泛应用于诸多公司如：NetFlex、Square、Cisco等。</p>
 <p><img src="/img/gRPC简介与使用/image-20230701104730528.png" /></p>
 </blockquote>
             </div>
@@ -470,7 +531,7 @@ Buffer</a>（也支持其他数据结构如JSON、XML等），并充分吸收了
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/07/05">
+                <div class="abstract-date" title="Last updated: 2023/07/08">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/07/03</span>
                 </div>
                 <!-- tags -->
@@ -722,67 +783,6 @@ Injection</em>)的关系与区别，顺带记录一下我自己思考的过程�
         <a class="post-tag" href="javascript:void(0);" data-tags="Java">Java</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags="Quarkus">Quarkus</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/posts/77d22b2a.html">
-                
-                <span class="abstract-title-text">Spring安全技术-Spring Security使用及总结（一）</span>
-            </a>
-            <div class="abstract-content">
-                <blockquote>
-<p>前面总结了Spring Data
-JPA，它主要是持久层的一些操作集合。这篇总结一下Spring
-Security，它也是Spring的一个子项目，它提供了认证、授权、会话管理、密码管理、缓存管理等功能，功能要比常见的Shiro更加丰富，并且支持OAuth2。这篇总结一下Spring
-Security在认证中的应用，包括：基于内存的用户储存、基于JDBC的用户储存、基于LDAP的用户储存、自定义用户详情服务。</p>
-<figure>
-<img
-src="/img/Spring安全技术-Spring-Security使用及总结（一）/image-20210509170555736.png"
-alt="image-20210509170555736" />
-<figcaption aria-hidden="true">image-20210509170555736</figcaption>
-</figure>
-</blockquote>
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2021/08/25">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/05/09</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-        
-        
-            
-        
-        
-        <span class="post-category" data-categories="开发技术"">
-            <i class="fas fa-folder post-category-icon"></i>
-            <span class="post-category-text">
-                开发技术
-            </span>
-        </span>
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="Java">Java</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="Spring">Spring</a>
     
 </div>
 
@@ -1364,7 +1364,14 @@ alt="image-20210509170555736" />
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
         
         
         
@@ -2337,7 +2344,7 @@ alt="image-20210509170555736" />
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 91
+        Total : 92
         </div>
         <!-- search  -->
         
@@ -2351,6 +2358,12 @@ alt="image-20210509170555736" />
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/08</span>
+            <a class="archive-post-title" href="/posts/undefined.html">Java Instrument机制及管窥IAST</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">07/03</span>
@@ -3123,6 +3136,11 @@ alt="image-20210509170555736" />
                 课程总结
             </span>
         
+            <span class="sidebar-tag-name" data-tags="DevSecOps">
+                <span class="iconfont-archer">&#xe606;</span>
+                DevSecOps
+            </span>
+        
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
@@ -3187,6 +3205,11 @@ alt="image-20210509170555736" />
         <span class="sidebar-category-name" data-categories="课程总结">
             <span class="iconfont-archer">&#xe60a;</span>
             课程总结
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="DevSecOps">
+            <span class="iconfont-archer">&#xe60a;</span>
+            DevSecOps
         </span>
     
     </div>

@@ -453,6 +453,67 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/posts/undefined.html">
+                
+                <span class="abstract-title-text">Java Instrument机制及管窥IAST</span>
+            </a>
+            <div class="abstract-content">
+                <blockquote>
+<ul>
+<li><p>Java Instrument机制于JDK
+1.5版本引入，是一种Java中的字节码增强技术（<em>Bytecode
+Instrumentation</em>）。可以理解为一种JVM级别的AOP实现方式，可以实现向JVM中一个运行时程序加载一个jar包、并由该jar包对运行时程序进行字节码修改的效果。最初目的为实现JVM监控和类的动态修改。作为插桩技术，其在安全领域的应用包括不限于RASP、IAST等。</p></li>
+<li><p>IAST（<em>Interactive application security
+testing</em>）交互式应用安全检测是一种应用安全测试方法，由Gartner公司与2012年提出。基于instrumentation机制，IAST可以与依赖库进行交互，并从内部对运行时应用进行分析，实现对代码漏洞的发现和诊断。（图片来源<a
+target="_blank" rel="noopener" href="https://dzone.com/refcardz/introduction-to-iast"
+title="Introduction to IAST - DZone Refcardz">[1]</a>）</p></li>
+</ul>
+<p><img src="/img/Java-Instrument机制及管窥IAST/10934497-picture3.png" style="zoom:80%;" /></p>
+</blockquote>
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2023/07/08">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/07/08</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+        
+        
+            
+        
+        
+        <span class="post-category" data-categories="DevSecOps"">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                DevSecOps
+            </span>
+        </span>
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="Java">Java</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="DevSecOps">DevSecOps</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/posts/479daa6d.html">
                 
                 <span class="abstract-title-text">gRPC简介与使用</span>
@@ -462,7 +523,7 @@
 <p>gRPC是谷歌设计的一个开源RPC（Remote Process
 Call）框架，其基于谷歌开发的<a
 target="_blank" rel="noopener" href="https://protobuf.dev/overview/">Protocol
-Buffer</a>（也支持其他数据结构如JSON、XML等），并充分吸收了提供了一种分布式系统内部各个微服务之间互相调用的方法，具有语言无关、平台无关、高效（HTTP/2）、安全（TLS）、可扩展性强的特点，已被广泛应用于诸多公司如：NetFlex、Square、Cisco等。</p>
+Buffer</a>（也支持其他数据结构如JSON、XML等），提供了一种分布式系统内部各个微服务之间互相调用的方法，具有语言无关、平台无关、高效（HTTP/2）、安全（TLS）、可扩展性强的特点，已被广泛应用于诸多公司如：NetFlex、Square、Cisco等。</p>
 <p><img src="/img/gRPC简介与使用/image-20230701104730528.png" /></p>
 </blockquote>
             </div>
@@ -470,7 +531,7 @@ Buffer</a>（也支持其他数据结构如JSON、XML等），并充分吸收了
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/07/05">
+                <div class="abstract-date" title="Last updated: 2023/07/08">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/07/03</span>
                 </div>
                 <!-- tags -->
@@ -705,63 +766,6 @@ target="_blank" rel="noopener" href="https://github.com/lzwgiter/MyCWebStudy">�
     
     
         <a class="post-tag" href="javascript:void(0);" data-tags="python">python</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/posts/f06096b.html">
-                
-                <span class="abstract-title-text">MATLAB - Wireless Communication Onramp</span>
-            </a>
-            <div class="abstract-content">
-                <blockquote>
-<p>失踪人口回归嘿嘿。最近出于实验需求，学习一下如何使用Matlab来模拟无线通信环境，包括通过添加噪声、过滤器等来模拟真实物理世界状态，旨在测试信道的误比特率。包括单链路和多链路的模拟。记录的内容主要来自官网MathWork上的在线免费课程。包括：</p>
-<ol type="1">
-<li>单理想通道&amp;噪声通道通信模拟</li>
-<li>多径理想&amp;噪声模拟，OFDM机制模拟</li>
-</ol>
-<p>(ps：之前一直认为Matlab没啥用&amp;&amp;没好好学的我对不起对不起对不起。</p>
-<p><img
-src="/img/MATLAB%20-%20Wireless%20Communication%20Onramp/image-20220122214915003.png" /></p>
-</blockquote>
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/01/02">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2022/01/20</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-        
-        
-            
-        
-        
-        <span class="post-category" data-categories="MATLAB"">
-            <i class="fas fa-folder post-category-icon"></i>
-            <span class="post-category-text">
-                MATLAB
-            </span>
-        </span>
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="MatLab">MatLab</a>
     
 </div>
 
@@ -1343,7 +1347,14 @@ src="/img/MATLAB%20-%20Wireless%20Communication%20Onramp/image-20220122214915003
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
         
         
         
@@ -2316,7 +2327,7 @@ src="/img/MATLAB%20-%20Wireless%20Communication%20Onramp/image-20220122214915003
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 91
+        Total : 92
         </div>
         <!-- search  -->
         
@@ -2330,6 +2341,12 @@ src="/img/MATLAB%20-%20Wireless%20Communication%20Onramp/image-20220122214915003
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/08</span>
+            <a class="archive-post-title" href="/posts/undefined.html">Java Instrument机制及管窥IAST</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">07/03</span>
@@ -3102,6 +3119,11 @@ src="/img/MATLAB%20-%20Wireless%20Communication%20Onramp/image-20220122214915003
                 课程总结
             </span>
         
+            <span class="sidebar-tag-name" data-tags="DevSecOps">
+                <span class="iconfont-archer">&#xe606;</span>
+                DevSecOps
+            </span>
+        
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
@@ -3166,6 +3188,11 @@ src="/img/MATLAB%20-%20Wireless%20Communication%20Onramp/image-20220122214915003
         <span class="sidebar-category-name" data-categories="课程总结">
             <span class="iconfont-archer">&#xe60a;</span>
             课程总结
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="DevSecOps">
+            <span class="iconfont-archer">&#xe60a;</span>
+            DevSecOps
         </span>
     
     </div>
