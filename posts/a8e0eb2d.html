@@ -35,10 +35,9 @@
 <meta property="og:image" content="https://lzwgiter.github.io/img/Quarkus%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0%E4%BB%A5%E5%8F%8A%E7%BC%96%E5%86%99REST%E6%9C%8D%E5%8A%A1/image-20210823164605102.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/Quarkus%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0%E4%BB%A5%E5%8F%8A%E7%BC%96%E5%86%99REST%E6%9C%8D%E5%8A%A1/image-20210823165047294.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/Quarkus%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0%E4%BB%A5%E5%8F%8A%E7%BC%96%E5%86%99REST%E6%9C%8D%E5%8A%A1/image-20210823165225982.png">
-<meta property="og:image" content="https://lzwgiter.github.io/img/Quarkus%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89%E6%A6%82%E8%BF%B0%E4%BB%A5%E5%8F%8A%E7%BC%96%E5%86%99REST%E6%9C%8D%E5%8A%A1/image-20210823172244162.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/%E8%AF%B7%E6%88%91%E5%96%9D%E6%9D%AF%E5%92%96%E5%95%A1%E5%90%A7.jpg">
 <meta property="article:published_time" content="2021-08-22T05:48:57.000Z">
-<meta property="article:modified_time" content="2022-05-06T13:57:14.000Z">
+<meta property="article:modified_time" content="2023-08-17T03:22:35.171Z">
 <meta property="article:author" content="lzwgiter">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Quarkus">
@@ -570,9 +569,9 @@ libraries and standards.</strong></p>
 <p>根据2020年NewRelic调查，在云服务领域，Java只占了6%的使用，具体如图：(图片来源：<a
 target="_blank" rel="noopener" href="https://opensource.com/downloads/java-serverless-ebook">A guide to
 Java serverless functions | Opensource.com</a>)</p>
-<p><img src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823083606274.png" alt="image-20210823083606274"  /></p>
+<p><img src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823083606274.png" /></p>
 <p>那么造成这个的原因是什么？<strong>很难在如Kubernetes的容器平台中优化Java的应用程序</strong>，我们可以使用NodeJs、Go语言进行一个对比，看看同样资源下支持的应用程序数目：</p>
-<p><img src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823083834106.png" alt="image-20210823083834106"  /></p>
+<p><img src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823083834106.png"/></p>
 <p>由于需要给每一个JVM堆分配内存，导致了Java应用程序较高的内存开销，相比与其他语言，<strong>尤其是内存开极小的GO</strong>，那基本上没得看，所以Go在云服务领域很流行。</p>
 <h2 id="为什么不继续用spring">为什么不继续用Spring？</h2>
 <p>上一节的原因导致了直接上Spring不是很合适，<strong>虽然，Spring
@@ -614,19 +613,18 @@ src="/img/Quarkus学习（一）概述以及编写REST服务/image-2021082216222
 <p>在官方的教程里，每次新建一个项目都需要敲很多的参数，个人觉得有点麻烦，好比这样的：</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mvn io.quarkus:quarkus-maven-plugin:2.1.3.Final:create \</span><br><span class="line">    -DprojectGroupId=org.acme \</span><br><span class="line">    -DprojectArtifactId=rest-json-quickstart \</span><br><span class="line">    -DclassName=&quot;org.acme.rest.json.FruitResource&quot; \</span><br><span class="line">    -Dpath=&quot;/fruits&quot; \</span><br><span class="line">    -Dextensions=&quot;resteasy,resteasy-jackson&quot;</span><br></pre></td></tr></table></figure>
 <p>实际上在官方的页面里有推荐这么一个官方的小工具，可以帮助你新建一个项目，其实和Go语言里的<code>Beego</code>中的<code>bee</code>工具作用差不多：</p>
-<p><img src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210822140736545.png" alt="image-20210822140736545" style="zoom: 67%;" /></p>
+<p><img src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210822140736545.png" style="zoom: 67%;" /></p>
 <p><strong>只不过这玩意儿貌似还在改进中，但是实测可以用。</strong>安装方法如下：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先安装JBang，这个小玩意儿还挺有意思的，可以看看：https://www.jbang.dev/</span></span><br><span class="line"><span class="built_in">iex</span> <span class="string">&quot;&amp; &#123; <span class="variable">$</span>(iwr https://ps.jbang.dev) &#125; app setup&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 然后我推荐你先去阿里云仓库下载quarkus-cli的runner包，然后再安装.</span></span><br><span class="line"><span class="comment"># https://developer.aliyun.com/mvn/search 搜索quarkus-cli，然后找到quarkus-cli-2.1.0.Final-runner.jar就行，这是最新的</span></span><br><span class="line"><span class="comment"># 然后jbang命令安装，这里我取名为quarkus。建议把jar包放到本地maven仓库的io.quarkus.quarkus-cli文件夹下</span></span><br><span class="line">jbang app install <span class="literal">--force</span> <span class="literal">--fresh</span> <span class="literal">--name</span> quarkus &lt;你的jar包的位置&gt;</span><br></pre></td></tr></table></figure>
 <p>安装后就可以正常用了：</p>
-<p><img src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210822141629148.png" alt="image-20210822141629148" style="zoom: 80%;" /></p>
+<p><img src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210822141629148.png" style="zoom: 80%;" /></p>
 <p>默认的create不带子命令就是在创建应用，<strong>Quarkus-cli创建项目时候有一个非常Nice的参数：--dry-run，对没错就是k8s那个dry-run，你可以预览并检查生成的选项而不是直接生成项目。好比这样：</strong></p>
-<p><img src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210822142927709.png" alt="image-20210822142927709" style="zoom:80%;" /></p>
+<p><img src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210822142927709.png" style="zoom:80%;" /></p>
 <p>我只能说好用的一批。好比我们创建一个rest-demo项目：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">quarkus create cn.edu.xidian:quarkus<span class="literal">-rest-demo</span> <span class="literal">-P</span> <span class="number">2.1</span>.<span class="number">3</span>.Final</span><br><span class="line"><span class="comment"># 输出：</span></span><br><span class="line"><span class="comment"># Creating an app (default project type, see --help).</span></span><br><span class="line"><span class="comment"># -----------</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># applying codestarts...</span></span><br><span class="line"><span class="comment"># &gt;&gt; java</span></span><br><span class="line"><span class="comment"># &gt;&gt; maven</span></span><br><span class="line"><span class="comment"># &gt;&gt; quarkus</span></span><br><span class="line"><span class="comment"># &gt;&gt; config-properties</span></span><br><span class="line"><span class="comment"># &gt;&gt; dockerfiles</span></span><br><span class="line"><span class="comment"># &gt;&gt; maven-wrapper</span></span><br><span class="line"><span class="comment"># &gt;&gt; resteasy-codestart</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># -----------</span></span><br><span class="line"><span class="comment"># [SUCCESS] quarkus project has been successfully generated in:</span></span><br><span class="line"><span class="comment"># --&gt; C:\Users\22629\IdeaProjects\quarkus-rest-demo</span></span><br><span class="line"><span class="comment"># -----------</span></span><br><span class="line"><span class="comment"># Navigate into this directory and get started: quarkus dev</span></span><br></pre></td></tr></table></figure>
-<p>项目结构如下，可以对比Spring发现多了docker的文件夹，其他没啥区别。
-<img
-src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210822143308436.png"
-alt="image-20210822143308436" /></p>
+<p>项目结构如下，可以对比Spring发现多了docker的文件夹，其他没啥区别。</p>
+<p><img
+src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210822143308436.png" /></p>
 <p>编写结束后如果要启动项目只需要在项目文件夹下执行<code>quarkus dev</code>就可以了，也不需要<code>mvn compile quarkus:dev</code>了，这个工具还是很方便的。</p>
 <h2 id="常用注解">常用注解</h2>
 <p>下面小结一下在Quarkus框架中常用的注解，这里主要是编写Restful服务常用的。Quarkus的ioc和rest规范都是跟从的官方，即：</p>
@@ -734,43 +732,27 @@ default="test")，即从配置文件中读取'vartest'变量的值，没有的�
 <p>然后我们定义对应的Resource，<strong>可以看到所有与RESTful相关的注解，都来自javax.ws.rx包，都是JAX-RS规范。</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.ws.rs.Path;</span><br><span class="line"><span class="keyword">import</span> javax.ws.rs.Produces;</span><br><span class="line"><span class="keyword">import</span> javax.ws.rs.Consumes;</span><br><span class="line"><span class="keyword">import</span> javax.ws.rs.core.MediaType;</span><br><span class="line"><span class="keyword">import</span> javax.ws.rs.GET;</span><br><span class="line"><span class="keyword">import</span> javax.ws.rs.POST;</span><br><span class="line"><span class="keyword">import</span> javax.ws.rs.DELETE;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.LinkedList;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lzwgiter</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2021/08/22</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Path(&quot;/book&quot;)</span></span><br><span class="line"><span class="meta">@Produces(MediaType.APPLICATION_JSON)</span></span><br><span class="line"><span class="meta">@Consumes(MediaType.APPLICATION_JSON)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BookResource</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> List&lt;Book&gt; bookList = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">BookResource</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.bookList.add(<span class="keyword">new</span> <span class="title class_">Book</span>(<span class="string">&quot;书_1&quot;</span>, <span class="string">&quot;abcdefg1&quot;</span>, <span class="string">&quot;lzwgiter&quot;</span>));</span><br><span class="line">        <span class="built_in">this</span>.bookList.add(<span class="keyword">new</span> <span class="title class_">Book</span>(<span class="string">&quot;书_2&quot;</span>, <span class="string">&quot;gfseffda&quot;</span>, <span class="string">&quot;lzwgiter&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GET</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Book&gt; <span class="title function_">getAllBooks</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.bookList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@POST</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Book&gt; <span class="title function_">addBook</span><span class="params">(Book book)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.bookList.add(book);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.bookList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@DELETE</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Book&gt; <span class="title function_">delBook</span><span class="params">(Book book)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.bookList.removeIf(existBook -&gt; existBook.equals(book));</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.bookList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>代码编写后，我们<code>quarkus dev</code>让他运行：</p>
-<figure>
-<img
-src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210822165316767.png"
-alt="image-20210822165316767" />
-<figcaption aria-hidden="true">image-20210822165316767</figcaption>
-</figure>
+<p><img
+src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210822165316767.png" /></p>
 <p>然后就可以请求服务了：</p>
-<figure>
-<img
-src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823102743229.png"
-alt="image-20210823102743229" />
-<figcaption aria-hidden="true">image-20210823102743229</figcaption>
-</figure>
+<p><img
+src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823102743229.png" /></p>
 <h2 id="构建可执行文件">构建可执行文件</h2>
 <blockquote>
 <p>接下来的两小节包括构建可执行文件和Docker镜像，这里不推荐使用那个quarkus-cli，它不支持打包到docker，建议用mvn命令。</p>
 </blockquote>
 <p><strong>这里我是在Linux下构建的可执行文件</strong>，windows下我会报只能使用AMD平台的错误，而且即使是在<code>x64 Native Tools Command Prompt for VS 2019</code>下不能解决。</p>
 <p>构建直接使用命令<code>mvn package -Pnative</code>。</p>
-<figure>
-<img
-src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823163646699.png"
-alt="image-20210823163646699" />
-<figcaption aria-hidden="true">image-20210823163646699</figcaption>
-</figure>
+<p><img
+src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823163646699.png" /></p>
 <p>我虽然是在虚拟机里构建的，但是这个速度也有点慢了吧。。构建完成后会生成一个xx-runner的文件：</p>
-<p><img src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823164605102.png" alt="image-20210823164605102" style="zoom: 80%;" /></p>
+<p><img src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823164605102.png" style="zoom: 80%;" /></p>
 <p>然后我们直接<code>./xxx-runner</code>启动就可以了，<strong>我这里用的是官方基于Oracle
 GraavlVM定制的一个下游版本，叫Mandrel，这时候你就发现牛逼的地方了：</strong></p>
-<figure>
-<img
-src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823164745281.png"
-alt="image-20210823164745281" />
-<figcaption aria-hidden="true">image-20210823164745281</figcaption>
-</figure>
+<p><img
+src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823164745281.png" /></p>
 <p>好家伙，22ms就起来了，我直呼<img src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823165047294.png" alt="image-20210823165047294" style="zoom:150%;" /></p>
-<p><img src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823165225982.png" alt="image-20210823165225982"  /></p>
+<p><img src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823165225982.png"/></p>
 <p>当然运行结果是一样的。</p>
 <h2 id="构建docker镜像">构建Docker镜像</h2>
 <p>这里只介绍最简单的办法,前面我们已经通过<code>mvn package -Pnative</code>命令完成构建了，<strong>此时在你的<code>src/main/docker</code>目录里可以看到一个Dockerfile.native，内容如下，这个不需要你写。</strong></p>
@@ -780,27 +762,26 @@ alt="image-20210823164745281" />
 <p>docker build -f src/main/docker/Dockerfile.native -t
 quarkus/quarkus-rest-demo .</p>
 </blockquote>
-<p><img src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823172244162.png" alt="image-20210823172244162" style="zoom:80%;" /></p>
+<p><img
+src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823172244162.png" /></p>
 <p>到这里镜像就构建好了，就可以投入使用了：</p>
-<figure>
-<img
-src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823173013018.png"
-alt="image-20210823173013018" />
-<figcaption aria-hidden="true">image-20210823173013018</figcaption>
-</figure>
-<p><a target="_blank" rel="noopener" href="https://opensource.com/downloads/java-serverless-ebook">A
-guide to Java serverless functions | Opensource.com</a></p>
+<p><img
+src="/img/Quarkus学习（一）概述以及编写REST服务/image-20210823173013018.png" /></p>
 <h1 id="参考学习">参考学习</h1>
-<p><a target="_blank" rel="noopener" href="http://quarkus.io/guides/cli-tooling">Quarkus - Building
-Quarkus apps with Quarkus Command Line Interface (CLI)</a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/graalvm/mandrel/releases">Releases ·
-graalvm/mandrel (github.com)</a></p>
-<p><a target="_blank" rel="noopener" href="http://quarkus.io/guides/rest-json">Quarkus - Writing JSON
-REST Services</a></p>
-<p><a target="_blank" rel="noopener" href="http://quarkus.io/guides/building-native-image">Quarkus -
-Building a Native Executable</a></p>
-<p><a target="_blank" rel="noopener" href="http://quarkus.io/guides/container-image">Quarkus -
-Container Images</a></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://opensource.com/downloads/java-serverless-ebook">A
+guide to Java serverless functions | Opensource.com</a></li>
+<li><a target="_blank" rel="noopener" href="http://quarkus.io/guides/cli-tooling">Quarkus - Building
+Quarkus apps with Quarkus Command Line Interface (CLI)</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/graalvm/mandrel/releases">Releases ·
+graalvm/mandrel (github.com)</a></li>
+<li><a target="_blank" rel="noopener" href="http://quarkus.io/guides/rest-json">Quarkus - Writing JSON
+REST Services</a></li>
+<li><a target="_blank" rel="noopener" href="http://quarkus.io/guides/building-native-image">Quarkus -
+Building a Native Executable</a></li>
+<li><a target="_blank" rel="noopener" href="http://quarkus.io/guides/container-image">Quarkus -
+Container Images</a></li>
+</ul>
 <p><img src="/img/请我喝杯咖啡吧.jpg" style="zoom:50%;" /></p>
 
     </article>
@@ -810,7 +791,7 @@ Container Images</a></p>
             <p>原文作者：<a href="https://lzwgiter.github.io">lzwgiter</a>
             <p>原文链接：<a href="https://lzwgiter.github.io/posts/a8e0eb2d.html">https://lzwgiter.github.io/posts/a8e0eb2d.html</a>
             <p>发表日期：<a href="https://lzwgiter.github.io/posts/a8e0eb2d.html">August 22nd 2021, 1:48:57 pm</a>
-            <p>更新日期：<a href="https://lzwgiter.github.io/posts/a8e0eb2d.html">May 6th 2022, 9:57:14 pm</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/a8e0eb2d.html">August 17th 2023, 11:22:35 am</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
