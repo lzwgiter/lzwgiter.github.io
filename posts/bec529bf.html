@@ -35,7 +35,7 @@
 <meta property="og:image" content="https://lzwgiter.github.io/img/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8F%8A%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E7%9A%84%E7%BC%96%E5%86%99%E3%80%81%E9%83%A8%E7%BD%B2%E3%80%81%E6%B5%8B%E8%AF%95/image-20210117204209879.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/%E8%AF%B7%E6%88%91%E5%96%9D%E6%9D%AF%E5%92%96%E5%95%A1%E5%90%A7.jpg">
 <meta property="article:published_time" content="2021-01-14T08:00:13.000Z">
-<meta property="article:modified_time" content="2023-08-20T05:44:27.202Z">
+<meta property="article:modified_time" content="2023-08-20T05:52:51.516Z">
 <meta property="article:author" content="lzwgiter">
 <meta property="article:tag" content="区块链技术">
 <meta property="article:tag" content="以太坊">
@@ -548,71 +548,54 @@
 <p>这篇纪录一下智能合约开发环境(Remix-ide、Truffle、EthScan)的搭建以及Solidity语言的简单使用，并使用Truffle来创建、编译、部署、测试一个简单的合约demo，并用区块链浏览器查看区块信息来进一步加深理解。参考书籍：《以太坊智能合约开发实战》、《Solidity编程》</p>
 </blockquote>
 <span id="more"></span>
-<h2 id="环境准备">环境准备</h2>
-<h3 id="安装nvmnodejsnpm">安装nvm、nodejs、npm</h3>
+<h1 id="环境准备">环境准备</h1>
+<h2 id="安装nvmnodejsnpm">安装nvm、nodejs、npm</h2>
 <ul>
 <li><p>nvm：强烈安利使用，可以便捷的切换node版本。</p>
 <ul>
-<li><p>windows下：<a
+<li>windows下：<a
 target="_blank" rel="noopener" href="https://github.com/coreybutler/nvm-windows/releases/">Releases ·
-coreybutler/nvm-windows (github.com)</a></p>
-<p>linux下: <a target="_blank" rel="noopener" href="https://github.com/nvm-sh/nvm">nvm-sh/nvm: Node
-Version Manager - POSIX-compliant bash script to manage multiple active
-node.js versions (github.com)</a></p></li>
+coreybutler/nvm-windows (github.com)</a></li>
 </ul></li>
+<li><p>linux下: <a
+target="_blank" rel="noopener" href="https://github.com/nvm-sh/nvm/releases">Releases · nvm-sh/nvm
+(github.com)</a></p></li>
 <li><p>node：</p>
-<ol type="1">
+<ul>
 <li>新建国内源的环境变量：
 <ul>
 <li>windows下：<code>NVM_NODEJS_ORG_MIRROR=https://npm.taobao.org/mirrors/node</code></li>
 <li>linux下：<code>bashrc</code>或者<code>/etc/profile</code>增加上述内容</li>
 </ul></li>
 <li>安装指定版本nodejs，如<code>nvm install 10.23.1</code>。具体版本号可以用<code>nvm list available</code>查看或者官网https://nodejs.org/en/download/releases查看版本</li>
-</ol></li>
+</ul></li>
 <li><p>npm：上述安装node后自动就有npm包管理器了，我们换一下国内源即可：<code>npm config set registry https://registry.npm.taobao.org/</code>。</p></li>
 </ul>
-<h3 id="安装remix-ide">安装Remix-ide</h3>
+<h2 id="安装remix-ide">安装Remix-ide</h2>
 <p>安装remix-ide的好处是你不用单独去安装solc或者solc.js编译器了，它自带，也不用折腾什么IDEA、vscode、Atom了，这个高亮和补全也还可以，而且自带很多功能。</p>
 <p><strong>这里不建议去github下源码编译安装，麻烦比较多，建议直接npm安装即可，并且版本请选择0.10.0或者&lt;0.9.4，本人亲测0.10.1、0.10.2、0.10.3都有问题，需要对源码做改动，并且改完后还不能正常使用。</strong></p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g remix-ide@0.10.0</span><br></pre></td></tr></table></figure>
 <p>安装好以后直接启动就可以了：</p>
-<figure>
-<img
-src="/img/以太坊智能合约开发环境搭建及智能合约的编写、部署、测试/image-20210117114135016.png"
-alt="image-20210117114135016" />
-<figcaption aria-hidden="true">image-20210117114135016</figcaption>
-</figure>
+<p><img
+src="/img/以太坊智能合约开发环境搭建及智能合约的编写、部署、测试/image-20210117114135016.png" /></p>
 <p>启动了后的结果：</p>
-<figure>
-<img
-src="/img/以太坊智能合约开发环境搭建及智能合约的编写、部署、测试/image-20210117114804647.png"
-alt="image-20210117114804647" />
-<figcaption aria-hidden="true">image-20210117114804647</figcaption>
-</figure>
-<h3 id="使用ethscan区块链浏览器">使用EthScan区块链浏览器</h3>
+<p><img
+src="/img/以太坊智能合约开发环境搭建及智能合约的编写、部署、测试/image-20210117114804647.png" /></p>
+<h2 id="使用ethscan区块链浏览器">使用EthScan区块链浏览器</h2>
 <p>区块链浏览器很多，我就随便找了一个EthScan，就是个html网页，很方便，主要是用来查看区块细节信息的，效果如图：</p>
-<figure>
-<img
-src="/img/以太坊智能合约开发环境搭建及智能合约的编写、部署、测试/image-20210117115436295.png"
-alt="image-20210117115436295" />
-<figcaption aria-hidden="true">image-20210117115436295</figcaption>
-</figure>
-<figure>
-<img
-src="/img/以太坊智能合约开发环境搭建及智能合约的编写、部署、测试/image-20210117115525374.png"
-alt="image-20210117115525374" />
-<figcaption aria-hidden="true">image-20210117115525374</figcaption>
-</figure>
-<h3 id="安装使用truffle">安装使用Truffle</h3>
+<p><img
+src="/img/以太坊智能合约开发环境搭建及智能合约的编写、部署、测试/image-20210117115436295.png" /></p>
+<p><img
+src="/img/以太坊智能合约开发环境搭建及智能合约的编写、部署、测试/image-20210117115525374.png" /></p>
+<h2 id="安装使用truffle">安装使用Truffle</h2>
 <p>Truffle可以认为是一个帮助你管理智能合约开发过程的工具，可以帮助以初始化、编译、调试、部署一个智能合约，和maven感觉有点像，反正好用的一匹。可以通过<a
 target="_blank" rel="noopener" href="https://learnblockchain.cn/docs/truffle/index.html">这个网址</a>来学习。</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g truffle</span><br></pre></td></tr></table></figure>
-<p>看一下Truffle的常用命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g truffle</span><br></pre></td></tr></table></figure>
+<p>看一下Truffle的常用命令和对应含义：</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">Truffle v5.1.61 - a development framework for Ethereum</span><br><span class="line"></span><br><span class="line">Usage: truffle &lt;command&gt; [options]</span><br><span class="line"></span><br><span class="line">Commands:</span><br><span class="line">  build     Execute build pipeline (if configuration present)	// 构建打包</span><br><span class="line">  compile   Compile contract source files		// 编译合约文件(.sol)</span><br><span class="line">  config    Set user-level configuration options</span><br><span class="line">  console   Run a console with contract abstractions and commands available</span><br><span class="line">  create    Helper to create new contracts, migrations and tests	// 用于创建文件，比如合约、测试等文件的模板</span><br><span class="line">  debug     Interactively debug any transaction on the blockchain</span><br><span class="line">  deploy    (alias for migrate)	// 部署合约(也可以使用migrate)</span><br><span class="line">  develop   Open a console with a local development blockchain</span><br><span class="line">  exec      Execute a JS module within this Truffle environment</span><br><span class="line">  help      List all commands or provide information about a specific command</span><br><span class="line">  init      Initialize new and empty Ethereum project	// 初始化一个Truffle项目</span><br><span class="line">  install   Install a package from the Ethereum Package Registry</span><br><span class="line">  migrate   Run migrations to deploy contracts	// 部署合约</span><br><span class="line">  networks  Show addresses for deployed contracts on each network</span><br><span class="line">  obtain    Fetch and cache a specified compiler</span><br><span class="line">  opcode    Print the compiled opcodes for a given contract</span><br><span class="line">  publish   Publish a package to the Ethereum Package Registry</span><br><span class="line">  run       Run a third-party command</span><br><span class="line">  test      Run JavaScript and Solidity tests	// 运行测试</span><br><span class="line">  unbox     Download a Truffle Box, a pre-built Truffle project		// 可以从官网下载一个box项目使用</span><br><span class="line">  version   Show version number and exit</span><br><span class="line">  watch     Watch filesystem for changes and rebuild the project automatically	// 后台监视文件是否发生变化并自动编译</span><br><span class="line"></span><br><span class="line">See more at http://trufflesuite.com/docs</span><br></pre></td></tr></table></figure>
-<h2 id="从零开始的demo">从零开始的Demo</h2>
-<h3
-id="使用truffle与solidity编写一个简单合约">使用Truffle与Solidity编写一个简单合约</h3>
-<h4 id="初始化">初始化</h4>
+<h1
+id="使用truffle与solidity编写一个简单合约">使用Truffle与Solidity编写一个简单合约</h1>
+<h2 id="初始化">初始化</h2>
 <p>我们新建并进入一个文件夹，运行<code>Truffle init</code>就好了：</p>
 <p><img src="/img/以太坊智能合约开发环境搭建及智能合约的编写、部署、测试/image-20210117122609378.png" alt="image-20210117122609378" style="zoom:80%;" /></p>
 <p>初始化后的文件目录含义如下：</p>
@@ -620,7 +603,7 @@ id="使用truffle与solidity编写一个简单合约">使用Truffle与Solidity�
 <p>我们先配置一下网络信息：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// truffle-config.js 文件里有具体的每一个参数的说明，这里不做说明</span></span><br><span class="line"><span class="attr">development</span>: &#123;</span><br><span class="line">    <span class="attr">host</span>: <span class="string">&quot;127.0.0.1&quot;</span>,</span><br><span class="line">    <span class="attr">port</span>: <span class="number">8545</span>,</span><br><span class="line">    <span class="attr">network_id</span>: <span class="number">666</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>我们这个网络名叫<code>development</code>，truffle编译的时候会默认使用这个网络的配置，我们也可以通过使用参数<code>--network</code>来指定网络，比如你定义了一个<code>test</code>网络，你就<code>--network test</code>就好了。不带参数就是使用的<code>development</code>。</p>
-<h4 id="编写合约">编写合约</h4>
+<h2 id="编写合约">编写合约</h2>
 <p>我们创建两个合约<code>first.sol</code>和<code>second.sol</code>：</p>
 <p><img src="/img/以太坊智能合约开发环境搭建及智能合约的编写、部署、测试/image-20210117132345252.png" alt="image-20210117132345252" style="zoom:80%;" /></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// SPDX-License-Identifier: MIT</span><br><span class="line">pragma solidity &gt;=0.4.22 &lt;0.9.0;</span><br><span class="line"></span><br><span class="line">contract first &#123;</span><br><span class="line">    </span><br><span class="line">    int public myData = 20;</span><br><span class="line">    </span><br><span class="line">    function get() public view returns (int) &#123;	// 返回保存的数值</span><br><span class="line">        return myData;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -628,7 +611,7 @@ id="使用truffle与solidity编写一个简单合约">使用Truffle与Solidity�
 <p>然后我们创建一个部署文件，定义我们的部署脚本文件：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 2_custom.js	注意命名方式，是数字_描述.js</span></span><br><span class="line"><span class="keyword">var</span> hw1 = artifacts.<span class="built_in">require</span>(<span class="string">&quot;first&quot;</span>);	<span class="comment">// 引入合约1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> hw2 = artifacts.<span class="built_in">require</span>(<span class="string">&quot;second&quot;</span>);	<span class="comment">// 引入合约2</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="keyword">function</span>(<span class="params">deployer</span>) &#123;	<span class="comment">// 先部署合约1再部署合约2</span></span><br><span class="line">    deployer.<span class="title function_">deploy</span>(hw1).<span class="title function_">then</span>(</span><br><span class="line">        <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> deployer.<span class="title function_">deploy</span>(hw2, hw1.<span class="property">address</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    )</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>这样truffle在部署合约时就会按照我们指定的顺序来部署合约。下面我们先编译合约。</p>
-<h4 id="编译合约">编译合约</h4>
+<h2 id="编译合约">编译合约</h2>
 <p><img src="/img/以太坊智能合约开发环境搭建及智能合约的编写、部署、测试/image-20210117135202248.png" alt="image-20210117135202248" style="zoom:80%;" /></p>
 <p>然后我们启动私链，运行deploy命令，<strong>注意要开启挖矿模块，并且要解锁用户，不然会报错："Migrations"
 -- Returned error: authentication needed: password or
@@ -643,17 +626,15 @@ unlock.</strong></p>
 <p>同时我们的私链也有以下输出，可以看到hash值与上述哈希值是一样的： <img
 src="/img/以太坊智能合约开发环境搭建及智能合约的编写、部署、测试/image-20210117142336079.png"
 alt="image-20210117142336079" /></p>
-<h4 id="测试合约">测试合约</h4>
+<h2 id="测试合约">测试合约</h2>
 <p>测试合约我们需要写一个js脚本，其实和单元测试比较像，主要是看程序的输出符不符合预期。Truffle中测试的脚本文件我们都放到test目录下就行，我们用javascript写一个测试脚本，内容如下：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> testFirst = artifacts.<span class="built_in">require</span>(<span class="string">&quot;../contracts/first.sol&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="title function_">contract</span>(<span class="string">&quot;first&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">it</span>(<span class="string">&quot;first.get&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">var</span> instanceFirst;</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">return</span> testFirst.<span class="title function_">deployed</span>().<span class="title function_">then</span>(</span><br><span class="line">          <span class="keyword">function</span>(<span class="params">instance</span>) &#123;</span><br><span class="line">              instanceFirst = instance;</span><br><span class="line">              <span class="keyword">return</span> instanceFirst.<span class="property">get</span>.<span class="title function_">call</span>();		<span class="comment">// 调用实例的get方法获取值</span></span><br><span class="line">          &#125;).<span class="title function_">then</span>(</span><br><span class="line">              <span class="keyword">function</span>(<span class="params">result</span>) &#123;</span><br><span class="line">                  <span class="comment">// assert.equal函数第一个参数为待判断值，第二个参数为预期值，第三个参数为不符合预期时的输出</span></span><br><span class="line">                  assert.<span class="title function_">equal</span>(result, <span class="number">20</span>, <span class="string">&quot;first.get() not equal to 20&quot;</span>);	</span><br><span class="line">              &#125;)</span><br><span class="line">  &#125;); <span class="comment">// end-of-it</span></span><br><span class="line">&#125;); <span class="comment">// end-of-contract</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>然后我们使用命令<code>truffle test</code>来进行测试，如果指定了测试文件的话就会只运行它包含的测试函数，否则就会运行test文件夹下所有的测试。</p>
 <p><img src="/img/以太坊智能合约开发环境搭建及智能合约的编写、部署、测试/image-20210117204209879.png" alt="image-20210117204209879" style="zoom:80%;" /></p>
 <p>可以看到测试通过，符合预期结果。</p>
 <p>当然也可以写solidity文件来进行测试，后续我会补充。</p>
-<h2 id="小结与后续">小结与后续</h2>
-<p>到此为止两篇，以太坊+智能合约基本已经摸清了7,8成了，开发方面的话，网上看到一张图，很好的描述了这些工具之间的关系：</p>
-<p>我们使用Truffle来管理我们的项目，这包括初始化、编译、测试、部署，合约最终部署到网络中后，就可以通过DApp下的web3.js层来调用合约，通过ABI(Application
-Binary Interface，应用二进制接口)与合约进行交互。</p>
+<h1 id="小结与后续">小结与后续</h1>
+<p>到此为止两篇，以太坊+智能合约的基本概念已经摸清了7,8成了，开发方面的话，网上看到一张图，很好的描述了这些工具之间的关系：</p>
 <figure>
 <img
 src="/img/以太坊智能合约开发环境搭建及智能合约的编写、部署、测试/45a055bcc9b34324aeaea9f61c3d8cf1803.jpg"
@@ -661,11 +642,15 @@ alt="45a055bcc9b34324aeaea9f61c3d8cf1803.jpg" />
 <figcaption
 aria-hidden="true">45a055bcc9b34324aeaea9f61c3d8cf1803.jpg</figcaption>
 </figure>
+<p>我们使用Truffle来管理我们的项目，这包括初始化、编译、测试、部署，合约最终部署到网络中。然后就可以通过DApp下的web3.js层来调用合约，通过ABI(Application
+Binary Interface，应用二进制接口)与合约进行交互。</p>
 <p>后续接下来可能会学习DApp的相关知识、Web3.js与geth客户端的交互。但是最近可能会补充一些密码学方面的知识，主要是应用于分布式环境下溯源问题的方案，为毕设打基础。</p>
-<h2 id="参考学习">参考学习：</h2>
-<p>https://blog.csdn.net/GDUYT_gduyt/article/details/88957688</p>
-<p>https://blog.csdn.net/gduyt_gduyt/article/details/89058725</p>
-<p>https://blog.csdn.net/weixin_33843947/article/details/91635213</p>
+<h1 id="参考学习">参考学习：</h1>
+<ul>
+<li><p>https://blog.csdn.net/GDUYT_gduyt/article/details/88957688</p></li>
+<li><p>https://blog.csdn.net/gduyt_gduyt/article/details/89058725</p></li>
+<li><p>https://blog.csdn.net/weixin_33843947/article/details/91635213</p></li>
+</ul>
 <p><img src="/img/请我喝杯咖啡吧.jpg" style="zoom:33%;" /></p>
 
     </article>
@@ -674,8 +659,8 @@ aria-hidden="true">45a055bcc9b34324aeaea9f61c3d8cf1803.jpg</figcaption>
         <div class="license-wrapper">
             <p>原文作者：<a href="https://lzwgiter.github.io">lzwgiter</a>
             <p>原文链接：<a href="https://lzwgiter.github.io/posts/bec529bf.html">https://lzwgiter.github.io/posts/bec529bf.html</a>
-            <p>发表日期：<a href="https://lzwgiter.github.io/posts/bec529bf.html">一月 14日 2021, 4:00:13 下午</a>
-            <p>更新日期：<a href="https://lzwgiter.github.io/posts/bec529bf.html">August 20th 2023, 1:44:27 pm</a>
+            <p>发表日期：<a href="https://lzwgiter.github.io/posts/bec529bf.html">January 14th 2021, 4:00:13 pm</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/bec529bf.html">August 20th 2023, 1:52:51 pm</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -860,7 +845,7 @@ aria-hidden="true">45a055bcc9b34324aeaea9f61c3d8cf1803.jpg</figcaption>
                 <div class="toc-catalog">
                     <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
                 </div>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">1.</span> <span class="toc-text">环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85nvmnodejsnpm"><span class="toc-number">1.1.</span> <span class="toc-text">安装nvm、nodejs、npm</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85remix-ide"><span class="toc-number">1.2.</span> <span class="toc-text">安装Remix-ide</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8ethscan%E5%8C%BA%E5%9D%97%E9%93%BE%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="toc-number">1.3.</span> <span class="toc-text">使用EthScan区块链浏览器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8truffle"><span class="toc-number">1.4.</span> <span class="toc-text">安装使用Truffle</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84demo"><span class="toc-number">2.</span> <span class="toc-text">从零开始的Demo</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8truffle%E4%B8%8Esolidity%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%90%88%E7%BA%A6"><span class="toc-number">2.1.</span> <span class="toc-text">使用Truffle与Solidity编写一个简单合约</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">2.1.1.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E5%90%88%E7%BA%A6"><span class="toc-number">2.1.2.</span> <span class="toc-text">编写合约</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E5%90%88%E7%BA%A6"><span class="toc-number">2.1.3.</span> <span class="toc-text">编译合约</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%90%88%E7%BA%A6"><span class="toc-number">2.1.4.</span> <span class="toc-text">测试合约</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93%E4%B8%8E%E5%90%8E%E7%BB%AD"><span class="toc-number">3.</span> <span class="toc-text">小结与后续</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0"><span class="toc-number">4.</span> <span class="toc-text">参考学习：</span></a></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">1.</span> <span class="toc-text">环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85nvmnodejsnpm"><span class="toc-number">1.1.</span> <span class="toc-text">安装nvm、nodejs、npm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85remix-ide"><span class="toc-number">1.2.</span> <span class="toc-text">安装Remix-ide</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8ethscan%E5%8C%BA%E5%9D%97%E9%93%BE%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="toc-number">1.3.</span> <span class="toc-text">使用EthScan区块链浏览器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8truffle"><span class="toc-number">1.4.</span> <span class="toc-text">安装使用Truffle</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8truffle%E4%B8%8Esolidity%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%90%88%E7%BA%A6"><span class="toc-number">2.</span> <span class="toc-text">使用Truffle与Solidity编写一个简单合约</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">2.1.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E5%90%88%E7%BA%A6"><span class="toc-number">2.2.</span> <span class="toc-text">编写合约</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E5%90%88%E7%BA%A6"><span class="toc-number">2.3.</span> <span class="toc-text">编译合约</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%90%88%E7%BA%A6"><span class="toc-number">2.4.</span> <span class="toc-text">测试合约</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93%E4%B8%8E%E5%90%8E%E7%BB%AD"><span class="toc-number">3.</span> <span class="toc-text">小结与后续</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0"><span class="toc-number">4.</span> <span class="toc-text">参考学习：</span></a></li></ol>
             </div>
         
         <!-- sidebar -->
