@@ -19,20 +19,21 @@
         <meta name="keywords" content="lzwgiter,f10@t's blog">
     
     <meta name="description" content="blogs from f10@t">
-    <meta name="description" content="之前入门学习了k8s集群环境的搭建和基本概念包括框架、网络模型，部署与动态扩展服务的方法：  Kubernetes 集群环境搭建使用及问题记录（一） Kubernetes-集群环境搭建使用及问题记录（二） Kubernetes-集群环境搭建使用及问题记录（三）  当然也要回归安全的课题上来，云安全本质上是传统安全在云原生环境下的重新思考。作为业内事实标准，k8s可以提供服务管理、">
+    <meta name="description" content="之前入门学习了k8s集群环境的搭建和基本概念包括框架、网络模型，部署与动态扩展服务的方法：  Kubernetes 集群环境搭建使用及问题记录（一） Kubernetes-集群环境搭建使用及问题记录（二） Kubernetes-集群环境搭建使用及问题记录（三）  回归安全的课题上来，云安全本质上是传统安全在云原生环境下的重新思考。作为业内事实标准，k8s可以提供服务管理、扩容等诸">
 <meta property="og:type" content="article">
 <meta property="og:title" content="K8s攻防之OWASP-K8S-TOP10（上）">
 <meta property="og:url" content="https://lzwgiter.github.io/posts/8aa36aba.html">
 <meta property="og:site_name" content="f10@t&#39;s blog">
-<meta property="og:description" content="之前入门学习了k8s集群环境的搭建和基本概念包括框架、网络模型，部署与动态扩展服务的方法：  Kubernetes 集群环境搭建使用及问题记录（一） Kubernetes-集群环境搭建使用及问题记录（二） Kubernetes-集群环境搭建使用及问题记录（三）  当然也要回归安全的课题上来，云安全本质上是传统安全在云原生环境下的重新思考。作为业内事实标准，k8s可以提供服务管理、">
+<meta property="og:description" content="之前入门学习了k8s集群环境的搭建和基本概念包括框架、网络模型，部署与动态扩展服务的方法：  Kubernetes 集群环境搭建使用及问题记录（一） Kubernetes-集群环境搭建使用及问题记录（二） Kubernetes-集群环境搭建使用及问题记录（三）  回归安全的课题上来，云安全本质上是传统安全在云原生环境下的重新思考。作为业内事实标准，k8s可以提供服务管理、扩容等诸">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10%EF%BC%88%E4%B8%8A%EF%BC%89/image-20230917222234007.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10%EF%BC%88%E4%B8%8A%EF%BC%89/image-20230918204405720.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10%EF%BC%88%E4%B8%8A%EF%BC%89/image-20230918205420522.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10%EF%BC%88%E4%B8%8A%EF%BC%89/image-20230918210321217.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10%EF%BC%88%E4%B8%8A%EF%BC%89/image-20230920153859379.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10%EF%BC%88%E4%B8%8A%EF%BC%89/Kyverno-Policy-Structure.png">
 <meta property="article:published_time" content="2023-09-16T07:25:21.000Z">
-<meta property="article:modified_time" content="2023-09-21T03:40:49.831Z">
+<meta property="article:modified_time" content="2023-09-22T13:40:32.412Z">
 <meta property="article:author" content="lzwgiter">
 <meta property="article:tag" content="Kubernete">
 <meta property="article:tag" content="云安全">
@@ -377,7 +378,7 @@
                 <!-- 文章字数统计 -->
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">5.6k</span>阅读时长: <span class="post-count reading-time">24 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">6.2k</span>阅读时长: <span class="post-count reading-time">27 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -548,7 +549,7 @@ target="_blank" rel="noopener" href="https://www.f10at.cn/posts/a08eb123.html">K
 <li><a
 target="_blank" rel="noopener" href="https://www.f10at.cn/posts/ed901271.html">Kubernetes-集群环境搭建使用及问题记录（三）</a></li>
 </ul>
-<p>当然也要回归安全的课题上来，云安全本质上是传统安全在云原生环境下的重新思考。作为业内事实标准，k8s可以提供服务管理、扩容等诸多功能，是提供云原生能力的基石。</p>
+<p>回归安全的课题上来，云安全本质上是传统安全在云原生环境下的重新思考。作为业内事实标准，k8s可以提供服务管理、扩容等诸多功能，是提供云原生能力的基石。</p>
 <p>因此后面计划首先学习云安全分支下的k8s安全，并同时学习docker中的常见安全问题。这篇先学习<a
 target="_blank" rel="noopener" href="https://owasp.org/www-project-kubernetes-top-ten/">OWASP
 Kubernetes Top Ten</a>的前五个。</p>
@@ -978,13 +979,62 @@ API | Kubernetes</a></li>
 <h2 id="k04-lack-of-centralized-policy-enforcement">K04: Lack of
 Centralized Policy Enforcement</h2>
 <h3 id="定义-3">定义</h3>
+<p>由于安全策略的管理位于一个中心实体，因而难以在资源数量（<strong>k8s集群、云服务器</strong>）过于庞大的情况下、分发和强制性执行安全策略。</p>
+<p>针对上述问题，<strong>k8s策略强制实施机制（Kubernetes policy
+enforcement）</strong>可以通过少量的配置就实现在多个集群、多个云的基础设施上实现：管理（governance）、实施（compliance）和安全配置（security
+requireents）。</p>
+<p>如下是一个来自<code>gatekeeper</code>的<strong>拒绝来自不可信的镜像源的镜像的配置文件：</strong>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Allowed repos</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">constraints.gatekeeper.sh/v1beta1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">K8sAllowedRepos</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">allowed-repos</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">match:</span></span><br><span class="line">    <span class="attr">kinds:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>]</span><br><span class="line">        <span class="attr">kinds:</span> [<span class="string">&quot;Pod&quot;</span>]</span><br><span class="line">    <span class="attr">namespaces:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;sbx&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;prd&quot;</span></span><br><span class="line">  <span class="attr">parameters:</span></span><br><span class="line">    <span class="attr">repos:</span>	<span class="comment"># 只允许来自如下两个镜像源的镜像</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;open-policy-agent&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;ubuntu&quot;</span></span><br></pre></td></tr></table></figure></p>
+<p>此外，这类配置资源方案（其他的如Kyverno、Kubewarden等）还可以确保<strong>已经发生错误配置的pod不会被集群继续调度产生。</strong>比如Deployment。</p>
 <h3
 id="对应k8s-goat场景securing-kubernetes-clusters-using-kyverno-policy-engine">对应k8s-goat场景：Securing
 Kubernetes Clusters using Kyverno Policy Engine</h3>
 <p>下图为官方的攻击场景示意图，初步判断该通过名为<code>Kyverno</code>的策略引擎抵挡了攻击者的命令执行。</p>
 <p><img
 src="/img/K8s攻防之OWASP-K8S-TOP10（上）/scenario-22-1d2c06a0672c48504caadc55568323d4.png" /></p>
-<h3 id="利用-3">利用</h3>
+<h3 id="预备知识-1">预备知识</h3>
+<blockquote>
+<p>关于Kyverno（希腊语，意味<code>Govern</code>） —— Kyverno is a policy
+engine designed for Kubernetes.</p>
+<p>Github: <a target="_blank" rel="noopener" href="https://github.com/kyverno/kyverno">kyverno/kyverno:
+Kubernetes Native Policy Management (github.com)</a></p>
+</blockquote>
+<p>首先需要了解什么是k8s中的准入控制器——<em>dynamic admission
+controller:</em></p>
+<blockquote>
+<p><em>An admission controller is a piece of code that intercepts
+requests to the Kubernetes API server prior to persistence of the
+object, but after the request is authenticated and authorized.</em>——<a
+target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/">Admission
+Controllers Reference | Kubernetes</a></p>
+</blockquote>
+<p>等于是一个拦截请求并对其进行认证的拦截器，可以拦截的请求动作包括：</p>
+<ul>
+<li>create、delete、modify或其他自定义的动词（如通过kube
+proxy连接pod）</li>
+</ul>
+<p>但也包括一些不能够拦截的动作：</p>
+<ul>
+<li>get、watch、list</li>
+</ul>
+<p>其具体的动作包括：</p>
+<ul>
+<li>validating：<strong>并行</strong>调用所有的验证的webhook，只要有一个不通过就不通过</li>
+<li>mutating：<strong>串行</strong>调用所有修改的webhook，挨个修改该请求</li>
+<li>both：混合前两者</li>
+</ul>
+<p>Kyverno可以作为k8s集群的<strong>动态准入控制器</strong>（<em>dynamic
+admission controller</em>），可以通过Helm包管理器进行安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加chart源</span></span><br><span class="line">helm repo add kyverno https://kyverno.github.io/kyverno/</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">更新并安装</span></span><br><span class="line">helm repo update</span><br><span class="line">helm install kyverno kyverno/kyverno -n kyverno --create-namespace</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如果要卸载也很简单</span></span><br><span class="line">helm uninstall kyverno kyverno/kyverno -n kyverno</span><br></pre></td></tr></table></figure>
+<p>安装结果：</p>
+<p><img
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230922201052379.png" /></p>
+<p>安装结束后，就可以通过编写<code>yaml</code>的格式来定义策略了。官方有详尽的指南：<a
+target="_blank" rel="noopener" href="https://kyverno.io/docs/kyverno-policies/">Policies and Rules |
+Kyverno</a>。Kyverno可以定义集群范围的策略<code>ClusterPolicy</code>或指定命名空间内的策略<code>Policy</code>，而具体的结构可以用下面的一张图来概括：</p>
+<p><img src="/img/K8s攻防之OWASP-K8S-TOP10（上）/Kyverno-Policy-Structure.png" style="zoom:60%;" /></p>
+<h3 id="使用">使用</h3>
+<p>安装后，</p>
 <h3 id="问题原因-3">问题原因</h3>
 <h3 id="参考学习-3">参考学习</h3>
 <ul>
@@ -1005,7 +1055,7 @@ Tetragon - eBPF-based Security Observability and Runtime
 Enforcement</h3>
 <p><img
 src="/img/K8s攻防之OWASP-K8S-TOP10（上）/scenario-21-f6224cb07df8c572137cd371e26c1d42.png" /></p>
-<h3 id="利用-4">利用</h3>
+<h3 id="利用-3">利用</h3>
 <h3 id="问题原因-4">问题原因</h3>
 <h3 id="参考学习-4">参考学习</h3>
 <ul>
@@ -1025,7 +1075,7 @@ Inadequate Logging | OWASP Foundation</a></li>
             <p>原文作者：<a href="https://lzwgiter.github.io">lzwgiter</a>
             <p>原文链接：<a href="https://lzwgiter.github.io/posts/8aa36aba.html">https://lzwgiter.github.io/posts/8aa36aba.html</a>
             <p>发表日期：<a href="https://lzwgiter.github.io/posts/8aa36aba.html">September 16th 2023, 3:25:21 pm</a>
-            <p>更新日期：<a href="https://lzwgiter.github.io/posts/8aa36aba.html">September 21st 2023, 11:40:49 am</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/8aa36aba.html">September 22nd 2023, 9:40:32 pm</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -1205,10 +1255,10 @@ Vulnerabilities</span></a><ol class="toc-child"><li class="toc-item toc-level-3"
 private registry</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%85%B3%E4%BA%8Edocker-registry"><span class="toc-number">3.2.3.</span> <span class="toc-text">预备知识：关于docker registry</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-1"><span class="toc-number">3.2.4.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-1"><span class="toc-number">3.2.5.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-1"><span class="toc-number">3.2.6.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k03-overly-permissive-rbac"><span class="toc-number">3.3.</span> <span class="toc-text">K03: Overly Permissive RBAC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-2"><span class="toc-number">3.3.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AFrbac-least-privileges-misconfiguration"><span class="toc-number">3.3.2.</span> <span class="toc-text">对应k8s-goat场景：RBAC
 least privileges misconfiguration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="toc-number">3.3.3.</span> <span class="toc-text">预备知识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-2"><span class="toc-number">3.3.4.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-2"><span class="toc-number">3.3.5.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-2"><span class="toc-number">3.3.6.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k04-lack-of-centralized-policy-enforcement"><span class="toc-number">3.4.</span> <span class="toc-text">K04: Lack of
 Centralized Policy Enforcement</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-3"><span class="toc-number">3.4.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AFsecuring-kubernetes-clusters-using-kyverno-policy-engine"><span class="toc-number">3.4.2.</span> <span class="toc-text">对应k8s-goat场景：Securing
-Kubernetes Clusters using Kyverno Policy Engine</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-3"><span class="toc-number">3.4.3.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-3"><span class="toc-number">3.4.4.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-3"><span class="toc-number">3.4.5.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k05-inadequate-logging-and-monitoring"><span class="toc-number">3.5.</span> <span class="toc-text">K05: Inadequate Logging
+Kubernetes Clusters using Kyverno Policy Engine</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86-1"><span class="toc-number">3.4.3.</span> <span class="toc-text">预备知识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">3.4.4.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-3"><span class="toc-number">3.4.5.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-3"><span class="toc-number">3.4.6.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k05-inadequate-logging-and-monitoring"><span class="toc-number">3.5.</span> <span class="toc-text">K05: Inadequate Logging
 and Monitoring</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-4"><span class="toc-number">3.5.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AFcilium-tetragon---ebpf-based-security-observability-and-runtime-enforcement"><span class="toc-number">3.5.2.</span> <span class="toc-text">对应k8s-goat场景：Cilium
 Tetragon - eBPF-based Security Observability and Runtime
-Enforcement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-4"><span class="toc-number">3.5.3.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-4"><span class="toc-number">3.5.4.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-4"><span class="toc-number">3.5.5.</span> <span class="toc-text">参考学习</span></a></li></ol></li></ol></li></ol>
+Enforcement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-3"><span class="toc-number">3.5.3.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-4"><span class="toc-number">3.5.4.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-4"><span class="toc-number">3.5.5.</span> <span class="toc-text">参考学习</span></a></li></ol></li></ol></li></ol>
             </div>
         
         <!-- sidebar -->
