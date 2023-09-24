@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10%EF%BC%88%E4%B8%8A%EF%BC%89/image-20230920153859379.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10%EF%BC%88%E4%B8%8A%EF%BC%89/Kyverno-Policy-Structure.png">
 <meta property="article:published_time" content="2023-09-16T07:25:21.000Z">
-<meta property="article:modified_time" content="2023-09-22T13:40:32.412Z">
+<meta property="article:modified_time" content="2023-09-24T14:02:44.709Z">
 <meta property="article:author" content="lzwgiter">
 <meta property="article:tag" content="Kubernete">
 <meta property="article:tag" content="云安全">
@@ -378,7 +378,7 @@
                 <!-- 文章字数统计 -->
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">6.2k</span>阅读时长: <span class="post-count reading-time">27 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">6.9k</span>阅读时长: <span class="post-count reading-time">30 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -989,16 +989,10 @@ requireents）。</p>
 <h3
 id="对应k8s-goat场景securing-kubernetes-clusters-using-kyverno-policy-engine">对应k8s-goat场景：Securing
 Kubernetes Clusters using Kyverno Policy Engine</h3>
-<p>下图为官方的攻击场景示意图，初步判断该通过名为<code>Kyverno</code>的策略引擎抵挡了攻击者的命令执行。</p>
+<p>下图为官方的攻击场景示意图，初步判断该通过名为<code>Kyverno</code>的策略引擎抵挡了攻击者对<code>valut</code>命名空间内的pod的命令执行请求。</p>
 <p><img
 src="/img/K8s攻防之OWASP-K8S-TOP10（上）/scenario-22-1d2c06a0672c48504caadc55568323d4.png" /></p>
 <h3 id="预备知识-1">预备知识</h3>
-<blockquote>
-<p>关于Kyverno（希腊语，意味<code>Govern</code>） —— Kyverno is a policy
-engine designed for Kubernetes.</p>
-<p>Github: <a target="_blank" rel="noopener" href="https://github.com/kyverno/kyverno">kyverno/kyverno:
-Kubernetes Native Policy Management (github.com)</a></p>
-</blockquote>
 <p>首先需要了解什么是k8s中的准入控制器——<em>dynamic admission
 controller:</em></p>
 <blockquote>
@@ -1023,7 +1017,13 @@ proxy连接pod）</li>
 <li>mutating：<strong>串行</strong>调用所有修改的webhook，挨个修改该请求</li>
 <li>both：混合前两者</li>
 </ul>
-<p>Kyverno可以作为k8s集群的<strong>动态准入控制器</strong>（<em>dynamic
+<blockquote>
+<p>关于Kyverno（希腊语，意味<code>Govern</code>） —— Kyverno is a policy
+engine designed for Kubernetes.</p>
+<p>Github: <a target="_blank" rel="noopener" href="https://github.com/kyverno/kyverno">kyverno/kyverno:
+Kubernetes Native Policy Management (github.com)</a></p>
+</blockquote>
+<p>而Kyverno可以作为k8s集群的<strong>动态准入控制器</strong>（<em>dynamic
 admission controller</em>），可以通过Helm包管理器进行安装：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加chart源</span></span><br><span class="line">helm repo add kyverno https://kyverno.github.io/kyverno/</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">更新并安装</span></span><br><span class="line">helm repo update</span><br><span class="line">helm install kyverno kyverno/kyverno -n kyverno --create-namespace</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如果要卸载也很简单</span></span><br><span class="line">helm uninstall kyverno kyverno/kyverno -n kyverno</span><br></pre></td></tr></table></figure>
 <p>安装结果：</p>
@@ -1034,8 +1034,20 @@ target="_blank" rel="noopener" href="https://kyverno.io/docs/kyverno-policies/">
 Kyverno</a>。Kyverno可以定义集群范围的策略<code>ClusterPolicy</code>或指定命名空间内的策略<code>Policy</code>，而具体的结构可以用下面的一张图来概括：</p>
 <p><img src="/img/K8s攻防之OWASP-K8S-TOP10（上）/Kyverno-Policy-Structure.png" style="zoom:60%;" /></p>
 <h3 id="使用">使用</h3>
-<p>安装后，</p>
-<h3 id="问题原因-3">问题原因</h3>
+<p>这里主要学习如何编写Kyverno策略配置文件，禁止用户使用exec命令进入指定容器。</p>
+<blockquote>
+<p>kubectl apply -f
+https://raw.githubusercontent.com/madhuakula/kubernetes-goat/master/scenarios/kyverno-namespace-exec-block/kyverno-block-pod-exec-by-namespace.yaml</p>
+</blockquote>
+<p>文件内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: kyverno.io/v1</span><br><span class="line">kind: ClusterPolicy</span><br><span class="line">metadata:</span><br><span class="line">  name: deny-exec-in-vault-namespace</span><br><span class="line">  annotations:</span><br><span class="line">    policies.kyverno.io/title: Block Pod Exec in Vault Namespace</span><br><span class="line">    policies.kyverno.io/category: Sample</span><br><span class="line">    policies.kyverno.io/minversion: 1.6.0</span><br><span class="line">    policies.kyverno.io/subject: Pod</span><br><span class="line">    policies.kyverno.io/description: &gt;-</span><br><span class="line">      The `exec` command may be used to gain shell access, or run other commands, in a Pod&#x27;s container. While this can be useful for troubleshooting purposes, it could represent an attack vector and is discouraged to use in the `vault` namespace. This policy blocks Pod exec commands to Pods in a Namespace called `vault`.</span><br><span class="line">spec:</span><br><span class="line">  validationFailureAction: Enforce</span><br><span class="line">  background: false</span><br><span class="line">  rules:</span><br><span class="line">  - name: deny-exec-ns-vault</span><br><span class="line">    match:	# 定义匹配规则</span><br><span class="line">      any:</span><br><span class="line">      - resources:</span><br><span class="line">          kinds:</span><br><span class="line">          - Pod/exec</span><br><span class="line">    preconditions:</span><br><span class="line">      all:</span><br><span class="line">      - key: &quot;&#123;&#123; request.operation || &#x27;BACKGROUND&#x27; &#125;&#125;&quot;</span><br><span class="line">        operator: Equals</span><br><span class="line">        value: CONNECT</span><br><span class="line">    validate:</span><br><span class="line">      message: 🚨 Pods in vault namespace should not be exec&#x27;d into. It has Kubernetes Goat 🐐 secrets 🔥</span><br><span class="line">      deny:	# 拒绝策略</span><br><span class="line">        conditions:</span><br><span class="line">          any:</span><br><span class="line">          - key: &quot;&#123;&#123; request.namespace &#125;&#125;&quot;</span><br><span class="line">            operator: Equals</span><br><span class="line">            value: vault</span><br></pre></td></tr></table></figure>
+<p>此时我们访问就会拒绝了：</p>
+<p><img
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230924141030991.png" /></p>
+<blockquote>
+<p>此外，Kyverno官方也提供了很多这样的策略例子供我们选择，<a
+target="_blank" rel="noopener" href="https://kyverno.io/policies/">Policies | Kyverno</a></p>
+</blockquote>
 <h3 id="参考学习-3">参考学习</h3>
 <ul>
 <li><a
@@ -1045,18 +1057,53 @@ Goat (madhuakula.com)</a></li>
 <li><a
 target="_blank" rel="noopener" href="https://owasp.org/www-project-kubernetes-top-ten/2022/en/src/K04-policy-enforcement">K04:
 Policy Enforcement | OWASP Foundation</a></li>
+<li><a target="_blank" rel="noopener" href="https://kyverno.io/policies/">Policies | Kyverno</a></li>
 </ul>
 <h2 id="k05-inadequate-logging-and-monitoring">K05: Inadequate Logging
 and Monitoring</h2>
 <h3 id="定义-4">定义</h3>
+<p>这部分也是工具的学习。在k8s中，一些事件默认是不会出现在日志中或者被监控，包括：</p>
+<ul>
+<li>认证失败、敏感资源访问、手动删除或修改k8s资源</li>
+<li>运行中负载的日志</li>
+</ul>
+<p>此外，没有开启日志记录、日志有没有被集中存储且是否可以实现防篡改、报警阈值设置是否合理。上述情况或问题都可能会导致攻击者的行径没有被记录下来，从而对溯源造成了困难。因此OWASP建议如下类型日志都应开启并合理配置：</p>
+<ul>
+<li>k8s审计日志：记录API调用</li>
+<li>k8s事件：记录资源状态的更改和错误</li>
+<li>应用&amp;容器日志：容器内部运行的应用程序自行记录应用程序的日志</li>
+<li>操作系统日志：如<code>journalctl</code>命令</li>
+<li>云提供商日志</li>
+<li>网络日志</li>
+</ul>
 <h3
 id="对应k8s-goat场景cilium-tetragon---ebpf-based-security-observability-and-runtime-enforcement">对应k8s-goat场景：Cilium
 Tetragon - eBPF-based Security Observability and Runtime
 Enforcement</h3>
 <p><img
 src="/img/K8s攻防之OWASP-K8S-TOP10（上）/scenario-21-f6224cb07df8c572137cd371e26c1d42.png" /></p>
-<h3 id="利用-3">利用</h3>
-<h3 id="问题原因-4">问题原因</h3>
+<h3 id="使用-1">使用</h3>
+<blockquote>
+<p>Tetragon是一个基于eBPF技术的运行时安全检测组件，具有如下特点：</p>
+<ul>
+<li>实时性：Tetragon is a runtime security enforcement and observability
+tool. What this means is Tetragon applies policy and filtering directly
+in eBPF in the kernel.</li>
+<li>灵活性：Tetragon can hook into any function in the Linux kernel and
+filter on its arguments, return value, associated metadata that Tetragon
+collects about processes (e.g., executable names), files, and other
+properties.</li>
+<li>内核信息可读：Tetragon, through eBPF, has access to the Linux kernel
+state.</li>
+</ul>
+</blockquote>
+<p>安装依然直接使用helm安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加软件源</span></span><br><span class="line">helm repo add cilium https://helm.cilium.io</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">更新并安装</span></span><br><span class="line">helm repo update &amp;&amp; helm install tetragon cilium/tetragon -n kube-system</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检查tetragon的pod状态</span></span><br><span class="line">kubectl rollout status -n kube-system ds/tetragon -w</span><br></pre></td></tr></table></figure>
+<p>具体Tetragon的使用方法、原理这里不做赘述，官方文档：<a
+target="_blank" rel="noopener" href="https://tetragon.cilium.io/docs/overview/">Overview | Tetragon
+(cilium.io)</a>。下图为Tetragon架构示意图：</p>
+<p><img
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/smart_observability.png" /></p>
 <h3 id="参考学习-4">参考学习</h3>
 <ul>
 <li><a
@@ -1066,6 +1113,8 @@ Enforcement | Kubernetes Goat (madhuakula.com)</a></li>
 <li><a
 target="_blank" rel="noopener" href="https://owasp.org/www-project-kubernetes-top-ten/2022/en/src/K05-inadequate-logging">K05:
 Inadequate Logging | OWASP Foundation</a></li>
+<li><a target="_blank" rel="noopener" href="https://tetragon.cilium.io/docs/overview/">Overview |
+Tetragon (cilium.io)</a></li>
 </ul>
 
     </article>
@@ -1075,7 +1124,7 @@ Inadequate Logging | OWASP Foundation</a></li>
             <p>原文作者：<a href="https://lzwgiter.github.io">lzwgiter</a>
             <p>原文链接：<a href="https://lzwgiter.github.io/posts/8aa36aba.html">https://lzwgiter.github.io/posts/8aa36aba.html</a>
             <p>发表日期：<a href="https://lzwgiter.github.io/posts/8aa36aba.html">September 16th 2023, 3:25:21 pm</a>
-            <p>更新日期：<a href="https://lzwgiter.github.io/posts/8aa36aba.html">September 22nd 2023, 9:40:32 pm</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/8aa36aba.html">September 24th 2023, 10:02:44 pm</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -1255,10 +1304,10 @@ Vulnerabilities</span></a><ol class="toc-child"><li class="toc-item toc-level-3"
 private registry</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%85%B3%E4%BA%8Edocker-registry"><span class="toc-number">3.2.3.</span> <span class="toc-text">预备知识：关于docker registry</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-1"><span class="toc-number">3.2.4.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-1"><span class="toc-number">3.2.5.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-1"><span class="toc-number">3.2.6.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k03-overly-permissive-rbac"><span class="toc-number">3.3.</span> <span class="toc-text">K03: Overly Permissive RBAC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-2"><span class="toc-number">3.3.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AFrbac-least-privileges-misconfiguration"><span class="toc-number">3.3.2.</span> <span class="toc-text">对应k8s-goat场景：RBAC
 least privileges misconfiguration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="toc-number">3.3.3.</span> <span class="toc-text">预备知识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-2"><span class="toc-number">3.3.4.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-2"><span class="toc-number">3.3.5.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-2"><span class="toc-number">3.3.6.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k04-lack-of-centralized-policy-enforcement"><span class="toc-number">3.4.</span> <span class="toc-text">K04: Lack of
 Centralized Policy Enforcement</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-3"><span class="toc-number">3.4.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AFsecuring-kubernetes-clusters-using-kyverno-policy-engine"><span class="toc-number">3.4.2.</span> <span class="toc-text">对应k8s-goat场景：Securing
-Kubernetes Clusters using Kyverno Policy Engine</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86-1"><span class="toc-number">3.4.3.</span> <span class="toc-text">预备知识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">3.4.4.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-3"><span class="toc-number">3.4.5.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-3"><span class="toc-number">3.4.6.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k05-inadequate-logging-and-monitoring"><span class="toc-number">3.5.</span> <span class="toc-text">K05: Inadequate Logging
+Kubernetes Clusters using Kyverno Policy Engine</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86-1"><span class="toc-number">3.4.3.</span> <span class="toc-text">预备知识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">3.4.4.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-3"><span class="toc-number">3.4.5.</span> <span class="toc-text">参考学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#k05-inadequate-logging-and-monitoring"><span class="toc-number">3.5.</span> <span class="toc-text">K05: Inadequate Logging
 and Monitoring</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-4"><span class="toc-number">3.5.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%BA%94k8s-goat%E5%9C%BA%E6%99%AFcilium-tetragon---ebpf-based-security-observability-and-runtime-enforcement"><span class="toc-number">3.5.2.</span> <span class="toc-text">对应k8s-goat场景：Cilium
 Tetragon - eBPF-based Security Observability and Runtime
-Enforcement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-3"><span class="toc-number">3.5.3.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0-4"><span class="toc-number">3.5.4.</span> <span class="toc-text">问题原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-4"><span class="toc-number">3.5.5.</span> <span class="toc-text">参考学习</span></a></li></ol></li></ol></li></ol>
+Enforcement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-1"><span class="toc-number">3.5.3.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0-4"><span class="toc-number">3.5.4.</span> <span class="toc-text">参考学习</span></a></li></ol></li></ol></li></ol>
             </div>
         
         <!-- sidebar -->
