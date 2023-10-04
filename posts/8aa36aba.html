@@ -32,8 +32,9 @@
 <meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10%EF%BC%88%E4%B8%8A%EF%BC%89/image-20230918210321217.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10%EF%BC%88%E4%B8%8A%EF%BC%89/image-20230920153859379.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/K8s%E6%94%BB%E9%98%B2%E4%B9%8BOWASP-K8S-TOP10%EF%BC%88%E4%B8%8A%EF%BC%89/Kyverno-Policy-Structure.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/%E8%AF%B7%E6%88%91%E5%96%9D%E6%9D%AF%E5%92%96%E5%95%A1%E5%90%A7.jpg">
 <meta property="article:published_time" content="2023-09-16T07:25:21.000Z">
-<meta property="article:modified_time" content="2023-09-24T14:02:44.709Z">
+<meta property="article:modified_time" content="2023-10-04T15:37:14.578Z">
 <meta property="article:author" content="lzwgiter">
 <meta property="article:tag" content="Kubernete">
 <meta property="article:tag" content="云安全">
@@ -606,7 +607,8 @@ src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230917164629557.png" /></
 <p><img
 src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230917164804225.png" /></p>
 <blockquote>
-<p>但是这里又出问题了，执行后我并没有看到出现新的Pod，且端口不可访问，因为原脚本将输出重定向到了null。因此单独执行命令后发现如下问题，目前尚未解决，已发起issue提问：</p>
+<p>这里又出问题了，但是我自己环境的问题，这部分可以忽略。</p>
+<p>执行后我并没有看到出现新的Pod，且端口不可访问，因为原脚本将输出重定向到了null。因此单独执行命令后发现如下问题，目前尚未解决，已发起issue提问：</p>
 <p><img
 src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230917221219482.png" /></p>
 </blockquote>
@@ -1099,6 +1101,9 @@ state.</li>
 </blockquote>
 <p>安装依然直接使用helm安装：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加软件源</span></span><br><span class="line">helm repo add cilium https://helm.cilium.io</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">更新并安装</span></span><br><span class="line">helm repo update &amp;&amp; helm install tetragon cilium/tetragon -n kube-system</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检查tetragon的pod状态</span></span><br><span class="line">kubectl rollout status -n kube-system ds/tetragon -w</span><br></pre></td></tr></table></figure>
+<p>安装结果：</p>
+<p><img
+src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20231002190521896.png" /></p>
 <p>具体Tetragon的使用方法、原理这里不做赘述，官方文档：<a
 target="_blank" rel="noopener" href="https://tetragon.cilium.io/docs/overview/">Overview | Tetragon
 (cilium.io)</a>。下图为Tetragon架构示意图：</p>
@@ -1116,6 +1121,7 @@ Inadequate Logging | OWASP Foundation</a></li>
 <li><a target="_blank" rel="noopener" href="https://tetragon.cilium.io/docs/overview/">Overview |
 Tetragon (cilium.io)</a></li>
 </ul>
+<p><img src="/img/请我喝杯咖啡吧.jpg" style="zoom:33%;" /></p>
 
     </article>
     <!-- license -->
@@ -1124,13 +1130,18 @@ Tetragon (cilium.io)</a></li>
             <p>原文作者：<a href="https://lzwgiter.github.io">lzwgiter</a>
             <p>原文链接：<a href="https://lzwgiter.github.io/posts/8aa36aba.html">https://lzwgiter.github.io/posts/8aa36aba.html</a>
             <p>发表日期：<a href="https://lzwgiter.github.io/posts/8aa36aba.html">September 16th 2023, 3:25:21 pm</a>
-            <p>更新日期：<a href="https://lzwgiter.github.io/posts/8aa36aba.html">September 24th 2023, 10:02:44 pm</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/8aa36aba.html">October 4th 2023, 11:37:14 pm</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
     <!-- paginator -->
     <ul class="post-paginator">
         <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href="/posts/85bf5302.html" title="K8s攻防之OWASP-K8S-TOP10（下）">
+                    <div class="nextTitle">K8s攻防之OWASP-K8S-TOP10（下）</div>
+                </a>
             
         </li>
         <li class="previous">
@@ -1786,7 +1797,24 @@ Enforcement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" 
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -2767,7 +2795,7 @@ Enforcement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" 
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 93
+        Total : 94
         </div>
         <!-- search  -->
         
@@ -2781,6 +2809,12 @@ Enforcement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" 
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/04</span>
+            <a class="archive-post-title" href="/posts/85bf5302.html">K8s攻防之OWASP-K8S-TOP10（下）</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">09/16</span>
