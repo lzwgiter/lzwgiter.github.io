@@ -468,6 +468,61 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/posts/169c63d0.html">
+                
+                <span class="abstract-title-text">Bloom Filter概念原理</span>
+            </a>
+            <div class="abstract-content">
+                <blockquote>
+<p>Bloom
+Filter（布隆过滤器）是一种空间利用很高的数据结构，使用一个数据来表示一个集合，用于判断一个元素是否存在于这个集合中。但是也有妥协：在判断一个元素是否属于该集合时有可能会误判(false
+positive)，故不适合于"零错误"的场景，在能够容忍低错误率的场合下，可以通过极少的错误来换取较高的存储空间利用率。google的Guava中就有<code>BloomFilter</code>这个类。</p>
+<p>一个比较常见的应用是缓解Redis等缓存中缓存击穿的问题。</p>
+</blockquote>
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2021/10/29">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/10/04</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+        
+        
+            
+        
+        
+        <span class="post-category" data-categories="论文阅读"">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                论文阅读
+            </span>
+        </span>
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="论文阅读">论文阅读</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="开发技术">开发技术</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/posts/85e98ef0.html">
                 
                 <span class="abstract-title-text">zk-SNARKs简洁的非交互式零知识证明学习(一)</span>
@@ -725,64 +780,6 @@ alt="image-20210810183438958" />
                 <!-- date -->
                 <div class="abstract-date" title="Last updated: 2021/10/29">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/08/12</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-        
-        
-            
-        
-        
-        <span class="post-category" data-categories="开发技术"">
-            <i class="fas fa-folder post-category-icon"></i>
-            <span class="post-category-text">
-                开发技术
-            </span>
-        </span>
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="分布式技术">分布式技术</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="Kubernete">Kubernete</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/posts/a08eb123.html">
-                
-                <span class="abstract-title-text">Kubernetes-集群环境搭建使用及问题记录（二）</span>
-            </a>
-            <div class="abstract-content">
-                <blockquote>
-<p>上一篇中我搭建了一个单master+三个从节点的Kubernetes集群，并直接使用nginx镜像进行了简单部署。这一篇来主要学习一下Kubernetes最主要的功能--容器编排。本篇将记录容器编排的重要概念、配置文件如何辨写开始，最后展示一个很简单的Hello-world。下一篇将深入实战，部署一个SpringCloud项目。</p>
-<figure>
-<img
-src="/img/Kubernetes-集群环境搭建使用及问题记录（一）/components-of-kubernetes.png"
-alt="image-20210810183438958" />
-<figcaption aria-hidden="true">image-20210810183438958</figcaption>
-</figure>
-</blockquote>
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2021/10/29">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/08/09</span>
                 </div>
                 <!-- tags -->
                 
@@ -1566,7 +1563,26 @@ alt="image-20210810183438958" />
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -2559,7 +2575,7 @@ alt="image-20210810183438958" />
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 94
+        Total : 95
         </div>
         <!-- search  -->
         
@@ -2573,6 +2589,12 @@ alt="image-20210810183438958" />
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/09</span>
+            <a class="archive-post-title" href="/posts/c41813ec.html">重新审视微服务</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">10/04</span>
@@ -3371,6 +3393,11 @@ alt="image-20210810183438958" />
             <span class="sidebar-tag-name" data-tags="云安全">
                 <span class="iconfont-archer">&#xe606;</span>
                 云安全
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="微服务技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                微服务技术
             </span>
         
     </div>
