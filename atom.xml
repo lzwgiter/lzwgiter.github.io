@@ -422,9 +422,9 @@ positive)，故不适合于&quot;零错误&quot;的场景，在能够容忍低�
     <category term="论文阅读" scheme="https://lzwgiter.github.io/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/"/>
     
     
-    <category term="论文阅读" scheme="https://lzwgiter.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/"/>
-    
     <category term="开发技术" scheme="https://lzwgiter.github.io/tags/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/"/>
+    
+    <category term="论文阅读" scheme="https://lzwgiter.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/"/>
     
   </entry>
   
@@ -453,9 +453,9 @@ R1CS -&amp;gt; QAP -&amp;gt; zk-SNARK&lt;/strong&gt;&lt;/p&gt;
     <category term="密码学" scheme="https://lzwgiter.github.io/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"/>
     
     
-    <category term="密码学" scheme="https://lzwgiter.github.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/"/>
-    
     <category term="区块链技术" scheme="https://lzwgiter.github.io/tags/%E5%8C%BA%E5%9D%97%E9%93%BE%E6%8A%80%E6%9C%AF/"/>
+    
+    <category term="密码学" scheme="https://lzwgiter.github.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/"/>
     
   </entry>
   
@@ -581,9 +581,9 @@ alt=&quot;image-20210810183438958&quot; /&gt;
     <category term="开发技术" scheme="https://lzwgiter.github.io/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/"/>
     
     
-    <category term="分布式技术" scheme="https://lzwgiter.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E6%8A%80%E6%9C%AF/"/>
-    
     <category term="Kubernete" scheme="https://lzwgiter.github.io/tags/Kubernete/"/>
+    
+    <category term="分布式技术" scheme="https://lzwgiter.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E6%8A%80%E6%9C%AF/"/>
     
   </entry>
   
@@ -612,9 +612,9 @@ alt=&quot;image-20210810183438958&quot; /&gt;
     <category term="开发技术" scheme="https://lzwgiter.github.io/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/"/>
     
     
-    <category term="分布式技术" scheme="https://lzwgiter.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E6%8A%80%E6%9C%AF/"/>
-    
     <category term="Kubernete" scheme="https://lzwgiter.github.io/tags/Kubernete/"/>
+    
+    <category term="分布式技术" scheme="https://lzwgiter.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E6%8A%80%E6%9C%AF/"/>
     
   </entry>
   
