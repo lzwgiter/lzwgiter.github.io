@@ -205,6 +205,19 @@
     <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
     <!-- algolia -->
     
+        <script>
+            var hits = JSON.parse('{"per_page":10}')
+            var labels = JSON.parse('{"input_placeholder":"搜索文章相关内容","hits_empty":"${query}搜索结果为空: ","hits_stats":"找到结果${hits}条，用时${time} ms"}')
+
+            var algolia = {
+                applicationID: 'BTZ93R2DLS',
+                apiKey: '672baf14074cdc7c5be7c85fe8b4d8bb',
+                indexName: 'hexo_blogs',
+                hits: hits,
+                labels: labels
+            }
+        </script>
+    
     <!-- 百度统计  -->
     
         <script>
@@ -459,6 +472,59 @@
             <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
             <div class="container container-unloaded">
                 <main class="main index-page">
+    
+        
+        
+        
+        
+            
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/posts/82490df7.html">
+                
+                <span class="abstract-title-text">并发模型之单线程多路I/O复用---select</span>
+            </a>
+            <div class="abstract-content">
+                <blockquote>
+<p>最近在写网络程序设计的大作业，大概就是一个聊天室的功能，牵扯到并发的问题，开始尝试使用多线程进行编写，但是发现结构稍微复杂，后来从《高质量嵌入式
+Linux
+C编程》一书中了解到，除了多线程、多进程之外，还有一种高并发的设计模式，那就是多路I/O复用技术(synchronous
+I/O
+multiplexing)，这个技术在特定条件下(I/O成本远远低于处理流程、单核CPU等)的情况下，效率是要比前两者高的，其实质就是在单线程的情况下同时监控多个I/O，最基本的机制就是<code>select()</code>机制，但是当然也有他的缺点以及优化版本(epoll等)
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2021/08/25">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/10/20</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+        
+        
+            
+        
+        
+        <span class="post-category" data-categories="开发技术"">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                开发技术
+            </span>
+        </span>
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="C编程">C编程</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
     
         
         
@@ -730,60 +796,10 @@ oit的使用熟练程度、分析流程以及Meterpreter后渗透的一些手法
         </article>
         <div class="index-post-divider"></div>
     
-        
-        
-        
-        
-            
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/posts/18238b8b.html">
-                
-                <span class="abstract-title-text">kali-渗透测试-信息收集2</span>
-            </a>
-            <div class="abstract-content">
-                <blockquote>
-<p>第二部分</p>
-</blockquote>
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/08/08">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/05/10</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-        
-        
-            
-        
-        
-        <span class="post-category" data-categories="渗透测试"">
-            <i class="fas fa-folder post-category-icon"></i>
-            <span class="post-category-text">
-                渗透测试
-            </span>
-        </span>
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="渗透测试">渗透测试</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
     <!-- paginator  -->
     
         <nav class="page-nav">
-            <a class="extend prev" rel="prev" href="/page/8/">&lt; PREV</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/10/">NEXT &gt;</a>
+            <a class="extend prev" rel="prev" href="/page/8/">&lt; PREV</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/10/">NEXT &gt;</a>
         </nav>
     
 </main>
@@ -877,13 +893,13 @@ oit的使用熟练程度、分析流程以及Meterpreter后渗透的一些手法
             
                 
                     <span>
-                        <a href="//doubler.cn/" target="_blank">Double-R</a>
+                        <a href="//blog.d4y1ight.xyz/" target="_blank">flight</a>
                     </span>
                 
             
                 
                     <span>
-                        <a href="//blog.d4y1ight.xyz/" target="_blank">flight</a>
+                        <a href="//doubler.cn/" target="_blank">Double-R</a>
                     </span>
                 
             
@@ -1504,7 +1520,30 @@ oit的使用熟练程度、分析流程以及Meterpreter后渗透的一些手法
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -2519,9 +2558,13 @@ oit的使用熟练程度、分析流程以及Meterpreter后渗透的一些手法
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 96
+        Total : 97
         </div>
         <!-- search  -->
+        
+            <div class="site-search site-search-loading popup-trigger">
+                <span class="iconfont-archer search-icon">&#xe627;</span>
+            </div>
         
     </div>
     
@@ -2529,6 +2572,21 @@ oit的使用熟练程度、分析流程以及Meterpreter后渗透的一些手法
     
         
             
+            
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/posts/21f893eb.html">学鲁菜之酱焖鲈鱼</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
             
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
@@ -3350,6 +3408,11 @@ oit的使用熟练程度、分析流程以及Meterpreter后渗透的一些手法
                 课程总结
             </span>
         
+            <span class="sidebar-tag-name" data-tags="日常">
+                <span class="iconfont-archer">&#xe606;</span>
+                日常
+            </span>
+        
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
@@ -3458,6 +3521,28 @@ oit的使用熟练程度、分析流程以及Meterpreter后渗透的一些手法
         <!-- fancybox -->
         <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
         <!-- algolia -->
+        
+            <div class="site-search site-search-loading">
+    <div class="algolia-popup popup">
+        <div class="algolia-search">
+            <div class="algolia-search-input-icon">
+                <i class="fa fa-search"></i>
+            </div>
+            <div class="algolia-search-input" id="algolia-search-input"></div>
+            <div class="popup-btn-close">
+                <i class="iconfont-archer">&#xe609;</i>
+            </div>
+        </div>
+
+        <div class="algolia-results">
+            <div id="algolia-stats" class="algolia-stats"></div>
+            <div id="algolia-hits"></div>
+            <div id="algolia-pagination" class="algolia-pagination"></div>
+        </div>
+    </div>
+</div>
+
+            <script src="/scripts/search.js?v=20211217" defer></script>
         
         <!-- busuanzi -->
         

@@ -205,6 +205,19 @@
     <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
     <!-- algolia -->
     
+        <script>
+            var hits = JSON.parse('{"per_page":10}')
+            var labels = JSON.parse('{"input_placeholder":"搜索文章相关内容","hits_empty":"${query}搜索结果为空: ","hits_stats":"找到结果${hits}条，用时${time} ms"}')
+
+            var algolia = {
+                applicationID: 'BTZ93R2DLS',
+                apiKey: '672baf14074cdc7c5be7c85fe8b4d8bb',
+                indexName: 'hexo_blogs',
+                hits: hits,
+                labels: labels
+            }
+        </script>
+    
     <!-- 百度统计  -->
     
         <script>
@@ -459,6 +472,63 @@
             <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
             <div class="container container-unloaded">
                 <main class="main index-page">
+    
+        
+        
+        
+        
+            
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/posts/f06096b.html">
+                
+                <span class="abstract-title-text">MATLAB - Wireless Communication Onramp</span>
+            </a>
+            <div class="abstract-content">
+                <blockquote>
+<p>失踪人口回归嘿嘿。最近出于实验需求，学习一下如何使用Matlab来模拟无线通信环境，包括通过添加噪声、过滤器等来模拟真实物理世界状态，旨在测试信道的误比特率。包括单链路和多链路的模拟。记录的内容主要来自官网MathWork上的在线免费课程。包括：</p>
+<ol type="1">
+<li>单理想通道&amp;噪声通道通信模拟</li>
+<li>多径理想&amp;噪声模拟，OFDM机制模拟</li>
+</ol>
+<p>(ps：之前一直认为Matlab没啥用&amp;&amp;没好好学的我对不起对不起对不起。</p>
+<p><img
+src="/img/MATLAB%20-%20Wireless%20Communication%20Onramp/image-20220122214915003.png" /></p>
+</blockquote>
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2023/01/02">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2022/01/20</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+        
+        
+            
+        
+        
+        <span class="post-category" data-categories="MATLAB"">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                MATLAB
+            </span>
+        </span>
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="MatLab">MatLab</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
     
         
         
@@ -733,71 +803,10 @@ blog</a>，但是当时只是简单的看了一下供微服务应用底层使用
         </article>
         <div class="index-post-divider"></div>
     
-        
-        
-        
-        
-            
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/posts/99665dc1.html">
-                
-                <span class="abstract-title-text">闲聊一下Java中的DI和CDI</span>
-            </a>
-            <div class="abstract-content">
-                <blockquote>
-<p>emm，更具体地来说其实是闲聊JSR-299与JSR-330，以及进一步澄清Spring的DI和Quarkus的CDI的概念。能疑惑这个问题只能说明我对Java的历史不够了解啊，只是很肤浅的去使用而没有思考其来源。</p>
-<p>思考这个问题是因为我接触了Quarkus这个Java框架，大家一说到区块链一说到容器化可能都会去想go，而不是资源占有大且重量级的Java，这个框架就是用来解决Spring系列在这方面繁重的问题的，具体我会在Quarkus系列中详细叙述该框架的优点。</p>
-<p>今天这篇文章主要内容包括这些：</p>
-<ul>
-<li>澄清一下DI(<em>Dependency Injection</em>)和CDI(<em>Context and
-Dependency
-Injection</em>)的关系与区别，顺带记录一下我自己思考的过程；</li>
-<li>澄清一下记Spring的ioc机制和这二者的关系(其实这俩没关系。。)</li>
-<li>简言一下Quarkus的特点</li>
-</ul>
-</blockquote>
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2021/08/25">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/08/18</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-        
-        
-            
-        
-        
-        <span class="post-category" data-categories="杂谈"">
-            <i class="fas fa-folder post-category-icon"></i>
-            <span class="post-category-text">
-                杂谈
-            </span>
-        </span>
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="Java">Java</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="Quarkus">Quarkus</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
     <!-- paginator  -->
     
         <nav class="page-nav">
-            <a class="extend prev" rel="prev" href="/page/2/">&lt; PREV</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/4/">NEXT &gt;</a>
+            <a class="extend prev" rel="prev" href="/page/2/">&lt; PREV</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/4/">NEXT &gt;</a>
         </nav>
     
 </main>
@@ -891,13 +900,13 @@ Injection</em>)的关系与区别，顺带记录一下我自己思考的过程�
             
                 
                     <span>
-                        <a href="//doubler.cn/" target="_blank">Double-R</a>
+                        <a href="//blog.d4y1ight.xyz/" target="_blank">flight</a>
                     </span>
                 
             
                 
                     <span>
-                        <a href="//blog.d4y1ight.xyz/" target="_blank">flight</a>
+                        <a href="//doubler.cn/" target="_blank">Double-R</a>
                     </span>
                 
             
@@ -1518,7 +1527,30 @@ Injection</em>)的关系与区别，顺带记录一下我自己思考的过程�
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -2533,9 +2565,13 @@ Injection</em>)的关系与区别，顺带记录一下我自己思考的过程�
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 96
+        Total : 97
         </div>
         <!-- search  -->
+        
+            <div class="site-search site-search-loading popup-trigger">
+                <span class="iconfont-archer search-icon">&#xe627;</span>
+            </div>
         
     </div>
     
@@ -2543,6 +2579,21 @@ Injection</em>)的关系与区别，顺带记录一下我自己思考的过程�
     
         
             
+            
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/posts/21f893eb.html">学鲁菜之酱焖鲈鱼</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
             
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
@@ -3364,6 +3415,11 @@ Injection</em>)的关系与区别，顺带记录一下我自己思考的过程�
                 课程总结
             </span>
         
+            <span class="sidebar-tag-name" data-tags="日常">
+                <span class="iconfont-archer">&#xe606;</span>
+                日常
+            </span>
+        
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
@@ -3472,6 +3528,28 @@ Injection</em>)的关系与区别，顺带记录一下我自己思考的过程�
         <!-- fancybox -->
         <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
         <!-- algolia -->
+        
+            <div class="site-search site-search-loading">
+    <div class="algolia-popup popup">
+        <div class="algolia-search">
+            <div class="algolia-search-input-icon">
+                <i class="fa fa-search"></i>
+            </div>
+            <div class="algolia-search-input" id="algolia-search-input"></div>
+            <div class="popup-btn-close">
+                <i class="iconfont-archer">&#xe609;</i>
+            </div>
+        </div>
+
+        <div class="algolia-results">
+            <div id="algolia-stats" class="algolia-stats"></div>
+            <div id="algolia-hits"></div>
+            <div id="algolia-pagination" class="algolia-pagination"></div>
+        </div>
+    </div>
+</div>
+
+            <script src="/scripts/search.js?v=20211217" defer></script>
         
         <!-- busuanzi -->
         

@@ -205,6 +205,19 @@
     <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
     <!-- algolia -->
     
+        <script>
+            var hits = JSON.parse('{"per_page":10}')
+            var labels = JSON.parse('{"input_placeholder":"搜索文章相关内容","hits_empty":"${query}搜索结果为空: ","hits_stats":"找到结果${hits}条，用时${time} ms"}')
+
+            var algolia = {
+                applicationID: 'BTZ93R2DLS',
+                apiKey: '672baf14074cdc7c5be7c85fe8b4d8bb',
+                indexName: 'hexo_blogs',
+                hits: hits,
+                labels: labels
+            }
+        </script>
+    
     <!-- 百度统计  -->
     
         <script>
@@ -468,6 +481,58 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/posts/79f16c6a.html">
+                
+                <span class="abstract-title-text">BOM-浏览器操作对象模型之window对象</span>
+            </a>
+            <div class="abstract-content">
+                <blockquote>
+<p>JavaScript的实现包括以下3个部分： 1.
+核心（ECMAScript）：描述了JS的语法和基本对象。 2. 文档对象模型
+☆（DOM）：处理网页内容的方法和接口 3.
+浏览器对象模型（BOM）：与浏览器交互的方法和接口
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2021/08/25">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/18</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+        
+        
+            
+        
+        
+        <span class="post-category" data-categories="开发技术"">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                开发技术
+            </span>
+        </span>
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="前端">前端</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/posts/aa0a7b0a.html">
                 
                 <span class="abstract-title-text">Javascript基础之数据类型2</span>
@@ -707,60 +772,10 @@
         </article>
         <div class="index-post-divider"></div>
     
-        
-        
-        
-        
-            
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/posts/d4db3e56.html">
-                
-                <span class="abstract-title-text">CSS基础4.3--选择器之属性选择器</span>
-            </a>
-            <div class="abstract-content">
-                <blockquote>
-<p>CSS3在CSS2的基础上新增加了3个属性选择器，如：E[attr^="value"]、E[attr$="value"]、E[attr*="value"]。与已定义的四个属性选择器为一体。</p>
-</blockquote>
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2021/08/25">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/08/08</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-        
-        
-            
-        
-        
-        <span class="post-category" data-categories="开发技术"">
-            <i class="fas fa-folder post-category-icon"></i>
-            <span class="post-category-text">
-                开发技术
-            </span>
-        </span>
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="CSS">CSS</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
     <!-- paginator  -->
     
         <nav class="page-nav">
-            <a class="extend prev" rel="prev" href="/page/14/">&lt; PREV</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/16/">NEXT &gt;</a>
+            <a class="extend prev" rel="prev" href="/page/14/">&lt; PREV</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/">16</a><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/16/">NEXT &gt;</a>
         </nav>
     
 </main>
@@ -854,13 +869,13 @@
             
                 
                     <span>
-                        <a href="//doubler.cn/" target="_blank">Double-R</a>
+                        <a href="//blog.d4y1ight.xyz/" target="_blank">flight</a>
                     </span>
                 
             
                 
                     <span>
-                        <a href="//blog.d4y1ight.xyz/" target="_blank">flight</a>
+                        <a href="//doubler.cn/" target="_blank">Double-R</a>
                     </span>
                 
             
@@ -1481,7 +1496,30 @@
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -2496,9 +2534,13 @@
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 96
+        Total : 97
         </div>
         <!-- search  -->
+        
+            <div class="site-search site-search-loading popup-trigger">
+                <span class="iconfont-archer search-icon">&#xe627;</span>
+            </div>
         
     </div>
     
@@ -2506,6 +2548,21 @@
     
         
             
+            
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/posts/21f893eb.html">学鲁菜之酱焖鲈鱼</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
             
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
@@ -3327,6 +3384,11 @@
                 课程总结
             </span>
         
+            <span class="sidebar-tag-name" data-tags="日常">
+                <span class="iconfont-archer">&#xe606;</span>
+                日常
+            </span>
+        
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
@@ -3435,6 +3497,28 @@
         <!-- fancybox -->
         <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
         <!-- algolia -->
+        
+            <div class="site-search site-search-loading">
+    <div class="algolia-popup popup">
+        <div class="algolia-search">
+            <div class="algolia-search-input-icon">
+                <i class="fa fa-search"></i>
+            </div>
+            <div class="algolia-search-input" id="algolia-search-input"></div>
+            <div class="popup-btn-close">
+                <i class="iconfont-archer">&#xe609;</i>
+            </div>
+        </div>
+
+        <div class="algolia-results">
+            <div id="algolia-stats" class="algolia-stats"></div>
+            <div id="algolia-hits"></div>
+            <div id="algolia-pagination" class="algolia-pagination"></div>
+        </div>
+    </div>
+</div>
+
+            <script src="/scripts/search.js?v=20211217" defer></script>
         
         <!-- busuanzi -->
         

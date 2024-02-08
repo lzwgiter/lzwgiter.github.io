@@ -205,6 +205,19 @@
     <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
     <!-- algolia -->
     
+        <script>
+            var hits = JSON.parse('{"per_page":10}')
+            var labels = JSON.parse('{"input_placeholder":"搜索文章相关内容","hits_empty":"${query}搜索结果为空: ","hits_stats":"找到结果${hits}条，用时${time} ms"}')
+
+            var algolia = {
+                applicationID: 'BTZ93R2DLS',
+                apiKey: '672baf14074cdc7c5be7c85fe8b4d8bb',
+                indexName: 'hexo_blogs',
+                hits: hits,
+                labels: labels
+            }
+        </script>
+    
     <!-- 百度统计  -->
     
         <script>
@@ -459,6 +472,67 @@
             <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
             <div class="container container-unloaded">
                 <main class="main index-page">
+    
+        
+        
+        
+        
+            
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/posts/e2947908.html">
+                
+                <span class="abstract-title-text">Java Instrument机制及管窥IAST</span>
+            </a>
+            <div class="abstract-content">
+                <blockquote>
+<ul>
+<li><p>Java Instrument机制于JDK
+1.5版本引入，是一种Java中的字节码增强技术（<em>Bytecode
+Instrumentation</em>）。可以理解为一种JVM级别的AOP实现方式，可以实现向JVM中一个运行时程序加载一个jar包、并由该jar包对运行时程序进行字节码修改的效果。最初目的为实现JVM监控和类的动态修改。作为插桩技术，其在安全领域的应用包括不限于RASP、IAST等。</p></li>
+<li><p>IAST（<em>Interactive application security
+testing</em>）交互式应用安全检测是一种应用安全测试方法，由Gartner公司与2012年提出。基于instrumentation机制，IAST可以与依赖库进行交互，并从内部对运行时应用进行分析，实现对代码漏洞的发现和诊断。（图片来源<a
+target="_blank" rel="noopener" href="https://dzone.com/refcardz/introduction-to-iast"
+title="Introduction to IAST - DZone Refcardz">[1]</a>）</p></li>
+</ul>
+<p><img src="/img/Java-Instrument机制及管窥IAST/10934497-picture3.png" style="zoom:80%;" /></p>
+</blockquote>
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2023/07/08">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/07/08</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+        
+        
+            
+        
+        
+        <span class="post-category" data-categories="DevSecOps"">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                DevSecOps
+            </span>
+        </span>
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="Java">Java</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="DevSecOps">DevSecOps</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
     
         
         
@@ -730,67 +804,10 @@ target="_blank" rel="noopener" href="https://github.com/lzwgiter/MyCWebStudy">�
         </article>
         <div class="index-post-divider"></div>
     
-        
-        
-        
-        
-            
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/posts/f06096b.html">
-                
-                <span class="abstract-title-text">MATLAB - Wireless Communication Onramp</span>
-            </a>
-            <div class="abstract-content">
-                <blockquote>
-<p>失踪人口回归嘿嘿。最近出于实验需求，学习一下如何使用Matlab来模拟无线通信环境，包括通过添加噪声、过滤器等来模拟真实物理世界状态，旨在测试信道的误比特率。包括单链路和多链路的模拟。记录的内容主要来自官网MathWork上的在线免费课程。包括：</p>
-<ol type="1">
-<li>单理想通道&amp;噪声通道通信模拟</li>
-<li>多径理想&amp;噪声模拟，OFDM机制模拟</li>
-</ol>
-<p>(ps：之前一直认为Matlab没啥用&amp;&amp;没好好学的我对不起对不起对不起。</p>
-<p><img
-src="/img/MATLAB%20-%20Wireless%20Communication%20Onramp/image-20220122214915003.png" /></p>
-</blockquote>
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/01/02">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2022/01/20</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-        
-        
-            
-        
-        
-        <span class="post-category" data-categories="MATLAB"">
-            <i class="fas fa-folder post-category-icon"></i>
-            <span class="post-category-text">
-                MATLAB
-            </span>
-        </span>
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="MatLab">MatLab</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
     <!-- paginator  -->
     
         <nav class="page-nav">
-            <a class="extend prev" rel="prev" href="/">&lt; PREV</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/3/">NEXT &gt;</a>
+            <a class="extend prev" rel="prev" href="/">&lt; PREV</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/3/">NEXT &gt;</a>
         </nav>
     
 </main>
@@ -884,13 +901,13 @@ src="/img/MATLAB%20-%20Wireless%20Communication%20Onramp/image-20220122214915003
             
                 
                     <span>
-                        <a href="//doubler.cn/" target="_blank">Double-R</a>
+                        <a href="//blog.d4y1ight.xyz/" target="_blank">flight</a>
                     </span>
                 
             
                 
                     <span>
-                        <a href="//blog.d4y1ight.xyz/" target="_blank">flight</a>
+                        <a href="//doubler.cn/" target="_blank">Double-R</a>
                     </span>
                 
             
@@ -1511,7 +1528,30 @@ src="/img/MATLAB%20-%20Wireless%20Communication%20Onramp/image-20220122214915003
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -2526,9 +2566,13 @@ src="/img/MATLAB%20-%20Wireless%20Communication%20Onramp/image-20220122214915003
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 96
+        Total : 97
         </div>
         <!-- search  -->
+        
+            <div class="site-search site-search-loading popup-trigger">
+                <span class="iconfont-archer search-icon">&#xe627;</span>
+            </div>
         
     </div>
     
@@ -2536,6 +2580,21 @@ src="/img/MATLAB%20-%20Wireless%20Communication%20Onramp/image-20220122214915003
     
         
             
+            
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/posts/21f893eb.html">学鲁菜之酱焖鲈鱼</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
             
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
@@ -3357,6 +3416,11 @@ src="/img/MATLAB%20-%20Wireless%20Communication%20Onramp/image-20220122214915003
                 课程总结
             </span>
         
+            <span class="sidebar-tag-name" data-tags="日常">
+                <span class="iconfont-archer">&#xe606;</span>
+                日常
+            </span>
+        
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
@@ -3465,6 +3529,28 @@ src="/img/MATLAB%20-%20Wireless%20Communication%20Onramp/image-20220122214915003
         <!-- fancybox -->
         <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
         <!-- algolia -->
+        
+            <div class="site-search site-search-loading">
+    <div class="algolia-popup popup">
+        <div class="algolia-search">
+            <div class="algolia-search-input-icon">
+                <i class="fa fa-search"></i>
+            </div>
+            <div class="algolia-search-input" id="algolia-search-input"></div>
+            <div class="popup-btn-close">
+                <i class="iconfont-archer">&#xe609;</i>
+            </div>
+        </div>
+
+        <div class="algolia-results">
+            <div id="algolia-stats" class="algolia-stats"></div>
+            <div id="algolia-hits"></div>
+            <div id="algolia-pagination" class="algolia-pagination"></div>
+        </div>
+    </div>
+</div>
+
+            <script src="/scripts/search.js?v=20211217" defer></script>
         
         <!-- busuanzi -->
         

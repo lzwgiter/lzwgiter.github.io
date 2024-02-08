@@ -211,6 +211,19 @@
     <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
     <!-- algolia -->
     
+        <script>
+            var hits = JSON.parse('{"per_page":10}')
+            var labels = JSON.parse('{"input_placeholder":"搜索文章相关内容","hits_empty":"${query}搜索结果为空: ","hits_stats":"找到结果${hits}条，用时${time} ms"}')
+
+            var algolia = {
+                applicationID: 'BTZ93R2DLS',
+                apiKey: '672baf14074cdc7c5be7c85fe8b4d8bb',
+                indexName: 'hexo_blogs',
+                hits: hits,
+                labels: labels
+            }
+        </script>
+    
     <!-- 百度统计  -->
     
         <script>
@@ -564,7 +577,7 @@ src="/img/BOM-浏览器操作对象模型之history和screen对象/1.png" />
         <div class="license-wrapper">
             <p>原文作者：<a href="https://lzwgiter.github.io">f10@t</a>
             <p>原文链接：<a href="https://lzwgiter.github.io/posts/20cf0786.html">https://lzwgiter.github.io/posts/20cf0786.html</a>
-            <p>发表日期：<a href="https://lzwgiter.github.io/posts/20cf0786.html">August 21st 2018, 1:42:36 pm</a>
+            <p>发表日期：<a href="https://lzwgiter.github.io/posts/20cf0786.html">八月 21日 2018, 1:42:36 下午</a>
             <p>更新日期：<a href="https://lzwgiter.github.io/posts/20cf0786.html">August 25th 2021, 7:24:22 pm</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
@@ -1226,7 +1239,30 @@ src="/img/BOM-浏览器操作对象模型之history和screen对象/1.png" />
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -2241,9 +2277,13 @@ src="/img/BOM-浏览器操作对象模型之history和screen对象/1.png" />
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 96
+        Total : 97
         </div>
         <!-- search  -->
+        
+            <div class="site-search site-search-loading popup-trigger">
+                <span class="iconfont-archer search-icon">&#xe627;</span>
+            </div>
         
     </div>
     
@@ -2251,6 +2291,21 @@ src="/img/BOM-浏览器操作对象模型之history和screen对象/1.png" />
     
         
             
+            
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/posts/21f893eb.html">学鲁菜之酱焖鲈鱼</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
             
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
@@ -3072,6 +3127,11 @@ src="/img/BOM-浏览器操作对象模型之history和screen对象/1.png" />
                 课程总结
             </span>
         
+            <span class="sidebar-tag-name" data-tags="日常">
+                <span class="iconfont-archer">&#xe606;</span>
+                日常
+            </span>
+        
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
@@ -3180,6 +3240,28 @@ src="/img/BOM-浏览器操作对象模型之history和screen对象/1.png" />
         <!-- fancybox -->
         <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
         <!-- algolia -->
+        
+            <div class="site-search site-search-loading">
+    <div class="algolia-popup popup">
+        <div class="algolia-search">
+            <div class="algolia-search-input-icon">
+                <i class="fa fa-search"></i>
+            </div>
+            <div class="algolia-search-input" id="algolia-search-input"></div>
+            <div class="popup-btn-close">
+                <i class="iconfont-archer">&#xe609;</i>
+            </div>
+        </div>
+
+        <div class="algolia-results">
+            <div id="algolia-stats" class="algolia-stats"></div>
+            <div id="algolia-hits"></div>
+            <div id="algolia-pagination" class="algolia-pagination"></div>
+        </div>
+    </div>
+</div>
+
+            <script src="/scripts/search.js?v=20211217" defer></script>
         
         <!-- busuanzi -->
         
