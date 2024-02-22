@@ -28,10 +28,9 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://lzwgiter.github.io/img/docker-compose%E5%8F%8Adockerfile%E6%80%BB%E7%BB%93/logo.jpeg">
 <meta property="og:image" content="https://lzwgiter.github.io/img/docker-compose%E5%8F%8Adockerfile%E6%80%BB%E7%BB%93/architecture.svg">
-<meta property="og:image" content="https://lzwgiter.github.io/img/docker-compose%E5%8F%8Adockerfile%E6%80%BB%E7%BB%93/image-20210709222453866.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/%E8%AF%B7%E6%88%91%E5%96%9D%E6%9D%AF%E5%92%96%E5%95%A1%E5%90%A7.jpg">
 <meta property="article:published_time" content="2021-07-06T03:37:26.000Z">
-<meta property="article:modified_time" content="2023-02-14T12:35:14.000Z">
+<meta property="article:modified_time" content="2024-02-22T11:15:03.619Z">
 <meta property="article:author" content="f10@t">
 <meta property="article:tag" content="docker">
 <meta name="twitter:card" content="summary">
@@ -559,60 +558,68 @@ run完事，没有细致的去了解docker的运行机制以及docker-compose、
 <h2 id="docker">Docker</h2>
 <h3 id="docker作用及特点">docker作用及特点</h3>
 <p>docker官网的文档是这么描述docker这个技术的：</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Docker provides the ability to package and run an application in a loosely isolated environment called a container. The isolation and security allow you to run many containers simultaneously on a given host. Containers are lightweight and contain everything needed to run the application, so you do not need to rely on what is currently installed on the host. You can easily share containers while you work, and be sure that everyone you share with gets the same container that works in the same way.</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Docker provides the ability to package and run an application in a
+loosely isolated environment called a container. The isolation and
+security allow you to run many containers simultaneously on a given
+host. Containers are lightweight and contain everything needed to run
+the application, so you do not need to rely on what is currently
+installed on the host. You can easily share containers while you work,
+and be sure that everyone you share with gets the same container that
+works in the same way.</p>
+</blockquote>
 <p>所以docker的核心是容器<code>container</code>，这些容器之间独立且都运行在本地主机<code>host</code>之上，并且这种容器非常便于分享、启停。安装也很简单，windows这里一般不用，一般都是Linux系统，直接<code>apt-get</code>就行了，可以配置配置镜像加速源，就可以使用了。官方文档也给出了三个主要的应用场景：</p>
 <ul>
 <li>一次性的环境，便于分享应用</li>
 <li>弹性的云服务，得益于容器便于管理</li>
 <li>便于组建微服务</li>
 </ul>
-<p>你让我来说的话，其实排除掉你自己的应用(jar、war、go什么的)，其实就俩部分：<code>image</code>和<code>container</code>，这俩的关系是这样的<code>image -&gt; container</code>，<strong>即容器是从镜像来的，构建镜像的过程就是在为你的应用添加依赖、添加环境配置的过程，镜像构建好了是静态的，而容器是动态的，按照你构建好的镜像来创建一个动态的容器，并对这个容器做一些隔离(端口等)，留出一些可以访问这个容器的途径，就可以使用这个容器了。</strong></p>
+<p>你让我来说的话，其实排除掉你自己的应用(jar、war、go什么的)，其实就俩部分：<code>image</code>和<code>container</code>，这俩的关系是这样的<code>image -&gt; container</code>，<strong>即容器是从镜像来的，而构建镜像的过程就是在为你的应用添加依赖、添加环境配置的过程。镜像构建好了是静态的，而容器是动态的，按照你构建好的镜像来创建一个动态的容器，并对这个容器做一些隔离(端口等)，留出一些可以访问这个容器的途径，就可以使用这个容器了。</strong></p>
 <h3
 id="docker整体架构以及本地网络架构">docker整体架构以及本地网络架构</h3>
-<p>docker属于cs架构，我们一般好像都是本地直接命令docker不拉不拉不拉，实际上docker分为了<code>docker client</code>和<code>docker server</code>，所以你也可以去连接一个远程主机上的docker服务，来进行镜像和容器的管理。整体结构如下图：</p>
+<p>docker属于C/S架构，我们一般好像都是本地直接命令<code>docker xxxx</code>，实际上docker分为了<code>docker client</code>和<code>docker server</code>，所以你也可以去连接一个远程主机上的docker服务，来进行镜像和容器的管理。整体结构如下图：</p>
 <figure>
 <img src="/img/docker-compose及dockerfile总结/architecture.svg"
 alt="architecture" />
 <figcaption aria-hidden="true">architecture</figcaption>
 </figure>
-<p>本地来看的话，一般会有以下网卡出现：</p>
-<p><img src="/img/docker-compose及dockerfile总结/image-20210709222453866.png" alt="image-20210709222453866" style="zoom:80%;" /></p>
 <h3 id="常见命令">常见命令</h3>
 <blockquote>
 <p>查看当前docker的环境配置变量</p>
 </blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看client以及server的状态、配置（硬件、目录信息、镜像和容器、镜像源等等）、</span></span><br><span class="line">docker info</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看client以及server的状态、配置（硬件、目录信息、镜像和容器、镜像源等等）、</span></span><br><span class="line">docker info</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>搜索镜像</p>
 </blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查询指定名称的镜像</span></span><br><span class="line">docker search [name]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如查询nginx：docker search nginx</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查询指定名称的镜像</span></span><br><span class="line">docker search [name]</span><br><span class="line"><span class="comment"># 如查询nginx：docker search nginx</span></span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>拉取指定的镜像</p>
 </blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">拉取指定的名称:tag的镜像，你可以设定镜像源，官方地址：https://hub.docker.com</span></span><br><span class="line">docker pull [name]:[tag]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如docker pull ubuntu:18.04</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拉取指定的名称:tag的镜像，你可以设定镜像源，官方地址：https://hub.docker.com</span></span><br><span class="line">docker pull [name]:[tag]</span><br><span class="line"><span class="comment"># 如docker pull ubuntu:18.04</span></span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>查看当前仓库的所有镜像、查看镜像构建信息(包括基本信息(作者、父镜像等)、构建信息(EntryPoint、环境变量等))</p>
 </blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">list</span></span><br><span class="line">docker images</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看镜像构建信息</span></span><br><span class="line">docker inspect [ID]</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># list</span></span><br><span class="line">docker images</span><br><span class="line"><span class="comment"># 查看镜像构建信息</span></span><br><span class="line">docker inspect [ID]</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>查看当前docker所有的容器(包括活动的、停止的)</p>
 </blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">两个命令都可以</span></span><br><span class="line">docker ps -a</span><br><span class="line">docker container ls -a</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 两个命令都可以</span></span><br><span class="line">docker ps -a</span><br><span class="line">docker container <span class="built_in">ls</span> -a</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>删除镜像</p>
 </blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker rmi [ID]or[name:tag]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">比如docker rmi xxxxx或者docker rmi ubuntu:18.04</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 比如docker rmi xxxxx或者docker rmi ubuntu:18.04</span></span><br><span class="line">docker rmi [ID]or[name:tag]</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>删除容器</p>
 </blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm [ID]</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">rm</span> [ID]</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>为一个镜像重新打标签</p>
 </blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">如果出现依赖问题时，有时可能是tag导致的问题，比如拉取[name]:v1.4但是实际上镜像源只有[name]:1.4</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">先拉取这个需要的镜像</span></span><br><span class="line">docker pull xxxx:[old_tag]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重新打tag</span></span><br><span class="line">docker tag xxxx:[old_tag] xxxx:[new_tag]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除原有镜像</span></span><br><span class="line">docker rmi xxxx:[old_tag]</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如果出现依赖问题时，有时可能是tag导致的问题，比如拉取[name]:v1.4但是实际上镜像源只有[name]:1.4</span></span><br><span class="line"><span class="comment"># 先拉取这个需要的镜像</span></span><br><span class="line">docker pull xxxx:[old_tag]</span><br><span class="line"><span class="comment"># 重新打tag</span></span><br><span class="line">docker tag xxxx:[old_tag] xxxx:[new_tag]</span><br><span class="line"><span class="comment"># 删除原有镜像</span></span><br><span class="line">docker rmi xxxx:[old_tag]</span><br></pre></td></tr></table></figure>
 <h2 id="dockerfile">Dockerfile</h2>
-<p>什么是Dockerfile？其实就是个文本文件，通过docker定义的几个关键字来描述你的需求，即可以通过文本来构建一个符合你需求的镜像，并依据这个镜像构造容器来搭建环境，达到<strong>快速部署、利于迭代</strong>的特点。</p>
-<p>也可以把自己的应用比如jar包、war包啥的写入Dockerfile，构建你自己应用的镜像，并上传到公开仓库里供别人使用。这里明确Dockerfile的目标是<strong>生成镜像而非生成容器</strong>。</p>
+<p>什么是Dockerfile？其实就是个文本文件，通过docker定义的几个关键字来描述你的需求，<strong>即通过文本指令来构建一个符合你需求的镜像，并依据这个镜像构造容器来搭建环境，达到快速部署、利于迭代</strong>的特点。</p>
+<p>也可以把自己的应用比如jar包、war包啥的写入Dockerfile，构建你自己应用的镜像，并上传到公开仓库里供别人使用。</p>
+<p>这里明确Dockerfile的目标是<strong>生成镜像而非生成容器</strong>。</p>
 <h3 id="如何编写dockfile">如何编写Dockfile</h3>
 <p>首先我们来看一下常用的关键字及其含义：</p>
 <table>
@@ -655,19 +662,19 @@ class="email">test@test.com</a></td>
 <td>类似CMD指令，但是不会被docker
 run的命令行所覆盖，并且这些命令行参数会被当做参数送给该指令指定的程序</td>
 <td>ENTRYPOINT ["app.jar",
-"8080"]，当然你也可以配合CMD命令来使用，使其为ENTRYPOINT传递可变参数ENTRYPOINT["nginx",
-"-c"] CMD["/etc/nginx/nginx.conf"]
-若执行<code>docker run nginx:test -c /etc/nginx/new.conf</code>则会容器会执行<code>nginx:test -c /etc/nginx/new.conf</code></td>
+"8080"]。<br />当然你也可以配合CMD命令来使用，使其为ENTRYPOINT传递可变参数：ENTRYPOINT["nginx",
+"-c"]
+CMD["/etc/nginx/nginx.conf"]。此时若执行<code>docker run nginx:test -c /etc/nginx/new.conf</code>则容器会执行<code>nginx:test -c /etc/nginx/new.conf</code></td>
 </tr>
 <tr class="even">
 <td>COPY</td>
 <td>将当前上下文目录中的文件复制到容器里面去</td>
-<td>COPY --chown=float:root ./app.jar
-可以使用<code>--chown &lt;user&gt;:&lt;group&gt;</code>来指定该文件的拥有者和属组</td>
+<td>COPY --chown=float:root
+./app.jar。此外，可以使用<code>--chown &lt;user&gt;:&lt;group&gt;</code>来指定该文件的拥有者和属组</td>
 </tr>
 <tr class="odd">
 <td>ADD</td>
-<td>和COPY类似，但是有优点：1.源文件为tar，且压缩个事为gzip、bzip2、xz情况下会自动复制并解压到目标路径</td>
+<td>和COPY类似，但是有优点：<br />1.源文件为tar，且压缩格式为gzip、bzip、xz情况下会自动复制并解压到目标路径</td>
 <td>ADD app.jar /home/float/app.jar</td>
 </tr>
 <tr class="even">
@@ -677,24 +684,23 @@ run的命令行所覆盖，并且这些命令行参数会被当做参数送给�
 </tr>
 <tr class="odd">
 <td>USER</td>
-<td>相当于su <username>，切换后续命令的执行用户</td>
+<td>相当于<code>su &lt;username&gt;</code>，切换后续命令的执行用户</td>
 <td>USER float 后续命令将使用float用户来执行</td>
 </tr>
 <tr class="even">
 <td>VOLUME</td>
 <td>定义匿名数据卷，启动容器时忘记挂载数据卷，会自动挂载到匿名卷。匿名数据卷可以防止容器逐渐变大、保护重要数据被重启影响</td>
-<td>VOLUME /opt/app_cache 格式：VOLUME <路径>，可以使用</td>
+<td>VOLUME /opt/app_cache 格式：VOLUME <路径></td>
 </tr>
 <tr class="odd">
 <td>EXPOSE</td>
-<td>声明端口，让看这个文件的人知道这个服务的守护端口是什么，但是运行的时候会随机映射，除非你手动指定</td>
+<td>声明端口，即这个服务的守护端口是什么，但是运行的时候会随机映射，除非你手动指定</td>
 <td>EXPOSE 8080
-但是实际到主机是一个任意的端口，需要你自己去指定，这个关键字知识让你知道8080是守护端口</td>
+但是实际到主机是一个任意的端口，需要你自己去指定，这个关键字只是让你知道8080是守护端口</td>
 </tr>
 <tr class="even">
 <td>ONBUILD</td>
-<td>当前Dockerfile构建的镜像如果被集成到其他 DockerFile 的时候就会运行
-ONBUILD 的指令，触发指令</td>
+<td>当前Dockerfile构建的镜像如果被集成到其他DockerFile的时候就会运行ONBUILD的指令，触发指令</td>
 <td>ONBUILD <其他指令></td>
 </tr>
 <tr class="odd">
@@ -710,7 +716,7 @@ ONBUILD 的指令，触发指令</td>
 </tbody>
 </table>
 <h3 id="一个demo">一个Demo</h3>
-<p>这个Demo没啥价值，但是也展示了如何进行Dockerfile的编写以及构建镜像，假设该文件名为ubuntuTest</p>
+<p>这个Demo展示了一下更换apt源头并进行软件更新的过程，假设该文件名为ubuntuTest：</p>
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> ubuntu:<span class="number">20.04</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">MAINTAINER</span> lzwgiter&lt;float311@<span class="number">163</span>.com&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 自定义环境变量</span></span><br><span class="line"><span class="keyword">ENV</span> APTPATH /etc/apt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换地址</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> <span class="variable">$APTPATH</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> <span class="built_in">cp</span> -a /etc/apt/sources.list /etc/apt/sources.list.bak</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> sed -i <span class="string">&quot;s@http://.*archive.ubuntu.com@http://repo.huaweicloud.com@g&quot;</span> /etc/apt/sources.list</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> sed -i <span class="string">&quot;s@http://.*security.ubuntu.com@http://repo.huaweicloud.com@g&quot;</span> /etc/apt/sources.list</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> apt-get update</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">22</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> <span class="built_in">echo</span> <span class="string">&quot;END&quot;</span></span></span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>构建命令： docker build -f ubuntuTest -t myubuntu:0.1 .</p>
@@ -726,7 +732,8 @@ alt="image-20210808120831016" />
 </figure>
 <h3
 id="在idea中使用golandpycharm等同理">在IDEA中使用(GoLand、PyCharm等同理)</h3>
-<p>新版本已经不需要手动去安装Docker插件了，没有的话自行在Pugins里安装。这里我用SpringCloud的Eureka做Demo，代码很简单不做展示，主要说明流程。首先在项目根目录下创建Dockerfile：</p>
+<p>新版本已经不需要手动去安装Docker插件了，没有的话自行在Pugins里安装。</p>
+<p>这里我用一个SpringCloud的Eureka应用做Demo，代码很简单不做展示，主要说明流程。首先在项目根目录下创建Dockerfile：</p>
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> openjdk:<span class="number">8</span>-jdk-alpine3.<span class="number">9</span></span><br><span class="line"><span class="keyword">MAINTAINER</span> lzwgier&lt;float311@<span class="number">163</span>.com&gt;</span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> ./target/Eureka-1-0.0.1-SNAPSHOT.jar Eureka-1.jar</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;java&quot;</span>, <span class="string">&quot;-jar&quot;</span>, <span class="string">&quot;Eureka-1.jar&quot;</span>, <span class="string">&quot;&amp;&quot;</span>]</span></span><br></pre></td></tr></table></figure>
 <p>然后我们在<code>File | Settings | Build, Execution, Deployment | Docker</code>中添加我们的Docker服务器：</p>
 <figure>
@@ -762,6 +769,16 @@ alt="image-20210810153737315" />
 <p>Ok，那上面说了Dockerfile了，方便吧？其实有更方便的，那就是docker-compose。这俩啥区别嘞？</p>
 <p>你想想，Dockerfile是通过构建镜像-&gt;手动生成容器来进行工作的，那为啥不能把这两步直接合并，我直接docker-compose就能起来容器了多好？那这就是docker-compose的作用了，他的目标是<strong>容器</strong>，而非Dockerfile的目标<strong>镜像</strong>。</p>
 <p>此外，扩展一下，如果你的环境不止一个镜像呢？每个镜像一个Dockerfile去构建，然后每次用的时候一个个手动创建容器？这也是个问题，而docker-compose就可以帮助你解决这个问题，通过编写docker-compose.yml文件来管理多个镜像、构造容器，实现一键启动环境。</p>
+<p>上述特点也即官方总结的几个特点：</p>
+<blockquote>
+<ul>
+<li>Simplified control：管理多个容器</li>
+<li>Efficient collaboration：只需要YAML文本就可以复现</li>
+<li>Rapid application development：</li>
+<li>Portability across environments</li>
+<li>Extensive community and support</li>
+</ul>
+</blockquote>
 <h3 id="如何使用docker-compose">如何使用docker-compose</h3>
 <p>首先我们需要下载docker-compose，下面的项目主页里二进制版本也可以，或者就是使用pip来安装。下面也列出了官方详细的教程供学习。</p>
 <ul>
@@ -782,8 +799,7 @@ Docker Compose | Docker Documentation</a></li>
 <li>docker-compose up -- 创建并启动容器</li>
 <li>docker-compose down -- 停止并删除容器</li>
 </ul>
-<p>通常上docker-compose流程需要三步：</p>
-<p>当然其那面也说了，docker-compose是配合你的dockerfile来进行工作的，实现多镜像多容器的自动管理。所以重头戏是怎么写<code>docker-compose.yml</code>这个文件，那我们接下来就看一下如何编写。</p>
+<p>当然前面也说了，docker-compose是配合你的dockerfile来进行工作的，实现多镜像多容器的自动管理。所以重头戏是怎么写<code>docker-compose.yml</code>这个文件，那我们接下来就看一下如何编写。</p>
 <h3 id="如何编写docker-compose.yml">如何编写docker-compose.yml</h3>
 <p>由于docker-compose由多个小单元构成(我这里指的单元就是service)，所以我们先直接来看一个官方的例子迅速了解一下docker-compose.yml如何编写：</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3.8&quot;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">    <span class="attr">web:</span></span><br><span class="line">        <span class="attr">build:</span> <span class="string">.</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">&quot;5000:5000&quot;</span></span><br><span class="line">        <span class="attr">volumes:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">.:/code</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">logvolume01:/var/log</span></span><br><span class="line">        <span class="attr">links:</span></span><br><span class="line">            <span class="attr">image:</span> <span class="string">redis</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">    <span class="attr">logvolume01:</span> &#123;&#125;</span><br></pre></td></tr></table></figure>
@@ -795,8 +811,8 @@ Docker Compose | Docker Documentation</a></li>
         <div class="license-wrapper">
             <p>原文作者：<a href="https://lzwgiter.github.io">f10@t</a>
             <p>原文链接：<a href="https://lzwgiter.github.io/posts/a9031312.html">https://lzwgiter.github.io/posts/a9031312.html</a>
-            <p>发表日期：<a href="https://lzwgiter.github.io/posts/a9031312.html">July 6th 2021, 11:37:26 am</a>
-            <p>更新日期：<a href="https://lzwgiter.github.io/posts/a9031312.html">February 14th 2023, 8:35:14 pm</a>
+            <p>发表日期：<a href="https://lzwgiter.github.io/posts/a9031312.html">七月 6日 2021, 11:37:26 中午</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/a9031312.html">February 22nd 2024, 7:15:03 pm</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
