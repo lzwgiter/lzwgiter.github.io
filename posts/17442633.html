@@ -1,23 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <!-- title -->
-
-
-    
-
 <!-- keywords -->
-
-
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="author" content="f10@t">
     <meta name="renderer" content="webkit">
     <meta name="copyright" content="f10@t">
-    
         <meta name="keywords" content="lzwgiter,f10@t's blog">
-    
     <meta name="description" content="blogs from f10@t">
     <meta name="description" content="翻bugku的时候看到了这道题，百思不得其解。属于流隐写的题，包含了一些隐写的基本技能，很不错的一道题。感谢冰皇师傅的指点迷津。">
 <meta property="og:type" content="article">
@@ -28,19 +19,16 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://lzwgiter.github.io/img/%E6%84%9F%E8%B0%A2.jpg">
 <meta property="og:image" content="https://lzwgiter.github.io/img/%E7%8C%AB%E7%89%87/png.png">
-<meta property="og:image" content="https://lzwgiter.github.io/img/%E7%8C%AB%E7%89%87/steg%E7%BB%93%E6%9E%9C.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/%E7%8C%AB%E7%89%87/result.png">
-<meta property="og:image" content="https://lzwgiter.github.io/img/%E8%AF%B7%E6%88%91%E5%96%9D%E6%9D%AF%E5%92%96%E5%95%A1%E5%90%A7.jpg">
 <meta property="article:published_time" content="2018-08-08T03:07:56.000Z">
-<meta property="article:modified_time" content="2021-08-25T11:24:22.000Z">
+<meta property="article:modified_time" content="2024-07-24T02:21:08.912Z">
 <meta property="article:author" content="f10@t">
 <meta property="article:tag" content="CTF">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://lzwgiter.github.io/img/%E6%84%9F%E8%B0%A2.jpg">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="icon" href="/assets/hello.svg">
-    
+    <link rel="icon" href="/assets/favicon.ico">
     <title>Bugku的一道misc-----猫片 · f10@t&#39;s blog</title>
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
@@ -163,7 +151,7 @@
 
     header,
     footer,
-    .back-top,
+    .footer-fixed-btn,
     .sidebar,
     .container,
     .site-intro-meta,
@@ -186,7 +174,13 @@
         left: 0;
         width: calc(100% + 300px);
         height: 100%;
-        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background: repeating-linear-gradient(
+            -45deg,
+            #444 0,
+            #444 80px,
+            #333 80px,
+            #333 160px
+        );
         background-position: center center;
         transform: translate3d(-226px, 0, 0);
         animation: gradient-move 2.5s ease-out 0s infinite;
@@ -202,18 +196,15 @@
     }
 </style>
 
-    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
-    <link rel="stylesheet" href="/css/dark.css">
-    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-fancybox" rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-base" rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-mobile" rel="preload" href="/css/mobile.css" as="style" onload="this.onload=null;this.rel='stylesheet';this.media='screen and (max-width: 960px)'">
+    <link id="stylesheet-theme-dark" rel="preload" href="/css/dark.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
-    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
-    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
     <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
     <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
     <!-- algolia -->
-    
         <script>
             var hits = JSON.parse('{"per_page":10}')
             var labels = JSON.parse('{"input_placeholder":"搜索文章相关内容","hits_empty":"${query}搜索结果为空: ","hits_stats":"找到结果${hits}条，用时${time} ms"}')
@@ -226,9 +217,7 @@
                 labels: labels
             }
         </script>
-    
     <!-- 百度统计  -->
-    
         <script>
             var _hmt = _hmt || [];
             (function () {
@@ -238,20 +227,25 @@
                 s.parentNode.insertBefore(hm, s);
             })();
         </script>
-    
     <!-- 谷歌统计  -->
-    
         <script>
-            (function (i, s, o, g, r, a, m) {
-                i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date(); a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-            })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-            ga('create', 'G-8DFDYFMQP8', 'auto');
-            ga('send', 'pageview');
+            var cnzz_s_tag = document.createElement('script');
+            cnzz_s_tag.type = 'text/javascript';
+            cnzz_s_tag.async = true;
+            cnzz_s_tag.charset = 'utf-8';
+            cnzz_s_tag.src = 'https://w.cnzz.com/c.php?id=&async=1';
+            var root_s = document.getElementsByTagName('script')[0];
+            root_s.parentNode.insertBefore(cnzz_s_tag, root_s);
         </script>
-    
+    <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-8DFDYFMQP8"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-8DFDYFMQP8');
+        </script>
 <meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="f10@t's blog" type="application/atom+xml">
 </head>
 
@@ -262,9 +256,7 @@
             document.write('<script src="/lib/jquery.min.js" />')
         }
     </script>
-    
         <body class="post-body">
-    
         <!-- header -->
         <header class="header header-mobile">
     <!-- top read progress line -->
@@ -273,12 +265,8 @@
     </div>
     <!-- sidebar menu button -->
     <div class="header-element">
-        
-            <div class="header-sidebar-menu header-sidebar-menu-rounded">
-        
-            
-                <i class="fas fa-bars"></i>
-            
+        <div class="header-sidebar-menu header-sidebar-menu-rounded">
+            <i class="fas fa-bars"></i>
         </div>
     </div>
     <!-- header actions -->
@@ -289,118 +277,101 @@
         </span>
         <!-- back to home page text -->
         <span class="home-link header-element">
-            <a href=/>f10@t's blog</a>
+            <a href="/">f10@t's blog</a>
         </span>
     </div>
-    <!-- toggle banner for post layout -->
-    
-        
-            <div class="banner">
-        
-            <div class="blog-title header-element">
-                <a href="/">f10@t&#39;s blog</a>
-            </div>
-            <div class="post-title header-element">
-                <a href="#" class="post-name">Bugku的一道misc-----猫片</a>
-            </div>
+    <!-- toggle banner -->
+    <div class="banner">
+        <div class="blog-title header-element">
+            <a href="/">f10@t&#39;s blog</a>
         </div>
-    
+        <div class="post-title header-element">
+            <a href="#" class="post-name">Bugku的一道misc-----猫片</a>
+        </div>
+    </div>
 </header>
 
         <!-- fixed footer -->
         <footer class="footer-fixed">
+    <!-- donate button -->
+    <div class="donate-popup donate-popup--hidden">
+    <div class="donate-popup__title">Buy Me A Coffee</div>
+    <div class="donate-popup__content">
+        <div class="donate-popup__content-description">如果这篇文章帮到了你，请赏一杯咖啡给我喝吧嘿嘿☕️</div>
+        <img
+            class="donate-popup__content-qrCode"
+            title="Wechat"
+            alt="Wechat"
+            src="/assets/donate-wechat.jpg"
+        ></img>
+        <img
+            class="donate-popup__content-qrCode"
+            title="Alipay"
+            alt="Alipay"
+            src="/assets/donate-alipay.jpg"
+        ></img>
+    </div>
+</div>
+
+    <div
+        title="Donate to the author"
+        class="footer-fixed-btn footer-fixed-btn--hidden footer-fixed-btn--rounded donate-btn"
+    >
+        <i class="fas fa-donate"></i>
+    </div>
+
     <!-- back to top button -->
-    <div class="footer-fixed-element">
-        
-            <div class="back-top back-top-hidden back-top-rounded">
-        
-        
-            <i class="fas fa-chevron-up"></i>
-        
-        </div>
+    <div class="footer-fixed-btn footer-fixed-btn--hidden footer-fixed-btn--rounded back-top">
+        <i class="fas fa-chevron-up"></i>
     </div>
 </footer>
 
         <!-- wrapper -->
         <div class="wrapper">
-            <div class="site-intro" style="
-
-
-
-
-
-
-
-    height:50vh;
-
+            <div class="site-intro" style="    height:50vh;
 ">
-    
     <!-- 主页  -->
-    
-        
     <!-- 404页  -->
-    
     <div class="site-intro-placeholder"></div>
     <div class="site-intro-img" style="background-image: url(https://source.unsplash.com/random/1600x900?landscape)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
-            
                 Bugku的一道misc-----猫片
             <!-- 404 -->
-            
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
-            
-                
             <!-- 404 -->
-            
         </p>
         <!-- 文章页 meta -->
-        
             <div class="post-intros">
                 <!-- 文章页标签  -->
-                
-                    <div class= post-intro-tags >
-    
-        
-        
-            
-        
-        
-        <span class="post-category" data-categories="CTF"">
+                    <div class="post-intro-tags" >
+        <span class="post-category" data-categories="CTF">
             <i class="fas fa-folder post-category-icon"></i>
             <span class="post-category-text">
                 CTF
             </span>
         </span>
-    
-    
         <a class="post-tag" href="javascript:void(0);" data-tags="CTF">CTF</a>
-    
 </div>
 
-                
                 <!-- 文章字数统计 -->
-                
                     <div class="post-intro-read">
                         <span>字数统计: <span class="post-count word-count">763</span>阅读时长: <span class="post-count reading-time">3 min</span></span>
                     </div>
-                
                 <div class="post-intro-meta">
                     <!-- 撰写日期 -->
                     <span class="iconfont-archer post-intro-calander">&#xe676;</span>
                     <span class="post-intro-time">2018/08/08</span>
                     <!-- busuanzi -->
-                    
                         <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                             <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
                             <span id="busuanzi_value_page_pv"></span>
                         </span>
-                    
                     <!-- 文章分享 -->
                     <span class="share-wrapper">
                         <span class="iconfont-archer share-icon">&#xe71d;</span>
@@ -417,7 +388,6 @@
                     </span>
                 </div>
             </div>
-        
     </div>
 </div>
 
@@ -544,7 +514,7 @@
   )
 </script>
 
-            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" alt="loading">
             <div class="container container-unloaded">
                 <main class="main post-page">
     <article class="article-entry">
@@ -552,11 +522,9 @@
 <span id="more"></span> <img src="/img/感谢.jpg" /> ### 第一部分：
 首先拿到题放进winhex里分析为png文件，文件名加后缀png，得到一张猫的图片：
 <img src="/img/猫片/png.png" />
-仔细分析了一下winhex结果，没有隐藏什么特殊的文件。
-扔进binwalk分析了一波也没效果。怀疑是藏在色道里。
-用stegsolve查看了各个色道没有收获。。。一脸懵逼。
-在冰皇师傅指导下才知道是LSB隐写： <img src="/img/猫片/steg结果.png" />
-保存为bin文件，用winhex打开： <img
+仔细分析了一下winhex结果，没有隐藏什么特殊的文件。扔进binwalk分析了一波也没效果。怀疑是藏在色道里。用stegsolve查看了各个色道没有收获。。。一脸懵逼。</p>
+<p>在冰皇师傅指导下才知道是LSB隐写： <img
+src="/img/猫片/steg结果.png" /> 保存为bin文件，用winhex打开： <img
 src="/img/猫片/steg-winhex结果.jpg" />
 删去前面的两个乱码，得到一张png图片，增加文件名后缀后打开，得到半张二维码：
 <img src="/img/猫片/result.png" /> 查看其属性： <img
@@ -577,63 +545,48 @@ src="/img/猫片/解压提示.png" />
 解压到一个文件夹里，放进ntfsstreamseditor分析： <img
 src="/img/猫片/分析结果.png" /> 将pyc文件导出，并在网上<a
 target="_blank" rel="noopener" href="https://tool.lu/pyc">在线pyc反编译工具</a>里反编译一下，得代码：
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># visit http://tool.lu/pyc/ for more information</span></span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">encode</span>():</span><br><span class="line">    flag = <span class="string">&#x27;*************&#x27;</span></span><br><span class="line">    ciphertext = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(flag)):</span><br><span class="line">        s = <span class="built_in">chr</span>(i ^ <span class="built_in">ord</span>(flag[i]))</span><br><span class="line">        <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">            s = <span class="built_in">ord</span>(s) + <span class="number">10</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            s = <span class="built_in">ord</span>(s) - <span class="number">10</span></span><br><span class="line">        ciphertext.append(<span class="built_in">str</span>(s))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> ciphertext[::-<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">ciphertext = [</span><br><span class="line">    <span class="string">&#x27;96&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;65&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;93&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;123&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;91&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;97&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;22&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;93&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;70&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;102&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;94&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;132&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;46&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;112&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;64&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;97&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;88&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;80&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;82&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;137&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;90&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;109&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;99&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;112&#x27;</span>]</span><br></pre></td></tr></table></figure> emmmmmm咋成密码题了。。。 写一个简单的解密脚本：
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># visit http://tool.lu/pyc/ for more information</span></span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">encode</span>():</span><br><span class="line">    flag = <span class="string">&#x27;*************&#x27;</span></span><br><span class="line">    ciphertext = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(flag)):</span><br><span class="line">        s = <span class="built_in">chr</span>(i ^ <span class="built_in">ord</span>(flag[i]))</span><br><span class="line">        <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">            s = <span class="built_in">ord</span>(s) + <span class="number">10</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            s = <span class="built_in">ord</span>(s) - <span class="number">10</span></span><br><span class="line">        ciphertext.append(<span class="built_in">str</span>(s))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> ciphertext[::-<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">ciphertext = [</span><br><span class="line">    <span class="string">&#x27;96&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;65&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;93&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;123&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;91&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;97&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;22&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;93&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;70&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;102&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;94&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;132&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;46&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;112&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;64&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;97&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;88&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;80&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;82&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;137&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;90&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;109&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;99&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;112&#x27;</span>]</span><br></pre></td></tr></table></figure> emmmmmm咋成密码题了。。。写一个简单的解密脚本：
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">decode</span>():</span><br><span class="line">    a = [<span class="string">&#x27;96&#x27;</span>, <span class="string">&#x27;65&#x27;</span>, <span class="string">&#x27;93&#x27;</span>, <span class="string">&#x27;123&#x27;</span>, <span class="string">&#x27;91&#x27;</span>, <span class="string">&#x27;97&#x27;</span>, <span class="string">&#x27;22&#x27;</span>, <span class="string">&#x27;93&#x27;</span>, <span class="string">&#x27;70&#x27;</span>, <span class="string">&#x27;102&#x27;</span>, <span class="string">&#x27;94&#x27;</span>, <span class="string">&#x27;132&#x27;</span>, <span class="string">&#x27;46&#x27;</span>, <span class="string">&#x27;112&#x27;</span>, <span class="string">&#x27;64&#x27;</span>, <span class="string">&#x27;97&#x27;</span>, <span class="string">&#x27;88&#x27;</span>, <span class="string">&#x27;80&#x27;</span>, <span class="string">&#x27;82&#x27;</span>, <span class="string">&#x27;137&#x27;</span>, <span class="string">&#x27;90&#x27;</span>, <span class="string">&#x27;109&#x27;</span>, <span class="string">&#x27;99&#x27;</span>, <span class="string">&#x27;112&#x27;</span>]</span><br><span class="line">    flag=<span class="string">&#x27;&#x27;</span></span><br><span class="line">    a.reverse()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(a)):</span><br><span class="line">        <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">            s = <span class="built_in">int</span>(a[i]) - <span class="number">10</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            s = <span class="built_in">int</span>(a[i]) + <span class="number">10</span></span><br><span class="line">        s = <span class="built_in">chr</span>(i^s)</span><br><span class="line">        flag += s</span><br><span class="line">        <span class="built_in">print</span>(flag)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">decode()</span><br></pre></td></tr></table></figure> 得flag：flag{Y@e_Cl3veR_C1Ever!}</p>
 <p>小结：这个题目包含了一定量的知识点，比如LSB隐写知识、改图片大小操作、反色操作、文件流隐写知识、脚本编写能力等。收获很多哈哈哈，再次感谢冰皇师傅(手动滑稽)。</p>
-<p><img src="/img/请我喝杯咖啡吧.jpg" style="zoom:33%;" /></p>
 
     </article>
     <!-- license -->
-    
         <div class="license-wrapper">
             <p>原文作者：<a href="https://lzwgiter.github.io">f10@t</a>
             <p>原文链接：<a href="https://lzwgiter.github.io/posts/17442633.html">https://lzwgiter.github.io/posts/17442633.html</a>
             <p>发表日期：<a href="https://lzwgiter.github.io/posts/17442633.html">August 8th 2018, 11:07:56 am</a>
-            <p>更新日期：<a href="https://lzwgiter.github.io/posts/17442633.html">August 25th 2021, 7:24:22 pm</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/17442633.html">July 24th 2024, 10:21:08 am</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
-    
     <!-- paginator -->
     <ul class="post-paginator">
         <li class="next">
-            
                 <div class="nextSlogan">Next Post</div>
                 <a href="/posts/98736a90.html" title="CSS样式基础4.4--选择器之伪类选择器">
                     <div class="nextTitle">CSS样式基础4.4--选择器之伪类选择器</div>
                 </a>
-            
         </li>
         <li class="previous">
-            
                 <div class="prevSlogan">Previous Post</div>
                 <a href="/posts/d4db3e56.html" title="CSS基础4.3--选择器之属性选择器">
                     <div class="prevTitle">CSS基础4.3--选择器之属性选择器</div>
                 </a>
-            
         </li>
     </ul>
     <!-- comment -->
-    
         <div class="post-comment">
             <!-- 来必力 City 版安装代码 -->
 
-
             
-
             
-
             
-
             <!-- utteranc评论 -->
-
 
             <!-- partial('_partial/comment/changyan') -->
             <!--PC版-->
 
-
             
-            
-    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+                <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
     <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
     <div id="comment"></div>
     <script>
@@ -649,116 +602,41 @@ target="_blank" rel="noopener" href="https://tool.lu/pyc">在线pyc反编译工�
         });
     </script>
 
-
             
-
         </div>
-    
     <!-- timeliness note -->
     <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
-    
     <!-- Mathjax -->
-    
 </main>
 
                 <!-- profile -->
-                
             </div>
             <footer class="footer footer-unloaded">
     <!-- social  -->
-    
         <div class="social">
-            
-    
-        
-    
-        
-            
-                <a href="//github.com/lzwgiter" class="iconfont-archer github" target="_blank" title=github></a>
-            
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-            
-                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title=rss></a>
-            
-        
-    
-
+                            <a href="//github.com/lzwgiter" class="iconfont-archer github" target="_blank" title="github"></a>
 
         </div>
-    
     <!-- powered by Hexo  -->
     <div class="copyright">
         <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
     </div>
     <!-- website approve for Chinese user -->
-    
     <!-- 不蒜子  -->
-    
         <div class="busuanzi-container">
-            
-            
                 <span id="busuanzi_container_site_uv">做客的小伙伴数: <span id="busuanzi_value_site_uv"></span></span>
-            
         </div>
-    	
 </footer>
 
         </div>
         <!-- toc -->
-        
-            <div class="toc-wrapper toc-wrapper-loding" style=
-
-
-
-
-
-
-
-    top:50vh;
-
+            <div class="toc-wrapper toc-wrapper-loding" style=    top:50vh;
 >
                 <div class="toc-catalog">
                     <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
                 </div>
                 <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86"><span class="toc-number">1.</span> <span class="toc-text">第二部分：</span></a></li></ol>
             </div>
-        
         <!-- sidebar -->
         <div class="sidebar sidebar-hide">
     <ul class="sidebar-tabs sidebar-tabs-active-0">
@@ -769,7 +647,6 @@ target="_blank" rel="noopener" href="https://tool.lu/pyc">在线pyc反编译工�
     <div class="sidebar-content sidebar-content-show-archive">
         <div class="sidebar-panel-archives">
     <!-- 在 ejs 中将 archive 按照时间排序 -->
-    
         
         
         
@@ -868,2302 +745,590 @@ target="_blank" rel="noopener" href="https://tool.lu/pyc">在线pyc反编译工�
         
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
-    
-    
-    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 98
         </div>
         <!-- search  -->
-        
             <div class="site-search site-search-loading popup-trigger">
                 <span class="iconfont-archer search-icon">&#xe627;</span>
             </div>
-        
     </div>
-    
     <div class="post-archive">
-    
-        
-            
-            
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
-            
-        
         <li class="archive-post-item">
             <span class="archive-post-date">04/23</span>
             <a class="archive-post-title" href="/posts/963fb8d3.html">领域驱动设计学习（一）</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">02/06</span>
             <a class="archive-post-title" href="/posts/21f893eb.html">学鲁菜之酱焖鲈鱼</a>
         </li>
-    
-        
-            
-            
-                
                 </ul>
-            
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
-            
-        
         <li class="archive-post-item">
             <span class="archive-post-date">10/22</span>
             <a class="archive-post-title" href="/posts/33ea2108.html">Spring AOP再探</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">10/09</span>
             <a class="archive-post-title" href="/posts/c41813ec.html">重新审视微服务</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">10/04</span>
             <a class="archive-post-title" href="/posts/85bf5302.html">K8s攻防之OWASP-K8S-TOP10（下）</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">09/16</span>
             <a class="archive-post-title" href="/posts/8aa36aba.html">K8s攻防之OWASP-K8S-TOP10（上）</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/08</span>
             <a class="archive-post-title" href="/posts/c16d1cd9.html">Java内存马原理（一）</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">07/08</span>
             <a class="archive-post-title" href="/posts/e2947908.html">Java Instrument机制及管窥IAST</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">07/03</span>
             <a class="archive-post-title" href="/posts/479daa6d.html">gRPC简介与使用</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">04/30</span>
             <a class="archive-post-title" href="/posts/b74b8800.html">fastjson反序列化漏洞学习（二）</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">01/07</span>
             <a class="archive-post-title" href="/posts/73d00ee7.html">Netty框架学习</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">01/04</span>
             <a class="archive-post-title" href="/posts/d6b305b7.html">Java网络编程模型复习</a>
         </li>
-    
-        
-            
-            
-                
                 </ul>
-            
             <div class="archive-year"> 2022 </div>
             <ul class="year-list">
-            
-        
         <li class="archive-post-item">
             <span class="archive-post-date">04/26</span>
             <a class="archive-post-title" href="/posts/203767b8.html">python-Numpy库使用</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">01/20</span>
             <a class="archive-post-title" href="/posts/f06096b.html">MATLAB - Wireless Communication Onramp</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">01/19</span>
             <a class="archive-post-title" href="/posts/3041f265.html">Matlab编程基础</a>
         </li>
-    
-        
-            
-            
-                
                 </ul>
-            
             <div class="archive-year"> 2021 </div>
             <ul class="year-list">
-            
-        
         <li class="archive-post-item">
             <span class="archive-post-date">10/04</span>
             <a class="archive-post-title" href="/posts/169c63d0.html">Bloom Filter概念原理</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/25</span>
             <a class="archive-post-title" href="/posts/85e98ef0.html">zk-SNARKs简洁的非交互式零知识证明学习(一)</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/22</span>
             <a class="archive-post-title" href="/posts/a8e0eb2d.html">Quarkus学习（一）概述以及编写REST服务</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/19</span>
             <a class="archive-post-title" href="/posts/e88577c0.html">Cloud Programming Simplified:A Berkeley View on Serverless Computing</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/18</span>
             <a class="archive-post-title" href="/posts/99665dc1.html">闲聊一下Java中的DI和CDI</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/12</span>
             <a class="archive-post-title" href="/posts/ed901271.html">Kubernetes-集群环境搭建使用及问题记录（三）</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/09</span>
             <a class="archive-post-title" href="/posts/a08eb123.html">Kubernetes-集群环境搭建使用及问题记录（二）</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/03</span>
             <a class="archive-post-title" href="/posts/eed4a979.html">Kubernetes 集群环境搭建使用及问题记录（一）</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">07/24</span>
             <a class="archive-post-title" href="/posts/2f0b60dd.html">闲聊一下Go语言的函数方法和多态机制特点</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">07/14</span>
             <a class="archive-post-title" href="/posts/5893facf.html">express学习（一）-基于NodeJS的Web框架</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">07/10</span>
             <a class="archive-post-title" href="/posts/8a9b0b34.html">Beego学习-ORM</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">07/06</span>
             <a class="archive-post-title" href="/posts/84db08d3.html">Beego学习-路由设置</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">07/06</span>
             <a class="archive-post-title" href="/posts/a9031312.html">docker-compose及dockerfile总结</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">05/09</span>
             <a class="archive-post-title" href="/posts/77d22b2a.html">Spring安全技术-Spring Security使用及总结（一）</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">04/28</span>
             <a class="archive-post-title" href="/posts/5e9eec21.html">DevOps技术-简单了解与入门</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">01/23</span>
             <a class="archive-post-title" href="/posts/27875254.html">Spring持久层技术-Sping Data JPA使用及总结（一）</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">01/14</span>
             <a class="archive-post-title" href="/posts/bec529bf.html">以太坊智能合约开发环境搭建及智能合约的编写、部署、测试</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">01/11</span>
             <a class="archive-post-title" href="/posts/2ff8a9fd.html">以太坊基本概念与实验环境搭建</a>
         </li>
-    
-        
-            
-            
-                
                 </ul>
-            
             <div class="archive-year"> 2020 </div>
             <ul class="year-list">
-            
-        
         <li class="archive-post-item">
             <span class="archive-post-date">06/17</span>
             <a class="archive-post-title" href="/posts/bcd864e2.html">DC-1靶机渗透</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">05/31</span>
             <a class="archive-post-title" href="/posts/c99165fd.html">fastjson反序列化漏洞学习（一）</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">05/09</span>
             <a class="archive-post-title" href="/posts/a9e6a25b.html">Spring基础学习 - AOP机制</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">05/06</span>
             <a class="archive-post-title" href="/posts/b92dbb83.html">JavaEE基础 - Servlet</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">05/06</span>
             <a class="archive-post-title" href="/posts/44088610.html">Spring基础学习 - IOC机制</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">05/01</span>
             <a class="archive-post-title" href="/posts/662e1cfe.html">微服务入门-5W和微服务思想</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">04/22</span>
             <a class="archive-post-title" href="/posts/c75c5fc7.html">Java 反序列化漏洞与JNDI注入(下)</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">04/14</span>
             <a class="archive-post-title" href="/posts/5dcfa8b5.html">Kerberos认证过程原理及攻击手段</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">02/26</span>
             <a class="archive-post-title" href="/posts/1ccc94ff.html">内存布局与栈溢出&堆溢出原理</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">02/21</span>
             <a class="archive-post-title" href="/posts/bc7cb7a1.html">入坑Pwn之刷题补坑</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">01/29</span>
             <a class="archive-post-title" href="/posts/760e25d9.html">内存取证原理学习及Volatility - 篇二</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">01/22</span>
             <a class="archive-post-title" href="/posts/b0024cb7.html">Struts框架管窥以及几个漏洞的分析</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">01/09</span>
             <a class="archive-post-title" href="/posts/8ce0a80d.html">Redis未授权访问漏洞及修补方法</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">01/08</span>
             <a class="archive-post-title" href="/posts/13fe3d9f.html">本地提权与漏洞提权</a>
         </li>
-    
-        
-            
-            
-                
                 </ul>
-            
             <div class="archive-year"> 2019 </div>
             <ul class="year-list">
-            
-        
         <li class="archive-post-item">
             <span class="archive-post-date">12/21</span>
             <a class="archive-post-title" href="/posts/f8b67901.html">逆向工程课程小结</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">12/08</span>
             <a class="archive-post-title" href="/posts/4d8e0b70.html">内存取证原理学习及Volatility - 篇一</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">10/20</span>
             <a class="archive-post-title" href="/posts/82490df7.html">并发模型之单线程多路I/O复用---select</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">09/29</span>
             <a class="archive-post-title" href="/posts/a715340f.html">入坑Pwn之基本知识</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">09/10</span>
             <a class="archive-post-title" href="/posts/47dcecb9.html">Apache-Commons-Collections反序列化漏洞</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">09/03</span>
             <a class="archive-post-title" href="/posts/de476e86.html">Java 反序列化漏洞与JNDI注入(上)</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/20</span>
             <a class="archive-post-title" href="/posts/7a9a17f3.html">记录一次对win2k3 Enterprise Edition的永恒之蓝利用</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">05/11</span>
             <a class="archive-post-title" href="/posts/6f24bb1d.html">kali-渗透测试-信息收集3</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">05/10</span>
             <a class="archive-post-title" href="/posts/18238b8b.html">kali-渗透测试-信息收集2</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">03/18</span>
             <a class="archive-post-title" href="/posts/812ada31.html">kali-渗透测试-信息收集1</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">02/11</span>
             <a class="archive-post-title" href="/posts/fffcd997.html">Metasploit渗透测试魔鬼训练营-客户端渗透攻击</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">02/10</span>
             <a class="archive-post-title" href="/posts/30b79e7d.html">Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">02/07</span>
             <a class="archive-post-title" href="/posts/79017d0.html">Metasploit渗透测试魔鬼训练营-web应用渗透</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">02/06</span>
             <a class="archive-post-title" href="/posts/6c9a4aca.html">Metasploit渗透测试魔鬼训练营-服务扫描与查点</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">02/04</span>
             <a class="archive-post-title" href="/posts/ed61533c.html">Metasploit渗透测试魔鬼训练营-信息收集</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">01/22</span>
             <a class="archive-post-title" href="/posts/ba8e1564.html">Metasploit渗透测试魔鬼训练营 第一天</a>
         </li>
-    
-        
-            
-            
-                
                 </ul>
-            
             <div class="archive-year"> 2018 </div>
             <ul class="year-list">
-            
-        
         <li class="archive-post-item">
             <span class="archive-post-date">12/28</span>
             <a class="archive-post-title" href="/posts/dd591816.html">小明的博客--Typecho 反序列化漏洞</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">12/10</span>
             <a class="archive-post-title" href="/posts/41159e88.html">Bugku的一道注入---多次</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">12/06</span>
             <a class="archive-post-title" href="/posts/26bacf07.html">Bugku的一道注入--INSERT INTO注入</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">11/26</span>
             <a class="archive-post-title" href="/posts/e1cf93ae.html">ThinkPHP框架学习---路由</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">11/25</span>
             <a class="archive-post-title" href="/posts/dec252e7.html">ThinkPHP框架学习---config类和config助手函数</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">11/25</span>
             <a class="archive-post-title" href="/posts/8405173.html">ThinkPHP框架学习---框架目录及框架配置</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">11/19</span>
             <a class="archive-post-title" href="/posts/5d13a793.html">Nmap使用指南</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">11/12</span>
             <a class="archive-post-title" href="/posts/e6caa5f0.html">SQL注入小记(二)</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">11/09</span>
             <a class="archive-post-title" href="/posts/78f948a4.html">PHP学习--超级全局变量</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">11/08</span>
             <a class="archive-post-title" href="/posts/777d53bb.html">PHP学习--变量</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">11/03</span>
             <a class="archive-post-title" href="/posts/f0bc436c.html">PHP框架MVC学习</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">10/30</span>
             <a class="archive-post-title" href="/posts/117580c0.html">CTF中的python脚本题小结（二）</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">10/30</span>
             <a class="archive-post-title" href="/posts/21636c18.html">CTF中的python脚本题小结（一）</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">10/20</span>
             <a class="archive-post-title" href="/posts/fc74b0ce.html">Hackergame 2018 wp</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">09/25</span>
             <a class="archive-post-title" href="/posts/8c800523.html">安恒九月题的misc和一道web</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">09/10</span>
             <a class="archive-post-title" href="/posts/49fb3e92.html">SQL注入小记(一)</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/27</span>
             <a class="archive-post-title" href="/posts/21c35507.html">隐写术-LSB隐写</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/26</span>
             <a class="archive-post-title" href="/posts/59bc0c0.html">隐写术--NTFS流隐写</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/25</span>
             <a class="archive-post-title" href="/posts/c7cffe19.html">CTF常见隐写手段小结</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/22</span>
             <a class="archive-post-title" href="/posts/69896e9f.html">DOM 文档对象模型</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/21</span>
             <a class="archive-post-title" href="/posts/20cf0786.html">BOM-浏览器操作对象模型之history和screen对象</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/20</span>
             <a class="archive-post-title" href="/posts/f92f304f.html">BOM 浏览器操作对象模型之navigator、location对象</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/18</span>
             <a class="archive-post-title" href="/posts/79f16c6a.html">BOM-浏览器操作对象模型之window对象</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/16</span>
             <a class="archive-post-title" href="/posts/aa0a7b0a.html">Javascript基础之数据类型2</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/15</span>
             <a class="archive-post-title" href="/posts/33032ab0.html">Javascript基础之数据类型1</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/12</span>
             <a class="archive-post-title" href="/posts/b5fac929.html">CTF隐写术--关于ZIP</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/09</span>
             <a class="archive-post-title" href="/posts/98736a90.html">CSS样式基础4.4--选择器之伪类选择器</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/08</span>
             <a class="archive-post-title" href="/posts/17442633.html">Bugku的一道misc-----猫片</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/08</span>
             <a class="archive-post-title" href="/posts/d4db3e56.html">CSS基础4.3--选择器之属性选择器</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/05</span>
             <a class="archive-post-title" href="/posts/7b6c38ce.html">CSS基础4.2--选择器之组合选择器</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/03</span>
             <a class="archive-post-title" href="/posts/6027632.html">CSS基础4.1--选择器之CSS基础4.1-选择器之基本选择器</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/02</span>
             <a class="archive-post-title" href="/posts/370eaad5.html">CSS基础3.2--特性之CSS基础3.2--特性之继承性</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/01</span>
             <a class="archive-post-title" href="/posts/4655c16f.html">CSS基础3.1--特性之CSS基础3.1-特性之层叠性</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/01</span>
             <a class="archive-post-title" href="/posts/ae68c748.html">CSS基础2--CSS基础2-应用</a>
         </li>
-    
-        
         <li class="archive-post-item">
             <span class="archive-post-date">08/01</span>
             <a class="archive-post-title" href="/posts/6b427aa1.html">CSS基础1--样式</a>
         </li>
-    
+            </ul>
     </div>
 </div>
 
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
-        
-            <span class="sidebar-tag-name" data-tags="Java">
-                <span class="iconfont-archer">&#xe606;</span>
-                Java
-            </span>
-        
-            <span class="sidebar-tag-name" data-tags="开发技术">
-                <span class="iconfont-archer">&#xe606;</span>
-                开发技术
-            </span>
-        
             <span class="sidebar-tag-name" data-tags="区块链技术">
                 <span class="iconfont-archer">&#xe606;</span>
                 区块链技术
             </span>
-        
+            <span class="sidebar-tag-name" data-tags="开发技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                开发技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="Java">
+                <span class="iconfont-archer">&#xe606;</span>
+                Java
+            </span>
             <span class="sidebar-tag-name" data-tags="渗透测试">
                 <span class="iconfont-archer">&#xe606;</span>
                 渗透测试
             </span>
-        
             <span class="sidebar-tag-name" data-tags="漏洞分析">
                 <span class="iconfont-archer">&#xe606;</span>
                 漏洞分析
             </span>
-        
             <span class="sidebar-tag-name" data-tags="web安全">
                 <span class="iconfont-archer">&#xe606;</span>
                 web安全
             </span>
-        
             <span class="sidebar-tag-name" data-tags="前端">
                 <span class="iconfont-archer">&#xe606;</span>
                 前端
             </span>
-        
             <span class="sidebar-tag-name" data-tags="Go语言">
                 <span class="iconfont-archer">&#xe606;</span>
                 Go语言
             </span>
-        
             <span class="sidebar-tag-name" data-tags="Go Web">
                 <span class="iconfont-archer">&#xe606;</span>
                 Go Web
             </span>
-        
             <span class="sidebar-tag-name" data-tags="论文阅读">
                 <span class="iconfont-archer">&#xe606;</span>
                 论文阅读
             </span>
-        
             <span class="sidebar-tag-name" data-tags="CTF">
                 <span class="iconfont-archer">&#xe606;</span>
                 CTF
             </span>
-        
             <span class="sidebar-tag-name" data-tags="SQL注入">
                 <span class="iconfont-archer">&#xe606;</span>
                 SQL注入
             </span>
-        
             <span class="sidebar-tag-name" data-tags="CSS">
                 <span class="iconfont-archer">&#xe606;</span>
                 CSS
             </span>
-        
-            <span class="sidebar-tag-name" data-tags="隐写术">
-                <span class="iconfont-archer">&#xe606;</span>
-                隐写术
-            </span>
-        
             <span class="sidebar-tag-name" data-tags="python">
                 <span class="iconfont-archer">&#xe606;</span>
                 python
             </span>
-        
+            <span class="sidebar-tag-name" data-tags="隐写术">
+                <span class="iconfont-archer">&#xe606;</span>
+                隐写术
+            </span>
             <span class="sidebar-tag-name" data-tags="云技术">
                 <span class="iconfont-archer">&#xe606;</span>
                 云技术
             </span>
-        
             <span class="sidebar-tag-name" data-tags="DevOps">
                 <span class="iconfont-archer">&#xe606;</span>
                 DevOps
             </span>
-        
             <span class="sidebar-tag-name" data-tags="开发与运维">
                 <span class="iconfont-archer">&#xe606;</span>
                 开发与运维
             </span>
-        
             <span class="sidebar-tag-name" data-tags="DevSecOps">
                 <span class="iconfont-archer">&#xe606;</span>
                 DevSecOps
             </span>
-        
             <span class="sidebar-tag-name" data-tags="网络编程">
                 <span class="iconfont-archer">&#xe606;</span>
                 网络编程
             </span>
-        
             <span class="sidebar-tag-name" data-tags="Kubernete">
                 <span class="iconfont-archer">&#xe606;</span>
                 Kubernete
             </span>
-        
             <span class="sidebar-tag-name" data-tags="云安全">
                 <span class="iconfont-archer">&#xe606;</span>
                 云安全
             </span>
-        
             <span class="sidebar-tag-name" data-tags="分布式技术">
                 <span class="iconfont-archer">&#xe606;</span>
                 分布式技术
             </span>
-        
             <span class="sidebar-tag-name" data-tags="MatLab">
                 <span class="iconfont-archer">&#xe606;</span>
                 MatLab
             </span>
-        
             <span class="sidebar-tag-name" data-tags="PHP">
                 <span class="iconfont-archer">&#xe606;</span>
                 PHP
             </span>
-        
-            <span class="sidebar-tag-name" data-tags="Spring">
-                <span class="iconfont-archer">&#xe606;</span>
-                Spring
-            </span>
-        
             <span class="sidebar-tag-name" data-tags="Quarkus">
                 <span class="iconfont-archer">&#xe606;</span>
                 Quarkus
             </span>
-        
+            <span class="sidebar-tag-name" data-tags="Spring">
+                <span class="iconfont-archer">&#xe606;</span>
+                Spring
+            </span>
             <span class="sidebar-tag-name" data-tags="docker">
                 <span class="iconfont-archer">&#xe606;</span>
                 docker
             </span>
-        
             <span class="sidebar-tag-name" data-tags="NodeJS">
                 <span class="iconfont-archer">&#xe606;</span>
                 NodeJS
             </span>
-        
             <span class="sidebar-tag-name" data-tags="express">
                 <span class="iconfont-archer">&#xe606;</span>
                 express
             </span>
-        
             <span class="sidebar-tag-name" data-tags="微服务技术">
                 <span class="iconfont-archer">&#xe606;</span>
                 微服务技术
             </span>
-        
-            <span class="sidebar-tag-name" data-tags="以太坊">
-                <span class="iconfont-archer">&#xe606;</span>
-                以太坊
-            </span>
-        
             <span class="sidebar-tag-name" data-tags="密码学">
                 <span class="iconfont-archer">&#xe606;</span>
                 密码学
             </span>
-        
+            <span class="sidebar-tag-name" data-tags="以太坊">
+                <span class="iconfont-archer">&#xe606;</span>
+                以太坊
+            </span>
             <span class="sidebar-tag-name" data-tags="智能合约">
                 <span class="iconfont-archer">&#xe606;</span>
                 智能合约
             </span>
-        
-            <span class="sidebar-tag-name" data-tags="电子取证">
-                <span class="iconfont-archer">&#xe606;</span>
-                电子取证
-            </span>
-        
             <span class="sidebar-tag-name" data-tags="pwn">
                 <span class="iconfont-archer">&#xe606;</span>
                 pwn
             </span>
-        
-            <span class="sidebar-tag-name" data-tags="C编程">
+            <span class="sidebar-tag-name" data-tags="电子取证">
                 <span class="iconfont-archer">&#xe606;</span>
-                C编程
+                电子取证
             </span>
-        
-            <span class="sidebar-tag-name" data-tags="课程总结">
-                <span class="iconfont-archer">&#xe606;</span>
-                课程总结
-            </span>
-        
             <span class="sidebar-tag-name" data-tags="日常">
                 <span class="iconfont-archer">&#xe606;</span>
                 日常
             </span>
-        
+            <span class="sidebar-tag-name" data-tags="C编程">
+                <span class="iconfont-archer">&#xe606;</span>
+                C编程
+            </span>
+            <span class="sidebar-tag-name" data-tags="课程总结">
+                <span class="iconfont-archer">&#xe606;</span>
+                课程总结
+            </span>
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
@@ -3174,72 +1339,58 @@ target="_blank" rel="noopener" href="https://tool.lu/pyc">在线pyc反编译工�
 
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
-    
-        <span class="sidebar-category-name" data-categories="开发技术">
-            <span class="iconfont-archer">&#xe60a;</span>
-            开发技术
-        </span>
-    
         <span class="sidebar-category-name" data-categories="区块链技术">
             <span class="iconfont-archer">&#xe60a;</span>
             区块链技术
         </span>
-    
+        <span class="sidebar-category-name" data-categories="开发技术">
+            <span class="iconfont-archer">&#xe60a;</span>
+            开发技术
+        </span>
         <span class="sidebar-category-name" data-categories="漏洞分析">
             <span class="iconfont-archer">&#xe60a;</span>
             漏洞分析
         </span>
-    
         <span class="sidebar-category-name" data-categories="论文阅读">
             <span class="iconfont-archer">&#xe60a;</span>
             论文阅读
         </span>
-    
         <span class="sidebar-category-name" data-categories="CTF">
             <span class="iconfont-archer">&#xe60a;</span>
             CTF
         </span>
-    
         <span class="sidebar-category-name" data-categories="渗透测试">
             <span class="iconfont-archer">&#xe60a;</span>
             渗透测试
         </span>
-    
         <span class="sidebar-category-name" data-categories="DevSecOps">
             <span class="iconfont-archer">&#xe60a;</span>
             DevSecOps
         </span>
-    
         <span class="sidebar-category-name" data-categories="云安全">
             <span class="iconfont-archer">&#xe60a;</span>
             云安全
         </span>
-    
         <span class="sidebar-category-name" data-categories="MATLAB">
             <span class="iconfont-archer">&#xe60a;</span>
             MATLAB
         </span>
-    
         <span class="sidebar-category-name" data-categories="密码学">
             <span class="iconfont-archer">&#xe60a;</span>
             密码学
         </span>
-    
         <span class="sidebar-category-name" data-categories="电子取证">
             <span class="iconfont-archer">&#xe60a;</span>
             电子取证
         </span>
-    
         <span class="sidebar-category-name" data-categories="课程总结">
             <span class="iconfont-archer">&#xe60a;</span>
             课程总结
         </span>
-    
         <span class="sidebar-category-name" data-categories="杂谈">
             <span class="iconfont-archer">&#xe60a;</span>
             杂谈
         </span>
-    
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
     <div class="sidebar-categories-list"></div>
@@ -3264,15 +1415,11 @@ target="_blank" rel="noopener" href="https://tool.lu/pyc">在线pyc反编译工�
         <!-- import experimental options here -->
         <!-- Custom Font -->
 
-
         <!-- main func -->
-        <script src="/scripts/main.js?v=20211217"></script>
-        <!-- dark mode -->
-        <script src="/scripts/dark.js?v=20211217"></script>
+        <script src="/scripts/main.js"></script>
         <!-- fancybox -->
-        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js" onload="window.Fancybox.bind('[data-fancybox]')" defer></script>
         <!-- algolia -->
-        
             <div class="site-search site-search-loading">
     <div class="algolia-popup popup">
         <div class="algolia-search">
@@ -3293,19 +1440,11 @@ target="_blank" rel="noopener" href="https://tool.lu/pyc">在线pyc反编译工�
     </div>
 </div>
 
-            <script src="/scripts/search.js?v=20211217" defer></script>
-        
+            <script src="/scripts/search.js" async></script>
         <!-- busuanzi -->
-        
             <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
-        
-        <!-- CNZZ -->
-        
         <!-- async load share.js -->
-        
-            <script src="/scripts/share.js?v=20211217" async></script>
-        
+            <script src="/scripts/share.js" async></script>
         <!-- mermaid -->
-        
     </body>
 </html>
