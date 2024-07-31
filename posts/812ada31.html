@@ -21,14 +21,13 @@
 <meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%861/2.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%861/3.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%861/4.png">
-<meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%861/5.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%861/6.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%861/7.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%861/8.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%861/9.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/kali-%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%861/10.png">
 <meta property="article:published_time" content="2019-03-18T11:40:33.000Z">
-<meta property="article:modified_time" content="2024-07-24T02:42:05.648Z">
+<meta property="article:modified_time" content="2024-07-31T03:10:31.767Z">
 <meta property="article:author" content="f10@t">
 <meta property="article:tag" content="渗透测试">
 <meta name="twitter:card" content="summary">
@@ -217,9 +216,9 @@
             var labels = JSON.parse('{"input_placeholder":"搜索文章相关内容","hits_empty":"${query}搜索结果为空: ","hits_stats":"找到结果${hits}条，用时${time} ms"}')
 
             var algolia = {
-                applicationID: 'BTZ93R2DLS',
-                apiKey: '672baf14074cdc7c5be7c85fe8b4d8bb',
-                indexName: 'hexo_blogs',
+                applicationID: 'M469ZFXTNU',
+                apiKey: '32b991ddc2b9f92be99f0e241d0f12d4',
+                indexName: 'blog_indices',
                 hits: hits,
                 labels: labels
             }
@@ -351,7 +350,7 @@
 
                 <!-- 文章字数统计 -->
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">2.9k</span>阅读时长: <span class="post-count reading-time">14 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">3.9k</span>阅读时长: <span class="post-count reading-time">21 min</span></span>
                     </div>
                 <div class="post-intro-meta">
                     <!-- 撰写日期 -->
@@ -567,8 +566,121 @@ DomainName)全限定域名的区别：如www.sina.com是sina.com的主机记录�
 <p><img src="/img/kali-渗透测试-信息收集1/3.png" /></p>
 <p>紧接着又向服务器查询了这十三个根域名A记录的ip地址</p>
 <p><img src="/img/kali-渗透测试-信息收集1/4.png" /></p>
-<p>之后随便挑了这13个ip地址中的一个(红线)，向他查询www.baidu.com这个A记录
-<img src="/img/kali-渗透测试-信息收集1/5.png" /></p>
+<p>xxxxxxxxxx root@kali:~# whois qq.com   Domain Name: QQ.COM   Registry
+Domain ID: 2895300_DOMAIN_COM-VRSN   Registrar WHOIS Server:
+whois.markmonitor.com   Registrar URL: http://www.markmonitor.com  
+Updated Date: 2019-01-30T03:30:02Z   Creation Date: 1995-05-04T04:00:00Z
+  Registry Expiry Date: 2027-07-27T02:09:19Z       //注册到期日  
+Registrar: MarkMonitor Inc.                       //注册员   Registrar
+IANA ID: 292   Registrar Abuse Contact Email:
+abusecomplaints@markmonitor.com   Registrar Abuse Contact Phone:
++1.2083895740   Domain Status: clientDeleteProhibited
+https://icann.org/epp#clientDeleteProhibited   Domain Status:
+clientTransferProhibited https://icann.org/epp#clientTransferProhibited
+  Domain Status: clientUpdateProhibited
+https://icann.org/epp#clientUpdateProhibited   Domain Status:
+serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited  
+Domain Status: serverTransferProhibited
+https://icann.org/epp#serverTransferProhibited   Domain Status:
+serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited  
+Name Server: NS1.QQ.COM   Name Server: NS2.QQ.COM   Name Server:
+NS3.QQ.COM   Name Server: NS4.QQ.COM   DNSSEC: unsigned   URL of the
+ICANN Whois Inaccuracy Complaint Form:
+https://www.icann.org/wicf/&gt;&gt;&gt; Last update of whois database:
+2019-05-10T15:26:50Z &lt;&lt;&lt;​For more information on Whois status
+codes, please visit https://icann.org/epp​NOTICE: The expiration date
+displayed in this record is the date theregistrar's sponsorship of the
+domain name registration in the registry iscurrently set to expire. This
+date does not necessarily reflect the expirationdate of the domain name
+registrant's agreement with the sponsoringregistrar. Users may consult
+the sponsoring registrar's Whois database toview the registrar's
+reported date of expiration for this registration.​TERMS OF USE: You are
+not authorized to access or query our Whoisdatabase through the use of
+electronic processes that are high-volume andautomated except as
+reasonably necessary to register domain names ormodify existing
+registrations; the Data in VeriSign Global RegistryServices'
+("VeriSign") Whois database is provided by VeriSign forinformation
+purposes only, and to assist persons in obtaining informationabout or
+related to a domain name registration record. VeriSign does notguarantee
+its accuracy. By submitting a Whois query, you agree to abideby the
+following terms of use: You agree that you may use this Data onlyfor
+lawful purposes and that under no circumstances will you use this
+Datato: (1) allow, enable, or otherwise support the transmission of
+massunsolicited, commercial advertising or solicitations via e-mail,
+telephone,or facsimile; or (2) enable high volume, automated, electronic
+processesthat apply to VeriSign (or its computer systems). The
+compilation,repackaging, dissemination or other use of this Data is
+expresslyprohibited without the prior written consent of VeriSign. You
+agree not touse electronic processes that are automated and high-volume
+to access orquery the Whois database except as reasonably necessary to
+registerdomain names or modify existing registrations. VeriSign reserves
+the rightto restrict your access to the Whois database in its sole
+discretion to ensureoperational stability. VeriSign may restrict or
+terminate your access to theWhois database for failure to abide by these
+terms of use. VeriSignreserves the right to modify these terms at any
+time.​The Registry database contains ONLY .COM, .NET, .EDU domains
+andRegistrars.Domain Name: qq.comRegistry Domain ID:
+2895300_DOMAIN_COM-VRSNRegistrar WHOIS Server:
+whois.markmonitor.comRegistrar URL: http://www.markmonitor.comUpdated
+Date: 2019-01-29T19:24:11-0800Creation Date:
+1995-05-03T21:00:00-0700Registrar Registration Expiration Date:
+2027-07-26T19:09:19-0700Registrar: MarkMonitor, Inc.        
+//域名的注册商是MarkMonitorRegistrar IANA ID: 292Registrar Abuse Contact
+Email: abusecomplaints@markmonitor.comRegistrar Abuse Contact Phone:
++1.2083895740Domain Status: clientUpdateProhibited
+(https://www.icann.org/epp#clientUpdateProhibited)Domain Status:
+clientTransferProhibited
+(https://www.icann.org/epp#clientTransferProhibited)Domain Status:
+clientDeleteProhibited
+(https://www.icann.org/epp#clientDeleteProhibited)Domain Status:
+serverUpdateProhibited
+(https://www.icann.org/epp#serverUpdateProhibited)Domain Status:
+serverTransferProhibited
+(https://www.icann.org/epp#serverTransferProhibited)Domain Status:
+serverDeleteProhibited
+(https://www.icann.org/epp#serverDeleteProhibited)Registrant
+Organization: Shenzhen Tencent Computer Systems CO.,LtdRegistrant
+State/Province: Guang DongRegistrant Country: CNAdmin Organization:
+Shenzhen Tencent Computer Systems CO.,LtdAdmin State/Province: Guang
+DongAdmin Country: CNTech Organization: Shenzhen Tencent Computer
+Systems CO.,LtdTech State/Province: Guang DongTech Country: CNName
+Server: ns2.qq.com               //四台DNS服务器Name Server:
+ns1.qq.comName Server: ns3.qq.comName Server: ns4.qq.comDNSSEC:
+unsignedURL of the ICANN WHOIS Data Problem Reporting System:
+http://wdprs.internic.net/&gt;&gt;&gt; Last update of WHOIS database:
+2019-05-10T08:17:56-0700 &lt;&lt;&lt;​For more information on WHOIS
+status codes, please visit:
+https://www.icann.org/resources/pages/epp-status-codes​If you wish to
+contact this domain’s Registrant, Administrative, or Technicalcontact,
+and such email address is not visible above, you may do so via our
+webform, pursuant to ICANN’s Temporary Specification. To verify that you
+are not arobot, please enter your email address to receive a link to a
+page thatfacilitates email communication with the relevant
+contact(s).​Web-based WHOIS: https://domains.markmonitor.com/whois​If you
+have a legitimate interest in viewing the non-public WHOIS details,
+sendyour request and the reasons for your request to
+whoisrequest@markmonitor.comand specify the domain name in the subject
+line. We will review that request andmay ask for supporting
+documentation and explanation.​The data in MarkMonitor’s WHOIS database
+is provided for information purposes,and to assist persons in obtaining
+information about or related to a domainname’s registration record.
+While MarkMonitor believes the data to be accurate,the data is provided
+"as is" with no guarantee or warranties regarding itsaccuracy.​By
+submitting a WHOIS query, you agree that you will use this data only
+forlawful purposes and that, under no circumstances will you use this
+data to: (1) allow, enable, or otherwise support the transmission by
+email, telephone,or facsimile of mass, unsolicited, commercial
+advertising, or spam; or (2) enable high volume, automated, or
+electronic processes that send queries,data, or email to MarkMonitor (or
+its systems) or the domain name contacts (orits systems).​MarkMonitor.com
+reserves the right to modify these terms at any time.​By submitting this
+query, you agree to abide by this policy.​MarkMonitor is the Global
+Leader in Online Brand Protection.​MarkMonitor Domain
+Management(TM)MarkMonitor Brand Protection(TM)MarkMonitor
+AntiCounterfeiting(TM)MarkMonitor AntiPiracy(TM)MarkMonitor
+AntiFraud(TM)Professional and Managed Services​Visit MarkMonitor at
+https://www.markmonitor.comContact us at +1.8007459229In Europe, at
++44.02032062220--​bash</p>
 <p><img src="/img/kali-渗透测试-信息收集1/6.png" /></p>
 <p>根域服务器返回的内容：一系列baidu的DNS解析服务器的NS记录</p>
 <p><img src="/img/kali-渗透测试-信息收集1/7.png" /></p>
@@ -586,7 +698,7 @@ DomainName)全限定域名的区别：如www.sina.com是sina.com的主机记录�
             <p>原文作者：<a href="https://lzwgiter.github.io">f10@t</a>
             <p>原文链接：<a href="https://lzwgiter.github.io/posts/812ada31.html">https://lzwgiter.github.io/posts/812ada31.html</a>
             <p>发表日期：<a href="https://lzwgiter.github.io/posts/812ada31.html">March 18th 2019, 7:40:33 pm</a>
-            <p>更新日期：<a href="https://lzwgiter.github.io/posts/812ada31.html">July 24th 2024, 10:42:05 am</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/812ada31.html">July 31st 2024, 11:10:31 am</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     <!-- paginator -->

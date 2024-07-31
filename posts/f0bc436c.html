@@ -17,11 +17,13 @@
 <meta property="og:site_name" content="f10@t&#39;s blog">
 <meta property="og:description" content="最近的打算是入门渗透，首先补补php的坑，先来了解一下最基本的PHP框架的基本结构">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lzwgiter.github.io/img/PHP%E6%A1%86%E6%9E%B6MVC%E5%AD%A6%E4%B9%A0/1.png">
 <meta property="article:published_time" content="2018-11-03T10:56:26.000Z">
-<meta property="article:modified_time" content="2024-07-24T02:43:38.768Z">
+<meta property="article:modified_time" content="2024-07-31T03:09:33.823Z">
 <meta property="article:author" content="f10@t">
 <meta property="article:tag" content="PHP">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lzwgiter.github.io/img/PHP%E6%A1%86%E6%9E%B6MVC%E5%AD%A6%E4%B9%A0/1.png">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="icon" href="/assets/hello.svg">
@@ -206,9 +208,9 @@
             var labels = JSON.parse('{"input_placeholder":"搜索文章相关内容","hits_empty":"${query}搜索结果为空: ","hits_stats":"找到结果${hits}条，用时${time} ms"}')
 
             var algolia = {
-                applicationID: 'BTZ93R2DLS',
-                apiKey: '672baf14074cdc7c5be7c85fe8b4d8bb',
-                indexName: 'hexo_blogs',
+                applicationID: 'M469ZFXTNU',
+                apiKey: '32b991ddc2b9f92be99f0e241d0f12d4',
+                indexName: 'blog_indices',
                 hits: hits,
                 labels: labels
             }
@@ -503,41 +505,47 @@
 <span id="more"></span>
 <p>参考文章：<a
 target="_blank" rel="noopener" href="https://www.cnblogs.com/dtiove/p/5586704.html">1</a>，<a
-target="_blank" rel="noopener" href="https://www.cnblogs.com/hehui/articles/4719746.html">2</a> 　　
-### MVC 　　那么什么是MVC呢？ 　　维基百科定义MVC是： &gt;
+target="_blank" rel="noopener" href="https://www.cnblogs.com/hehui/articles/4719746.html">2</a> #
+MVC</p>
+<p>那么什么是MVC呢？维基百科定义MVC是： &gt;
 MVC模式（Model–view–controller）是软件工程中的一种软件架构模式，把软件系统分为三个基本部分：模型（Model）、视图（View）和控制器（Controller）。</p>
-<p>　　MVC模式最早由Trygve
+<p>MVC模式最早由Trygve
 Reenskaug在1978年提出[1]，是施乐帕罗奥多研究中心（Xerox
-PARC）在20世纪80年代为程序语言Smalltalk发明的一种<strong>软件架构</strong>。MVC模式的<strong>目的</strong>是<strong>实现一种动态的程序设计，使后续对程序的修改和扩展简化，并且使程序某一部分的重复利用成为可能</strong>。除此之外，此模式通过对复杂度的简化，使程序结构更加直观。软件系统通过对自身基本部分分离的同时也赋予了各个基本部分应有的功能。专业人员可以通过自身的专长分组：</p>
-<p>　　1. 控制器（Controller）- 负责转发请求，对请求进行处理。 　　2.
-视图（View） - 界面设计人员进行图形界面设计。 　　3. 模型（Model） -
-程序员编写程序应有的功能（实现算法等等）、数据库专家进行数据　　管理和数据库设计(可以实现具体的功能)。</p>
-<p>　　简单说，mvc就是一种设计模型，它把业务逻辑和具体的数据显示区分开，进行了分层。即上面提到的三个部分：
-　　1. M:model 模型，完成具体的业务逻辑 　　2.
-V:view，试图，负责展示信息的 　　3.
-C:controller，控制器，负责发号施令，扮演了一种交通警察的角色（把方法进行区分，在前台传来需求的时候，确定用什么方法进行处理）
-　　view即是视图，也就是web页面，control即是控制器
-向系统发出指令的工具，model 简单说是从数据库中取出数据进行处理。
-　　　　　　　　具体的流程见下图： 　　　　　　　　<img
-src="/img/PHP框架MVC学习" />
-　　　　　　　　首先我们打开浏览器输入地址，即url，这个请求被服务端处理的时候会首先解析url，然后根据后面三个参数进行分类处理，根据p参数找到对应的平台，根据c找到对应的控制器，根据a找到对应的控制器中的方法，对应的控制器再根据具体来调用数据库模型进行相应的数据库操作，以及数据的逻辑处理，并返回结果，然后由view层进行显示。
-　　　　　　　　Mvc的工作流程： 　　　　　　　　<strong>第一步</strong>
-浏览者-&gt;调用控制器，对此发出指令
-　　　　　　　　<strong>第二步</strong>
-控制器-&gt;按指令选取一个合适的模型
-　　　　　　　　<strong>第三步</strong>
-模型-&gt;按照控制器指令选取相应的数据
-　　　　　　　　<strong>第四步</strong> 控制器-&gt;按指令选取相应的视图
-　　　　　　　　<strong>第五步</strong>
-视图-&gt;把第三步取到的数据按用户想要的样子显示出来
-　　　　　　　　mvc模式的优势很明显：分层明确，便于团队开发和修改。</p>
+PARC）在20世纪80年代为程序语言Smalltalk发明的一种<strong>软件架构</strong>。</p>
+<p>MVC模式的<strong>目的</strong>是<strong>实现一种动态的程序设计，使后续对程序的修改和扩展简化，并且使程序某一部分的重复利用成为可能</strong>。除此之外，此模式通过对复杂度的简化，使程序结构更加直观。软件系统通过对自身基本部分分离的同时也赋予了各个基本部分应有的功能。专业人员可以通过自身的专长分组：</p>
+<ol type="1">
+<li>控制器（Controller）- 负责转发请求，对请求进行处理。</li>
+<li>视图（View） - 界面设计人员进行图形界面设计。</li>
+<li>模型（Model） -
+程序员编写程序应有的功能（实现算法等等）、数据库专家进行数据　　管理和数据库设计(可以实现具体的功能)。</li>
+</ol>
+<p>简单说，mvc就是一种设计模型，它把业务逻辑和具体的数据显示区分开，进行了分层。即上面提到的三个部分：</p>
+<ol type="1">
+<li>M:model 模型，完成具体的业务逻辑</li>
+<li>V:view，试图，负责展示信息的</li>
+<li>C:controller，控制器，负责发号施令，扮演了一种交通警察的角色（把方法进行区分，在前台传来需求的时候，确定用什么方法进行处理）</li>
+</ol>
+<p>view即是视图，也就是web页面，control即是控制器
+向系统发出指令的工具，model 简单说是从数据库中取出数据进行处理。</p>
+<p>具体的流程见下图：</p>
+<p><img src="/img/PHP框架MVC学习/1.png" />
+首先我们打开浏览器输入地址，即url，这个请求被服务端处理的时候会首先解析url，然后根据后面三个参数进行分类处理，根据p参数找到对应的平台，根据c找到对应的控制器，根据a找到对应的控制器中的方法，对应的控制器再根据具体来调用数据库模型进行相应的数据库操作，以及数据的逻辑处理，并返回结果，然后由view层进行显示。</p>
+<p>Mvc的工作流程：</p>
+<ul>
+<li><strong>第一步</strong> 浏览者-&gt;调用控制器，对此发出指令</li>
+<li><strong>第二步</strong> 控制器-&gt;按指令选取一个合适的模型</li>
+<li><strong>第三步</strong> 模型-&gt;按照控制器指令选取相应的数据</li>
+<li><strong>第四步</strong> 控制器-&gt;按指令选取相应的视</li>
+<li><strong>第五步</strong>
+视图-&gt;把第三步取到的数据按用户想要的样子显示出来</li>
+</ul>
+<p>mvc模式的优势很明显：分层明确，便于团队开发和修改。</p>
 <h3 id="简单示例">简单示例</h3>
-<p>　　下面为一个MVC的基本结构示例：
-　　首先我们给出一个简单的controller模型(testController.class.php)：
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">testController</span></span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">show</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  </span><br><span class="line">      <span class="variable">$testModel</span> = <span class="keyword">new</span> <span class="title function_ invoke__">testModel</span>();<span class="comment">//选取合适的模型</span></span><br><span class="line">  </span><br><span class="line">      <span class="variable">$data</span> = <span class="variable">$testModel</span>-&gt;<span class="title function_ invoke__">get</span>();<span class="comment">//获取相应的数据</span></span><br><span class="line">  </span><br><span class="line">      <span class="variable">$testView</span> = <span class="keyword">new</span> <span class="title function_ invoke__">testView</span>();<span class="comment">//选择相应的视图</span></span><br><span class="line">  </span><br><span class="line">      <span class="variable">$testView</span>-&gt;<span class="title function_ invoke__">display</span>(<span class="variable">$data</span>);<span class="comment">//展示给用户</span></span><br><span class="line">  </span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure> 　　Model模型(testModel.class.php)： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">  </span><br><span class="line">class testModel&#123;</span><br><span class="line">  </span><br><span class="line">function get()&#123;</span><br><span class="line">  </span><br><span class="line">return &quot;hello world&quot;;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-　　View模型(testView.class.php): <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">testView</span></span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">display</span>(<span class="params"><span class="variable">$data</span></span>)</span>&#123;</span><br><span class="line">  </span><br><span class="line">     <span class="keyword">echo</span> <span class="variable">$data</span>;</span><br><span class="line">  </span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line"> &#125;</span><br><span class="line">  </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-　　最后将三者放入一个文件夹中，并另写一个test.php文件： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">  </span><br><span class="line"><span class="keyword">require_once</span>(<span class="string">&#x27;testController.class.php&#x27;</span>);</span><br><span class="line">  </span><br><span class="line"><span class="keyword">require_once</span>(<span class="string">&#x27;testModel.class.php&#x27;</span>);</span><br><span class="line">  </span><br><span class="line"><span class="keyword">require_once</span>(<span class="string">&#x27;testView.class.php&#x27;</span>);</span><br><span class="line">  </span><br><span class="line"><span class="variable">$testController</span> = <span class="keyword">new</span> <span class="title function_ invoke__">testController</span>();<span class="comment">//调用控制器</span></span><br><span class="line">  </span><br><span class="line"><span class="variable">$testController</span>-&gt;<span class="title function_ invoke__">show</span>();</span><br><span class="line"> </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-　　最后放进www目录，访问test.php即可看到'hello
+<p>下面为一个MVC的基本结构示例，首先我们给出一个简单的controller模型（testController.class.php）：
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">testController</span></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">show</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      <span class="variable">$testModel</span> = <span class="keyword">new</span> <span class="title function_ invoke__">testModel</span>();<span class="comment">//选取合适的模型</span></span><br><span class="line">      <span class="variable">$data</span> = <span class="variable">$testModel</span>-&gt;<span class="title function_ invoke__">get</span>();<span class="comment">//获取相应的数据</span></span><br><span class="line">      <span class="variable">$testView</span> = <span class="keyword">new</span> <span class="title function_ invoke__">testView</span>();<span class="comment">//选择相应的视图</span></span><br><span class="line">      <span class="variable">$testView</span>-&gt;<span class="title function_ invoke__">display</span>(<span class="variable">$data</span>);<span class="comment">//展示给用户</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure> Model模型（testModel.class.php）： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">testModel</span></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">get</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="string">&quot;hello world&quot;</span>;  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+View模型（testView.class.php）: <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">testView</span></span>&#123; </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">display</span>(<span class="params"><span class="variable">$data</span></span>)</span>&#123;  </span><br><span class="line">     <span class="keyword">echo</span> <span class="variable">$data</span>;</span><br><span class="line">  &#125;  </span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+最后将三者放入一个文件夹中，并另写一个test.php文件： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">  </span><br><span class="line"><span class="keyword">require_once</span>(<span class="string">&#x27;testController.class.php&#x27;</span>);</span><br><span class="line"><span class="keyword">require_once</span>(<span class="string">&#x27;testModel.class.php&#x27;</span>); </span><br><span class="line"><span class="keyword">require_once</span>(<span class="string">&#x27;testView.class.php&#x27;</span>);</span><br><span class="line">  </span><br><span class="line"><span class="variable">$testController</span> = <span class="keyword">new</span> <span class="title function_ invoke__">testController</span>();<span class="comment">//调用控制器</span></span><br><span class="line"><span class="variable">$testController</span>-&gt;<span class="title function_ invoke__">show</span>();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+最后放进<code>www</code>目录，访问test.php即可看到'hello
 world'字样。这就是一个最简单的MVC模型了。</p>
 
     </article>
@@ -546,7 +554,7 @@ world'字样。这就是一个最简单的MVC模型了。</p>
             <p>原文作者：<a href="https://lzwgiter.github.io">f10@t</a>
             <p>原文链接：<a href="https://lzwgiter.github.io/posts/f0bc436c.html">https://lzwgiter.github.io/posts/f0bc436c.html</a>
             <p>发表日期：<a href="https://lzwgiter.github.io/posts/f0bc436c.html">November 3rd 2018, 6:56:26 pm</a>
-            <p>更新日期：<a href="https://lzwgiter.github.io/posts/f0bc436c.html">July 24th 2024, 10:43:38 am</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/f0bc436c.html">July 31st 2024, 11:09:33 am</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     <!-- paginator -->
