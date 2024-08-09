@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!-- title -->
+<!-- keywords -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="f10@t">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="f10@t">
+        <meta name="keywords" content="lzwgiter,f10@t's blog">
+    <meta name="description" content="blogs by f10@t">
+    <meta name="description" content="&quot;Domain-Driven Design is an approach to software development that centers the development on programming a domain model that has a rich understanding of the processes and rules of a domain. ....">
+<meta property="og:type" content="article">
+<meta property="og:title" content="领域驱动设计学习（一）">
+<meta property="og:url" content="https://lzwgiter.github.io/posts/963fb8d3/index.html">
+<meta property="og:site_name" content="f10@t&#39;s blog">
+<meta property="og:description" content="&quot;Domain-Driven Design is an approach to software development that centers the development on programming a domain model that has a rich understanding of the processes and rules of a domain. ....">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lzwgiter.github.io/img/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/58b6617915180e558b39a314eec4b6b.jpg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/image-20240510170611962.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/image-20240511152704540.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/image-20240509221255399.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/image-20240509221739617.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/image-20240509222315922.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/image-20240511161313085.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/image-20240511172651138.png">
+<meta property="article:published_time" content="2024-04-23T02:00:27.000Z">
+<meta property="article:modified_time" content="2024-08-07T14:15:33.078Z">
+<meta property="article:author" content="f10@t">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="开发技术">
+<meta property="article:tag" content="微服务技术">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lzwgiter.github.io/img/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80%EF%BC%89/58b6617915180e558b39a314eec4b6b.jpg">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/hello.svg">
+    <title>领域驱动设计学习（一） · f10@t&#39;s blog</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .footer-fixed-btn,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(
+            -45deg,
+            #444 0,
+            #444 80px,
+            #333 80px,
+            #333 160px
+        );
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link id="stylesheet-fancybox" rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-base" rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-mobile" rel="preload" href="/css/mobile.css" as="style" onload="this.onload=null;this.rel='stylesheet';this.media='screen and (max-width: 960px)'">
+    <link id="stylesheet-theme-dark" rel="preload" href="/css/dark.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+        <script>
+            var hits = JSON.parse('{"per_page":10}')
+            var labels = JSON.parse('{"input_placeholder":"搜索文章相关内容","hits_empty":"${query}搜索结果为空: ","hits_stats":"找到结果${hits}条，用时${time} ms"}')
+
+            var algolia = {
+                applicationID: 'M469ZFXTNU',
+                apiKey: '32b991ddc2b9f92be99f0e241d0f12d4',
+                indexName: 'blog_indices',
+                hits: hits,
+                labels: labels
+            }
+        </script>
+    <!-- 百度统计  -->
+        <script>
+            var _hmt = _hmt || [];
+            (function () {
+                var hm = document.createElement("script");
+                hm.src = "https://hm.baidu.com/hm.js?9ef67111f9ae4eefa278780655f0c1e3";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
+    <!-- 谷歌统计  -->
+    <!-- Google tag (gtag.js) -->
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="f10@t's blog" type="application/atom+xml">
+</head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+        <body class="post-body">
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress read-progress-feature"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        <div class="header-sidebar-menu header-sidebar-menu-rounded">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href="/">f10@t's blog</a>
+        </span>
+    </div>
+    <!-- toggle banner -->
+    <div class="banner">
+        <div class="blog-title header-element">
+            <a href="/">f10@t&#39;s blog</a>
+        </div>
+        <div class="post-title header-element">
+            <a href="#" class="post-name">领域驱动设计学习（一）</a>
+        </div>
+    </div>
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- donate button -->
+    <div class="donate-popup donate-popup--hidden">
+    <div class="donate-popup__title">Buy Me A Coffee</div>
+    <div class="donate-popup__content">
+        <div class="donate-popup__content-description">如果这篇文章帮到了你，请赏一杯咖啡给我喝吧嘿嘿☕️</div>
+        <img
+            class="donate-popup__content-qrCode"
+            title="Wechat"
+            alt="Wechat"
+            src="/assets/donate-wechat.jpg"
+        ></img>
+        <img
+            class="donate-popup__content-qrCode"
+            title="Alipay"
+            alt="Alipay"
+            src="/assets/donate-alipay.jpg"
+        ></img>
+    </div>
+</div>
+
+    <div
+        title="Donate to the author"
+        class="footer-fixed-btn footer-fixed-btn--hidden footer-fixed-btn--rounded donate-btn"
+    >
+        <i class="fas fa-donate"></i>
+    </div>
+
+    <!-- back to top button -->
+    <div class="footer-fixed-btn footer-fixed-btn--hidden footer-fixed-btn--rounded back-top">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="    height:50vh;
+">
+    <!-- 主页  -->
+    <!-- 404页  -->
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/B.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+                领域驱动设计学习（一）
+            <!-- 404 -->
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            <!-- 404 -->
+        </p>
+        <!-- 文章页 meta -->
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                    <div class="post-intro-tags" >
+        <span class="post-category" data-categories="开发技术">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                开发技术
+            </span>
+        </span>
+        <a class="post-tag" href="javascript:void(0);" data-tags="Java">Java</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="开发技术">开发技术</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="微服务技术">微服务技术</a>
+</div>
+
+                <!-- 文章字数统计 -->
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">5.1k</span>阅读时长: <span class="post-count reading-time">17 min</span></span>
+                    </div>
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2024/04/23</span>
+                    <!-- busuanzi -->
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" alt="loading">
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <blockquote>
+<blockquote>
+<p>"<em>Domain-Driven Design is an approach to software development that
+centers the development on programming a domain model that has a rich
+understanding of the processes and rules of a domain. ....... The
+approach is particularly suited to complex domains, where a lot of
+often-messy logic needs to be organized.</em>"——<a
+target="_blank" rel="noopener" href="https://martinfowler.com/bliki/DomainDrivenDesign.html"
+title="Domain Driven Design (martinfowler.com)">Martin Fowler</a></p>
+</blockquote>
+<p>最近阅读了郑天民的<a
+target="_blank" rel="noopener" href="https://product.dangdang.com/11676757444.html"
+title="《DDD工程实战：从零构建企业级DDD应用》">《DDD工程实战：从零构建企业级DDD应用》</a>，相较于一些直译本，个人感觉更加易懂。了解了DDD方法的思想、概念和优势，打破了我一直以来对于Java后端开发，特别是微服务开发时的一些固念。感兴趣的伙伴可以阅读Martin
+Fowler的相关博客或者这本书。（喜欢好友家乡的甏肉干饭白）</p>
+<p><img src="/img/领域驱动设计学习（一）/58b6617915180e558b39a314eec4b6b.jpg" /></p>
+</blockquote>
+<span id="more"></span>
+<h1 id="before-ddd">Before DDD</h1>
+<p>在我个人的理解中，DDD是一种编写代码时的思维方式，一种对代码进行组织的方法。大约在大二的时候听到了这个概念，随手也借来了一本Evans原著的译本，了解到了一些关于<strong>领域对象建模</strong>的概念。但当时我更多的精力在于学习已有的编码相关技术，对这一类上层思想类内容不感兴趣或不够重视。也不了解DDD诞生<strong>要解决的问题</strong>是什么、他的优点是什么、他的缺点是什么等。</p>
+<p>随着着手写了一些单体结构的代码、微服务风格的代码后，无事回头再来看DDD，才了解了他的因为所以然。以我个人代码习惯来说，在早期，我的代码大多是这样的结构：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240509162809587.png" /></p>
+<p>弄出来不同的类，<strong>各自包含不同的方法</strong>，比如<code>Utils</code>类。然后在一个main中把他们依次创建、调用，结束。在这个过程中，通常也都是在一个文件夹下编写，不存在什么分包的意思，也无所谓什么测试，大不了print出来看白（滑稽）。问题也随之而来，更改起来有诸多麻烦，一个函数包含的功能也较多，有时候还要找半天功能代码在哪里，并不规范。</p>
+<p>后来大三实习了，接触到了微服务的开发，也基本学习了一些代码规范，才知道有maven管理、分包这些概念。我的代码才变成了下面这样常见的结构：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240509163846784.png" /></p>
+<p>由于转向了Java后端开发的学习，也就接触了上面的分层结构。在这个过程中，<code>controller</code>的代码都很简单，仅仅包含接口的暴露以及服务的注入和调用（以我写过的<a
+target="_blank" rel="noopener" href="https://github.com/lzwgiter/Blockchain-Java-LatteCoin">代码</a>作为例子说明）：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240509164702426.png" /></p>
+<p>配合<code>entity</code>中定义的、要持久化的实体（左图），<code>repo</code>层编写如Spring
+Data JPA的接口代码（右图）：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240510223835944.png" /></p>
+<p>而大量的<code>repo</code>层调用代码、业务功能代码，都充斥在Service层中。这样的代码从功能复杂度或者花费的功夫上来说，很像一个<strong>菱形</strong>，上、下都是尖尖的，因为要么是简单的接口暴露、要么是自动化的持久化，中间则臃肿成了一个胖子，充斥着大量的代码。</p>
+<p>从对象的角度来说，这样的编码方式是一种典型的<strong>贫血模型</strong>编写方法。也即核心的对象中（如上左图中的Block类），仅仅包含属性、Getter、Setter方法、构造器，没有任何与业务相关的代码。
+<strong>仅仅是数据本身。</strong></p>
+<blockquote>
+<p>......<strong>实体对象</strong>具有状态可变性和完整生命周期...有时候，我们把基于实体对象的建模方式称为<strong>充血模型</strong>，以便与基于<strong>数据对象</strong>的贫血模型相区别...数据对象只包含了一组数据属性，没有提供任何对业务逻辑的处理过程，开发人员更关注数据而不是领域。这种开发模式非常常见，但却不是DDD更推荐的做法。在DDD中，我们关注的是领域模型对象而非数据本身<a
+target="_blank" rel="noopener" href="https://product.dangdang.com/11676757444.html"
+title="《DDD工程实战：从零构建企业级DDD应用》">[3]</a>。...</p>
+</blockquote>
+<p>上述的代码方式当然有他的优点，分包清晰、职责划分清楚，便于思考时快速组织代码框架，这也是我很长一段时间编写代码的方式。</p>
+<h1 id="why-ddd">Why DDD？</h1>
+<p><em>那么DDD的必要性在哪里呢？换言之，上述通用的开发习惯会带来怎么的问题？</em>recall关于数据对象的开发方式，谈一谈我个人理解和感受。</p>
+<p>在实际开发中，一旦问题背景较为复杂，涉及的业务方面较广，其下也包含各种不同的小业务，那么就会出现半天理不清类关系、业务流程、东一榔头西一棒槌的感觉。今天觉得这样好就这样写，明天又觉得得拆分开那就拆分开。<strong>我总感觉似乎缺少一个能够指导我快速将业务划分清楚，并且将其对应到代码中角色的一个方法论。</strong>当项目没有那么复杂的时候，这个问题似乎看不见，越复杂我感觉越明显。这也是我的长期以来的一个瓶颈。</p>
+<p>其实<a target="_blank" rel="noopener" href="https://martinfowler.com/bliki/CQRS.html"
+title="CQRS">原著</a>中Evans也是因为在为电气工程师开发软件时，由于对方不了解开发概念，Evans自己也不了解电气知识。这就是一个上述新的陌生场景，而通过DDD方法就可以清晰的抓住线头，按部就班地整理出代码结构。</p>
+<p>因此，与代码架构有所区别，如单体、微服务、中台，DDD我认为是一种<strong>方法论</strong>，可以应用于上述任一代码架构中。当然，事物都有两面性，产品、所在团队不一定每个人都会使用这样的方法论，也不一定有那么多的时间精力或者人力条件去细致的讨论业务需求。但是我觉得了解这个方法还是一些好处的，包括：</p>
+<ul>
+<li>提供一种新的系统建模模式，能够帮助你快速抓住项目中核心的部分。也就是我总觉得缺少的那个指导我的"方法论"。</li>
+<li>提供一种能够和需求方沟通的通用语言</li>
+</ul>
+<h1 id="ddd基本概念">DDD基本概念</h1>
+<p>首先介绍一下大流程，在DDD中，我们的思考会有两个维度：战术设计（<em>tactical
+design</em>）和战略设计（<em>strategic design</em>），其中：</p>
+<ul>
+<li>战术：目的在于如何实现和开发系统，层次较低。更关注如何实施DDD、如何在领域模型基础上采用技术工具来开发。</li>
+<li>战略：目的在于清楚地界定不同的系统与业务关注点，层次较高。更关注如何设计领域模型、如何对领域模型进行划分。</li>
+</ul>
+<p>战略显然更为抽象，因此聚焦业务架构和技术架构怎么结合；而战术则更为具体，聚焦如何设计和实现技术架构。下图是业务模型与战略、战术设计之间的对应关系。</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240509203530561.png" /></p>
+<p>一个大概的流程如下：</p>
+<p>首先，进行战略设计：</p>
+<ol type="1">
+<li><p>我们根据需求方的<code>业务描述</code>首先整理出业务场景的<code>通用语言（Ubiquitous Language）</code>，即一句话描述清楚这个业务场景是干什么的？什么流程？</p></li>
+<li><p>接下来我们需要进行业务拆分，即那些功能是需要分开的？根据业务和<code>通用语言</code>拆分处不同的子域，从而得到不同的<code>限界上下文</code>。具体来说，子域会分为：</p>
+<ul>
+<li>核心子域：系统核心业务</li>
+<li>支撑子域：专注与某一方面业务，为了核心子域而开发</li>
+<li>通用子域：公共能力或基础设施，也可以用于如数据分析等其他领域</li>
+</ul></li>
+</ol>
+<p>另外，也可以使用非面向领域的拆分方法，如根据团队只能进行拆分：前端、后端、数据库等。然后，进行战术设计：</p>
+<ol type="1">
+<li>针对每一个<code>限界上下文</code>，提取其聚合对象、值对象和实体对象。</li>
+<li>根据业务需求，我们将不同<code>限界上下文</code>中的聚合对象联系起来，从而构建起<code>领域服务</code>。</li>
+<li>针对存在强耦合的实体，我们可以提取<code>领域事件</code>以解耦，他可能是<code>限界上下文</code>内部的或跨上下文的。</li>
+<li>构建数据访问的<code>资源库</code>，实现对象的持久化，如MyBatis、Hibernate。</li>
+<li>最后，面向用户界面，构建<code>应用服务</code>。特别地，它是命令查询分离（Command
+Query Responsibility Segregation，CQRS）风格的。</li>
+</ol>
+<p>可以看出，DDD字如其意，核心就是Domain，就是<code>限界上下文</code>，不同的上下文就构建起了整个应用，如同一个个小细胞。因此下面将聚焦单一的一个界限上下文，阐述不同的核心概念。后续文章将进一步总结关于不同上下文集成的内容和技术框架。</p>
+<h2 id="限界上下文bounded-context">限界上下文（Bounded Context）</h2>
+<p>以Java为例，首先给出一个典型的限界上下文的代码包结构：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240510153914269.png" /></p>
+<p>大的来说，可以分为：领域模型对象（Domain）、领域应用服务（application）、基础设施（infrastructure）、上下文集成（intergration）、接口（interfaces）。每一个包的含义及其下属包的含义如下图，后面会针对每一个领域概念、对应着代码包结构进行总结：</p>
+<figure>
+<img src="/img/领域驱动设计学习（一）/image-20240510170611962.png"
+alt="DDD代码架构图" />
+<figcaption aria-hidden="true">DDD代码架构图</figcaption>
+</figure>
+<h3 id="领域模型对象domain">领域模型对象（domain）</h3>
+<p>这里我们主要讨论<a
+href="#group-8">架构图</a>中的<code>model</code>部分：</p>
+<p><img src="/img/领域驱动设计学习（一）/image-20240511152704540.png" style="zoom:80%;" /></p>
+<p>从类别上，可以将对象分为：聚合（<em>Aggregate</em>）、实体（Entity）、值对象（<em>Value
+Object</em>）；从包含关系来说，包含后两者。</p>
+<h4 id="实体entity">实体（Entity）</h4>
+<p>区别于<strong>数据对象</strong>，实体对象包含了业务状态以及围绕这些状态的是生命周期，称为<strong>充血模型</strong>。实体中包含一个唯一标识以及一些改变状态的业务方法。如下代码所示：</p>
+<p><img src="/img/领域驱动设计学习（一）/image-20240509221255399.png" style="zoom:80%;" /></p>
+<h4 id="值对象value-object">值对象（Value Object）</h4>
+<p>值对象自身没有状态，且不可变。如地址、城市、国家，这些都是不可变的内容，比如我们常用的Enum类。即实际代码中不存在Setter方法，仅包含构造函数，一旦创建这不可修改。如下代码所示：</p>
+<p><img src="/img/领域驱动设计学习（一）/image-20240509221739617.png" style="zoom:80%;" /></p>
+<p>值对象的作用包括：</p>
+<ul>
+<li>表示业务数据，如国家</li>
+<li>充当响应的数据传输媒介</li>
+</ul>
+<h4 id="聚合aggregate">聚合（Aggregate）</h4>
+<p>聚合设计领域模型最基本和重要的工作就是在限界上下文中识别<strong>聚合</strong>。聚合由聚合根、实体和值对象组成。为什么要聚合这个概念呢？</p>
+<p>原因在于通过将不同实体和值对象“聚合”到一个类中，可以有效地减少不同类之间的交互关系，<strong>仅由聚合根完成交互。</strong>因此，本文后面的限界上下文集成中，通信也只由不同限界上下文的聚合根进行。如下代码是一个聚合的示例：</p>
+<p><img src="/img/领域驱动设计学习（一）/image-20240509222315922.png" style="zoom:80%;" /></p>
+<p>从上述代码中可以看出，区别于普通的实体对象，聚合对象不仅是一个充血模型，还包含了同一限界上下文内所有其他实体对象的<strong>引用。</strong>如<code>oder</code>、<code>plan</code>、<code>score</code>等对象都不是普通的数据类型。即：聚合对象一定是实体对象，但实体对象不一定是聚合对象（也可以是）。</p>
+<p>那么我们如何识别聚合对象？他有哪些特点？识别聚合对象的方法有三条原则：</p>
+<ul>
+<li>不变条件。即一个事务修改的内容应该位于同一聚合中，保持<strong>强一致性</strong>，要修改则都变。</li>
+<li>设计小聚合。聚合不宜太大，如上代码所示，如果一个聚合边界过大、包含对象过多，那就会导致复杂的对象管理和深层次的对象遍历，带来较差的性能。此外，小聚合也能确保一定的可扩展性。</li>
+<li>不同限界上下文中的聚合通过唯一表示进行引用。</li>
+</ul>
+<h3 id="领域服务services">领域服务（Services）</h3>
+<p>下面首先讨论<a href="#group-8">架构图</a>中的如下部分：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240511161548087.png" /></p>
+<p>领域服务的存在是为了更好地组织一个限界上下文中各个技术组件之间的交互关系，可以理解为当前限界上下文<strong>提供给外部的接口</strong>，他的作用类似于设计模式中的外观模式（Facade）。书中有一张图很清晰，我在图中增加了一些内容以增强理解性：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240511161614863.png" /></p>
+<p>绿色范围内的就是一个限界上下文，向内的箭头来自客户端和其他上下文的集成行为；向外的箭头则为来自本限界上下文的请求或集成。可以发现起到“中心调度”作用的就是应用服务。<strong>他对外屏蔽了客户端、其他上下文对本上下文内聚合的直接调用；也屏蔽了聚合与如REST
+API、中间件、资源库等外部资源之间的直接调用关系。</strong></p>
+<p>在开发过程中，领域服务会分为两大类服务：<strong>命令（Command）服务</strong>和<strong>查询（Query）服务</strong>。DDD提倡使用CQRS模式，因此分为了上述两类服务，而他们最大的区别就是是否会对<strong>聚合的状态产生改变。</strong>这里提一嘴CQRS模式，他起源于<em>Bertrand
+Meyer</em>提出的命令查询分离模型（<em>Command and Query Separation
+Principle，CQS</em>），wiki部分描述如下：</p>
+<blockquote>
+<p>It states that every method should either be a command that performs
+an action, or a query that returns data to the caller, but not both. In
+other words, asking a question should not change the answer.</p>
+</blockquote>
+<p>而CQRS则是在架构层面采用CQS原则的版本，即将服务类型分为独立的命令和查询服务。<a
+target="_blank" rel="noopener" href="https://martinfowler.com/bliki/CQRS.html" title="CQRS"><em>Martin
+Flower</em></a>认为有两种情况下适合采用该模式，否则可能会带来复杂性，可能还不如原来普通的CRUD：</p>
+<ul>
+<li>极少数清况下，对于较为复杂的领域，使用CQRS可能更加清晰。但如果查询和命令对应的实体对象都是同一个类，那就没有必要分开了。</li>
+<li>对于有高性能需求的应用，CQRS可以将读写的负载天然的分开，如果二者的负载差异很大那么可以考虑采用CQRS。当然，也可以使用不同的数据库。</li>
+</ul>
+<p>首先我们需要在领域中定义命令和查询实体对象，如对于命令对象：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240511153213307.png" /></p>
+<p>命名上结尾为Command，作为实体当然具有一个唯一的ID。而对于命令对象则如下图，命名上结尾为Summary，并且在<code>query</code>包下定义不同的transformer类来满足客户端/服务请求的数据内容（类似于视图）：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240511153822606.png" />定义了相关命令、查询对象后，我们就可以利用这些对象来定义服务了。下图为一个CQRS的代码示例，上图为命令服务，下图为查询服务，从函数的返回值就可以看出，命令服务返回值都为void，而查询服务返回的则是数据对象。</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240510153024298.png" /></p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240510153054844.png" /></p>
+<p>定义好领域服务后，我们就可以跨领域构建应用服务了。但在这过程中，考虑如下问题：</p>
+<blockquote>
+<p>如果直接将远程调用的代码写入到服务代码中，并对返回的数据进行对应的处理，那么如果以后被请求的接口的参数列表或返回值变动了怎么办？是不是还得反过头来修改请求方的服务代码？如果涉及的调用很多怎么办？</p>
+</blockquote>
+<p>为了解决上述问题，显然我们要将<strong>本地的业务代码保护起来</strong>，设计一层单独的代码起到隔离的作用。此时就需要引入架构图中的如下部分：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240511155921306.png" /></p>
+<ul>
+<li>对于入站操作（本小节特指REST请求），我们将<strong>请求数据与普通对象的转化</strong>以及<strong>该普通对象与本领域内命令/查询对象的转化</strong>的指责分别定义在<code>dto</code>包和<code>assembler</code>包下。顾名思义，前者将“data”转换为"object"，后者将普通的“object”聚集称为领域对象。</li>
+<li>对于出站操作，我们将对其他领域借口调用的代码放入到<code>acl</code>包下，其意为防腐层（<em>Anti-Corruption
+Layer</em>，ACL）。即将发出请求的代码与本领域服务的业务代码分隔开来，从而解决前述问题。</li>
+</ul>
+<h3 id="领域事件-domain-events">领域事件 （Domain Events）</h3>
+<p>当通用语言中出现“当......发生......时”、"如果发生......"等诸如此类描述，可以考虑引入领域事件。换言之：</p>
+<blockquote>
+<p>...当一个实体一来与另一个实体，当两者之间并不希望产生强耦合，而我们需要保证二者之间的一致性时，通常可以提取领域事件<a
+target="_blank" rel="noopener" href="https://product.dangdang.com/11676757444.html"
+title="《DDD工程实战：从零构建企业级DDD应用》">[3]</a>。</p>
+</blockquote>
+<p>那么就首先需要对事件建模，因此我们会在<a
+href="#group-8">架构图</a>的如下<code>event</code>包中定义领域事件。</p>
+<p><img src="/img/领域驱动设计学习（一）/image-20240511161313085.png" style="zoom:80%;" /></p>
+<p>如下图就是一个领域事件：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240511201741603.png" /></p>
+<p>对领域事件对象建模时，通常：</p>
+<ul>
+<li>名称采用"xxx+动词过去式+Event"的格式</li>
+<li>事件对象类中可以包含唯一ID、产生时间、事件来源等元数据或业务数据</li>
+<li>事件对应不应包含Setter类似的方法，因为事件本身产生后就应该是<strong>不可变</strong>的，代表的是客观存在的瞬时状态。</li>
+</ul>
+<p>既然是事件，那就涉及到异步处理，那么必然会存在生产者、消费者、中间件。这里插一句，对<strong>事件驱动架构</strong>感兴趣的读者可以阅读<a
+target="_blank" rel="noopener" href="https://dl.acm.org/doi/book/10.5555/940308"
+title="《Enterprise Integration Patterns - Designing, Building And Deploying Messaging Solutions》">《Enterprise
+Integration Patterns - Designing, Building And Deploying Messaging
+Solutions》</a>。换言之他的生命周期是怎样的呢？如下图，可以分为<strong>两个阶段四个步骤</strong>。</p>
+<p><img src="/img/领域驱动设计学习（一）/image-20240511172651138.png" style="zoom:80%;" /></p>
+<p>上图中的生产者和消费者不限定所在的上下文，which
+means二者可以处于同一个上下文，也可以是不同的上下文。区别在于是否涉及到中间件，对于不同上下文的情况，通常需要中间件的参与且要考虑网络因素。</p>
+<p>而实现上述功能的代码，则对应<a
+href="#group-8">架构图</a>中的如下部分：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240511210208023.png" /></p>
+<p>如下是一个消费事件的入站包代码示例，通常事件的消费类命名为"xxx+EventHandler"，利用SpringCloud
+Stream提供的事件监听注解<code>SteamListener</code>来标记。</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240511210326147.png" /></p>
+<p>相反生产者命名为“xxx+EventPublisher”，如下代码中，当对应事件生成时将事件发送出去。</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240511210620314.png" /></p>
+<p>特别地，对于跨上下文的集成行为，我们会将上述消息发送到中间件如RabbitMQ中去，这就涉及到了<a
+href="#group-8">架构图</a>的如下部分：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240511211152289.png" /></p>
+<p>顾名思义，基础设施，包含了我们技术相关配置文件或资源，这里仅介绍事件相关的消息包，下一小节介绍资源库。</p>
+<p>在<code>messaging</code>包中，以Spring Cloud
+Stream为例，我们需要定义消息中间件的配置文件并定义对应的路由：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240511211511106.png" /></p>
+<p>命名方面，消息生产者命名为"xxxSource"，对应地，消费者这命名为“xxxSink”：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240511211631029.png" /></p>
+<h3 id="资源库repository">资源库（Repository）</h3>
+<p>下面讨论内容对应<a href="#group-8">架构图</a>中的如下部分：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240511221917087.png" /></p>
+<p>资源库分为定义和实现两个部分，这么做的原因是为了将<strong>领域模型对象</strong>和<strong>持久化技术</strong>解耦，也称为资源库模式（Repository）<a
+target="_blank" rel="noopener" href="https://martinfowler.com/books/eaa.html"
+title="《Patterns of Enterprise Application Architecture》">[5]</a>：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240511220102172.png" /></p>
+<p>即，在领域模型对象和持久化层代码之间新构建一个代码层，负责从数据请求方处接收操作内容，并向下调用持久化层代码，最终将操作结果返回给数据请求放。（原文如下：）：</p>
+<blockquote>
+<p>A Repository mediates between the domain and data mapping layers,
+acting like an in-memory domain object collection. Client objects
+construct query specifications declaratively and submit them to
+Repository for satisfaction.<a
+target="_blank" rel="noopener" href="https://martinfowler.com/books/eaa.html"
+title="《Patterns of Enterprise Application Architecture》">[5]</a></p>
+</blockquote>
+<p>因此首先，我们需要领域模型<code>domain</code>包下定义数据仓库操作类，并在当前<code>repository</code>包中给出对应的实现：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240511222056048.png" /></p>
+<p>针对实现，我们需要进一步根据资源库模式分化出三类不同指责的子包：</p>
+<ul>
+<li><p><code>po</code>：即Persistent
+Object，待被持久化的对象类定义，典型的如Spring Data JPA中：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240511221220857.png" /></p></li>
+<li><p><code>factory</code>：工厂类，负责<strong>持久化对象PO</strong>和领域聚合对象之间的转换：</p>
+<p>​ <img
+src="/img/领域驱动设计学习（一）/image-20240511221521750.png" /></p></li>
+<li><p><code>mapper</code>：数据映射器代码，典型的如Spring Data
+JPA：</p>
+<p><img
+src="/img/领域驱动设计学习（一）/image-20240511221103322.png" /></p></li>
+</ul>
+<h1 id="参考学习">参考学习</h1>
+
+    </article>
+    <!-- license -->
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://lzwgiter.github.io">f10@t</a>
+            <p>原文链接：<a href="https://lzwgiter.github.io/posts/963fb8d3/">https://lzwgiter.github.io/posts/963fb8d3/</a>
+            <p>发表日期：<a href="https://lzwgiter.github.io/posts/963fb8d3/">April 23rd 2024, 10:00:27 am</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/963fb8d3/">August 7th 2024, 10:15:33 pm</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+                <div class="nextSlogan">Next Post</div>
+                <a href="/posts/54e979b4/" title="RabbitMQ学习">
+                    <div class="nextTitle">RabbitMQ学习</div>
+                </a>
+        </li>
+        <li class="previous">
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/posts/21f893eb/" title="学鲁菜之酱焖鲈鱼">
+                    <div class="prevTitle">学鲁菜之酱焖鲈鱼</div>
+                </a>
+        </li>
+    </ul>
+    <!-- comment -->
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+            
+            
+            
+            <!-- utteranc评论 -->
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+            
+                <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    <div id="comment"></div>
+    <script>
+        new Valine({
+            el: '#comment',
+            notify:false,
+            verify:false,
+            appId: "KADRlHg5xXyhKL0d6USDWfIB-gzGzoHsz",
+            appKey: "Ppj8kIdro2yDqXOvqWkTRxuW",
+            placeholder: "递咖啡就坐(　o=^•ェ•)o　┏━┓（填写邮箱地址可以收到邮件回复捏）",
+            path:window.location.pathname,
+            avatar:'mm'
+        });
+    </script>
+
+            
+        </div>
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    <!-- Mathjax -->
+</main>
+
+                <!-- profile -->
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+        <div class="social">
+                            <a href="//github.com/lzwgiter" class="iconfont-archer github" target="_blank" title="github"></a>
+
+        </div>
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    <!-- 不蒜子  -->
+        <div class="busuanzi-container">
+                <span id="busuanzi_container_site_uv">做客的小伙伴数: <span id="busuanzi_value_site_uv"></span></span>
+        </div>
+</footer>
+
+        </div>
+        <!-- toc -->
+            <div class="toc-wrapper toc-wrapper-loding" style=    top:50vh;
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#before-ddd"><span class="toc-number">1.</span> <span class="toc-text">Before DDD</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#why-ddd"><span class="toc-number">2.</span> <span class="toc-text">Why DDD？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ddd%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">3.</span> <span class="toc-text">DDD基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%90%E7%95%8C%E4%B8%8A%E4%B8%8B%E6%96%87bounded-context"><span class="toc-number">3.1.</span> <span class="toc-text">限界上下文（Bounded Context）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B%E5%AF%B9%E8%B1%A1domain"><span class="toc-number">3.1.1.</span> <span class="toc-text">领域模型对象（domain）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E4%BD%93entity"><span class="toc-number">3.1.1.1.</span> <span class="toc-text">实体（Entity）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%80%BC%E5%AF%B9%E8%B1%A1value-object"><span class="toc-number">3.1.1.2.</span> <span class="toc-text">值对象（Value Object）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%81%9A%E5%90%88aggregate"><span class="toc-number">3.1.1.3.</span> <span class="toc-text">聚合（Aggregate）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E6%9C%8D%E5%8A%A1services"><span class="toc-number">3.1.2.</span> <span class="toc-text">领域服务（Services）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E4%BA%8B%E4%BB%B6-domain-events"><span class="toc-number">3.1.3.</span> <span class="toc-text">领域事件 （Domain Events）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E5%BA%93repository"><span class="toc-number">3.1.4.</span> <span class="toc-text">资源库（Repository）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%AD%A6%E4%B9%A0"><span class="toc-number">4.</span> <span class="toc-text">参考学习</span></a></li></ol>
+            </div>
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 99
+        </div>
+        <!-- search  -->
+            <div class="site-search site-search-loading popup-trigger">
+                <span class="iconfont-archer search-icon">&#xe627;</span>
+            </div>
+    </div>
+    <div class="post-archive">
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/05</span>
+            <a class="archive-post-title" href="/posts/54e979b4/">RabbitMQ学习</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/23</span>
+            <a class="archive-post-title" href="/posts/963fb8d3/">领域驱动设计学习（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/posts/21f893eb/">学鲁菜之酱焖鲈鱼</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2023 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span>
+            <a class="archive-post-title" href="/posts/33ea2108/">Spring AOP再探</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/09</span>
+            <a class="archive-post-title" href="/posts/c41813ec/">重新审视微服务</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/04</span>
+            <a class="archive-post-title" href="/posts/85bf5302/">K8s攻防之OWASP-K8S-TOP10（下）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/16</span>
+            <a class="archive-post-title" href="/posts/8aa36aba/">K8s攻防之OWASP-K8S-TOP10（上）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/posts/c16d1cd9/">Java内存马原理（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/08</span>
+            <a class="archive-post-title" href="/posts/e2947908/">Java Instrument机制及管窥IAST</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/03</span>
+            <a class="archive-post-title" href="/posts/479daa6d/">gRPC简介与使用</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/30</span>
+            <a class="archive-post-title" href="/posts/b74b8800/">fastjson反序列化漏洞学习（二）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span>
+            <a class="archive-post-title" href="/posts/73d00ee7/">Netty框架学习</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/04</span>
+            <a class="archive-post-title" href="/posts/d6b305b7/">Java网络编程模型复习</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2022 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span>
+            <a class="archive-post-title" href="/posts/203767b8/">python-Numpy库使用</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/20</span>
+            <a class="archive-post-title" href="/posts/f06096b/">MATLAB - Wireless Communication Onramp</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span>
+            <a class="archive-post-title" href="/posts/3041f265/">Matlab编程基础</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2021 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/04</span>
+            <a class="archive-post-title" href="/posts/169c63d0/">Bloom Filter概念原理</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span>
+            <a class="archive-post-title" href="/posts/85e98ef0/">zk-SNARKs简洁的非交互式零知识证明学习(一)</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span>
+            <a class="archive-post-title" href="/posts/a8e0eb2d/">Quarkus学习（一）概述以及编写REST服务</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/19</span>
+            <a class="archive-post-title" href="/posts/e88577c0/">Cloud Programming Simplified:A Berkeley View on Serverless Computing</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span>
+            <a class="archive-post-title" href="/posts/99665dc1/">闲聊一下Java中的DI和CDI</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span>
+            <a class="archive-post-title" href="/posts/ed901271/">Kubernetes-集群环境搭建使用及问题记录（三）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/09</span>
+            <a class="archive-post-title" href="/posts/a08eb123/">Kubernetes-集群环境搭建使用及问题记录（二）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span>
+            <a class="archive-post-title" href="/posts/eed4a979/">Kubernetes 集群环境搭建使用及问题记录（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/24</span>
+            <a class="archive-post-title" href="/posts/2f0b60dd/">闲聊一下Go语言的函数方法和多态机制特点</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span>
+            <a class="archive-post-title" href="/posts/5893facf/">express学习（一）-基于NodeJS的Web框架</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/10</span>
+            <a class="archive-post-title" href="/posts/8a9b0b34/">Beego学习-ORM</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/posts/84db08d3/">Beego学习-路由设置</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/posts/a9031312/">docker-compose及dockerfile总结</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/09</span>
+            <a class="archive-post-title" href="/posts/77d22b2a/">Spring安全技术-Spring Security使用及总结（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/28</span>
+            <a class="archive-post-title" href="/posts/5e9eec21/">DevOps技术-简单了解与入门</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span>
+            <a class="archive-post-title" href="/posts/27875254/">Spring持久层技术-Sping Data JPA使用及总结（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/14</span>
+            <a class="archive-post-title" href="/posts/bec529bf/">以太坊智能合约开发环境搭建及智能合约的编写、部署、测试</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span>
+            <a class="archive-post-title" href="/posts/2ff8a9fd/">以太坊基本概念与实验环境搭建</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2020 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span>
+            <a class="archive-post-title" href="/posts/bcd864e2/">DC-1靶机渗透</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span>
+            <a class="archive-post-title" href="/posts/c99165fd/">fastjson反序列化漏洞学习（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/09</span>
+            <a class="archive-post-title" href="/posts/a9e6a25b/">Spring基础学习 - AOP机制</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/06</span>
+            <a class="archive-post-title" href="/posts/b92dbb83/">JavaEE基础 - Servlet</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/06</span>
+            <a class="archive-post-title" href="/posts/44088610/">Spring基础学习 - IOC机制</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/01</span>
+            <a class="archive-post-title" href="/posts/662e1cfe/">微服务入门-5W和微服务思想</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span>
+            <a class="archive-post-title" href="/posts/c75c5fc7/">Java 反序列化漏洞与JNDI注入(下)</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/14</span>
+            <a class="archive-post-title" href="/posts/5dcfa8b5/">Kerberos认证过程原理及攻击手段</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/26</span>
+            <a class="archive-post-title" href="/posts/1ccc94ff/">内存布局与栈溢出&堆溢出原理</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/21</span>
+            <a class="archive-post-title" href="/posts/bc7cb7a1/">入坑Pwn之刷题补坑</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/29</span>
+            <a class="archive-post-title" href="/posts/760e25d9/">内存取证原理学习及Volatility - 篇二</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span>
+            <a class="archive-post-title" href="/posts/b0024cb7/">Struts框架管窥以及几个漏洞的分析</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/09</span>
+            <a class="archive-post-title" href="/posts/8ce0a80d/">Redis未授权访问漏洞及修补方法</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span>
+            <a class="archive-post-title" href="/posts/13fe3d9f/">本地提权与漏洞提权</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2019 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/21</span>
+            <a class="archive-post-title" href="/posts/f8b67901/">逆向工程课程小结</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span>
+            <a class="archive-post-title" href="/posts/4d8e0b70/">内存取证原理学习及Volatility - 篇一</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span>
+            <a class="archive-post-title" href="/posts/82490df7/">并发模型之单线程多路I/O复用---select</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/29</span>
+            <a class="archive-post-title" href="/posts/a715340f/">入坑Pwn之基本知识</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span>
+            <a class="archive-post-title" href="/posts/47dcecb9/">Apache-Commons-Collections反序列化漏洞</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/03</span>
+            <a class="archive-post-title" href="/posts/de476e86/">Java 反序列化漏洞与JNDI注入(上)</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span>
+            <a class="archive-post-title" href="/posts/7a9a17f3/">记录一次对win2k3 Enterprise Edition的永恒之蓝利用</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/11</span>
+            <a class="archive-post-title" href="/posts/6f24bb1d/">kali-渗透测试-信息收集3</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/10</span>
+            <a class="archive-post-title" href="/posts/18238b8b/">kali-渗透测试-信息收集2</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/18</span>
+            <a class="archive-post-title" href="/posts/812ada31/">kali-渗透测试-信息收集1</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span>
+            <a class="archive-post-title" href="/posts/fffcd997/">Metasploit渗透测试魔鬼训练营-客户端渗透攻击</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/10</span>
+            <a class="archive-post-title" href="/posts/30b79e7d/">Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/07</span>
+            <a class="archive-post-title" href="/posts/79017d0/">Metasploit渗透测试魔鬼训练营-web应用渗透</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/posts/6c9a4aca/">Metasploit渗透测试魔鬼训练营-服务扫描与查点</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/04</span>
+            <a class="archive-post-title" href="/posts/ed61533c/">Metasploit渗透测试魔鬼训练营-信息收集</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span>
+            <a class="archive-post-title" href="/posts/ba8e1564/">Metasploit渗透测试魔鬼训练营 第一天</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2018 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/posts/dd591816/">小明的博客--Typecho 反序列化漏洞</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span>
+            <a class="archive-post-title" href="/posts/41159e88/">Bugku的一道注入---多次</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span>
+            <a class="archive-post-title" href="/posts/26bacf07/">Bugku的一道注入--INSERT INTO注入</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span>
+            <a class="archive-post-title" href="/posts/e1cf93ae/">ThinkPHP框架学习---路由</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span>
+            <a class="archive-post-title" href="/posts/dec252e7/">ThinkPHP框架学习---config类和config助手函数</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span>
+            <a class="archive-post-title" href="/posts/8405173/">ThinkPHP框架学习---框架目录及框架配置</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/19</span>
+            <a class="archive-post-title" href="/posts/5d13a793/">Nmap使用指南</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/12</span>
+            <a class="archive-post-title" href="/posts/e6caa5f0/">SQL注入小记(二)</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span>
+            <a class="archive-post-title" href="/posts/78f948a4/">PHP学习--超级全局变量</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/08</span>
+            <a class="archive-post-title" href="/posts/777d53bb/">PHP学习--变量</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/03</span>
+            <a class="archive-post-title" href="/posts/f0bc436c/">PHP框架MVC学习</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span>
+            <a class="archive-post-title" href="/posts/117580c0/">CTF中的python脚本题小结（二）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span>
+            <a class="archive-post-title" href="/posts/21636c18/">CTF中的python脚本题小结（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span>
+            <a class="archive-post-title" href="/posts/fc74b0ce/">Hackergame 2018 wp</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span>
+            <a class="archive-post-title" href="/posts/8c800523/">安恒九月题的misc和一道web</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span>
+            <a class="archive-post-title" href="/posts/49fb3e92/">SQL注入小记(一)</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/27</span>
+            <a class="archive-post-title" href="/posts/21c35507/">隐写术-LSB隐写</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span>
+            <a class="archive-post-title" href="/posts/59bc0c0/">隐写术--NTFS流隐写</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span>
+            <a class="archive-post-title" href="/posts/c7cffe19/">CTF常见隐写手段小结</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span>
+            <a class="archive-post-title" href="/posts/69896e9f/">DOM 文档对象模型</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/21</span>
+            <a class="archive-post-title" href="/posts/20cf0786/">BOM-浏览器操作对象模型之history和screen对象</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span>
+            <a class="archive-post-title" href="/posts/f92f304f/">BOM 浏览器操作对象模型之navigator、location对象</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span>
+            <a class="archive-post-title" href="/posts/79f16c6a/">BOM-浏览器操作对象模型之window对象</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/16</span>
+            <a class="archive-post-title" href="/posts/aa0a7b0a/">Javascript基础之数据类型2</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span>
+            <a class="archive-post-title" href="/posts/33032ab0/">Javascript基础之数据类型1</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span>
+            <a class="archive-post-title" href="/posts/b5fac929/">CTF隐写术--关于ZIP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/09</span>
+            <a class="archive-post-title" href="/posts/98736a90/">CSS样式基础4.4--选择器之伪类选择器</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/posts/17442633/">Bugku的一道misc-----猫片</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/posts/d4db3e56/">CSS基础4.3--选择器之属性选择器</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/05</span>
+            <a class="archive-post-title" href="/posts/7b6c38ce/">CSS基础4.2--选择器之组合选择器</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span>
+            <a class="archive-post-title" href="/posts/6027632/">CSS基础4.1--选择器之CSS基础4.1-选择器之基本选择器</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/02</span>
+            <a class="archive-post-title" href="/posts/370eaad5/">CSS基础3.2--特性之CSS基础3.2--特性之继承性</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/4655c16f/">CSS基础3.1--特性之CSS基础3.1-特性之层叠性</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/ae68c748/">CSS基础2--CSS基础2-应用</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/6b427aa1/">CSS基础1--样式</a>
+        </li>
+            </ul>
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+            <span class="sidebar-tag-name" data-tags="区块链技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                区块链技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="渗透测试">
+                <span class="iconfont-archer">&#xe606;</span>
+                渗透测试
+            </span>
+            <span class="sidebar-tag-name" data-tags="Java">
+                <span class="iconfont-archer">&#xe606;</span>
+                Java
+            </span>
+            <span class="sidebar-tag-name" data-tags="漏洞分析">
+                <span class="iconfont-archer">&#xe606;</span>
+                漏洞分析
+            </span>
+            <span class="sidebar-tag-name" data-tags="web安全">
+                <span class="iconfont-archer">&#xe606;</span>
+                web安全
+            </span>
+            <span class="sidebar-tag-name" data-tags="开发技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                开发技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="前端">
+                <span class="iconfont-archer">&#xe606;</span>
+                前端
+            </span>
+            <span class="sidebar-tag-name" data-tags="Go语言">
+                <span class="iconfont-archer">&#xe606;</span>
+                Go语言
+            </span>
+            <span class="sidebar-tag-name" data-tags="Go Web">
+                <span class="iconfont-archer">&#xe606;</span>
+                Go Web
+            </span>
+            <span class="sidebar-tag-name" data-tags="论文阅读">
+                <span class="iconfont-archer">&#xe606;</span>
+                论文阅读
+            </span>
+            <span class="sidebar-tag-name" data-tags="CSS">
+                <span class="iconfont-archer">&#xe606;</span>
+                CSS
+            </span>
+            <span class="sidebar-tag-name" data-tags="CTF">
+                <span class="iconfont-archer">&#xe606;</span>
+                CTF
+            </span>
+            <span class="sidebar-tag-name" data-tags="SQL注入">
+                <span class="iconfont-archer">&#xe606;</span>
+                SQL注入
+            </span>
+            <span class="sidebar-tag-name" data-tags="隐写术">
+                <span class="iconfont-archer">&#xe606;</span>
+                隐写术
+            </span>
+            <span class="sidebar-tag-name" data-tags="python">
+                <span class="iconfont-archer">&#xe606;</span>
+                python
+            </span>
+            <span class="sidebar-tag-name" data-tags="云技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                云技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="DevOps">
+                <span class="iconfont-archer">&#xe606;</span>
+                DevOps
+            </span>
+            <span class="sidebar-tag-name" data-tags="开发与运维">
+                <span class="iconfont-archer">&#xe606;</span>
+                开发与运维
+            </span>
+            <span class="sidebar-tag-name" data-tags="DevSecOps">
+                <span class="iconfont-archer">&#xe606;</span>
+                DevSecOps
+            </span>
+            <span class="sidebar-tag-name" data-tags="网络编程">
+                <span class="iconfont-archer">&#xe606;</span>
+                网络编程
+            </span>
+            <span class="sidebar-tag-name" data-tags="Kubernete">
+                <span class="iconfont-archer">&#xe606;</span>
+                Kubernete
+            </span>
+            <span class="sidebar-tag-name" data-tags="云安全">
+                <span class="iconfont-archer">&#xe606;</span>
+                云安全
+            </span>
+            <span class="sidebar-tag-name" data-tags="分布式技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                分布式技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="MatLab">
+                <span class="iconfont-archer">&#xe606;</span>
+                MatLab
+            </span>
+            <span class="sidebar-tag-name" data-tags="PHP">
+                <span class="iconfont-archer">&#xe606;</span>
+                PHP
+            </span>
+            <span class="sidebar-tag-name" data-tags="Quarkus">
+                <span class="iconfont-archer">&#xe606;</span>
+                Quarkus
+            </span>
+            <span class="sidebar-tag-name" data-tags="微服务技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                微服务技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="Spring">
+                <span class="iconfont-archer">&#xe606;</span>
+                Spring
+            </span>
+            <span class="sidebar-tag-name" data-tags="docker">
+                <span class="iconfont-archer">&#xe606;</span>
+                docker
+            </span>
+            <span class="sidebar-tag-name" data-tags="NodeJS">
+                <span class="iconfont-archer">&#xe606;</span>
+                NodeJS
+            </span>
+            <span class="sidebar-tag-name" data-tags="express">
+                <span class="iconfont-archer">&#xe606;</span>
+                express
+            </span>
+            <span class="sidebar-tag-name" data-tags="密码学">
+                <span class="iconfont-archer">&#xe606;</span>
+                密码学
+            </span>
+            <span class="sidebar-tag-name" data-tags="以太坊">
+                <span class="iconfont-archer">&#xe606;</span>
+                以太坊
+            </span>
+            <span class="sidebar-tag-name" data-tags="智能合约">
+                <span class="iconfont-archer">&#xe606;</span>
+                智能合约
+            </span>
+            <span class="sidebar-tag-name" data-tags="pwn">
+                <span class="iconfont-archer">&#xe606;</span>
+                pwn
+            </span>
+            <span class="sidebar-tag-name" data-tags="电子取证">
+                <span class="iconfont-archer">&#xe606;</span>
+                电子取证
+            </span>
+            <span class="sidebar-tag-name" data-tags="日常">
+                <span class="iconfont-archer">&#xe606;</span>
+                日常
+            </span>
+            <span class="sidebar-tag-name" data-tags="C编程">
+                <span class="iconfont-archer">&#xe606;</span>
+                C编程
+            </span>
+            <span class="sidebar-tag-name" data-tags="课程总结">
+                <span class="iconfont-archer">&#xe606;</span>
+                课程总结
+            </span>
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+        <span class="sidebar-category-name" data-categories="区块链技术">
+            <span class="iconfont-archer">&#xe60a;</span>
+            区块链技术
+        </span>
+        <span class="sidebar-category-name" data-categories="漏洞分析">
+            <span class="iconfont-archer">&#xe60a;</span>
+            漏洞分析
+        </span>
+        <span class="sidebar-category-name" data-categories="开发技术">
+            <span class="iconfont-archer">&#xe60a;</span>
+            开发技术
+        </span>
+        <span class="sidebar-category-name" data-categories="论文阅读">
+            <span class="iconfont-archer">&#xe60a;</span>
+            论文阅读
+        </span>
+        <span class="sidebar-category-name" data-categories="CTF">
+            <span class="iconfont-archer">&#xe60a;</span>
+            CTF
+        </span>
+        <span class="sidebar-category-name" data-categories="渗透测试">
+            <span class="iconfont-archer">&#xe60a;</span>
+            渗透测试
+        </span>
+        <span class="sidebar-category-name" data-categories="DevSecOps">
+            <span class="iconfont-archer">&#xe60a;</span>
+            DevSecOps
+        </span>
+        <span class="sidebar-category-name" data-categories="云安全">
+            <span class="iconfont-archer">&#xe60a;</span>
+            云安全
+        </span>
+        <span class="sidebar-category-name" data-categories="MATLAB">
+            <span class="iconfont-archer">&#xe60a;</span>
+            MATLAB
+        </span>
+        <span class="sidebar-category-name" data-categories="密码学">
+            <span class="iconfont-archer">&#xe60a;</span>
+            密码学
+        </span>
+        <span class="sidebar-category-name" data-categories="电子取证">
+            <span class="iconfont-archer">&#xe60a;</span>
+            电子取证
+        </span>
+        <span class="sidebar-category-name" data-categories="课程总结">
+            <span class="iconfont-archer">&#xe60a;</span>
+            课程总结
+        </span>
+        <span class="sidebar-category-name" data-categories="杂谈">
+            <span class="iconfont-archer">&#xe60a;</span>
+            杂谈
+        </span>
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "https://lzwgiter.github.io",
+        root: siteMetaRoot,
+        author: "f10@t"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+        <!-- main func -->
+        <script src="/scripts/main.js"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js" onload="window.Fancybox.bind('[data-fancybox]')" defer></script>
+        <!-- algolia -->
+            <div class="site-search site-search-loading">
+    <div class="algolia-popup popup">
+        <div class="algolia-search">
+            <div class="algolia-search-input-icon">
+                <i class="fa fa-search"></i>
+            </div>
+            <div class="algolia-search-input" id="algolia-search-input"></div>
+            <div class="popup-btn-close">
+                <i class="iconfont-archer">&#xe609;</i>
+            </div>
+        </div>
+
+        <div class="algolia-results">
+            <div id="algolia-stats" class="algolia-stats"></div>
+            <div id="algolia-hits"></div>
+            <div id="algolia-pagination" class="algolia-pagination"></div>
+        </div>
+    </div>
+</div>
+
+            <script src="/scripts/search.js" async></script>
+        <!-- busuanzi -->
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        <!-- async load share.js -->
+            <script src="/scripts/share.js" async></script>
+        <!-- mermaid -->
+    </body>
+</html>

@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!-- title -->
+<!-- keywords -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="f10@t">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="f10@t">
+        <meta name="keywords" content="lzwgiter,f10@t's blog">
+    <meta name="description" content="blogs by f10@t">
+    <meta name="description" content="DOM(Document Object Model)文档对象模型是W3C指定的一套技术规范，用来描述Javascript脚本怎么与HTML或XML文档进行交互的Web标准。DOM定义了一系列标准接口，允许开发人员通过标准方式访问文档结构、操作网页内容、控制样式和行为等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DOM 文档对象模型">
+<meta property="og:url" content="https://lzwgiter.github.io/posts/69896e9f/index.html">
+<meta property="og:site_name" content="f10@t&#39;s blog">
+<meta property="og:description" content="DOM(Document Object Model)文档对象模型是W3C指定的一套技术规范，用来描述Javascript脚本怎么与HTML或XML文档进行交互的Web标准。DOM定义了一系列标准接口，允许开发人员通过标准方式访问文档结构、操作网页内容、控制样式和行为等。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lzwgiter.github.io/img/DOM-%E6%96%87%E6%A1%A3%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/2.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/DOM-%E6%96%87%E6%A1%A3%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/4.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/DOM-%E6%96%87%E6%A1%A3%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/6.png">
+<meta property="article:published_time" content="2018-08-22T05:02:36.000Z">
+<meta property="article:modified_time" content="2024-07-24T02:40:56.824Z">
+<meta property="article:author" content="f10@t">
+<meta property="article:tag" content="前端">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lzwgiter.github.io/img/DOM-%E6%96%87%E6%A1%A3%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/2.png">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/hello.svg">
+    <title>DOM 文档对象模型 · f10@t&#39;s blog</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .footer-fixed-btn,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(
+            -45deg,
+            #444 0,
+            #444 80px,
+            #333 80px,
+            #333 160px
+        );
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link id="stylesheet-fancybox" rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-base" rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-mobile" rel="preload" href="/css/mobile.css" as="style" onload="this.onload=null;this.rel='stylesheet';this.media='screen and (max-width: 960px)'">
+    <link id="stylesheet-theme-dark" rel="preload" href="/css/dark.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+        <script>
+            var hits = JSON.parse('{"per_page":10}')
+            var labels = JSON.parse('{"input_placeholder":"搜索文章相关内容","hits_empty":"${query}搜索结果为空: ","hits_stats":"找到结果${hits}条，用时${time} ms"}')
+
+            var algolia = {
+                applicationID: 'M469ZFXTNU',
+                apiKey: '32b991ddc2b9f92be99f0e241d0f12d4',
+                indexName: 'blog_indices',
+                hits: hits,
+                labels: labels
+            }
+        </script>
+    <!-- 百度统计  -->
+        <script>
+            var _hmt = _hmt || [];
+            (function () {
+                var hm = document.createElement("script");
+                hm.src = "https://hm.baidu.com/hm.js?9ef67111f9ae4eefa278780655f0c1e3";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
+    <!-- 谷歌统计  -->
+    <!-- Google tag (gtag.js) -->
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="f10@t's blog" type="application/atom+xml">
+</head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+        <body class="post-body">
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress read-progress-feature"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        <div class="header-sidebar-menu header-sidebar-menu-rounded">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href="/">f10@t's blog</a>
+        </span>
+    </div>
+    <!-- toggle banner -->
+    <div class="banner">
+        <div class="blog-title header-element">
+            <a href="/">f10@t&#39;s blog</a>
+        </div>
+        <div class="post-title header-element">
+            <a href="#" class="post-name">DOM 文档对象模型</a>
+        </div>
+    </div>
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- donate button -->
+    <div class="donate-popup donate-popup--hidden">
+    <div class="donate-popup__title">Buy Me A Coffee</div>
+    <div class="donate-popup__content">
+        <div class="donate-popup__content-description">如果这篇文章帮到了你，请赏一杯咖啡给我喝吧嘿嘿☕️</div>
+        <img
+            class="donate-popup__content-qrCode"
+            title="Wechat"
+            alt="Wechat"
+            src="/assets/donate-wechat.jpg"
+        ></img>
+        <img
+            class="donate-popup__content-qrCode"
+            title="Alipay"
+            alt="Alipay"
+            src="/assets/donate-alipay.jpg"
+        ></img>
+    </div>
+</div>
+
+    <div
+        title="Donate to the author"
+        class="footer-fixed-btn footer-fixed-btn--hidden footer-fixed-btn--rounded donate-btn"
+    >
+        <i class="fas fa-donate"></i>
+    </div>
+
+    <!-- back to top button -->
+    <div class="footer-fixed-btn footer-fixed-btn--hidden footer-fixed-btn--rounded back-top">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="    height:50vh;
+">
+    <!-- 主页  -->
+    <!-- 404页  -->
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/B.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+                DOM 文档对象模型
+            <!-- 404 -->
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            <!-- 404 -->
+        </p>
+        <!-- 文章页 meta -->
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                    <div class="post-intro-tags" >
+        <span class="post-category" data-categories="开发技术">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                开发技术
+            </span>
+        </span>
+        <a class="post-tag" href="javascript:void(0);" data-tags="前端">前端</a>
+</div>
+
+                <!-- 文章字数统计 -->
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">1.9k</span>阅读时长: <span class="post-count reading-time">7 min</span></span>
+                    </div>
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2018/08/22</span>
+                    <!-- busuanzi -->
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" alt="loading">
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <blockquote>
+<p>DOM(Document Object
+Model)文档对象模型是W3C指定的一套技术规范，用来描述Javascript脚本怎么与HTML或XML文档进行交互的Web标准。DOM定义了一系列标准接口，允许开发人员通过标准方式访问文档结构、操作网页内容、控制样式和行为等。</p>
+</blockquote>
+<span id="more"></span>
+<h3 id="dom基础">DOM基础</h3>
+<p>　　当网页被加载时，浏览器会创建页面的文档对象模型（Document Object
+Model）。 HTML DOM
+模型被构造为对象的树，用来获取或设置文档中标签的属性，例如获取或者设置input表单的value值。
+　　DOM可以以一种独立于平台和语言的方式访问和修改一个文档的内容和结构。换句话说，这是表示和处理一个HTML或XML文档的常用方法。DOM定义了表示和修改文档所需的对象、这些对象的行为和属性以及这些对象之间的关系。可以把DOM认为是页面上数据和结构的一个树形表示。
+　　W3C DOM 标准被分为 3 个不同的部分： 　　　　１.核心 DOM -
+针对任何结构化文档的标准模型 　　　　２.XML DOM - 针对 XML
+文档的标准模型 　　　　３.HTML DOM - 针对 HTML 文档的标准模型
+　　核心Dom是结构化文档比较底层对象的集合，这一部分所定义的对象已经完全可以表达出任何HTML和XML文档中的数据了。HTML
+DOM和XML DOM两部分则是专为操作具体HTML文档和XML文档所提供的方法。</p>
+<blockquote>
+<p>DOM定义了HTML文档和XML文档的逻辑结构（DOM树），给出了一种访问和处理这两种文档的方法。文档代表的是数据，而DOM则代表了如何去处理这些数据。</p>
+</blockquote>
+<h2 id="节点">节点</h2>
+<h3 id="dom-节点类型node-types">DOM 节点类型（Node Types）</h3>
+<p>　　DOM1级定义了Node接口，该接口为DOM的所有节点类型定义了原始类型。JS实现了这个接口，<strong>定义所有的节点类型必须继承Node类型</strong>，Node的子类或孙类都拥有Node的基本属性和方法。
+　　DOM规定：整个文档是一个文档节点，每一个标签时一个元素节点，元素包含的文本是文本节点，元素的属性是一个属性节点，注释属于注释节点等等：
+　　１.文档节点（Document）：代表整个文档。
+　　２.元素节点（Element）：文档中的一个标记。
+　　３.文本节点（Text）：标记中的文本。
+　　４.属性节点（Attr）：代表一个属性，元素才有属性。 　　
+　　下表为不同的节点类型以及其可拥有的子类型。 　　<img
+src="/img/DOM-文档对象模型/1.png" />
+　　Node为所有节点的父接口，下表为一组公共的属性和方法。 　　<img
+src="/img/DOM-文档对象模型/3.png" />
+　　每一个节点都有一个nodeType属性，用于表明文档的类型，使用nodeType属性返回值可以判断一个节点的类型。
+　　<img src="/img/DOM-文档对象模型/2.png" />
+例：借助nodeType属性检索当前文档中的元素个数。 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>DOM<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>DOM是<span class="tag">&lt;<span class="name">cite</span>&gt;</span>Document Object Model<span class="tag">&lt;/<span class="name">cite</span>&gt;</span>首字母简写，中文翻译为<span class="tag">&lt;<span class="name">b</span>&gt;</span>文档对象模型<span class="tag">&lt;/<span class="name">b</span>&gt;</span>，是<span class="tag">&lt;<span class="name">i</span>&gt;</span>W3C<span class="tag">&lt;/<span class="name">i</span>&gt;</span>组织推荐的处理可扩展标识语言的标准编程接口。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>D表示文档，HTML文档结构。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>O表示对象，文档结构的JavaScript脚本化映射。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>M表示模型，脚本与结构交互的方法和行为。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">function</span> <span class="title function_">count</span>(<span class="params">n</span>)&#123; 							<span class="comment">//定义文档元素统计函数</span></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">var</span> num = <span class="number">0</span>; 								<span class="comment">// 初始化变量</span></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">if</span>(n.<span class="property">nodeType</span> == <span class="number">1</span>)							<span class="comment">// 检查是否为元素节点(ELEMENT_NODE)</span></span></span><br><span class="line"><span class="language-javascript">    num ++ ;									<span class="comment">// 如果是，则计数器加1</span></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">var</span> son = n.<span class="property">childNodes</span>; 					<span class="comment">// 获取所有子节点</span></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; son.<span class="property">length</span>; i ++ )&#123; 		<span class="comment">// 循环统一每个子元素</span></span></span><br><span class="line"><span class="language-javascript">        num += count (son[i]);			<span class="comment">// 递归操作</span></span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">return</span> num; 						<span class="comment">// 返回统计值</span></span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"><span class="title function_">alert</span>(<span class="string">&quot;当前文档包含 &quot;</span> + <span class="title function_">count</span>(<span class="variable language_">document</span>) + <span class="string">&quot; 个元素&quot;</span>);	<span class="comment">// 传入文档节点，计算元素的总个数</span></span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span> </span><br><span class="line">//输出结果：当前文档包含 14 个元素(9个COMMENT_NODE(不算这个)、5个body直系元素)</span><br></pre></td></tr></table></figure>
+上面的14个元素如果看不出来的话，这里推<a
+target="_blank" rel="noopener" href="https://www.jianshu.com/p/695b5c78a7ca">一篇博客</a>供学习，讲解了Node类型的本质。</p>
+<h3 id="节点名称和值">节点名称和值</h3>
+<p>　　使用节点的属性nodeName和nodeValue可以读取节点的名称和值，这两个属性的值完全取决于节点的类型。如下表：
+　　<img src="/img/DOM-文档对象模型/4.png" />
+　　nodeName属性在处理标签时比较实用，而nodeValue在处理文本信息时比较实用。</p>
+<h3 id="节点关系">节点关系</h3>
+<p>　　DOM将文档视为一种树状结构，这种树结构称为<strong>节点树</strong>，跟C语言中的树还是有相通之处的。JS脚本可以通过这棵树访问所有节点，并进行修改或删除内容，也可以删除该节点。
+　　节点之间的关系如下： 　　1. 节点树中最顶端为根节点。 　　2.
+除根节点外每个节点都有一个父节点。 　　3. 节点可以包含任何数量的子节点。
+　　4. 叶子是没有子节点的节点。 　　5.
+同级节点拥有相同父节点的节点，为兄弟关系。
+　　下图可以帮你更好的理解节点树的概念： 　　　　　　　　　　<img
+src="/img/DOM-文档对象模型/5.png" /></p>
+<h3 id="访问节点">访问节点</h3>
+<p>　　DOM为Node定义了以下属性，以便于JS对整个文档树的访问。 　　1.
+ownerDocument: 返回当前节点的根元素(document) 　　2. parentNode:
+返回当前节点的父节点。所有节点都仅有一个父节点。 　　3. childNodes:
+返回当前节点的所有子节点的节点列表 　　4. firstChild:
+返回当前节点的首个子节点。 　　5. lastChild:
+返回当前节点的最后一个子节点。 　　6. nextSibling:
+返回当前节点之后相邻的同级节点。 　　7. previousSibling:
+返回当前节点之前的相邻同级节点。 　　这里我们示例几个： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>DOM<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>DOM是<span class="tag">&lt;<span class="name">cite</span>&gt;</span>Document Object Model<span class="tag">&lt;/<span class="name">cite</span>&gt;</span>首字母简写，中文翻译为<span class="tag">&lt;<span class="name">b</span>&gt;</span>文档对象模型<span class="tag">&lt;/<span class="name">b</span>&gt;</span>，是<span class="tag">&lt;<span class="name">i</span>&gt;</span>W3C<span class="tag">&lt;/<span class="name">i</span>&gt;</span>组织推荐的处理可扩展标识语言的标准编程接口。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>D表示文档，HTML文档结构。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>O表示对象，文档结构的JavaScript脚本化映射。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>M表示模型，脚本与结构交互的方法和行为。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">var</span> txt = <span class="string">&quot;&quot;</span>;            <span class="comment">//记录所有节点类型</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">var</span> tag = <span class="variable language_">document</span>.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;ul&quot;</span>)[<span class="number">0</span>];	<span class="comment">// 获取列表元素</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">var</span> a = tag.<span class="property">childNodes</span>; 	<span class="comment">// 获取列表元素包含的所有节点</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;a.<span class="property">length</span>; i++)&#123;    <span class="comment">//打印所有的节点类型</span></span></span><br><span class="line"><span class="language-javascript">	txt = txt + a[i].<span class="property">nodeName</span> + <span class="string">&quot;&lt;br&gt;&quot;</span>;</span></span><br><span class="line"><span class="language-javascript">&#125;;</span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">document</span>.<span class="title function_">write</span>(txt + <span class="string">&#x27;&lt;br&gt;&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">document</span>.<span class="title function_">write</span>(a[<span class="number">0</span>].<span class="property">nodeType</span> + <span class="string">&#x27;&lt;br&gt;&#x27;</span>); <span class="comment">//第1个节点类型，返回值为3，显示为文本节点</span></span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">document</span>.<span class="title function_">write</span>(a.<span class="title function_">item</span>(<span class="number">1</span>).<span class="property">innerHTML</span> + <span class="string">&#x27;&lt;br&gt;&#x27;</span>); 	<span class="comment">// 显示第2个节点包含的文本</span></span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">document</span>.<span class="title function_">write</span>(a.<span class="property">length</span>); 	<span class="comment">// 包含子节点个数，nodeList长度</span></span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span> </span><br></pre></td></tr></table></figure>
+　　结果如下： <img src="/img/DOM-文档对象模型/6.png" />
+<strong>注意</strong>：第一个#text是<code>&lt;ul</code>&gt;和<code>&lt;li&gt;</code>之间的换行，也算一个文本节点。</p>
+<h3 id="操作节点">操作节点</h3>
+<p>　　Node类型为所有节点定义了很多方法，以便对节点进行操作。 　　<img
+src="/img/DOM-文档对象模型/7.png" /></p>
+<p>参考博客： 　　1. <a
+target="_blank" rel="noopener" href="http://www.flyne.org/article/407/2">http://www.flyne.org/article/407/2</a>
+　　2. <a
+target="_blank" rel="noopener" href="https://blog.csdn.net/IamChuancey/article/details/78335443">https://blog.csdn.net/IamChuancey/article/details/78335443</a>
+　　3. <a
+target="_blank" rel="noopener" href="https://www.cnblogs.com/propheterLiu/p/5966791.html">https://www.cnblogs.com/propheterLiu/p/5966791.html</a></p>
+
+    </article>
+    <!-- license -->
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://lzwgiter.github.io">f10@t</a>
+            <p>原文链接：<a href="https://lzwgiter.github.io/posts/69896e9f/">https://lzwgiter.github.io/posts/69896e9f/</a>
+            <p>发表日期：<a href="https://lzwgiter.github.io/posts/69896e9f/">August 22nd 2018, 1:02:36 pm</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/69896e9f/">July 24th 2024, 10:40:56 am</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+                <div class="nextSlogan">Next Post</div>
+                <a href="/posts/c7cffe19/" title="CTF常见隐写手段小结">
+                    <div class="nextTitle">CTF常见隐写手段小结</div>
+                </a>
+        </li>
+        <li class="previous">
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/posts/20cf0786/" title="BOM-浏览器操作对象模型之history和screen对象">
+                    <div class="prevTitle">BOM-浏览器操作对象模型之history和screen对象</div>
+                </a>
+        </li>
+    </ul>
+    <!-- comment -->
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+            
+            
+            
+            <!-- utteranc评论 -->
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+            
+                <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    <div id="comment"></div>
+    <script>
+        new Valine({
+            el: '#comment',
+            notify:false,
+            verify:false,
+            appId: "KADRlHg5xXyhKL0d6USDWfIB-gzGzoHsz",
+            appKey: "Ppj8kIdro2yDqXOvqWkTRxuW",
+            placeholder: "递咖啡就坐(　o=^•ェ•)o　┏━┓（填写邮箱地址可以收到邮件回复捏）",
+            path:window.location.pathname,
+            avatar:'mm'
+        });
+    </script>
+
+            
+        </div>
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    <!-- Mathjax -->
+</main>
+
+                <!-- profile -->
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+        <div class="social">
+                            <a href="//github.com/lzwgiter" class="iconfont-archer github" target="_blank" title="github"></a>
+
+        </div>
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    <!-- 不蒜子  -->
+        <div class="busuanzi-container">
+                <span id="busuanzi_container_site_uv">做客的小伙伴数: <span id="busuanzi_value_site_uv"></span></span>
+        </div>
+</footer>
+
+        </div>
+        <!-- toc -->
+            <div class="toc-wrapper toc-wrapper-loding" style=    top:50vh;
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#dom%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">DOM基础</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8A%82%E7%82%B9"><span class="toc-number"></span> <span class="toc-text">节点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dom-%E8%8A%82%E7%82%B9%E7%B1%BB%E5%9E%8Bnode-types"><span class="toc-number">1.</span> <span class="toc-text">DOM 节点类型（Node Types）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E5%90%8D%E7%A7%B0%E5%92%8C%E5%80%BC"><span class="toc-number">2.</span> <span class="toc-text">节点名称和值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E5%85%B3%E7%B3%BB"><span class="toc-number">3.</span> <span class="toc-text">节点关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E8%8A%82%E7%82%B9"><span class="toc-number">4.</span> <span class="toc-text">访问节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E8%8A%82%E7%82%B9"><span class="toc-number">5.</span> <span class="toc-text">操作节点</span></a></li></ol>
+            </div>
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 99
+        </div>
+        <!-- search  -->
+            <div class="site-search site-search-loading popup-trigger">
+                <span class="iconfont-archer search-icon">&#xe627;</span>
+            </div>
+    </div>
+    <div class="post-archive">
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/05</span>
+            <a class="archive-post-title" href="/posts/54e979b4/">RabbitMQ学习</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/23</span>
+            <a class="archive-post-title" href="/posts/963fb8d3/">领域驱动设计学习（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/posts/21f893eb/">学鲁菜之酱焖鲈鱼</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2023 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span>
+            <a class="archive-post-title" href="/posts/33ea2108/">Spring AOP再探</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/09</span>
+            <a class="archive-post-title" href="/posts/c41813ec/">重新审视微服务</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/04</span>
+            <a class="archive-post-title" href="/posts/85bf5302/">K8s攻防之OWASP-K8S-TOP10（下）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/16</span>
+            <a class="archive-post-title" href="/posts/8aa36aba/">K8s攻防之OWASP-K8S-TOP10（上）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/posts/c16d1cd9/">Java内存马原理（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/08</span>
+            <a class="archive-post-title" href="/posts/e2947908/">Java Instrument机制及管窥IAST</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/03</span>
+            <a class="archive-post-title" href="/posts/479daa6d/">gRPC简介与使用</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/30</span>
+            <a class="archive-post-title" href="/posts/b74b8800/">fastjson反序列化漏洞学习（二）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span>
+            <a class="archive-post-title" href="/posts/73d00ee7/">Netty框架学习</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/04</span>
+            <a class="archive-post-title" href="/posts/d6b305b7/">Java网络编程模型复习</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2022 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span>
+            <a class="archive-post-title" href="/posts/203767b8/">python-Numpy库使用</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/20</span>
+            <a class="archive-post-title" href="/posts/f06096b/">MATLAB - Wireless Communication Onramp</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span>
+            <a class="archive-post-title" href="/posts/3041f265/">Matlab编程基础</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2021 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/04</span>
+            <a class="archive-post-title" href="/posts/169c63d0/">Bloom Filter概念原理</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span>
+            <a class="archive-post-title" href="/posts/85e98ef0/">zk-SNARKs简洁的非交互式零知识证明学习(一)</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span>
+            <a class="archive-post-title" href="/posts/a8e0eb2d/">Quarkus学习（一）概述以及编写REST服务</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/19</span>
+            <a class="archive-post-title" href="/posts/e88577c0/">Cloud Programming Simplified:A Berkeley View on Serverless Computing</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span>
+            <a class="archive-post-title" href="/posts/99665dc1/">闲聊一下Java中的DI和CDI</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span>
+            <a class="archive-post-title" href="/posts/ed901271/">Kubernetes-集群环境搭建使用及问题记录（三）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/09</span>
+            <a class="archive-post-title" href="/posts/a08eb123/">Kubernetes-集群环境搭建使用及问题记录（二）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span>
+            <a class="archive-post-title" href="/posts/eed4a979/">Kubernetes 集群环境搭建使用及问题记录（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/24</span>
+            <a class="archive-post-title" href="/posts/2f0b60dd/">闲聊一下Go语言的函数方法和多态机制特点</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span>
+            <a class="archive-post-title" href="/posts/5893facf/">express学习（一）-基于NodeJS的Web框架</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/10</span>
+            <a class="archive-post-title" href="/posts/8a9b0b34/">Beego学习-ORM</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/posts/84db08d3/">Beego学习-路由设置</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/posts/a9031312/">docker-compose及dockerfile总结</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/09</span>
+            <a class="archive-post-title" href="/posts/77d22b2a/">Spring安全技术-Spring Security使用及总结（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/28</span>
+            <a class="archive-post-title" href="/posts/5e9eec21/">DevOps技术-简单了解与入门</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span>
+            <a class="archive-post-title" href="/posts/27875254/">Spring持久层技术-Sping Data JPA使用及总结（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/14</span>
+            <a class="archive-post-title" href="/posts/bec529bf/">以太坊智能合约开发环境搭建及智能合约的编写、部署、测试</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span>
+            <a class="archive-post-title" href="/posts/2ff8a9fd/">以太坊基本概念与实验环境搭建</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2020 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span>
+            <a class="archive-post-title" href="/posts/bcd864e2/">DC-1靶机渗透</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span>
+            <a class="archive-post-title" href="/posts/c99165fd/">fastjson反序列化漏洞学习（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/09</span>
+            <a class="archive-post-title" href="/posts/a9e6a25b/">Spring基础学习 - AOP机制</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/06</span>
+            <a class="archive-post-title" href="/posts/b92dbb83/">JavaEE基础 - Servlet</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/06</span>
+            <a class="archive-post-title" href="/posts/44088610/">Spring基础学习 - IOC机制</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/01</span>
+            <a class="archive-post-title" href="/posts/662e1cfe/">微服务入门-5W和微服务思想</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span>
+            <a class="archive-post-title" href="/posts/c75c5fc7/">Java 反序列化漏洞与JNDI注入(下)</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/14</span>
+            <a class="archive-post-title" href="/posts/5dcfa8b5/">Kerberos认证过程原理及攻击手段</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/26</span>
+            <a class="archive-post-title" href="/posts/1ccc94ff/">内存布局与栈溢出&堆溢出原理</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/21</span>
+            <a class="archive-post-title" href="/posts/bc7cb7a1/">入坑Pwn之刷题补坑</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/29</span>
+            <a class="archive-post-title" href="/posts/760e25d9/">内存取证原理学习及Volatility - 篇二</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span>
+            <a class="archive-post-title" href="/posts/b0024cb7/">Struts框架管窥以及几个漏洞的分析</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/09</span>
+            <a class="archive-post-title" href="/posts/8ce0a80d/">Redis未授权访问漏洞及修补方法</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span>
+            <a class="archive-post-title" href="/posts/13fe3d9f/">本地提权与漏洞提权</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2019 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/21</span>
+            <a class="archive-post-title" href="/posts/f8b67901/">逆向工程课程小结</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span>
+            <a class="archive-post-title" href="/posts/4d8e0b70/">内存取证原理学习及Volatility - 篇一</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span>
+            <a class="archive-post-title" href="/posts/82490df7/">并发模型之单线程多路I/O复用---select</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/29</span>
+            <a class="archive-post-title" href="/posts/a715340f/">入坑Pwn之基本知识</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span>
+            <a class="archive-post-title" href="/posts/47dcecb9/">Apache-Commons-Collections反序列化漏洞</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/03</span>
+            <a class="archive-post-title" href="/posts/de476e86/">Java 反序列化漏洞与JNDI注入(上)</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span>
+            <a class="archive-post-title" href="/posts/7a9a17f3/">记录一次对win2k3 Enterprise Edition的永恒之蓝利用</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/11</span>
+            <a class="archive-post-title" href="/posts/6f24bb1d/">kali-渗透测试-信息收集3</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/10</span>
+            <a class="archive-post-title" href="/posts/18238b8b/">kali-渗透测试-信息收集2</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/18</span>
+            <a class="archive-post-title" href="/posts/812ada31/">kali-渗透测试-信息收集1</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span>
+            <a class="archive-post-title" href="/posts/fffcd997/">Metasploit渗透测试魔鬼训练营-客户端渗透攻击</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/10</span>
+            <a class="archive-post-title" href="/posts/30b79e7d/">Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/07</span>
+            <a class="archive-post-title" href="/posts/79017d0/">Metasploit渗透测试魔鬼训练营-web应用渗透</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/posts/6c9a4aca/">Metasploit渗透测试魔鬼训练营-服务扫描与查点</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/04</span>
+            <a class="archive-post-title" href="/posts/ed61533c/">Metasploit渗透测试魔鬼训练营-信息收集</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span>
+            <a class="archive-post-title" href="/posts/ba8e1564/">Metasploit渗透测试魔鬼训练营 第一天</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2018 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/posts/dd591816/">小明的博客--Typecho 反序列化漏洞</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span>
+            <a class="archive-post-title" href="/posts/41159e88/">Bugku的一道注入---多次</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span>
+            <a class="archive-post-title" href="/posts/26bacf07/">Bugku的一道注入--INSERT INTO注入</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span>
+            <a class="archive-post-title" href="/posts/e1cf93ae/">ThinkPHP框架学习---路由</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span>
+            <a class="archive-post-title" href="/posts/dec252e7/">ThinkPHP框架学习---config类和config助手函数</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span>
+            <a class="archive-post-title" href="/posts/8405173/">ThinkPHP框架学习---框架目录及框架配置</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/19</span>
+            <a class="archive-post-title" href="/posts/5d13a793/">Nmap使用指南</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/12</span>
+            <a class="archive-post-title" href="/posts/e6caa5f0/">SQL注入小记(二)</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span>
+            <a class="archive-post-title" href="/posts/78f948a4/">PHP学习--超级全局变量</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/08</span>
+            <a class="archive-post-title" href="/posts/777d53bb/">PHP学习--变量</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/03</span>
+            <a class="archive-post-title" href="/posts/f0bc436c/">PHP框架MVC学习</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span>
+            <a class="archive-post-title" href="/posts/117580c0/">CTF中的python脚本题小结（二）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span>
+            <a class="archive-post-title" href="/posts/21636c18/">CTF中的python脚本题小结（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span>
+            <a class="archive-post-title" href="/posts/fc74b0ce/">Hackergame 2018 wp</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span>
+            <a class="archive-post-title" href="/posts/8c800523/">安恒九月题的misc和一道web</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span>
+            <a class="archive-post-title" href="/posts/49fb3e92/">SQL注入小记(一)</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/27</span>
+            <a class="archive-post-title" href="/posts/21c35507/">隐写术-LSB隐写</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span>
+            <a class="archive-post-title" href="/posts/59bc0c0/">隐写术--NTFS流隐写</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span>
+            <a class="archive-post-title" href="/posts/c7cffe19/">CTF常见隐写手段小结</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span>
+            <a class="archive-post-title" href="/posts/69896e9f/">DOM 文档对象模型</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/21</span>
+            <a class="archive-post-title" href="/posts/20cf0786/">BOM-浏览器操作对象模型之history和screen对象</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span>
+            <a class="archive-post-title" href="/posts/f92f304f/">BOM 浏览器操作对象模型之navigator、location对象</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span>
+            <a class="archive-post-title" href="/posts/79f16c6a/">BOM-浏览器操作对象模型之window对象</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/16</span>
+            <a class="archive-post-title" href="/posts/aa0a7b0a/">Javascript基础之数据类型2</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span>
+            <a class="archive-post-title" href="/posts/33032ab0/">Javascript基础之数据类型1</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span>
+            <a class="archive-post-title" href="/posts/b5fac929/">CTF隐写术--关于ZIP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/09</span>
+            <a class="archive-post-title" href="/posts/98736a90/">CSS样式基础4.4--选择器之伪类选择器</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/posts/17442633/">Bugku的一道misc-----猫片</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/posts/d4db3e56/">CSS基础4.3--选择器之属性选择器</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/05</span>
+            <a class="archive-post-title" href="/posts/7b6c38ce/">CSS基础4.2--选择器之组合选择器</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span>
+            <a class="archive-post-title" href="/posts/6027632/">CSS基础4.1--选择器之CSS基础4.1-选择器之基本选择器</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/02</span>
+            <a class="archive-post-title" href="/posts/370eaad5/">CSS基础3.2--特性之CSS基础3.2--特性之继承性</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/4655c16f/">CSS基础3.1--特性之CSS基础3.1-特性之层叠性</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/ae68c748/">CSS基础2--CSS基础2-应用</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/6b427aa1/">CSS基础1--样式</a>
+        </li>
+            </ul>
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+            <span class="sidebar-tag-name" data-tags="区块链技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                区块链技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="渗透测试">
+                <span class="iconfont-archer">&#xe606;</span>
+                渗透测试
+            </span>
+            <span class="sidebar-tag-name" data-tags="Java">
+                <span class="iconfont-archer">&#xe606;</span>
+                Java
+            </span>
+            <span class="sidebar-tag-name" data-tags="漏洞分析">
+                <span class="iconfont-archer">&#xe606;</span>
+                漏洞分析
+            </span>
+            <span class="sidebar-tag-name" data-tags="web安全">
+                <span class="iconfont-archer">&#xe606;</span>
+                web安全
+            </span>
+            <span class="sidebar-tag-name" data-tags="开发技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                开发技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="前端">
+                <span class="iconfont-archer">&#xe606;</span>
+                前端
+            </span>
+            <span class="sidebar-tag-name" data-tags="Go语言">
+                <span class="iconfont-archer">&#xe606;</span>
+                Go语言
+            </span>
+            <span class="sidebar-tag-name" data-tags="Go Web">
+                <span class="iconfont-archer">&#xe606;</span>
+                Go Web
+            </span>
+            <span class="sidebar-tag-name" data-tags="论文阅读">
+                <span class="iconfont-archer">&#xe606;</span>
+                论文阅读
+            </span>
+            <span class="sidebar-tag-name" data-tags="CSS">
+                <span class="iconfont-archer">&#xe606;</span>
+                CSS
+            </span>
+            <span class="sidebar-tag-name" data-tags="CTF">
+                <span class="iconfont-archer">&#xe606;</span>
+                CTF
+            </span>
+            <span class="sidebar-tag-name" data-tags="SQL注入">
+                <span class="iconfont-archer">&#xe606;</span>
+                SQL注入
+            </span>
+            <span class="sidebar-tag-name" data-tags="隐写术">
+                <span class="iconfont-archer">&#xe606;</span>
+                隐写术
+            </span>
+            <span class="sidebar-tag-name" data-tags="python">
+                <span class="iconfont-archer">&#xe606;</span>
+                python
+            </span>
+            <span class="sidebar-tag-name" data-tags="云技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                云技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="DevOps">
+                <span class="iconfont-archer">&#xe606;</span>
+                DevOps
+            </span>
+            <span class="sidebar-tag-name" data-tags="开发与运维">
+                <span class="iconfont-archer">&#xe606;</span>
+                开发与运维
+            </span>
+            <span class="sidebar-tag-name" data-tags="DevSecOps">
+                <span class="iconfont-archer">&#xe606;</span>
+                DevSecOps
+            </span>
+            <span class="sidebar-tag-name" data-tags="网络编程">
+                <span class="iconfont-archer">&#xe606;</span>
+                网络编程
+            </span>
+            <span class="sidebar-tag-name" data-tags="Kubernete">
+                <span class="iconfont-archer">&#xe606;</span>
+                Kubernete
+            </span>
+            <span class="sidebar-tag-name" data-tags="云安全">
+                <span class="iconfont-archer">&#xe606;</span>
+                云安全
+            </span>
+            <span class="sidebar-tag-name" data-tags="分布式技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                分布式技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="MatLab">
+                <span class="iconfont-archer">&#xe606;</span>
+                MatLab
+            </span>
+            <span class="sidebar-tag-name" data-tags="PHP">
+                <span class="iconfont-archer">&#xe606;</span>
+                PHP
+            </span>
+            <span class="sidebar-tag-name" data-tags="Quarkus">
+                <span class="iconfont-archer">&#xe606;</span>
+                Quarkus
+            </span>
+            <span class="sidebar-tag-name" data-tags="微服务技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                微服务技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="Spring">
+                <span class="iconfont-archer">&#xe606;</span>
+                Spring
+            </span>
+            <span class="sidebar-tag-name" data-tags="docker">
+                <span class="iconfont-archer">&#xe606;</span>
+                docker
+            </span>
+            <span class="sidebar-tag-name" data-tags="NodeJS">
+                <span class="iconfont-archer">&#xe606;</span>
+                NodeJS
+            </span>
+            <span class="sidebar-tag-name" data-tags="express">
+                <span class="iconfont-archer">&#xe606;</span>
+                express
+            </span>
+            <span class="sidebar-tag-name" data-tags="密码学">
+                <span class="iconfont-archer">&#xe606;</span>
+                密码学
+            </span>
+            <span class="sidebar-tag-name" data-tags="以太坊">
+                <span class="iconfont-archer">&#xe606;</span>
+                以太坊
+            </span>
+            <span class="sidebar-tag-name" data-tags="智能合约">
+                <span class="iconfont-archer">&#xe606;</span>
+                智能合约
+            </span>
+            <span class="sidebar-tag-name" data-tags="pwn">
+                <span class="iconfont-archer">&#xe606;</span>
+                pwn
+            </span>
+            <span class="sidebar-tag-name" data-tags="电子取证">
+                <span class="iconfont-archer">&#xe606;</span>
+                电子取证
+            </span>
+            <span class="sidebar-tag-name" data-tags="日常">
+                <span class="iconfont-archer">&#xe606;</span>
+                日常
+            </span>
+            <span class="sidebar-tag-name" data-tags="C编程">
+                <span class="iconfont-archer">&#xe606;</span>
+                C编程
+            </span>
+            <span class="sidebar-tag-name" data-tags="课程总结">
+                <span class="iconfont-archer">&#xe606;</span>
+                课程总结
+            </span>
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+        <span class="sidebar-category-name" data-categories="区块链技术">
+            <span class="iconfont-archer">&#xe60a;</span>
+            区块链技术
+        </span>
+        <span class="sidebar-category-name" data-categories="漏洞分析">
+            <span class="iconfont-archer">&#xe60a;</span>
+            漏洞分析
+        </span>
+        <span class="sidebar-category-name" data-categories="开发技术">
+            <span class="iconfont-archer">&#xe60a;</span>
+            开发技术
+        </span>
+        <span class="sidebar-category-name" data-categories="论文阅读">
+            <span class="iconfont-archer">&#xe60a;</span>
+            论文阅读
+        </span>
+        <span class="sidebar-category-name" data-categories="CTF">
+            <span class="iconfont-archer">&#xe60a;</span>
+            CTF
+        </span>
+        <span class="sidebar-category-name" data-categories="渗透测试">
+            <span class="iconfont-archer">&#xe60a;</span>
+            渗透测试
+        </span>
+        <span class="sidebar-category-name" data-categories="DevSecOps">
+            <span class="iconfont-archer">&#xe60a;</span>
+            DevSecOps
+        </span>
+        <span class="sidebar-category-name" data-categories="云安全">
+            <span class="iconfont-archer">&#xe60a;</span>
+            云安全
+        </span>
+        <span class="sidebar-category-name" data-categories="MATLAB">
+            <span class="iconfont-archer">&#xe60a;</span>
+            MATLAB
+        </span>
+        <span class="sidebar-category-name" data-categories="密码学">
+            <span class="iconfont-archer">&#xe60a;</span>
+            密码学
+        </span>
+        <span class="sidebar-category-name" data-categories="电子取证">
+            <span class="iconfont-archer">&#xe60a;</span>
+            电子取证
+        </span>
+        <span class="sidebar-category-name" data-categories="课程总结">
+            <span class="iconfont-archer">&#xe60a;</span>
+            课程总结
+        </span>
+        <span class="sidebar-category-name" data-categories="杂谈">
+            <span class="iconfont-archer">&#xe60a;</span>
+            杂谈
+        </span>
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "https://lzwgiter.github.io",
+        root: siteMetaRoot,
+        author: "f10@t"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+        <!-- main func -->
+        <script src="/scripts/main.js"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js" onload="window.Fancybox.bind('[data-fancybox]')" defer></script>
+        <!-- algolia -->
+            <div class="site-search site-search-loading">
+    <div class="algolia-popup popup">
+        <div class="algolia-search">
+            <div class="algolia-search-input-icon">
+                <i class="fa fa-search"></i>
+            </div>
+            <div class="algolia-search-input" id="algolia-search-input"></div>
+            <div class="popup-btn-close">
+                <i class="iconfont-archer">&#xe609;</i>
+            </div>
+        </div>
+
+        <div class="algolia-results">
+            <div id="algolia-stats" class="algolia-stats"></div>
+            <div id="algolia-hits"></div>
+            <div id="algolia-pagination" class="algolia-pagination"></div>
+        </div>
+    </div>
+</div>
+
+            <script src="/scripts/search.js" async></script>
+        <!-- busuanzi -->
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        <!-- async load share.js -->
+            <script src="/scripts/share.js" async></script>
+        <!-- mermaid -->
+    </body>
+</html>

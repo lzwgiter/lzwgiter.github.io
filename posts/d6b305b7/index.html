@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <!-- title -->
+<!-- keywords -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="f10@t">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="f10@t">
+        <meta name="keywords" content="lzwgiter,f10@t's blog">
+    <meta name="description" content="blogs by f10@t">
+    <meta name="description" content="失踪人口回归...，2022年几乎没怎么好好写博客，一方面原因是因为科研，另一方面...懒了懒了我错了。年底中招奥密克戎，最近也是才缓过劲来，真是坎坷的一年。本科之前其实接触过C语言的网络编程，带课的李金库老师讲的很好，记得当时特别地对I&#x2F;O多路复用(select)留下了很深的印象。今天复习一下Java中网络编程的相关理论和代码，包括最基础的Sokcet使用以及三种I&#x2F;O模型。（ps：我git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java网络编程模型复习">
+<meta property="og:url" content="https://lzwgiter.github.io/posts/d6b305b7/index.html">
+<meta property="og:site_name" content="f10@t&#39;s blog">
+<meta property="og:description" content="失踪人口回归...，2022年几乎没怎么好好写博客，一方面原因是因为科研，另一方面...懒了懒了我错了。年底中招奥密克戎，最近也是才缓过劲来，真是坎坷的一年。本科之前其实接触过C语言的网络编程，带课的李金库老师讲的很好，记得当时特别地对I&#x2F;O多路复用(select)留下了很深的印象。今天复习一下Java中网络编程的相关理论和代码，包括最基础的Sokcet使用以及三种I&#x2F;O模型。（ps：我git">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/db04ec35da1f9962545649576098426a.jpeg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/IMG_20230103_131726.jpg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/%E6%8A%A5%E6%96%87%E6%A0%BC%E5%BC%8F.jpg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/IMG_20230103_130809.jpg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/diffSocket.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/IMG_20230103_130921.jpg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/UDP%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/%E9%98%BB%E5%A1%9E%E6%A8%A1%E5%BC%8F.jpg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/%E9%9D%9E%E9%98%BB%E5%A1%9E%E6%A8%A1%E5%BC%8F.jpg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.jpg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/%E4%BF%A1%E5%8F%B7%E9%A9%B1%E5%8A%A8.jpg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/%E5%BC%82%E6%AD%A5.jpg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/5%E7%A7%8DIO%E6%A8%A1%E5%9E%8B%E6%AF%94%E8%BE%83.jpg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/NIO%E5%B8%B8%E7%94%A8%E7%B1%BB%E5%85%B3%E7%B3%BB%E5%9B%BE.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/image-20230107011032615.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.jpg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/%E5%BC%82%E6%AD%A5.jpg">
+<meta property="og:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/AIO%E5%B8%B8%E7%94%A8%E7%B1%BB%E5%85%B3%E7%B3%BB%E5%9B%BE.png">
+<meta property="article:published_time" content="2023-01-03T17:06:09.000Z">
+<meta property="article:modified_time" content="2024-07-31T03:19:27.347Z">
+<meta property="article:author" content="f10@t">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="网络编程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lzwgiter.github.io/img/Java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8BReview/db04ec35da1f9962545649576098426a.jpeg">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/hello.svg">
+    <title>Java网络编程模型复习 · f10@t&#39;s blog</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .footer-fixed-btn,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(
+            -45deg,
+            #444 0,
+            #444 80px,
+            #333 80px,
+            #333 160px
+        );
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link id="stylesheet-fancybox" rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-base" rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link id="stylesheet-mobile" rel="preload" href="/css/mobile.css" as="style" onload="this.onload=null;this.rel='stylesheet';this.media='screen and (max-width: 960px)'">
+    <link id="stylesheet-theme-dark" rel="preload" href="/css/dark.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+        <script>
+            var hits = JSON.parse('{"per_page":10}')
+            var labels = JSON.parse('{"input_placeholder":"搜索文章相关内容","hits_empty":"${query}搜索结果为空: ","hits_stats":"找到结果${hits}条，用时${time} ms"}')
+
+            var algolia = {
+                applicationID: 'M469ZFXTNU',
+                apiKey: '32b991ddc2b9f92be99f0e241d0f12d4',
+                indexName: 'blog_indices',
+                hits: hits,
+                labels: labels
+            }
+        </script>
+    <!-- 百度统计  -->
+        <script>
+            var _hmt = _hmt || [];
+            (function () {
+                var hm = document.createElement("script");
+                hm.src = "https://hm.baidu.com/hm.js?9ef67111f9ae4eefa278780655f0c1e3";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
+    <!-- 谷歌统计  -->
+    <!-- Google tag (gtag.js) -->
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="f10@t's blog" type="application/atom+xml">
+</head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+        <body class="post-body">
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress read-progress-feature"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        <div class="header-sidebar-menu header-sidebar-menu-rounded">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href="/">f10@t's blog</a>
+        </span>
+    </div>
+    <!-- toggle banner -->
+    <div class="banner">
+        <div class="blog-title header-element">
+            <a href="/">f10@t&#39;s blog</a>
+        </div>
+        <div class="post-title header-element">
+            <a href="#" class="post-name">Java网络编程模型复习</a>
+        </div>
+    </div>
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- donate button -->
+    <div class="donate-popup donate-popup--hidden">
+    <div class="donate-popup__title">Buy Me A Coffee</div>
+    <div class="donate-popup__content">
+        <div class="donate-popup__content-description">如果这篇文章帮到了你，请赏一杯咖啡给我喝吧嘿嘿☕️</div>
+        <img
+            class="donate-popup__content-qrCode"
+            title="Wechat"
+            alt="Wechat"
+            src="/assets/donate-wechat.jpg"
+        ></img>
+        <img
+            class="donate-popup__content-qrCode"
+            title="Alipay"
+            alt="Alipay"
+            src="/assets/donate-alipay.jpg"
+        ></img>
+    </div>
+</div>
+
+    <div
+        title="Donate to the author"
+        class="footer-fixed-btn footer-fixed-btn--hidden footer-fixed-btn--rounded donate-btn"
+    >
+        <i class="fas fa-donate"></i>
+    </div>
+
+    <!-- back to top button -->
+    <div class="footer-fixed-btn footer-fixed-btn--hidden footer-fixed-btn--rounded back-top">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="    height:50vh;
+">
+    <!-- 主页  -->
+    <!-- 404页  -->
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/B.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+                Java网络编程模型复习
+            <!-- 404 -->
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            <!-- 404 -->
+        </p>
+        <!-- 文章页 meta -->
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                    <div class="post-intro-tags" >
+        <span class="post-category" data-categories="开发技术">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                开发技术
+            </span>
+        </span>
+        <a class="post-tag" href="javascript:void(0);" data-tags="Java">Java</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="网络编程">网络编程</a>
+</div>
+
+                <!-- 文章字数统计 -->
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">7.1k</span>阅读时长: <span class="post-count reading-time">29 min</span></span>
+                    </div>
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2023/01/04</span>
+                    <!-- busuanzi -->
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" alt="loading">
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <blockquote>
+<p>失踪人口回归...，2022年几乎没怎么好好写博客，一方面原因是因为科研，另一方面...懒了懒了我错了。年底中招奥密克戎，最近也是才缓过劲来，真是坎坷的一年。本科之前其实接触过C语言的网络编程，带课的李金库老师讲的很好，记得当时特别地对I/O多路复用(select)留下了<a
+target="_blank" rel="noopener" href="https://github.com/lzwgiter/MyCWebStudy">很深的印象</a>。今天复习一下Java中网络编程的相关理论和代码，包括最基础的Sokcet使用以及三种I/O模型。（ps：<strong>我gitee的博客由于部分文章没法过审核，因此gitee博客以后可能就不会更新了，我仍然使用github博客为主。</strong></p>
+<p><img src="/img/Java网络编程模型Review/db04ec35da1f9962545649576098426a.jpeg" alt="db04ec35da1f9962545649576098426a" style="zoom:67%;" /></p>
+</blockquote>
+<span id="more"></span>
+<h1 id="什么是socketjava中如何使用">什么是Socket？Java中如何使用？</h1>
+<p>老生常谈的问题了，什么是Socket？也即套接字？</p>
+<p>首先我们要了解一下，什么是<strong>进程间通信（InterProcess
+Communication,
+IPC）</strong>，操作系统中时时刻刻都有大量的进程在运行，每一个进程实体都由<strong>数据、程序代码和进程控制块(PCB)</strong>组成，每个进程都在自己的地址范围内运行，操作系统通过<strong>PCB</strong>控制进程，进程根据<strong>程序代码</strong>对<strong>数据</strong>进行处理计算。当两个进程之间需要通信的时候，操作系统为我们提供了很多途径，如UNIX中的pipe，下图是一个父子进程使用的普通管道，此外还有对等进程使用的命名管道。</p>
+<p><img src="/img/Java网络编程模型Review/IMG_20230103_131726.jpg" /></p>
+<p>上述的计算和通信过程都是在<strong>一个机器内部</strong>发生的，因此我们很容易就会想到，那<strong>不同机器上的不同进程如何通信呢？</strong>ok，这就是网络编程干的事情。</p>
+<p>操作系统为我们提供了Socket来完成这件事情。提供这个干什么呢？具体来说，既然是网络编程，那我们必定是要使用<strong>网络协议栈</strong>的，也即TCP/IP四层模型：应用层、传输层、网络层和网络接口层，Socket为作为应用层开发者的我们，提供了一种简单的使用网络协议栈的方法。如man手册中就一言以蔽之：</p>
+<blockquote>
+<p>The BSD compatible sockets are the uniform interface between the user
+process and the network protocol stacks in the kernel.</p>
+<p>BSD(Berkeley Software Distribution, 伯克利软件套件)
+sockets是用户进程和内核中网络协议栈之间的通用接口。ps：这东西最早是伯克利大学开发的</p>
+</blockquote>
+<h2
+id="socket是为了解决网络编程中的什么问题">Socket是为了解决网络编程中的什么问题？</h2>
+<p>我们深入探讨一下，Socket的出发点是为了解决什么问题。同样，我们先看看单机中进程通信的一个最基本的问题。</p>
+<p>单机中，不同的进程运行在不同的地址空间内，当发生通信时，如何寻找另一个进程呢？</p>
+<ul>
+<li>通过PID，即process
+identifier，通过这唯一的进程标识符，我们就可以唯一地确定一个进程。可以通过命令<code>ulimit -n</code>和查看<code>/proc/sys/kernel/pid_max</code>来知道pid的实际以及理论上限。</li>
+</ul>
+<p>那么自然而然的，<strong>问题1：</strong>网络编程中，本地的进程如何寻找另一个机器上的进程呢？也是使用PID吗？那万一这俩进程号一样，怎么确定唯一性呢？那用IP？关键这个机器上进程很多啊，你说个127.0.0.1我也不知道是哪个进程啊？</p>
+<p>所以TCP/IP协议中才设计了<strong>传输层协议端口</strong>这个东西，我们使用一个端口号唯一确定一个进程，结合IP地址，我们就可以唯一的确定<strong>一台主机上的一个进程</strong>了，我们用一个五元组在全局中唯一表示一个<strong>网间进程通信：（传输层协议，本地IP，本地端口，远程IP，远程端口）</strong>。</p>
+<p>如下图是TCP和UDP两种不同传输层协议的报文格式，这就是为什么报文中要有端口号。由于端口号是一个16bit的的字段，因此，共有<code>2^16=65535</code>个端口号可供我们使用，其中<code>0-1023</code>属于保留的端口(well-know
+port)，<code>1-255</code>给一些常见服务如如HTTP 80、HTTPS 443、FTP
+21、DNS 53、SMTP
+25等等，<code>256-1023</code>保留给如路由等协议。而<code>1024-4999</code>可以作为任意客户的端口，<code>5000-65535</code>这个庞大的空间作为用户的服务器端口（毕竟连接服务器的人多嘛）。</p>
+<p><img src="/img/Java网络编程模型Review/报文格式.jpg" /></p>
+<p>除了<strong>问题1</strong>，我们还面临着如下三个问题：</p>
+<ol type="1">
+<li>如何连接网络剧哦协议栈</li>
+<li>不同网络协议（如IPX/SPX）如何识别</li>
+<li>不同应用的数据传输可靠性、速率等要求不同，如何实现有选择地使用网络协议栈提供的不同服务（即TCP
+or UDP）</li>
+</ol>
+<p>那上述问题，socket都帮我们解决了，socket作为操作系统本身的系统调用，为我们提供了使用网络协议栈的方法；socket创建时<code>int socket(int domain, int type, int protocol);</code>，为我们提供了不同网络协议的选择方法（如AF_IPX字段代表IPX协议、AF_DECnet代表DECet协议等等）；socket也可以让我们选择不同的传输层协议（SOCK_STREAM即TCP、SOCK_DGRAM即UDP）。</p>
+<h2 id="java中的socket">Java中的Socket</h2>
+<h3 id="tcp">TCP</h3>
+<p>我们先看看在C语言中，也即UNIX系统中是如何创建并使用一个TCP类型的socket的。具体以C/S架构为例，如图所示：</p>
+<p><img src="/img/Java网络编程模型Review/IMG_20230103_130809.jpg" /></p>
+<p>根据角色分一下类，我们可以看到，客户端程序和服务端程序需要执行的函数是有区别的：</p>
+<ul>
+<li>客户端不需要被动Listen</li>
+<li>不需要绑定本地端口（即随机从1024-65535中选取一个），</li>
+<li>不需要Accept远程机器的连接。</li>
+</ul>
+<p>因此，面向对象嘛，Java对这两种不同职责的Socket进行了划分，分别为<code>java.net.Socket</code>和<code>java.net.ServerSocket</code>，这俩的区别其实就是上面提到的三点。二者关系如下：</p>
+<p><img src="/img/Java网络编程模型Review/diffSocket.png" /></p>
+<h4 id="服务端代码">服务端代码</h4>
+<p>我们写一个简单的服务端，他将接收客户端的请求ID，并为其返回对应的数据。我们要使用到上面提到的<code>java.net.ServerSocket</code>，他的生命周期如下：</p>
+<p><img
+src="/img/Java网络编程模型Review/ServerSocket生命周期.png" /></p>
+<p>下面我们将实现一个服务端程序，他接收客户端发来的个位数，并返回这个个位数的英文：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.net.ServerSocket;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * TCP 服务端 - 同步阻塞模式</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lzwgiter</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2023/01/03</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BIOTCPServer</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ArrayList&lt;String&gt; DICT = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(</span><br><span class="line">            Arrays.asList(<span class="string">&quot;Zero&quot;</span>, <span class="string">&quot;One&quot;</span>, <span class="string">&quot;Two&quot;</span>, <span class="string">&quot;Three&quot;</span>, <span class="string">&quot;Four&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;Five&quot;</span>, <span class="string">&quot;Six&quot;</span>, <span class="string">&quot;Seven&quot;</span>, <span class="string">&quot;Eight&quot;</span>, <span class="string">&quot;Nine&quot;</span>)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 这里默认完成了bind的操作，你也可以通过无参构造，然后手动bind一个SocketAddress</span></span><br><span class="line">        <span class="keyword">try</span> (<span class="type">ServerSocket</span> <span class="variable">serverSocket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ServerSocket</span>(<span class="number">6666</span>)) &#123;</span><br><span class="line">            <span class="comment">// 一直运行</span></span><br><span class="line">            <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">                <span class="type">char</span>[] data = <span class="keyword">new</span> <span class="title class_">char</span>[<span class="number">1</span>];</span><br><span class="line">                <span class="comment">// 阻塞等待连接</span></span><br><span class="line">                <span class="type">Socket</span> <span class="variable">requestSocket</span> <span class="operator">=</span> serverSocket.accept();</span><br><span class="line">                <span class="comment">// 收到请求</span></span><br><span class="line">                System.out.println(<span class="string">&quot;# 客户端连接：&quot;</span> + requestSocket.getRemoteSocketAddress() + <span class="string">&quot; #&quot;</span>);</span><br><span class="line">                <span class="comment">// 接收数据并处理</span></span><br><span class="line">                <span class="type">Reader</span> <span class="variable">reader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InputStreamReader</span>(requestSocket.getInputStream());</span><br><span class="line">                reader.read(data);</span><br><span class="line">                <span class="comment">// 返回数据</span></span><br><span class="line">                <span class="type">Writer</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OutputStreamWriter</span>(requestSocket.getOutputStream());</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">                out.write(DICT.get(Integer.parseInt(String.valueOf(data))));</span><br><span class="line">                out.flush();</span><br><span class="line">                <span class="comment">// 关闭连接</span></span><br><span class="line">                requestSocket.close();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">            System.err.println(ex);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="客户端代码">客户端代码</h4>
+<p>对应我们的服务端，客户端代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"><span class="keyword">import</span> java.net.UnknownHostException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * TCP 客户端 - 同步阻塞模式</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lzwgiter</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2023/01/03</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BIOClient</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 创建连接（注意，这里会直接connect，你也可以通过无参构造，手动connect一个SocketAddress</span></span><br><span class="line">        <span class="keyword">try</span> (<span class="type">Socket</span> <span class="variable">client</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Socket</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">6666</span>);) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;本地的Socket信息：&quot;</span> + client.getLocalSocketAddress());</span><br><span class="line">            System.out.println(<span class="string">&quot;远程的Socket信息：&quot;</span> + client.getRemoteSocketAddress());</span><br><span class="line">            <span class="type">Writer</span> <span class="variable">writer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OutputStreamWriter</span>(client.getOutputStream());</span><br><span class="line">            <span class="type">char</span>[] wordToInquire = <span class="keyword">new</span> <span class="title class_">char</span>[]&#123;<span class="string">&#x27;2&#x27;</span>&#125;;</span><br><span class="line">            writer.write(wordToInquire);</span><br><span class="line">            writer.flush();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 读取数据</span></span><br><span class="line">            <span class="type">char</span>[] result = <span class="keyword">new</span> <span class="title class_">char</span>[<span class="number">10</span>];</span><br><span class="line">            <span class="type">Reader</span> <span class="variable">reader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InputStreamReader</span>(client.getInputStream());</span><br><span class="line">            reader.read(result);</span><br><span class="line">            System.out.println(String.valueOf(wordToInquire) + <span class="string">&quot; in English is &quot;</span> + String.valueOf(result).trim());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (UnknownHostException ex) &#123;</span><br><span class="line">            System.err.println(<span class="string">&quot;主机名无法解析&quot;</span> + ex);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">            System.err.println(ex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="运行结果">运行结果</h4>
+<p>最后我们的运行结果如下图所示：</p>
+<p><img
+src="/img/Java网络编程模型Review/image-20230103204535977.png" /></p>
+<p>在这个过程中我重启了两次客户端程序，可以看到：</p>
+<ul>
+<li>每次的本地客户端端口都是随机选取的。</li>
+<li>客户端程序结束了，但服务端会一直<strong>阻塞</strong>在<code>accept()</code>等待新的连接。</li>
+</ul>
+<h3 id="udp">UDP</h3>
+<p>相较于TCP需要三次握手建立连接的过程，UDP协议不需要该过程，当然也没提供TCP那些什么滑动窗口、差错控制等等，毕竟你看他报文那么简单嘛。</p>
+<p>我们还是看看C语言中是什么样子的，具体如下：</p>
+<p><img src="/img/Java网络编程模型Review/IMG_20230103_130921.jpg" /></p>
+<p>仍然是分开看一下Java中客户端和服务器端要做的事情：</p>
+<p>服务端：</p>
+<ul>
+<li>创建UDP类型套接字并绑定IP、端口</li>
+<li>阻塞等待接收数据报文</li>
+<li>接收后处理并返回</li>
+<li>关闭套接字</li>
+</ul>
+<p>客户端：</p>
+<ul>
+<li>创建UDP类型套接字</li>
+<li>向服务端发送数据报文</li>
+<li>接收数据包</li>
+<li>关闭套接字</li>
+</ul>
+<p>为了实现上述功能，Java中定义了<code>java.net.DatagramPacket</code>和<code>java.net.DatagramSocket</code>来负责上述功能，我们通过<code>DatagramPacket</code>来封装和解封数据，用<code>DatagramSocket</code>来发送<code>DatagramPacket</code>数据包。</p>
+<p><img src="/img/Java网络编程模型Review/UDP数据结构.png" /></p>
+<h4 id="服务端代码-1">服务端代码</h4>
+<p>这里实现的功能与上一章节相同，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.net.DatagramPacket;</span><br><span class="line"><span class="keyword">import</span> java.net.DatagramSocket;</span><br><span class="line"><span class="keyword">import</span> java.net.InetSocketAddress;</span><br><span class="line"><span class="keyword">import</span> java.net.SocketAddress;</span><br><span class="line"><span class="keyword">import</span> java.nio.charset.StandardCharsets;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * UDP 服务端 - 同步阻塞模式</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lzwgiter</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2023/01/03</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BIOUDPServer</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ArrayList&lt;String&gt; DICT = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(</span><br><span class="line">            Arrays.asList(<span class="string">&quot;Zero&quot;</span>, <span class="string">&quot;One&quot;</span>, <span class="string">&quot;Two&quot;</span>, <span class="string">&quot;Three&quot;</span>, <span class="string">&quot;Four&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;Five&quot;</span>, <span class="string">&quot;Six&quot;</span>, <span class="string">&quot;Seven&quot;</span>, <span class="string">&quot;Eight&quot;</span>, <span class="string">&quot;Nine&quot;</span>)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> (<span class="type">DatagramSocket</span> <span class="variable">server</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DatagramSocket</span>(<span class="number">6667</span>)) &#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">                <span class="type">DatagramPacket</span> <span class="variable">request</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DatagramPacket</span>(<span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1</span>], <span class="number">1</span>);</span><br><span class="line">                <span class="comment">// 接收数据包</span></span><br><span class="line">                server.receive(request);</span><br><span class="line">                <span class="comment">// 收到请求</span></span><br><span class="line">                System.out.println(<span class="string">&quot;# 客户端数据报：&quot;</span> + request.getAddress() + <span class="string">&quot;:&quot;</span> + request.getPort() + <span class="string">&quot;#&quot;</span>);</span><br><span class="line">                <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> Integer.parseInt(<span class="keyword">new</span> <span class="title class_">String</span>(request.getData()));</span><br><span class="line">                <span class="type">byte</span>[] data = DICT.get(index).getBytes(StandardCharsets.UTF_8);</span><br><span class="line">                <span class="type">SocketAddress</span> <span class="variable">clientAddress</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InetSocketAddress</span>(request.getAddress(), request.getPort());</span><br><span class="line">                <span class="type">DatagramPacket</span> <span class="variable">response</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DatagramPacket</span>(data, data.length, clientAddress);</span><br><span class="line">                server.send(response);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            System.err.println(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="客户端代码-1">客户端代码</h4>
+<p><strong>注意</strong>，在UDP下创建客户端的Socket时，和TCP是有区别的，TCP中我们使用：<code>new Socket("127.0.0.1", 6666);</code>，这个端口指的是远程的端口。而在UDP客户端socket初始化时，<code>new DatagramSocket(0)</code>，这里填写的<strong>可不是远程的，而是本地的</strong>，0代表随机选择一个。客户端代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.net.*;</span><br><span class="line"><span class="keyword">import</span> java.nio.charset.StandardCharsets;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * UDP 客户端 - 同步阻塞模式</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lzwgiter</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2023/01/03</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BIOUDPClient</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 设置绑定的本地端口，0代表随机选择</span></span><br><span class="line">        <span class="keyword">try</span> (<span class="type">DatagramSocket</span> <span class="variable">client</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DatagramSocket</span>(<span class="number">0</span>)) &#123;</span><br><span class="line">            <span class="comment">// 设置超时（单位：毫秒）</span></span><br><span class="line">            client.setSoTimeout(<span class="number">10000</span>);</span><br><span class="line">            <span class="comment">// 创建数据报</span></span><br><span class="line">            <span class="type">SocketAddress</span> <span class="variable">remote</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InetSocketAddress</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">6667</span>);</span><br><span class="line">            <span class="type">String</span> <span class="variable">wordToInquire</span> <span class="operator">=</span> <span class="string">&quot;1&quot;</span>;</span><br><span class="line">            <span class="type">byte</span>[] dataToSend = wordToInquire.getBytes(StandardCharsets.UTF_8);</span><br><span class="line">            <span class="type">DatagramPacket</span> <span class="variable">requestPacket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DatagramPacket</span>(dataToSend, dataToSend.length, remote);</span><br><span class="line">            <span class="comment">// 构造接收的报文</span></span><br><span class="line">            <span class="type">byte</span>[] data = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">10</span>];</span><br><span class="line">            <span class="type">DatagramPacket</span> <span class="variable">recvedPacket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DatagramPacket</span>(data, data.length);</span><br><span class="line">            client.send(requestPacket);</span><br><span class="line">            client.receive(recvedPacket);</span><br><span class="line">            System.out.println(<span class="keyword">new</span> <span class="title class_">String</span>(recvedPacket.getData()).trim());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            System.err.println(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="运行结果-1">运行结果</h4>
+<p><img
+src="/img/Java网络编程模型Review/image-20230104005528740.png" /></p>
+<p>在这个过程中我重启了两次客户端程序，可以看到：</p>
+<ul>
+<li>每次的本地客户端端口都是随机选取的（左边服务器端显示的日志）。</li>
+<li>客户端程序结束了，但服务端会一直<strong>阻塞</strong>在<code>receive()</code>等待新的数据包。</li>
+</ul>
+<h1 id="java中三种io模型及其实现">Java中三种I/O模型及其实现</h1>
+<p>知道基本的Socket、TCP/UDP相关java的API使用方式后，我们就要深究一下，有哪些IO模式了，通常上，我们使用两个指标来划分，即：<strong>同步</strong>or<strong>异步</strong>，<strong>阻塞</strong>or<strong>非阻塞</strong>。那同步异步区别在哪呢？它们的区别在<strong>消息通信机制</strong>上，同步为<code>Synchronous Communication</code>，而异步为<code>Aynchronous Communication</code>，具体来说：</p>
+<ul>
+<li>同步模式下，我们调用一个方法，在这个方法完成前，我们需要一直<strong>主动</strong>等待它（这个主动的理解很关键），没得到结果前我们会一直等着。</li>
+<li>异步模式下，同样一个方法，我们调用后将直接返回，在它完成前，我们不需要等待他，而是由它<strong>主动</strong>通知我们，<strong>结果</strong>好了，可以使用了。通知方法如信号、回调函数等。</li>
+</ul>
+<p>ok，那同步异步的区别实际上就是看是我们<strong>主动</strong>等结果，还是结果<strong>主动</strong>通知我们了。那阻塞和非阻塞呢？</p>
+<ul>
+<li>阻塞IO下，执行阻塞的系统调用（如前面我们看到的<code>receive</code>）当前线程会被挂起，等待<strong>系统调用的完成</strong>。</li>
+<li>非阻塞IO下，与阻塞相反，非阻塞的系统调用会直接返回一个<strong>瞬时</strong>的结果，无需等待系统调用的完成。然后通过<strong>轮询</strong>的方式去判断调用是否完成。典型的例子如<code>select</code>系统调用，它可以<strong>轮询</strong>检测活动的socket而无需等待，有I/O可用时将直接返回。</li>
+</ul>
+<p>所以根据同步异步的<strong>消息通信机制</strong>，以及阻塞非阻塞的IO方式，我们可以排列组合得到如下集中IO模型：</p>
+<ul>
+<li>同步阻塞</li>
+<li>同步非阻塞</li>
+<li><del>异步阻塞</del></li>
+<li>异步非阻塞（其实没这个说法，直接就叫异步）</li>
+</ul>
+<p>哎为什么没有异步阻塞呢？因为前面我们说异步模式下，方法会直接返回无需等待，所以<strong>异步一定是非阻塞的</strong>。但是反过来可就不对了（如select同步非阻塞）。</p>
+<p>所以从大的方面上来说，我们有三种IO模型。实际上，Unix中有5种IO模型，划分更为细致。分别为：</p>
+<ul>
+<li>Blocking
+IO（同步阻塞），可以看到流程其实和我们UDP程序逻辑是一样的，也即Java原始的<strong>BIO</strong></li>
+</ul>
+<p><img src="/img/Java网络编程模型Review/阻塞模式.jpg" /></p>
+<ul>
+<li>NonBlocking IO （同步非阻塞，轮询）</li>
+</ul>
+<p><img src="/img/Java网络编程模型Review/非阻塞模式.jpg" /></p>
+<ul>
+<li>IO Multiplexing（如select、poll）（同步阻塞，但相较于Blocking
+IO，能监听更多的socket）
+。这也是<strong>Java的NIO原理</strong>，这个有大量的应用，比如你Nginx。</li>
+</ul>
+<p><img src="/img/Java网络编程模型Review/IO多路复用.jpg" /></p>
+<ul>
+<li>Signal-Driven（同步非阻塞，当IO操作<strong>准备好时</strong>会通过信号通知）</li>
+</ul>
+<p><img src="/img/Java网络编程模型Review/信号驱动.jpg" /></p>
+<ul>
+<li>Asynchronous
+IO（异步，当IO操作<strong>完成时</strong>会通过信号通知）。这也是<strong>Java的AIO原理</strong>。</li>
+</ul>
+<p><img src="/img/Java网络编程模型Review/异步.jpg" /></p>
+<p>注意，前四种都是同步的，这是因为他们都需要调用<code>receive</code>等方法将<strong>数据从内核空间复制到用户空间</strong>，都会导致当前线程挂起。而只有异步的IO模型，是真正不需要这个操作的（上图中没有出现如<code>recvform</code>的系统阻塞调用）。这五种模型的比较如下图所示：</p>
+<p><img src="/img/Java网络编程模型Review/5种IO模型比较.jpg" /></p>
+<h2 id="bio">BIO</h2>
+<p>BIO（Blocking
+IO），即IO是阻塞的状态，其实上一章节中我们的BIOServer就是阻塞的，即服务器会<strong>阻塞在accept/receive，等待客户端的连接</strong>，这个时候你的程序是干不了其他事情的。<strong>BIO是一种同步阻塞的机制。</strong>具体详情前面的代码、示图已经说的很清楚了。Java中主要使用的就是<code>java.net.*</code>下面的类。</p>
+<h2 id="nio">NIO</h2>
+<p>JDK 1.4中java引入了NIO（New
+IO），主要是使用了<code>Selector</code>实现了IO多路复用。其实在Linux中，该机制是通过<code>select</code>系统调用来实现的。</p>
+<p>我写过一个简单的C语言的聊天室<a
+target="_blank" rel="noopener" href="https://github.com/lzwgiter/MyCWebStudy">项目</a>，感兴趣的可以看看，该项目就是用的<code>select</code>机制来实现的。当然也有更好的<code>epoll</code>可以替换。<strong>NIO本质上是一种利用了I/O多路复用技术的、同步非阻塞的机制。但是相较于BIO，可以处理更多的Socket。</strong></p>
+<h3 id="使用方法">使用方法</h3>
+<p>我们以TCP为例。Java中主要使用<code>java.nio.*</code>下的类来实现，常用的类如：<code>java.nio.channels.Selector</code>、<code>java.nio..channels.ServerSocketChannel</code>、<code>java.nio.channels.SocketChannel</code>。至于UDP，将上面的<code>ServerSocketChannel</code>和改为使用<code>DatagramChannel</code>即可，他们的关系如下：</p>
+<p><img src="/img/Java网络编程模型Review/NIO常用类关系图.png" /></p>
+<p>用一张图表示的话，NIO的结构是这样的：</p>
+<p><img
+src="/img/Java网络编程模型Review/image-20230107200241928.png" /></p>
+<p>下面我们就使用上述类写一个服务端和客户端，学习一下使用方法。</p>
+<h4 id="服务端">服务端</h4>
+<p>对于服务端，我们主要使用<code>java.nio.Selector</code>来监听多个socket，<strong>此时我们不需要手动for循环去判断哪一个socket可用，而是由操作系统通知JVM哪个socket可用读入或写入</strong>。</p>
+<p>注意，在<code>select</code>时，Java会调用<code>java.nio.channels.spi.SelectorProvider</code>这个单例类的<code>provide()</code>方法来返回操作系统的具体实现。且当<code>select</code>时，当前线程会阻塞，等待有IO可用时、操作系统的通知。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.net.InetSocketAddress;</span><br><span class="line"><span class="keyword">import</span> java.nio.ByteBuffer;</span><br><span class="line"><span class="keyword">import</span> java.nio.channels.SelectionKey;</span><br><span class="line"><span class="keyword">import</span> java.nio.channels.Selector;</span><br><span class="line"><span class="keyword">import</span> java.nio.channels.ServerSocketChannel;</span><br><span class="line"><span class="keyword">import</span> java.nio.channels.SocketChannel;</span><br><span class="line"><span class="keyword">import</span> java.time.LocalDateTime;</span><br><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Java NIO</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lzwgiter</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022/12/30</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NIOServer</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> (<span class="type">Selector</span> <span class="variable">selector</span> <span class="operator">=</span> Selector.open();</span><br><span class="line">             <span class="type">ServerSocketChannel</span> <span class="variable">serverSocketChannel</span> <span class="operator">=</span> ServerSocketChannel.open()) &#123;</span><br><span class="line">            <span class="comment">// 设置为非阻塞模式</span></span><br><span class="line">            serverSocketChannel.configureBlocking(<span class="literal">false</span>);</span><br><span class="line">            <span class="comment">// 绑定端口</span></span><br><span class="line">            serverSocketChannel.bind(<span class="keyword">new</span> <span class="title class_">InetSocketAddress</span>(<span class="number">6666</span>));</span><br><span class="line">            <span class="comment">// 将serverSocketChannel的accept交由selector来处理</span></span><br><span class="line">            serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);</span><br><span class="line">            System.out.println(<span class="string">&quot;端口注册完成, 等待连接中......&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 阻塞在select方法</span></span><br><span class="line">            <span class="keyword">while</span> (selector.select() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">// 我们使用SelectionKey来对可用的socket进行遍历</span></span><br><span class="line">                Set&lt;SelectionKey&gt; selectionKeys = selector.selectedKeys();</span><br><span class="line">                <span class="comment">// 处理每一个事件</span></span><br><span class="line">                SocketChannel sc;</span><br><span class="line">                Iterator&lt;SelectionKey&gt; iter = selectionKeys.iterator();</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 遍历每一个可用的socket</span></span><br><span class="line">                <span class="keyword">while</span> (iter.hasNext()) &#123;</span><br><span class="line">                    <span class="type">SelectionKey</span> <span class="variable">key</span> <span class="operator">=</span> iter.next();</span><br><span class="line">                    <span class="keyword">if</span> (key.isAcceptable()) &#123;</span><br><span class="line">                        <span class="type">ServerSocketChannel</span> <span class="variable">nssc</span> <span class="operator">=</span> (ServerSocketChannel) key.channel();</span><br><span class="line">                        sc = nssc.accept();</span><br><span class="line">                        <span class="comment">// 设为非阻塞</span></span><br><span class="line">                        sc.configureBlocking(<span class="literal">false</span>);</span><br><span class="line">                        <span class="comment">// 注册并分配缓存区</span></span><br><span class="line">                        <span class="type">ByteBuffer</span> <span class="variable">echoBuffer</span> <span class="operator">=</span> ByteBuffer.allocate(<span class="number">100</span>);</span><br><span class="line">                        sc.register(selector, SelectionKey.OP_READ, echoBuffer);</span><br><span class="line">                        System.out.println(LocalDateTime.now() + <span class="string">&quot; - ** 新的连接 ** &quot;</span> + sc);</span><br><span class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (key.isReadable()) &#123;</span><br><span class="line">                        sc = (SocketChannel) key.channel();</span><br><span class="line">                        <span class="type">ByteBuffer</span> <span class="variable">echoBuffer</span> <span class="operator">=</span> (ByteBuffer) key.attachment();</span><br><span class="line">                        <span class="comment">// 读取数据</span></span><br><span class="line">                        echoBuffer.clear();</span><br><span class="line">                        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> sc.read(echoBuffer);</span><br><span class="line">                        <span class="keyword">if</span> (len == -<span class="number">1</span>) &#123;</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">if</span> (len &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                            echoBuffer.clear();</span><br><span class="line">                            <span class="type">String</span> <span class="variable">raw</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(echoBuffer.array()).trim();</span><br><span class="line">                            System.out.println(LocalDateTime.now() + <span class="string">&quot; - ## 接收来自 &quot;</span> + sc + <span class="string">&quot;的数据：&quot;</span> + raw + <span class="string">&quot; ##&quot;</span>);</span><br><span class="line">                            <span class="comment">// 处理消息</span></span><br><span class="line">                            <span class="type">String</span> <span class="variable">response</span> <span class="operator">=</span> <span class="string">&quot;MSG: &#123;&quot;</span> + raw + <span class="string">&quot;&#125; is accepted.&quot;</span>;</span><br><span class="line">                            echoBuffer.put(response.getBytes());</span><br><span class="line">                            echoBuffer.flip();</span><br><span class="line">                            sc.write(echoBuffer);</span><br><span class="line">                            System.out.println(LocalDateTime.now() + <span class="string">&quot; - ## 发送给 &quot;</span> + sc + <span class="string">&quot;的数据：&quot;</span> +</span><br><span class="line">                                    <span class="keyword">new</span> <span class="title class_">String</span>(echoBuffer.array()).trim() + <span class="string">&quot; ##&quot;</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="comment">// 关闭客户端连接</span></span><br><span class="line">                        sc.close();</span><br><span class="line">                        System.out.println(sc + <span class="string">&quot;连接结束&quot;</span>);</span><br><span class="line">                        System.out.println(<span class="string">&quot;===========================&quot;</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">// 从遍历集合中删除</span></span><br><span class="line">                    iter.remove();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(<span class="string">&quot;this is a simple test.&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>这里需要澄清一个小概念，我学习时就有疑惑</strong>。单线程下，若没有可用的I/O操作，那不就阻塞在<code>select</code>函数吗？啥都干不了啊？</p>
+<p>实际上阻塞、非阻塞都是对于I/O操作来说的，由于I/O多路复用机制提供了单线程下操作多个I/O的方法，因此我们当前线程不会阻塞在单个I/O中。比如现在有两个个客户端连接进来了，ok我们处理了1号I/O，由于1没有新的消息了，因此我们会去处理2号I/O，<strong>而并没有阻塞在1号I/O上。</strong>因此说它是非阻塞的。</p>
+<h4 id="客户端">客户端</h4>
+<p>客户端代码要简单一些。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.net.InetSocketAddress;</span><br><span class="line"><span class="keyword">import</span> java.nio.ByteBuffer;</span><br><span class="line"><span class="keyword">import</span> java.nio.channels.SocketChannel;</span><br><span class="line"><span class="keyword">import</span> java.time.LocalDateTime;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Java NIO客户端</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lzwgiter</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2022/12/30</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NIOClient</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> (<span class="type">SocketChannel</span> <span class="variable">client</span> <span class="operator">=</span> SocketChannel.open(<span class="keyword">new</span> <span class="title class_">InetSocketAddress</span>(<span class="number">6666</span>))) &#123;</span><br><span class="line">            client.configureBlocking(<span class="literal">false</span>);</span><br><span class="line">            <span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span> <span class="string">&quot;this is a simple test.&quot;</span>;</span><br><span class="line">            System.out.println(LocalDateTime.now() + <span class="string">&quot; - ##发送数据: &quot;</span> + msg + <span class="string">&quot; ##&quot;</span>);</span><br><span class="line">            <span class="type">ByteBuffer</span> <span class="variable">buffer</span> <span class="operator">=</span> ByteBuffer.allocate(<span class="number">100</span>);</span><br><span class="line">            buffer.put(msg.getBytes());</span><br><span class="line">            buffer.flip();</span><br><span class="line">            client.write(buffer);</span><br><span class="line">            buffer.clear();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> client.read(buffer);</span><br><span class="line">                <span class="keyword">if</span> (len &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    System.out.println(LocalDateTime.now() + <span class="string">&quot; - ##接收数据: &quot;</span> + <span class="keyword">new</span> <span class="title class_">String</span>(buffer.array()).trim() + <span class="string">&quot; ##&quot;</span>);</span><br><span class="line">                    client.close();</span><br><span class="line">                    System.out.println(LocalDateTime.now() + <span class="string">&quot; - ##连接关闭: &quot;</span> + <span class="string">&quot; ##&quot;</span>);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="运行结果-2">运行结果</h3>
+<figure>
+<img src="/img/Java网络编程模型Review/image-20230107011032615.png"
+alt="NIO运行结果" />
+<figcaption aria-hidden="true">NIO运行结果</figcaption>
+</figure>
+<h2 id="aio">AIO</h2>
+<p>JDK 1.7引入了NIO2.0，也即AIO（Asynchronous
+IO），他为我们提供了异步的可能性，如异步的文件通道、异步的套接字通道，他的底层在Windows中是通过<code>IOCP（I/O Completion Port）</code>来实现的，Linux中则是<code>epoll</code>。<strong>AIO本质上是一种异步的机制。</strong></p>
+<p>那么AIO和BIO的区别在哪里呢？其实很好理解，在上一节NIO代码可以看出，<strong>操作系统通知我们的时刻，是该IO就绪的时刻，即可读或可写</strong>，在此之前我们是阻塞的。回顾一下select的图：</p>
+<p><img src="/img/Java网络编程模型Review/IO多路复用.jpg" /></p>
+<p>而对于真正的异步，我们是不需要主动等待的，而是立即返回，并由操作系统通知我们。<strong>对于AIO，操作系统通知我们的时刻，是该IO已经完成的时刻，即读完了，写完了</strong>。回顾一下异步的图。</p>
+<p><img src="/img/Java网络编程模型Review/异步.jpg" /></p>
+<h3 id="使用方法-1">使用方法</h3>
+<p>我们以TCP为例。Java中主要使用<code>java.nio.*</code>下的类来实现，常用的类如：<code>java.nio.channels.AsynchronousSocketChannel</code>、<code>java.nio.channels.AsynchronousServerSocketChannel</code>、<code>java.nio.channels.CompletionHandler</code>。至于UDP，将上面的<code>AsynchronousSocketChannel</code>和改为使用<code>AsynchronousDatagramChanel</code>即可，他们的关系如下：</p>
+<p><img src="/img/Java网络编程模型Review/AIO常用类关系图.png" /></p>
+<p>注意到，在<code>AsynchronoutSocketChannel</code>中，<code>accept</code>、<code>connect</code>、<code>read</code>和<code>write</code>方法有都提供了使用<code>CompletionHandler&lt;Integer, A&gt;</code>的<strong>回调机制</strong>，这也是体现异步的地方，这四个函数的调用会立即返回，不会阻塞，且将这四个函数的<strong>具体执行交给JVM默认线程池的某个线程在后台执行，当操作完成后，该线程会再执行传入的回调函数来通知我们</strong>。</p>
+<p>这样的回调机制和方法声明，在NIO中是没有的，也是最主要的一个区别。我们可以看一下这个关键的<code>java.nio.channels.CompletionHandler</code>是怎么定义的：</p>
+<p><img
+src="/img/Java网络编程模型Review/image-20230106144042454.png" /></p>
+<p>可以看到，该接口声明了两个方法分别对应IO操作<strong>成功</strong>和<strong>失败</strong>两种情况，并传入IO操作的结果或异常至我们的回调函数中进行进一步的处理。</p>
+<h4 id="服务端-1">服务端</h4>
+<p>下面我们就看一下使用AIO如何编写服务端和客户端。大体来说，与BIO编写方式类似，但是我们可以通过回调的方式实现异步操作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.net.InetSocketAddress;</span><br><span class="line"><span class="keyword">import</span> java.nio.ByteBuffer;</span><br><span class="line"><span class="keyword">import</span> java.nio.channels.AsynchronousServerSocketChannel;</span><br><span class="line"><span class="keyword">import</span> java.nio.channels.AsynchronousSocketChannel;</span><br><span class="line"><span class="keyword">import</span> java.nio.channels.CompletionHandler;</span><br><span class="line"><span class="keyword">import</span> java.time.LocalDateTime;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lzwgiter</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2023/01/06</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AIOTCPServer</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 异步监听socket，在静态代码块中初始化</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">AsynchronousServerSocketChannel</span> <span class="variable">serverSocketChannel</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            serverSocketChannel = AsynchronousServerSocketChannel.open();</span><br><span class="line">            serverSocketChannel.bind(<span class="keyword">new</span> <span class="title class_">InetSocketAddress</span>(<span class="number">6666</span>));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            System.err.println(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 读取数据的回调函数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> CompletionHandler&lt;Integer, ByteBuffer&gt; READ_HANDLER = <span class="keyword">new</span> <span class="title class_">CompletionHandler</span>&lt;Integer, ByteBuffer&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">completed</span><span class="params">(Integer result, ByteBuffer readResultBuffer)</span> &#123;</span><br><span class="line">            <span class="comment">// 数据读取完成（这里注意，不需要我们去read操作，操作系统已经帮我们把数据拷贝到用户空间了，即readResultBuffer变量中</span></span><br><span class="line">            readResultBuffer.flip();</span><br><span class="line">            <span class="type">String</span> <span class="variable">rawData</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(readResultBuffer.array()).trim();</span><br><span class="line">            System.out.println(LocalDateTime.now() + <span class="string">&quot; - &quot;</span> + Thread.currentThread().getName() +</span><br><span class="line">                    <span class="string">&quot; - ## 接收数据：&quot;</span> + rawData + <span class="string">&quot; ##&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">failed</span><span class="params">(Throwable exc, ByteBuffer attachment)</span> &#123;</span><br><span class="line">            exc.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 接收请求的回调函数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> CompletionHandler&lt;AsynchronousSocketChannel, Void&gt; ACCEPT_HANDLER =</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">CompletionHandler</span>&lt;AsynchronousSocketChannel, Void&gt;() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">completed</span><span class="params">(AsynchronousSocketChannel channel, Void obj)</span> &#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        System.out.println(LocalDateTime.now() + <span class="string">&quot; - &quot;</span> +  Thread.currentThread().getName() +</span><br><span class="line">                                <span class="string">&quot; - ## 客户端连接成功：&quot;</span> + channel.getRemoteAddress() + <span class="string">&quot; ##&quot;</span>);</span><br><span class="line">                        <span class="comment">// 异步读取数据，立即返回不阻塞</span></span><br><span class="line">                        <span class="type">ByteBuffer</span> <span class="variable">buffer</span> <span class="operator">=</span> ByteBuffer.allocate(<span class="number">100</span>);</span><br><span class="line">                        channel.read(buffer, buffer, READ_HANDLER);</span><br><span class="line"></span><br><span class="line">                        <span class="comment">// 再次接受其他的客户端链接</span></span><br><span class="line">                        serverSocketChannel.accept(<span class="literal">null</span>, <span class="built_in">this</span>);</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">failed</span><span class="params">(Throwable exc, Void obj)</span> &#123;</span><br><span class="line">                    System.err.println(<span class="string">&quot;连接客户端失败！err: &quot;</span> + exc);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;端口绑定完成，等待连接......&quot;</span>);</span><br><span class="line">        <span class="comment">// 等待连接，立即返回，不阻塞</span></span><br><span class="line">        serverSocketChannel.accept(<span class="literal">null</span>, ACCEPT_HANDLER);</span><br><span class="line">        <span class="comment">// 验证异步</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">500</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot;闲的一匹&quot;</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的代码中，static静态代码块以及main函数处我们写了简单的逻辑，即初始化socket、绑定端口等等。</p>
+<p>需要注意的是，从<code>accept</code>函数开始我们的使用方法就有区别了。在开头我定义了两个常量（ps：实际开发肯定不这么干，肯定是写类）<code>READ_HANDLER</code>和<code>ACCEPT_HANDLER</code>，一个是<strong>接收到连接</strong>时的回调函数，另一个是<strong>读取数据完成时</strong>的回调函数。二者均实现了前面提到的<code>CompletionHandler</code>接口，分别定义了complete和failed函数的内容。</p>
+<p>而这两个回调函数也正是我们实现异步操作的核心了，当JVM后台线程池accept、read操作后，就会对应地、执行我们的回调函数。这就对应了我们前面理论部分中提到的：<strong>操作完成时（如accept完成、读取完成、写入完成等）由操作系统通知我们，而不是我们主动阻塞等待。</strong></p>
+<h4 id="客户端-1">客户端</h4>
+<p>对应的实现客户端代码如下。同上，我们需要定义一个<code>connect</code>函数的回调函数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.net.InetSocketAddress;</span><br><span class="line"><span class="keyword">import</span> java.nio.ByteBuffer;</span><br><span class="line"><span class="keyword">import</span> java.nio.channels.AsynchronousSocketChannel;</span><br><span class="line"><span class="keyword">import</span> java.nio.channels.CompletionHandler;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.CountDownLatch;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> lzwgiter</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2023/01/06</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AIOTCPClient</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> (<span class="type">AsynchronousSocketChannel</span> <span class="variable">socketChannel</span> <span class="operator">=</span> AsynchronousSocketChannel.open()) &#123;</span><br><span class="line">            <span class="type">InetSocketAddress</span> <span class="variable">remote</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InetSocketAddress</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">6666</span>);</span><br><span class="line">            <span class="comment">// 用于计数，避免客户端退出</span></span><br><span class="line">            <span class="type">CountDownLatch</span> <span class="variable">end</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CountDownLatch</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">            <span class="type">ByteBuffer</span> <span class="variable">buffer</span> <span class="operator">=</span> ByteBuffer.allocate(<span class="number">100</span>);</span><br><span class="line"></span><br><span class="line">            socketChannel.connect(remote, buffer, <span class="keyword">new</span> <span class="title class_">CompletionHandler</span>&lt;Void, ByteBuffer&gt;() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">completed</span><span class="params">(Void result, ByteBuffer channel)</span> &#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        System.out.println(<span class="string">&quot;客户端连接成功&quot;</span>);</span><br><span class="line">                        <span class="type">String</span> <span class="variable">msg</span> <span class="operator">=</span> <span class="string">&quot;this is a simple test.&quot;</span>;</span><br><span class="line">                        channel.put(msg.getBytes());</span><br><span class="line">                        channel.flip();</span><br><span class="line">                        socketChannel.write(channel);</span><br><span class="line">                        System.out.println(<span class="string">&quot;发送数据: &quot;</span> + msg);</span><br><span class="line">                        socketChannel.close();</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">                    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                        end.countDown();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">failed</span><span class="params">(Throwable exc, ByteBuffer attachment)</span> &#123;</span><br><span class="line">                    exc.printStackTrace();</span><br><span class="line">                    end.countDown();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 等待直到连接关闭</span></span><br><span class="line">            end.await();</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException | InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="运行结果-3">运行结果</h3>
+<p>运行结果有几个意思的点，结合理论，重点强调一下加深印象。</p>
+<p><img
+src="/img/Java网络编程模型Review/image-20230107012042473.png" /></p>
+<ul>
+<li><p>可以看到，能打印出<code>闲的一批</code>就已经说明<code>accept</code>不阻塞了，并没有"卡"在accpet那里使得main线程挂起。</p></li>
+<li><p>观察一下，在<code>accept</code>和<code>read</code>操作的回调函数中，是谁在执行操作？从图中可以看到<code>Thread-x</code>的名字。那就说明，是从属于JVM默认线程池中的线程来做的，这和理论保持一致。</p></li>
+</ul>
+<h2 id="小结">小结</h2>
+<p>看完基本的三种IO模型后，一个很自然而然的问题就是，我们应当在什么场景下使用呢？</p>
+<ul>
+<li>BIO：BIO方式适用于连接数量少且固定的场景，这种方式对服务器资源要求比较高，
+JDK1.4之前唯一的选择，程序直观简单易理解。</li>
+<li>NIO：适用于连接数目多且业务比较轻。JDK1.4开始支持。</li>
+<li>AIO：适用于连接数目多且连接比较长(业务重操作)，需要操作系统充分参与并发操作。JDK1.7开始支持。</li>
+</ul>
+<p>如果说你的服务器资源充足、且客户端数量少，那BIO就可以了，这是足够且最简单的方法。</p>
+<p>而如果连接数比较多了，比如10万个连接，就算是多线程+BIO也没法处理（线程切换开销、线程池资源有限）。这时候就可以考虑使用利用<code>selector</code>机制的NIO。值得一提的是，你如果自己用JDK原生的NIO类去写代码，说实话蛮麻烦的，我前面那个都是小儿科了，正儿八经的需要熟悉<strong>Reactor模式</strong>（单一线程监听连接、多线程处理不同连接），如select后的包装成FutureTask扔给线程池，那你还得懂多线程编程、并发注意事项等等。</p>
+<p><strong>Netty是一个封装了Java
+NIO的API的框架，比如Hadoop的RPC框架就是基于Netty实现的，</strong>直接用Netty去实现NIO相较于你自己从头搞要好很多（当然，了解原理是很重要的）。而AIO，当你需要异步需求的时候可以使用。</p>
+<h1 id="总结">总结</h1>
+<p>总结一下，本篇复习了以下内容：</p>
+<ul>
+<li>关于Socket</li>
+<li>Java中如何使用基本的socket实现基本同步阻塞的TCP、UDP编程</li>
+<li>Java中的三种IO模型(BIO、NIO、AIO)、使用方法及其应用场景。</li>
+</ul>
+<h1 id="参考文献">参考文献</h1>
+<ul>
+<li>《网络编程使用教程（第2版）》——叶树华</li>
+<li>《操作系统概念》——亚伯拉罕·西尔伯沙茨</li>
+<li>《Java核心技术 卷I 开发基础（第12版）》——凯·S.霍斯特曼</li>
+<li>《Java网络编程进阶——从BIO到RPC》——肖川</li>
+<li><a
+target="_blank" rel="noopener" href="https://www.cnblogs.com/binbingg/p/15208296.html#scroller-10">【转】Java网络编程模型
+- Binge-和时间做朋友 - 博客园 (cnblogs.com)</a>****</li>
+</ul>
+
+    </article>
+    <!-- license -->
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://lzwgiter.github.io">f10@t</a>
+            <p>原文链接：<a href="https://lzwgiter.github.io/posts/d6b305b7/">https://lzwgiter.github.io/posts/d6b305b7/</a>
+            <p>发表日期：<a href="https://lzwgiter.github.io/posts/d6b305b7/">January 4th 2023, 1:06:09 am</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/d6b305b7/">July 31st 2024, 11:19:27 am</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+                <div class="nextSlogan">Next Post</div>
+                <a href="/posts/73d00ee7/" title="Netty框架学习">
+                    <div class="nextTitle">Netty框架学习</div>
+                </a>
+        </li>
+        <li class="previous">
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/posts/203767b8/" title="python-Numpy库使用">
+                    <div class="prevTitle">python-Numpy库使用</div>
+                </a>
+        </li>
+    </ul>
+    <!-- comment -->
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+            
+            
+            
+            <!-- utteranc评论 -->
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+            
+                <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    <div id="comment"></div>
+    <script>
+        new Valine({
+            el: '#comment',
+            notify:false,
+            verify:false,
+            appId: "KADRlHg5xXyhKL0d6USDWfIB-gzGzoHsz",
+            appKey: "Ppj8kIdro2yDqXOvqWkTRxuW",
+            placeholder: "递咖啡就坐(　o=^•ェ•)o　┏━┓（填写邮箱地址可以收到邮件回复捏）",
+            path:window.location.pathname,
+            avatar:'mm'
+        });
+    </script>
+
+            
+        </div>
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    <!-- Mathjax -->
+</main>
+
+                <!-- profile -->
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+        <div class="social">
+                            <a href="//github.com/lzwgiter" class="iconfont-archer github" target="_blank" title="github"></a>
+
+        </div>
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    <!-- 不蒜子  -->
+        <div class="busuanzi-container">
+                <span id="busuanzi_container_site_uv">做客的小伙伴数: <span id="busuanzi_value_site_uv"></span></span>
+        </div>
+</footer>
+
+        </div>
+        <!-- toc -->
+            <div class="toc-wrapper toc-wrapper-loding" style=    top:50vh;
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFsocketjava%E4%B8%AD%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">什么是Socket？Java中如何使用？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#socket%E6%98%AF%E4%B8%BA%E4%BA%86%E8%A7%A3%E5%86%B3%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text">Socket是为了解决网络编程中的什么问题？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#java%E4%B8%AD%E7%9A%84socket"><span class="toc-number">1.2.</span> <span class="toc-text">Java中的Socket</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#tcp"><span class="toc-number">1.2.1.</span> <span class="toc-text">TCP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">服务端代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%A3%E7%A0%81"><span class="toc-number">1.2.1.2.</span> <span class="toc-text">客户端代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C"><span class="toc-number">1.2.1.3.</span> <span class="toc-text">运行结果</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#udp"><span class="toc-number">1.2.2.</span> <span class="toc-text">UDP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%BB%A3%E7%A0%81-1"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">服务端代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%A3%E7%A0%81-1"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">客户端代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C-1"><span class="toc-number">1.2.2.3.</span> <span class="toc-text">运行结果</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#java%E4%B8%AD%E4%B8%89%E7%A7%8Dio%E6%A8%A1%E5%9E%8B%E5%8F%8A%E5%85%B6%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">Java中三种I&#x2F;O模型及其实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#bio"><span class="toc-number">2.1.</span> <span class="toc-text">BIO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nio"><span class="toc-number">2.2.</span> <span class="toc-text">NIO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">2.2.1.</span> <span class="toc-text">使用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="toc-number">2.2.1.1.</span> <span class="toc-text">服务端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">2.2.1.2.</span> <span class="toc-text">客户端</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C-2"><span class="toc-number">2.2.2.</span> <span class="toc-text">运行结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#aio"><span class="toc-number">2.3.</span> <span class="toc-text">AIO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">使用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF-1"><span class="toc-number">2.3.1.1.</span> <span class="toc-text">服务端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF-1"><span class="toc-number">2.3.1.2.</span> <span class="toc-text">客户端</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C-3"><span class="toc-number">2.3.2.</span> <span class="toc-text">运行结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">2.4.</span> <span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-number">4.</span> <span class="toc-text">参考文献</span></a></li></ol>
+            </div>
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 99
+        </div>
+        <!-- search  -->
+            <div class="site-search site-search-loading popup-trigger">
+                <span class="iconfont-archer search-icon">&#xe627;</span>
+            </div>
+    </div>
+    <div class="post-archive">
+            <div class="archive-year"> 2024 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/05</span>
+            <a class="archive-post-title" href="/posts/54e979b4/">RabbitMQ学习</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/23</span>
+            <a class="archive-post-title" href="/posts/963fb8d3/">领域驱动设计学习（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/posts/21f893eb/">学鲁菜之酱焖鲈鱼</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2023 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/22</span>
+            <a class="archive-post-title" href="/posts/33ea2108/">Spring AOP再探</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/09</span>
+            <a class="archive-post-title" href="/posts/c41813ec/">重新审视微服务</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/04</span>
+            <a class="archive-post-title" href="/posts/85bf5302/">K8s攻防之OWASP-K8S-TOP10（下）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/16</span>
+            <a class="archive-post-title" href="/posts/8aa36aba/">K8s攻防之OWASP-K8S-TOP10（上）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/posts/c16d1cd9/">Java内存马原理（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/08</span>
+            <a class="archive-post-title" href="/posts/e2947908/">Java Instrument机制及管窥IAST</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/03</span>
+            <a class="archive-post-title" href="/posts/479daa6d/">gRPC简介与使用</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/30</span>
+            <a class="archive-post-title" href="/posts/b74b8800/">fastjson反序列化漏洞学习（二）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span>
+            <a class="archive-post-title" href="/posts/73d00ee7/">Netty框架学习</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/04</span>
+            <a class="archive-post-title" href="/posts/d6b305b7/">Java网络编程模型复习</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2022 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span>
+            <a class="archive-post-title" href="/posts/203767b8/">python-Numpy库使用</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/20</span>
+            <a class="archive-post-title" href="/posts/f06096b/">MATLAB - Wireless Communication Onramp</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/19</span>
+            <a class="archive-post-title" href="/posts/3041f265/">Matlab编程基础</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2021 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/04</span>
+            <a class="archive-post-title" href="/posts/169c63d0/">Bloom Filter概念原理</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span>
+            <a class="archive-post-title" href="/posts/85e98ef0/">zk-SNARKs简洁的非交互式零知识证明学习(一)</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span>
+            <a class="archive-post-title" href="/posts/a8e0eb2d/">Quarkus学习（一）概述以及编写REST服务</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/19</span>
+            <a class="archive-post-title" href="/posts/e88577c0/">Cloud Programming Simplified:A Berkeley View on Serverless Computing</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span>
+            <a class="archive-post-title" href="/posts/99665dc1/">闲聊一下Java中的DI和CDI</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span>
+            <a class="archive-post-title" href="/posts/ed901271/">Kubernetes-集群环境搭建使用及问题记录（三）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/09</span>
+            <a class="archive-post-title" href="/posts/a08eb123/">Kubernetes-集群环境搭建使用及问题记录（二）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span>
+            <a class="archive-post-title" href="/posts/eed4a979/">Kubernetes 集群环境搭建使用及问题记录（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/24</span>
+            <a class="archive-post-title" href="/posts/2f0b60dd/">闲聊一下Go语言的函数方法和多态机制特点</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/14</span>
+            <a class="archive-post-title" href="/posts/5893facf/">express学习（一）-基于NodeJS的Web框架</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/10</span>
+            <a class="archive-post-title" href="/posts/8a9b0b34/">Beego学习-ORM</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/posts/84db08d3/">Beego学习-路由设置</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/06</span>
+            <a class="archive-post-title" href="/posts/a9031312/">docker-compose及dockerfile总结</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/09</span>
+            <a class="archive-post-title" href="/posts/77d22b2a/">Spring安全技术-Spring Security使用及总结（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/28</span>
+            <a class="archive-post-title" href="/posts/5e9eec21/">DevOps技术-简单了解与入门</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span>
+            <a class="archive-post-title" href="/posts/27875254/">Spring持久层技术-Sping Data JPA使用及总结（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/14</span>
+            <a class="archive-post-title" href="/posts/bec529bf/">以太坊智能合约开发环境搭建及智能合约的编写、部署、测试</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/11</span>
+            <a class="archive-post-title" href="/posts/2ff8a9fd/">以太坊基本概念与实验环境搭建</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2020 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/17</span>
+            <a class="archive-post-title" href="/posts/bcd864e2/">DC-1靶机渗透</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/31</span>
+            <a class="archive-post-title" href="/posts/c99165fd/">fastjson反序列化漏洞学习（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/09</span>
+            <a class="archive-post-title" href="/posts/a9e6a25b/">Spring基础学习 - AOP机制</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/06</span>
+            <a class="archive-post-title" href="/posts/b92dbb83/">JavaEE基础 - Servlet</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/06</span>
+            <a class="archive-post-title" href="/posts/44088610/">Spring基础学习 - IOC机制</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/01</span>
+            <a class="archive-post-title" href="/posts/662e1cfe/">微服务入门-5W和微服务思想</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/22</span>
+            <a class="archive-post-title" href="/posts/c75c5fc7/">Java 反序列化漏洞与JNDI注入(下)</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/14</span>
+            <a class="archive-post-title" href="/posts/5dcfa8b5/">Kerberos认证过程原理及攻击手段</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/26</span>
+            <a class="archive-post-title" href="/posts/1ccc94ff/">内存布局与栈溢出&堆溢出原理</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/21</span>
+            <a class="archive-post-title" href="/posts/bc7cb7a1/">入坑Pwn之刷题补坑</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/29</span>
+            <a class="archive-post-title" href="/posts/760e25d9/">内存取证原理学习及Volatility - 篇二</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span>
+            <a class="archive-post-title" href="/posts/b0024cb7/">Struts框架管窥以及几个漏洞的分析</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/09</span>
+            <a class="archive-post-title" href="/posts/8ce0a80d/">Redis未授权访问漏洞及修补方法</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/08</span>
+            <a class="archive-post-title" href="/posts/13fe3d9f/">本地提权与漏洞提权</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2019 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/21</span>
+            <a class="archive-post-title" href="/posts/f8b67901/">逆向工程课程小结</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span>
+            <a class="archive-post-title" href="/posts/4d8e0b70/">内存取证原理学习及Volatility - 篇一</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span>
+            <a class="archive-post-title" href="/posts/82490df7/">并发模型之单线程多路I/O复用---select</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/29</span>
+            <a class="archive-post-title" href="/posts/a715340f/">入坑Pwn之基本知识</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span>
+            <a class="archive-post-title" href="/posts/47dcecb9/">Apache-Commons-Collections反序列化漏洞</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/03</span>
+            <a class="archive-post-title" href="/posts/de476e86/">Java 反序列化漏洞与JNDI注入(上)</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span>
+            <a class="archive-post-title" href="/posts/7a9a17f3/">记录一次对win2k3 Enterprise Edition的永恒之蓝利用</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/11</span>
+            <a class="archive-post-title" href="/posts/6f24bb1d/">kali-渗透测试-信息收集3</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/10</span>
+            <a class="archive-post-title" href="/posts/18238b8b/">kali-渗透测试-信息收集2</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/18</span>
+            <a class="archive-post-title" href="/posts/812ada31/">kali-渗透测试-信息收集1</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/11</span>
+            <a class="archive-post-title" href="/posts/fffcd997/">Metasploit渗透测试魔鬼训练营-客户端渗透攻击</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/10</span>
+            <a class="archive-post-title" href="/posts/30b79e7d/">Metasploit渗透测试魔鬼训练营-Windows服务漏洞MS08-067实战与分析总结</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/07</span>
+            <a class="archive-post-title" href="/posts/79017d0/">Metasploit渗透测试魔鬼训练营-web应用渗透</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/06</span>
+            <a class="archive-post-title" href="/posts/6c9a4aca/">Metasploit渗透测试魔鬼训练营-服务扫描与查点</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/04</span>
+            <a class="archive-post-title" href="/posts/ed61533c/">Metasploit渗透测试魔鬼训练营-信息收集</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/22</span>
+            <a class="archive-post-title" href="/posts/ba8e1564/">Metasploit渗透测试魔鬼训练营 第一天</a>
+        </li>
+                </ul>
+            <div class="archive-year"> 2018 </div>
+            <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/28</span>
+            <a class="archive-post-title" href="/posts/dd591816/">小明的博客--Typecho 反序列化漏洞</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span>
+            <a class="archive-post-title" href="/posts/41159e88/">Bugku的一道注入---多次</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span>
+            <a class="archive-post-title" href="/posts/26bacf07/">Bugku的一道注入--INSERT INTO注入</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span>
+            <a class="archive-post-title" href="/posts/e1cf93ae/">ThinkPHP框架学习---路由</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span>
+            <a class="archive-post-title" href="/posts/dec252e7/">ThinkPHP框架学习---config类和config助手函数</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span>
+            <a class="archive-post-title" href="/posts/8405173/">ThinkPHP框架学习---框架目录及框架配置</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/19</span>
+            <a class="archive-post-title" href="/posts/5d13a793/">Nmap使用指南</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/12</span>
+            <a class="archive-post-title" href="/posts/e6caa5f0/">SQL注入小记(二)</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/09</span>
+            <a class="archive-post-title" href="/posts/78f948a4/">PHP学习--超级全局变量</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/08</span>
+            <a class="archive-post-title" href="/posts/777d53bb/">PHP学习--变量</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/03</span>
+            <a class="archive-post-title" href="/posts/f0bc436c/">PHP框架MVC学习</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span>
+            <a class="archive-post-title" href="/posts/117580c0/">CTF中的python脚本题小结（二）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/30</span>
+            <a class="archive-post-title" href="/posts/21636c18/">CTF中的python脚本题小结（一）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span>
+            <a class="archive-post-title" href="/posts/fc74b0ce/">Hackergame 2018 wp</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/25</span>
+            <a class="archive-post-title" href="/posts/8c800523/">安恒九月题的misc和一道web</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/10</span>
+            <a class="archive-post-title" href="/posts/49fb3e92/">SQL注入小记(一)</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/27</span>
+            <a class="archive-post-title" href="/posts/21c35507/">隐写术-LSB隐写</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/26</span>
+            <a class="archive-post-title" href="/posts/59bc0c0/">隐写术--NTFS流隐写</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/25</span>
+            <a class="archive-post-title" href="/posts/c7cffe19/">CTF常见隐写手段小结</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/22</span>
+            <a class="archive-post-title" href="/posts/69896e9f/">DOM 文档对象模型</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/21</span>
+            <a class="archive-post-title" href="/posts/20cf0786/">BOM-浏览器操作对象模型之history和screen对象</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/20</span>
+            <a class="archive-post-title" href="/posts/f92f304f/">BOM 浏览器操作对象模型之navigator、location对象</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/18</span>
+            <a class="archive-post-title" href="/posts/79f16c6a/">BOM-浏览器操作对象模型之window对象</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/16</span>
+            <a class="archive-post-title" href="/posts/aa0a7b0a/">Javascript基础之数据类型2</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span>
+            <a class="archive-post-title" href="/posts/33032ab0/">Javascript基础之数据类型1</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/12</span>
+            <a class="archive-post-title" href="/posts/b5fac929/">CTF隐写术--关于ZIP</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/09</span>
+            <a class="archive-post-title" href="/posts/98736a90/">CSS样式基础4.4--选择器之伪类选择器</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/posts/17442633/">Bugku的一道misc-----猫片</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/posts/d4db3e56/">CSS基础4.3--选择器之属性选择器</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/05</span>
+            <a class="archive-post-title" href="/posts/7b6c38ce/">CSS基础4.2--选择器之组合选择器</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/03</span>
+            <a class="archive-post-title" href="/posts/6027632/">CSS基础4.1--选择器之CSS基础4.1-选择器之基本选择器</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/02</span>
+            <a class="archive-post-title" href="/posts/370eaad5/">CSS基础3.2--特性之CSS基础3.2--特性之继承性</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/4655c16f/">CSS基础3.1--特性之CSS基础3.1-特性之层叠性</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/ae68c748/">CSS基础2--CSS基础2-应用</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/01</span>
+            <a class="archive-post-title" href="/posts/6b427aa1/">CSS基础1--样式</a>
+        </li>
+            </ul>
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+            <span class="sidebar-tag-name" data-tags="区块链技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                区块链技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="渗透测试">
+                <span class="iconfont-archer">&#xe606;</span>
+                渗透测试
+            </span>
+            <span class="sidebar-tag-name" data-tags="Java">
+                <span class="iconfont-archer">&#xe606;</span>
+                Java
+            </span>
+            <span class="sidebar-tag-name" data-tags="漏洞分析">
+                <span class="iconfont-archer">&#xe606;</span>
+                漏洞分析
+            </span>
+            <span class="sidebar-tag-name" data-tags="web安全">
+                <span class="iconfont-archer">&#xe606;</span>
+                web安全
+            </span>
+            <span class="sidebar-tag-name" data-tags="开发技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                开发技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="前端">
+                <span class="iconfont-archer">&#xe606;</span>
+                前端
+            </span>
+            <span class="sidebar-tag-name" data-tags="Go语言">
+                <span class="iconfont-archer">&#xe606;</span>
+                Go语言
+            </span>
+            <span class="sidebar-tag-name" data-tags="Go Web">
+                <span class="iconfont-archer">&#xe606;</span>
+                Go Web
+            </span>
+            <span class="sidebar-tag-name" data-tags="论文阅读">
+                <span class="iconfont-archer">&#xe606;</span>
+                论文阅读
+            </span>
+            <span class="sidebar-tag-name" data-tags="CSS">
+                <span class="iconfont-archer">&#xe606;</span>
+                CSS
+            </span>
+            <span class="sidebar-tag-name" data-tags="CTF">
+                <span class="iconfont-archer">&#xe606;</span>
+                CTF
+            </span>
+            <span class="sidebar-tag-name" data-tags="SQL注入">
+                <span class="iconfont-archer">&#xe606;</span>
+                SQL注入
+            </span>
+            <span class="sidebar-tag-name" data-tags="隐写术">
+                <span class="iconfont-archer">&#xe606;</span>
+                隐写术
+            </span>
+            <span class="sidebar-tag-name" data-tags="python">
+                <span class="iconfont-archer">&#xe606;</span>
+                python
+            </span>
+            <span class="sidebar-tag-name" data-tags="云技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                云技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="DevOps">
+                <span class="iconfont-archer">&#xe606;</span>
+                DevOps
+            </span>
+            <span class="sidebar-tag-name" data-tags="开发与运维">
+                <span class="iconfont-archer">&#xe606;</span>
+                开发与运维
+            </span>
+            <span class="sidebar-tag-name" data-tags="DevSecOps">
+                <span class="iconfont-archer">&#xe606;</span>
+                DevSecOps
+            </span>
+            <span class="sidebar-tag-name" data-tags="网络编程">
+                <span class="iconfont-archer">&#xe606;</span>
+                网络编程
+            </span>
+            <span class="sidebar-tag-name" data-tags="Kubernete">
+                <span class="iconfont-archer">&#xe606;</span>
+                Kubernete
+            </span>
+            <span class="sidebar-tag-name" data-tags="云安全">
+                <span class="iconfont-archer">&#xe606;</span>
+                云安全
+            </span>
+            <span class="sidebar-tag-name" data-tags="分布式技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                分布式技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="MatLab">
+                <span class="iconfont-archer">&#xe606;</span>
+                MatLab
+            </span>
+            <span class="sidebar-tag-name" data-tags="PHP">
+                <span class="iconfont-archer">&#xe606;</span>
+                PHP
+            </span>
+            <span class="sidebar-tag-name" data-tags="Quarkus">
+                <span class="iconfont-archer">&#xe606;</span>
+                Quarkus
+            </span>
+            <span class="sidebar-tag-name" data-tags="微服务技术">
+                <span class="iconfont-archer">&#xe606;</span>
+                微服务技术
+            </span>
+            <span class="sidebar-tag-name" data-tags="Spring">
+                <span class="iconfont-archer">&#xe606;</span>
+                Spring
+            </span>
+            <span class="sidebar-tag-name" data-tags="docker">
+                <span class="iconfont-archer">&#xe606;</span>
+                docker
+            </span>
+            <span class="sidebar-tag-name" data-tags="NodeJS">
+                <span class="iconfont-archer">&#xe606;</span>
+                NodeJS
+            </span>
+            <span class="sidebar-tag-name" data-tags="express">
+                <span class="iconfont-archer">&#xe606;</span>
+                express
+            </span>
+            <span class="sidebar-tag-name" data-tags="密码学">
+                <span class="iconfont-archer">&#xe606;</span>
+                密码学
+            </span>
+            <span class="sidebar-tag-name" data-tags="以太坊">
+                <span class="iconfont-archer">&#xe606;</span>
+                以太坊
+            </span>
+            <span class="sidebar-tag-name" data-tags="智能合约">
+                <span class="iconfont-archer">&#xe606;</span>
+                智能合约
+            </span>
+            <span class="sidebar-tag-name" data-tags="pwn">
+                <span class="iconfont-archer">&#xe606;</span>
+                pwn
+            </span>
+            <span class="sidebar-tag-name" data-tags="电子取证">
+                <span class="iconfont-archer">&#xe606;</span>
+                电子取证
+            </span>
+            <span class="sidebar-tag-name" data-tags="日常">
+                <span class="iconfont-archer">&#xe606;</span>
+                日常
+            </span>
+            <span class="sidebar-tag-name" data-tags="C编程">
+                <span class="iconfont-archer">&#xe606;</span>
+                C编程
+            </span>
+            <span class="sidebar-tag-name" data-tags="课程总结">
+                <span class="iconfont-archer">&#xe606;</span>
+                课程总结
+            </span>
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+        <span class="sidebar-category-name" data-categories="区块链技术">
+            <span class="iconfont-archer">&#xe60a;</span>
+            区块链技术
+        </span>
+        <span class="sidebar-category-name" data-categories="漏洞分析">
+            <span class="iconfont-archer">&#xe60a;</span>
+            漏洞分析
+        </span>
+        <span class="sidebar-category-name" data-categories="开发技术">
+            <span class="iconfont-archer">&#xe60a;</span>
+            开发技术
+        </span>
+        <span class="sidebar-category-name" data-categories="论文阅读">
+            <span class="iconfont-archer">&#xe60a;</span>
+            论文阅读
+        </span>
+        <span class="sidebar-category-name" data-categories="CTF">
+            <span class="iconfont-archer">&#xe60a;</span>
+            CTF
+        </span>
+        <span class="sidebar-category-name" data-categories="渗透测试">
+            <span class="iconfont-archer">&#xe60a;</span>
+            渗透测试
+        </span>
+        <span class="sidebar-category-name" data-categories="DevSecOps">
+            <span class="iconfont-archer">&#xe60a;</span>
+            DevSecOps
+        </span>
+        <span class="sidebar-category-name" data-categories="云安全">
+            <span class="iconfont-archer">&#xe60a;</span>
+            云安全
+        </span>
+        <span class="sidebar-category-name" data-categories="MATLAB">
+            <span class="iconfont-archer">&#xe60a;</span>
+            MATLAB
+        </span>
+        <span class="sidebar-category-name" data-categories="密码学">
+            <span class="iconfont-archer">&#xe60a;</span>
+            密码学
+        </span>
+        <span class="sidebar-category-name" data-categories="电子取证">
+            <span class="iconfont-archer">&#xe60a;</span>
+            电子取证
+        </span>
+        <span class="sidebar-category-name" data-categories="课程总结">
+            <span class="iconfont-archer">&#xe60a;</span>
+            课程总结
+        </span>
+        <span class="sidebar-category-name" data-categories="杂谈">
+            <span class="iconfont-archer">&#xe60a;</span>
+            杂谈
+        </span>
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "https://lzwgiter.github.io",
+        root: siteMetaRoot,
+        author: "f10@t"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+        <!-- main func -->
+        <script src="/scripts/main.js"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js" onload="window.Fancybox.bind('[data-fancybox]')" defer></script>
+        <!-- algolia -->
+            <div class="site-search site-search-loading">
+    <div class="algolia-popup popup">
+        <div class="algolia-search">
+            <div class="algolia-search-input-icon">
+                <i class="fa fa-search"></i>
+            </div>
+            <div class="algolia-search-input" id="algolia-search-input"></div>
+            <div class="popup-btn-close">
+                <i class="iconfont-archer">&#xe609;</i>
+            </div>
+        </div>
+
+        <div class="algolia-results">
+            <div id="algolia-stats" class="algolia-stats"></div>
+            <div id="algolia-hits"></div>
+            <div id="algolia-pagination" class="algolia-pagination"></div>
+        </div>
+    </div>
+</div>
+
+            <script src="/scripts/search.js" async></script>
+        <!-- busuanzi -->
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        <!-- async load share.js -->
+            <script src="/scripts/share.js" async></script>
+        <!-- mermaid -->
+    </body>
+</html>
