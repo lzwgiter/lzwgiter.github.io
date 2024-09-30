@@ -429,6 +429,56 @@
             <div class="container container-unloaded">
                 <main class="main index-page">
         <article class="index-post">
+            <a class="abstract-title" href="/posts/a212a999/">
+                <span class="abstract-title-text">SpringCloud Config Server使用及全自动配置热更新</span>
+            </a>
+            <div class="abstract-content">
+                <blockquote>
+<p>本篇记录Spring Config Server配置管理方案中、基于git
+webhook和rabbitmq实现配置的实时热更新，无需重启应用。</p>
+<p>对于服务较少的类型，其实可以通过手动发送post请求到指定应用的端口从而实现手动触发配置更新，但是在应用数量众多、环境profile较多、配置服务器不止一个的情况下，上述方法就较为低效了。因此，可以通过使用SpringCloud
+Config
+Server方案。（本篇没有讨论与nacos、consul的对比，若也有疑问可以参考<a
+target="_blank" rel="noopener" href="https://www.cnblogs.com/hanease/p/16227790.html">Nacos、Apollo、SpringCloud
+Config微服务配置中心对比 - hanease - 博客园 (cnblogs.com)</a>）</p>
+<ul>
+<li>基于git对配置文件进行管理，使用{应用名}-{profile}方式实现隔离管理；</li>
+<li>基于git webhook异步回调触发配置更新；</li>
+<li>基于SpringCloud
+Bus、AMQP协议实现待更新的微服务应用从配置服务器处接收更新；</li>
+</ul>
+<figure>
+<img
+src="/img/SpringCloud%20Config%20Server使用及全自动配置热更新/6113f7f6233a7cbfed683631be91b03.jpg"
+alt="前段时间拍的石泉县后柳水乡，风景真的很好" />
+<figcaption
+aria-hidden="true">前段时间拍的石泉县后柳水乡，风景真的很好</figcaption>
+</figure>
+</blockquote>
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/09/30">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/09/30</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <span class="post-category" data-categories="开发技术">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                开发技术
+            </span>
+        </span>
+        <a class="post-tag" href="javascript:void(0);" data-tags="Java">Java</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="分布式技术">分布式技术</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="Spring">Spring</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+        <article class="index-post">
             <a class="abstract-title" href="/posts/54e979b4/">
                 <span class="abstract-title-text">RabbitMQ学习</span>
             </a>
@@ -639,49 +689,6 @@ target="_blank" rel="noopener" href="https://www.f10at.cn/posts/8aa36aba.html">�
             </div>
         </article>
         <div class="index-post-divider"></div>
-        <article class="index-post">
-            <a class="abstract-title" href="/posts/8aa36aba/">
-                <span class="abstract-title-text">K8s攻防之OWASP-K8S-TOP10（上）</span>
-            </a>
-            <div class="abstract-content">
-                <blockquote>
-<p>之前入门学习了k8s集群环境的搭建和基本概念包括框架、网络模型，部署与动态扩展服务的方法：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://www.f10at.cn/posts/eed4a979.html">Kubernetes
-集群环境搭建使用及问题记录（一）</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://www.f10at.cn/posts/a08eb123.html">Kubernetes-集群环境搭建使用及问题记录（二）</a></li>
-<li><a
-target="_blank" rel="noopener" href="https://www.f10at.cn/posts/ed901271.html">Kubernetes-集群环境搭建使用及问题记录（三）</a></li>
-</ul>
-<p>回归安全的课题上来，云安全本质上是传统安全在云原生环境下的重新思考。作为业内事实标准，k8s可以提供服务管理、扩容等诸多功能，是提供云原生能力的基石。</p>
-<p>因此后面计划首先学习云安全分支下的k8s安全，并同时学习docker中的常见安全问题。这篇先学习<a
-target="_blank" rel="noopener" href="https://owasp.org/www-project-kubernetes-top-ten/">OWASP
-Kubernetes Top Ten</a>的前五个。</p>
-<p><img src="/img/K8s攻防之OWASP-K8S-TOP10（上）/image-20230917222234007.png" style="zoom:60%;" /></p>
-</blockquote>
-            </div>
-            <!-- read more -->
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/08/09">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/09/16</span>
-                </div>
-                <!-- tags -->
-                    <div class="abstract-tags" >
-        <span class="post-category" data-categories="云安全">
-            <i class="fas fa-folder post-category-icon"></i>
-            <span class="post-category-text">
-                云安全
-            </span>
-        </span>
-        <a class="post-tag" href="javascript:void(0);" data-tags="Kubernete">Kubernete</a>
-        <a class="post-tag" href="javascript:void(0);" data-tags="云安全">云安全</a>
-</div>
-
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
     <!-- paginator  -->
         <nav class="page-nav">
             <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/2/">NEXT &gt;</a>
@@ -869,9 +876,10 @@ Kubernetes Top Ten</a>的前五个。</p>
         
         
         
+        
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 99
+        Total : 100
         </div>
         <!-- search  -->
             <div class="site-search site-search-loading popup-trigger">
@@ -881,6 +889,10 @@ Kubernetes Top Ten</a>的前五个。</p>
     <div class="post-archive">
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/30</span>
+            <a class="archive-post-title" href="/posts/a212a999/">SpringCloud Config Server使用及全自动配置热更新</a>
+        </li>
         <li class="archive-post-item">
             <span class="archive-post-date">08/05</span>
             <a class="archive-post-title" href="/posts/54e979b4/">RabbitMQ学习</a>

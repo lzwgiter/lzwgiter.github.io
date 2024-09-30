@@ -422,6 +422,56 @@
             <div class="container container-unloaded">
                 <main class="main index-page">
         <article class="index-post">
+            <a class="abstract-title" href="/posts/a212a999/">
+                <span class="abstract-title-text">SpringCloud Config Server使用及全自动配置热更新</span>
+            </a>
+            <div class="abstract-content">
+                <blockquote>
+<p>本篇记录Spring Config Server配置管理方案中、基于git
+webhook和rabbitmq实现配置的实时热更新，无需重启应用。</p>
+<p>对于服务较少的类型，其实可以通过手动发送post请求到指定应用的端口从而实现手动触发配置更新，但是在应用数量众多、环境profile较多、配置服务器不止一个的情况下，上述方法就较为低效了。因此，可以通过使用SpringCloud
+Config
+Server方案。（本篇没有讨论与nacos、consul的对比，若也有疑问可以参考<a
+target="_blank" rel="noopener" href="https://www.cnblogs.com/hanease/p/16227790.html">Nacos、Apollo、SpringCloud
+Config微服务配置中心对比 - hanease - 博客园 (cnblogs.com)</a>）</p>
+<ul>
+<li>基于git对配置文件进行管理，使用{应用名}-{profile}方式实现隔离管理；</li>
+<li>基于git webhook异步回调触发配置更新；</li>
+<li>基于SpringCloud
+Bus、AMQP协议实现待更新的微服务应用从配置服务器处接收更新；</li>
+</ul>
+<figure>
+<img
+src="/img/SpringCloud%20Config%20Server使用及全自动配置热更新/6113f7f6233a7cbfed683631be91b03.jpg"
+alt="前段时间拍的石泉县后柳水乡，风景真的很好" />
+<figcaption
+aria-hidden="true">前段时间拍的石泉县后柳水乡，风景真的很好</figcaption>
+</figure>
+</blockquote>
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/09/30">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2024/09/30</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <span class="post-category" data-categories="开发技术">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                开发技术
+            </span>
+        </span>
+        <a class="post-tag" href="javascript:void(0);" data-tags="Java">Java</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="分布式技术">分布式技术</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="Spring">Spring</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+        <article class="index-post">
             <a class="abstract-title" href="/posts/54e979b4/">
                 <span class="abstract-title-text">RabbitMQ学习</span>
             </a>
@@ -611,37 +661,6 @@ Buffer</a>（也支持其他数据结构如JSON、XML等），提供了一种分
             </div>
         </article>
         <div class="index-post-divider"></div>
-        <article class="index-post">
-            <a class="abstract-title" href="/posts/73d00ee7/">
-                <span class="abstract-title-text">Netty框架学习</span>
-            </a>
-            <div class="abstract-content">
-                <blockquote>
-<p>本篇学习一下Netty框架，Netty是一个Java实现的、非常流行的NIO网络编程框架，很多知名项目如a阿里的Dubbo、Spark、ElasticSearch、Hadoop、蚂蚁金服的SOFABolt、谷歌的gRPC等等。学习前建议先掌握Java中NIO相关API的使用，并理解Unix操作系统中I/O多路复用模型的理论。</p>
-<p><img src="/img/Netty框架学习/components.png" alt="components" style="zoom:100%;" /></p>
-</blockquote>
-            </div>
-            <!-- read more -->
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/07/24">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/01/07</span>
-                </div>
-                <!-- tags -->
-                    <div class="abstract-tags" >
-        <span class="post-category" data-categories="开发技术">
-            <i class="fas fa-folder post-category-icon"></i>
-            <span class="post-category-text">
-                开发技术
-            </span>
-        </span>
-        <a class="post-tag" href="javascript:void(0);" data-tags="Java">Java</a>
-        <a class="post-tag" href="javascript:void(0);" data-tags="网络编程">网络编程</a>
-</div>
-
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
     <!-- paginator  -->
         <nav class="page-nav">
             <span class="page-number current">1</span><a class="page-number" href="/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/page/2/">2</a><a class="page-number" href="/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/page/8/">8</a><a class="extend next" rel="next" href="/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/page/2/">NEXT &gt;</a>
@@ -778,9 +797,10 @@ Buffer</a>（也支持其他数据结构如JSON、XML等），提供了一种分
         
         
         
+        
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 99
+        Total : 100
         </div>
         <!-- search  -->
             <div class="site-search site-search-loading popup-trigger">
@@ -790,6 +810,10 @@ Buffer</a>（也支持其他数据结构如JSON、XML等），提供了一种分
     <div class="post-archive">
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/30</span>
+            <a class="archive-post-title" href="/posts/a212a999/">SpringCloud Config Server使用及全自动配置热更新</a>
+        </li>
         <li class="archive-post-item">
             <span class="archive-post-date">08/05</span>
             <a class="archive-post-title" href="/posts/54e979b4/">RabbitMQ学习</a>

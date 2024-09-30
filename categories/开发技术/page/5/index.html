@@ -422,6 +422,38 @@
             <div class="container container-unloaded">
                 <main class="main index-page">
         <article class="index-post">
+            <a class="abstract-title" href="/posts/82490df7/">
+                <span class="abstract-title-text">并发模型之单线程多路I/O复用---select</span>
+            </a>
+            <div class="abstract-content">
+                <blockquote>
+<p>最近在写网络程序设计的大作业，大概就是一个聊天室的功能，牵扯到并发的问题，开始尝试使用多线程进行编写，但是发现结构稍微复杂，后来从《高质量嵌入式
+Linux
+C编程》一书中了解到，除了多线程、多进程之外，还有一种高并发的设计模式，那就是多路I/O复用技术(synchronous
+I/O
+multiplexing)，这个技术在特定条件下(I/O成本远远低于处理流程、单核CPU等)的情况下，效率是要比前两者高的，其实质就是在单线程的情况下同时监控多个I/O，最基本的机制就是<code>select()</code>机制，但是当然也有他的缺点以及优化版本(epoll等)
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2024/07/24">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/10/20</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <span class="post-category" data-categories="开发技术">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                开发技术
+            </span>
+        </span>
+        <a class="post-tag" href="javascript:void(0);" data-tags="C编程">C编程</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+        <article class="index-post">
             <a class="abstract-title" href="/posts/e1cf93ae/">
                 <span class="abstract-title-text">ThinkPHP框架学习---路由</span>
             </a>
@@ -555,35 +587,6 @@ global $variable; 就可以访问它们。</p>
                 <!-- date -->
                 <div class="abstract-date" title="Last updated: 2024/07/31">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/11/08</span>
-                </div>
-                <!-- tags -->
-                    <div class="abstract-tags" >
-        <span class="post-category" data-categories="开发技术">
-            <i class="fas fa-folder post-category-icon"></i>
-            <span class="post-category-text">
-                开发技术
-            </span>
-        </span>
-        <a class="post-tag" href="javascript:void(0);" data-tags="PHP">PHP</a>
-</div>
-
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-        <article class="index-post">
-            <a class="abstract-title" href="/posts/f0bc436c/">
-                <span class="abstract-title-text">PHP框架MVC学习</span>
-            </a>
-            <div class="abstract-content">
-                <blockquote>
-<p>最近的打算是入门渗透，首先补补php的坑，先来了解一下最基本的PHP框架的基本结构</p>
-</blockquote>
-            </div>
-            <!-- read more -->
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/07/31">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/11/03</span>
                 </div>
                 <!-- tags -->
                     <div class="abstract-tags" >
@@ -735,9 +738,10 @@ global $variable; 就可以访问它们。</p>
         
         
         
+        
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 99
+        Total : 100
         </div>
         <!-- search  -->
             <div class="site-search site-search-loading popup-trigger">
@@ -747,6 +751,10 @@ global $variable; 就可以访问它们。</p>
     <div class="post-archive">
             <div class="archive-year"> 2024 </div>
             <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/30</span>
+            <a class="archive-post-title" href="/posts/a212a999/">SpringCloud Config Server使用及全自动配置热更新</a>
+        </li>
         <li class="archive-post-item">
             <span class="archive-post-date">08/05</span>
             <a class="archive-post-title" href="/posts/54e979b4/">RabbitMQ学习</a>
