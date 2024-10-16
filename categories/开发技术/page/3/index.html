@@ -422,6 +422,42 @@
             <div class="container container-unloaded">
                 <main class="main index-page">
         <article class="index-post">
+            <a class="abstract-title" href="/posts/a08eb123/">
+                <span class="abstract-title-text">Kubernetes-集群环境搭建使用及问题记录（二）</span>
+            </a>
+            <div class="abstract-content">
+                <blockquote>
+<p>上一篇中我搭建了一个单master+三个从节点的Kubernetes集群，并直接使用nginx镜像进行了简单部署。这一篇来主要学习一下Kubernetes最主要的功能--容器编排。本篇将记录容器编排的重要概念、配置文件如何辨写开始，最后展示一个很简单的Hello-world。下一篇将深入实战，部署一个SpringCloud项目。</p>
+<figure>
+<img
+src="/img/Kubernetes-集群环境搭建使用及问题记录（一）/components-of-kubernetes.png"
+alt="image-20210810183438958" />
+<figcaption aria-hidden="true">image-20210810183438958</figcaption>
+</figure>
+</blockquote>
+            </div>
+            <!-- read more -->
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2021/10/29">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/08/09</span>
+                </div>
+                <!-- tags -->
+                    <div class="abstract-tags" >
+        <span class="post-category" data-categories="开发技术">
+            <i class="fas fa-folder post-category-icon"></i>
+            <span class="post-category-text">
+                开发技术
+            </span>
+        </span>
+        <a class="post-tag" href="javascript:void(0);" data-tags="Kubernete">Kubernete</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="分布式技术">分布式技术</a>
+</div>
+
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+        <article class="index-post">
             <a class="abstract-title" href="/posts/eed4a979/">
                 <span class="abstract-title-text">Kubernetes 集群环境搭建使用及问题记录（一）</span>
             </a>
@@ -582,41 +618,6 @@ run完事，没有细致的去了解docker的运行机制以及docker-compose、
             </div>
         </article>
         <div class="index-post-divider"></div>
-        <article class="index-post">
-            <a class="abstract-title" href="/posts/77d22b2a/">
-                <span class="abstract-title-text">Spring安全技术-Spring Security使用及总结（一）</span>
-            </a>
-            <div class="abstract-content">
-                <blockquote>
-<p>前面总结了Spring Data
-JPA，它主要是持久层的一些操作集合。这篇总结一下Spring
-Security，它也是Spring的一个子项目，它提供了认证、授权、会话管理、密码管理、缓存管理等功能，功能要比常见的Shiro更加丰富，并且支持OAuth2。这篇总结一下Spring
-Security在认证中的应用，包括：基于内存的用户储存、基于JDBC的用户储存、基于LDAP的用户储存、自定义用户详情服务。</p>
-<p><img
-src="/img/Spring安全技术-Spring-Security使用及总结（一）/image-20210509170555736.png" /></p>
-</blockquote>
-            </div>
-            <!-- read more -->
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2024/07/31">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/05/09</span>
-                </div>
-                <!-- tags -->
-                    <div class="abstract-tags" >
-        <span class="post-category" data-categories="开发技术">
-            <i class="fas fa-folder post-category-icon"></i>
-            <span class="post-category-text">
-                开发技术
-            </span>
-        </span>
-        <a class="post-tag" href="javascript:void(0);" data-tags="Java">Java</a>
-        <a class="post-tag" href="javascript:void(0);" data-tags="Spring">Spring</a>
-</div>
-
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
     <!-- paginator  -->
         <nav class="page-nav">
             <a class="extend prev" rel="prev" href="/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/page/2/">&lt; PREV</a><a class="page-number" href="/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/">1</a><a class="page-number" href="/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/page/4/">4</a><a class="page-number" href="/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/page/8/">8</a><a class="extend next" rel="next" href="/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/page/4/">NEXT &gt;</a>
@@ -754,9 +755,10 @@ src="/img/Spring安全技术-Spring-Security使用及总结（一）/image-20210
         
         
         
+        
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 100
+        Total : 101
         </div>
         <!-- search  -->
             <div class="site-search site-search-loading popup-trigger">
@@ -816,6 +818,10 @@ src="/img/Spring安全技术-Spring-Security使用及总结（一）/image-20210
         <li class="archive-post-item">
             <span class="archive-post-date">04/30</span>
             <a class="archive-post-title" href="/posts/b74b8800/">fastjson反序列化漏洞学习（二）</a>
+        </li>
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/21</span>
+            <a class="archive-post-title" href="/posts/4ebd8c48/">Java多线程编程Review</a>
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">01/07</span>
