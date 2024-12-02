@@ -17,15 +17,18 @@
 <meta property="og:site_name" content="f10@t&#39;s blog">
 <meta property="og:description" content="DOM(Document Object Model)文档对象模型是W3C指定的一套技术规范，用来描述Javascript脚本怎么与HTML或XML文档进行交互的Web标准。DOM定义了一系列标准接口，允许开发人员通过标准方式访问文档结构、操作网页内容、控制样式和行为等。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lzwgiter.github.io/img/DOM-%E6%96%87%E6%A1%A3%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/1.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/DOM-%E6%96%87%E6%A1%A3%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/2.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/DOM-%E6%96%87%E6%A1%A3%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/4.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/DOM-%E6%96%87%E6%A1%A3%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/5.png">
 <meta property="og:image" content="https://lzwgiter.github.io/img/DOM-%E6%96%87%E6%A1%A3%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/6.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/DOM-%E6%96%87%E6%A1%A3%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/7.png">
 <meta property="article:published_time" content="2018-08-22T05:02:36.000Z">
-<meta property="article:modified_time" content="2024-07-24T02:40:56.824Z">
+<meta property="article:modified_time" content="2024-12-02T13:11:09.809Z">
 <meta property="article:author" content="f10@t">
 <meta property="article:tag" content="前端">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://lzwgiter.github.io/img/DOM-%E6%96%87%E6%A1%A3%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/2.png">
+<meta name="twitter:image" content="https://lzwgiter.github.io/img/DOM-%E6%96%87%E6%A1%A3%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/1.png">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="icon" href="/assets/hello.svg">
@@ -506,63 +509,80 @@
 Model)文档对象模型是W3C指定的一套技术规范，用来描述Javascript脚本怎么与HTML或XML文档进行交互的Web标准。DOM定义了一系列标准接口，允许开发人员通过标准方式访问文档结构、操作网页内容、控制样式和行为等。</p>
 </blockquote>
 <span id="more"></span>
-<h3 id="dom基础">DOM基础</h3>
-<p>　　当网页被加载时，浏览器会创建页面的文档对象模型（Document Object
-Model）。 HTML DOM
-模型被构造为对象的树，用来获取或设置文档中标签的属性，例如获取或者设置input表单的value值。
-　　DOM可以以一种独立于平台和语言的方式访问和修改一个文档的内容和结构。换句话说，这是表示和处理一个HTML或XML文档的常用方法。DOM定义了表示和修改文档所需的对象、这些对象的行为和属性以及这些对象之间的关系。可以把DOM认为是页面上数据和结构的一个树形表示。
-　　W3C DOM 标准被分为 3 个不同的部分： 　　　　１.核心 DOM -
-针对任何结构化文档的标准模型 　　　　２.XML DOM - 针对 XML
-文档的标准模型 　　　　３.HTML DOM - 针对 HTML 文档的标准模型
-　　核心Dom是结构化文档比较底层对象的集合，这一部分所定义的对象已经完全可以表达出任何HTML和XML文档中的数据了。HTML
-DOM和XML DOM两部分则是专为操作具体HTML文档和XML文档所提供的方法。</p>
+<h1 id="dom基础">DOM基础</h1>
 <blockquote>
 <p>DOM定义了HTML文档和XML文档的逻辑结构（DOM树），给出了一种访问和处理这两种文档的方法。文档代表的是数据，而DOM则代表了如何去处理这些数据。</p>
 </blockquote>
+<p>当网页被加载时，浏览器会创建页面的文档对象模型（Document Object
+Model）。HTML DOM
+模型被构造为<strong>对象的树</strong>，用来获取或设置文档中标签的属性，例如获取或者设置input表单的value值。</p>
+<p>DOM可以以一种独立于平台和语言的方式访问和修改一个文档的内容和结构。换句话说，DOM提供了<strong>表示</strong>和<strong>处理</strong>一个HTML或XML文档的常用方法。</p>
+<p>DOM定义了表示和修改文档所需的对象、对象的行为和属性以及对象之间的关系。可以把DOM认为是页面上数据和结构的一个树形表示。</p>
+<p>W3C DOM 标准被分为 3 个不同的部分：</p>
+<ul>
+<li>核心 DOM：针对任何结构化文档的标准模型</li>
+<li>XML DOM：针对 XML 文档的标准模型</li>
+<li>HTML DOM：针对 HTML 文档的标准模型</li>
+</ul>
+<p>其中，核心DOM是结构化文档比较底层对象的集合，这一部分所定义的对象已经完全可以表达出任何HTML和XML文档中的数据了。而HTML
+DOM和XML DOM两部分则是专为操作具体HTML文档和XML文档所提供的方法。</p>
 <h2 id="节点">节点</h2>
 <h3 id="dom-节点类型node-types">DOM 节点类型（Node Types）</h3>
-<p>　　DOM1级定义了Node接口，该接口为DOM的所有节点类型定义了原始类型。JS实现了这个接口，<strong>定义所有的节点类型必须继承Node类型</strong>，Node的子类或孙类都拥有Node的基本属性和方法。
-　　DOM规定：整个文档是一个文档节点，每一个标签时一个元素节点，元素包含的文本是文本节点，元素的属性是一个属性节点，注释属于注释节点等等：
-　　１.文档节点（Document）：代表整个文档。
-　　２.元素节点（Element）：文档中的一个标记。
-　　３.文本节点（Text）：标记中的文本。
-　　４.属性节点（Attr）：代表一个属性，元素才有属性。 　　
-　　下表为不同的节点类型以及其可拥有的子类型。 　　<img
-src="/img/DOM-文档对象模型/1.png" />
-　　Node为所有节点的父接口，下表为一组公共的属性和方法。 　　<img
-src="/img/DOM-文档对象模型/3.png" />
-　　每一个节点都有一个nodeType属性，用于表明文档的类型，使用nodeType属性返回值可以判断一个节点的类型。
-　　<img src="/img/DOM-文档对象模型/2.png" />
-例：借助nodeType属性检索当前文档中的元素个数。 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>DOM<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>DOM是<span class="tag">&lt;<span class="name">cite</span>&gt;</span>Document Object Model<span class="tag">&lt;/<span class="name">cite</span>&gt;</span>首字母简写，中文翻译为<span class="tag">&lt;<span class="name">b</span>&gt;</span>文档对象模型<span class="tag">&lt;/<span class="name">b</span>&gt;</span>，是<span class="tag">&lt;<span class="name">i</span>&gt;</span>W3C<span class="tag">&lt;/<span class="name">i</span>&gt;</span>组织推荐的处理可扩展标识语言的标准编程接口。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>D表示文档，HTML文档结构。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>O表示对象，文档结构的JavaScript脚本化映射。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>M表示模型，脚本与结构交互的方法和行为。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">function</span> <span class="title function_">count</span>(<span class="params">n</span>)&#123; 							<span class="comment">//定义文档元素统计函数</span></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">var</span> num = <span class="number">0</span>; 								<span class="comment">// 初始化变量</span></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">if</span>(n.<span class="property">nodeType</span> == <span class="number">1</span>)							<span class="comment">// 检查是否为元素节点(ELEMENT_NODE)</span></span></span><br><span class="line"><span class="language-javascript">    num ++ ;									<span class="comment">// 如果是，则计数器加1</span></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">var</span> son = n.<span class="property">childNodes</span>; 					<span class="comment">// 获取所有子节点</span></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; son.<span class="property">length</span>; i ++ )&#123; 		<span class="comment">// 循环统一每个子元素</span></span></span><br><span class="line"><span class="language-javascript">        num += count (son[i]);			<span class="comment">// 递归操作</span></span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">return</span> num; 						<span class="comment">// 返回统计值</span></span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"><span class="title function_">alert</span>(<span class="string">&quot;当前文档包含 &quot;</span> + <span class="title function_">count</span>(<span class="variable language_">document</span>) + <span class="string">&quot; 个元素&quot;</span>);	<span class="comment">// 传入文档节点，计算元素的总个数</span></span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span> </span><br><span class="line">//输出结果：当前文档包含 14 个元素(9个COMMENT_NODE(不算这个)、5个body直系元素)</span><br></pre></td></tr></table></figure>
-上面的14个元素如果看不出来的话，这里推<a
+<p>DOM
+1级定义了Node接口，该接口为DOM的所有节点类型定义了原始类型。JS实现了这个接口，<strong>定义所有的节点类型必须继承Node类型</strong>，Node的子类或孙类都拥有Node的基本属性和方法。</p>
+<p>DOM规定整个文档是一个文档节点，每一个标签时一个元素节点，如元素包含的文本是文本节点，元素的属性是一个属性节点，注释属于注释节点等等：</p>
+<ul>
+<li>文档节点（Document）：代表整个文档。</li>
+<li>元素节点（Element）：文档中的一个标记。</li>
+<li>文本节点（Text）：标记中的文本。</li>
+<li>属性节点（Attr）：代表一个属性，元素才有属性。</li>
+</ul>
+<p>下表为不同的节点类型以及其可拥有的子类型：</p>
+<p><img src="/img/DOM-文档对象模型/1.png" /></p>
+<p>Node为所有节点的父接口，下表为一组公共的属性和方法。 　　<img
+src="/img/DOM-文档对象模型/3.png" /></p>
+<p>每一个节点都有一个nodeType属性，用于表明文档的类型，使用nodeType属性返回值可以判断一个节点的类型。</p>
+<p><img src="/img/DOM-文档对象模型/2.png" /></p>
+<p>例：借助nodeType属性检索当前文档中的元素个数。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>DOM<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>DOM是<span class="tag">&lt;<span class="name">cite</span>&gt;</span>Document Object Model<span class="tag">&lt;/<span class="name">cite</span>&gt;</span>首字母简写，中文翻译为<span class="tag">&lt;<span class="name">b</span>&gt;</span>文档对象模型<span class="tag">&lt;/<span class="name">b</span>&gt;</span>，是<span class="tag">&lt;<span class="name">i</span>&gt;</span>W3C<span class="tag">&lt;/<span class="name">i</span>&gt;</span>组织推荐的处理可扩展标识语言的标准编程接口。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>D表示文档，HTML文档结构。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>O表示对象，文档结构的JavaScript脚本化映射。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>M表示模型，脚本与结构交互的方法和行为。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">function</span> <span class="title function_">count</span>(<span class="params">n</span>)&#123; 							<span class="comment">//定义文档元素统计函数</span></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">var</span> num = <span class="number">0</span>; 								<span class="comment">// 初始化变量</span></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">if</span>(n.<span class="property">nodeType</span> == <span class="number">1</span>)							<span class="comment">// 检查是否为元素节点(ELEMENT_NODE)</span></span></span><br><span class="line"><span class="language-javascript">    num ++ ;									<span class="comment">// 如果是，则计数器加1</span></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">var</span> son = n.<span class="property">childNodes</span>; 					<span class="comment">// 获取所有子节点</span></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; son.<span class="property">length</span>; i ++ )&#123; 		<span class="comment">// 循环统一每个子元素</span></span></span><br><span class="line"><span class="language-javascript">        num += count (son[i]);			<span class="comment">// 递归操作</span></span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">return</span> num; 						<span class="comment">// 返回统计值</span></span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"><span class="title function_">alert</span>(<span class="string">&quot;当前文档包含 &quot;</span> + <span class="title function_">count</span>(<span class="variable language_">document</span>) + <span class="string">&quot; 个元素&quot;</span>);	<span class="comment">// 传入文档节点，计算元素的总个数</span></span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span> </span><br><span class="line">//输出结果：当前文档包含 14 个元素(9个COMMENT_NODE(不算这个)、5个body直系元素)</span><br></pre></td></tr></table></figure>
+<p>上面的14个元素如果看不出来的话，这里推<a
 target="_blank" rel="noopener" href="https://www.jianshu.com/p/695b5c78a7ca">一篇博客</a>供学习，讲解了Node类型的本质。</p>
 <h3 id="节点名称和值">节点名称和值</h3>
-<p>　　使用节点的属性nodeName和nodeValue可以读取节点的名称和值，这两个属性的值完全取决于节点的类型。如下表：
-　　<img src="/img/DOM-文档对象模型/4.png" />
-　　nodeName属性在处理标签时比较实用，而nodeValue在处理文本信息时比较实用。</p>
+<p>使用节点的属性nodeName和nodeValue可以读取节点的名称和值，这两个属性的值完全取决于节点的类型。如下表：</p>
+<p><img src="/img/DOM-文档对象模型/4.png" /></p>
+<p>nodeName属性在处理标签时比较实用，而nodeValue在处理文本信息时比较实用。</p>
 <h3 id="节点关系">节点关系</h3>
-<p>　　DOM将文档视为一种树状结构，这种树结构称为<strong>节点树</strong>，跟C语言中的树还是有相通之处的。JS脚本可以通过这棵树访问所有节点，并进行修改或删除内容，也可以删除该节点。
-　　节点之间的关系如下： 　　1. 节点树中最顶端为根节点。 　　2.
-除根节点外每个节点都有一个父节点。 　　3. 节点可以包含任何数量的子节点。
-　　4. 叶子是没有子节点的节点。 　　5.
-同级节点拥有相同父节点的节点，为兄弟关系。
-　　下图可以帮你更好的理解节点树的概念： 　　　　　　　　　　<img
-src="/img/DOM-文档对象模型/5.png" /></p>
-<h3 id="访问节点">访问节点</h3>
-<p>　　DOM为Node定义了以下属性，以便于JS对整个文档树的访问。 　　1.
-ownerDocument: 返回当前节点的根元素(document) 　　2. parentNode:
-返回当前节点的父节点。所有节点都仅有一个父节点。 　　3. childNodes:
-返回当前节点的所有子节点的节点列表 　　4. firstChild:
-返回当前节点的首个子节点。 　　5. lastChild:
-返回当前节点的最后一个子节点。 　　6. nextSibling:
-返回当前节点之后相邻的同级节点。 　　7. previousSibling:
-返回当前节点之前的相邻同级节点。 　　这里我们示例几个： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>DOM<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>DOM是<span class="tag">&lt;<span class="name">cite</span>&gt;</span>Document Object Model<span class="tag">&lt;/<span class="name">cite</span>&gt;</span>首字母简写，中文翻译为<span class="tag">&lt;<span class="name">b</span>&gt;</span>文档对象模型<span class="tag">&lt;/<span class="name">b</span>&gt;</span>，是<span class="tag">&lt;<span class="name">i</span>&gt;</span>W3C<span class="tag">&lt;/<span class="name">i</span>&gt;</span>组织推荐的处理可扩展标识语言的标准编程接口。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>D表示文档，HTML文档结构。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>O表示对象，文档结构的JavaScript脚本化映射。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>M表示模型，脚本与结构交互的方法和行为。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">var</span> txt = <span class="string">&quot;&quot;</span>;            <span class="comment">//记录所有节点类型</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">var</span> tag = <span class="variable language_">document</span>.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;ul&quot;</span>)[<span class="number">0</span>];	<span class="comment">// 获取列表元素</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">var</span> a = tag.<span class="property">childNodes</span>; 	<span class="comment">// 获取列表元素包含的所有节点</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;a.<span class="property">length</span>; i++)&#123;    <span class="comment">//打印所有的节点类型</span></span></span><br><span class="line"><span class="language-javascript">	txt = txt + a[i].<span class="property">nodeName</span> + <span class="string">&quot;&lt;br&gt;&quot;</span>;</span></span><br><span class="line"><span class="language-javascript">&#125;;</span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">document</span>.<span class="title function_">write</span>(txt + <span class="string">&#x27;&lt;br&gt;&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">document</span>.<span class="title function_">write</span>(a[<span class="number">0</span>].<span class="property">nodeType</span> + <span class="string">&#x27;&lt;br&gt;&#x27;</span>); <span class="comment">//第1个节点类型，返回值为3，显示为文本节点</span></span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">document</span>.<span class="title function_">write</span>(a.<span class="title function_">item</span>(<span class="number">1</span>).<span class="property">innerHTML</span> + <span class="string">&#x27;&lt;br&gt;&#x27;</span>); 	<span class="comment">// 显示第2个节点包含的文本</span></span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">document</span>.<span class="title function_">write</span>(a.<span class="property">length</span>); 	<span class="comment">// 包含子节点个数，nodeList长度</span></span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span> </span><br></pre></td></tr></table></figure>
-　　结果如下： <img src="/img/DOM-文档对象模型/6.png" />
-<strong>注意</strong>：第一个#text是<code>&lt;ul</code>&gt;和<code>&lt;li&gt;</code>之间的换行，也算一个文本节点。</p>
-<h3 id="操作节点">操作节点</h3>
-<p>　　Node类型为所有节点定义了很多方法，以便对节点进行操作。 　　<img
-src="/img/DOM-文档对象模型/7.png" /></p>
-<p>参考博客： 　　1. <a
+<p>DOM将文档视为一种树状结构，这种树结构称为<strong>节点树</strong>，跟C语言中的树还是有相通之处的。JS脚本可以通过这棵树访问所有节点，并进行修改或删除内容，也可以删除该节点。</p>
+<p>节点之间的关系如下：</p>
+<ol type="1">
+<li>节点树中最顶端为根节点。</li>
+<li>除根节点外每个节点都有一个父节点。</li>
+<li>节点可以包含任何数量的子节点。</li>
+<li>叶子是没有子节点的节点。、</li>
+<li>同级节点拥有相同父节点的节点，为兄弟关系。</li>
+</ol>
+<p>下图可以帮你更好的理解节点树的概念：</p>
+<p><img src="/img/DOM-文档对象模型/5.png" /></p>
+<h2 id="访问节点">访问节点</h2>
+<p>DOM为Node定义了以下属性，以便于JS对整个文档树的访问。 　　1.
+<code>ownerDocument</code>： 返回当前节点的根元素(document) 　　2.
+<code>parentNode</code>：
+返回当前节点的父节点。所有节点都仅有一个父节点。 　　3.
+<code>childNodes</code>： 返回当前节点的所有子节点的节点列表 　　4.
+<code>firstChild</code>：返回当前节点的首个子节点。 　　5.
+<code>lastChild</code>：返回当前节点的最后一个子节点。 　　6.
+<code>nextSibling</code>：返回当前节点之后相邻的同级节点。 　　7.
+<code>previousSibling</code>：返回当前节点之前的相邻同级节点。</p>
+<p>这里我们示例几个：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>DOM<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>DOM是<span class="tag">&lt;<span class="name">cite</span>&gt;</span>Document Object Model<span class="tag">&lt;/<span class="name">cite</span>&gt;</span>首字母简写，中文翻译为<span class="tag">&lt;<span class="name">b</span>&gt;</span>文档对象模型<span class="tag">&lt;/<span class="name">b</span>&gt;</span>，是<span class="tag">&lt;<span class="name">i</span>&gt;</span>W3C<span class="tag">&lt;/<span class="name">i</span>&gt;</span>组织推荐的处理可扩展标识语言的标准编程接口。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>D表示文档，HTML文档结构。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>O表示对象，文档结构的JavaScript脚本化映射。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>M表示模型，脚本与结构交互的方法和行为。<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">var</span> txt = <span class="string">&quot;&quot;</span>;            <span class="comment">//记录所有节点类型</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">var</span> tag = <span class="variable language_">document</span>.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;ul&quot;</span>)[<span class="number">0</span>];	<span class="comment">// 获取列表元素</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">var</span> a = tag.<span class="property">childNodes</span>; 	<span class="comment">// 获取列表元素包含的所有节点</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;a.<span class="property">length</span>; i++)&#123;    <span class="comment">//打印所有的节点类型</span></span></span><br><span class="line"><span class="language-javascript">	txt = txt + a[i].<span class="property">nodeName</span> + <span class="string">&quot;&lt;br&gt;&quot;</span>;</span></span><br><span class="line"><span class="language-javascript">&#125;;</span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">document</span>.<span class="title function_">write</span>(txt + <span class="string">&#x27;&lt;br&gt;&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">document</span>.<span class="title function_">write</span>(a[<span class="number">0</span>].<span class="property">nodeType</span> + <span class="string">&#x27;&lt;br&gt;&#x27;</span>); <span class="comment">//第1个节点类型，返回值为3，显示为文本节点</span></span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">document</span>.<span class="title function_">write</span>(a.<span class="title function_">item</span>(<span class="number">1</span>).<span class="property">innerHTML</span> + <span class="string">&#x27;&lt;br&gt;&#x27;</span>); 	<span class="comment">// 显示第2个节点包含的文本</span></span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">document</span>.<span class="title function_">write</span>(a.<span class="property">length</span>); 	<span class="comment">// 包含子节点个数，nodeList长度</span></span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span> </span><br></pre></td></tr></table></figure>
+<p>结果如下:</p>
+<p><img src="/img/DOM-文档对象模型/6.png" /></p>
+<p><strong>注意</strong>：第一个#text是<code>&lt;ul</code>&gt;和<code>&lt;li&gt;</code>之间的换行，也算一个文本节点。</p>
+<h2 id="操作节点">操作节点</h2>
+<p>Node类为所有节点定义了很多方法，以便对节点进行操作：</p>
+<p><img src="/img/DOM-文档对象模型/7.png" /></p>
+<h1 id="参考博客">参考博客</h1>
+<p>　　1. <a
 target="_blank" rel="noopener" href="http://www.flyne.org/article/407/2">http://www.flyne.org/article/407/2</a>
 　　2. <a
 target="_blank" rel="noopener" href="https://blog.csdn.net/IamChuancey/article/details/78335443">https://blog.csdn.net/IamChuancey/article/details/78335443</a>
@@ -575,7 +595,7 @@ target="_blank" rel="noopener" href="https://www.cnblogs.com/propheterLiu/p/5966
             <p>原文作者：<a href="https://lzwgiter.github.io">f10@t</a>
             <p>原文链接：<a href="https://lzwgiter.github.io/posts/69896e9f/">https://lzwgiter.github.io/posts/69896e9f/</a>
             <p>发表日期：<a href="https://lzwgiter.github.io/posts/69896e9f/">八月 22日 2018, 1:02:36 下午</a>
-            <p>更新日期：<a href="https://lzwgiter.github.io/posts/69896e9f/">July 24th 2024, 10:40:56 am</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/69896e9f/">December 2nd 2024, 9:11:09 pm</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     <!-- paginator -->
@@ -655,7 +675,7 @@ target="_blank" rel="noopener" href="https://www.cnblogs.com/propheterLiu/p/5966
                 <div class="toc-catalog">
                     <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
                 </div>
-                <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#dom%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">DOM基础</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8A%82%E7%82%B9"><span class="toc-number"></span> <span class="toc-text">节点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dom-%E8%8A%82%E7%82%B9%E7%B1%BB%E5%9E%8Bnode-types"><span class="toc-number">1.</span> <span class="toc-text">DOM 节点类型（Node Types）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E5%90%8D%E7%A7%B0%E5%92%8C%E5%80%BC"><span class="toc-number">2.</span> <span class="toc-text">节点名称和值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E5%85%B3%E7%B3%BB"><span class="toc-number">3.</span> <span class="toc-text">节点关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E8%8A%82%E7%82%B9"><span class="toc-number">4.</span> <span class="toc-text">访问节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E8%8A%82%E7%82%B9"><span class="toc-number">5.</span> <span class="toc-text">操作节点</span></a></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#dom%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">DOM基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8A%82%E7%82%B9"><span class="toc-number">1.1.</span> <span class="toc-text">节点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dom-%E8%8A%82%E7%82%B9%E7%B1%BB%E5%9E%8Bnode-types"><span class="toc-number">1.1.1.</span> <span class="toc-text">DOM 节点类型（Node Types）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E5%90%8D%E7%A7%B0%E5%92%8C%E5%80%BC"><span class="toc-number">1.1.2.</span> <span class="toc-text">节点名称和值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E5%85%B3%E7%B3%BB"><span class="toc-number">1.1.3.</span> <span class="toc-text">节点关系</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E8%8A%82%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text">访问节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E8%8A%82%E7%82%B9"><span class="toc-number">1.3.</span> <span class="toc-text">操作节点</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%8D%9A%E5%AE%A2"><span class="toc-number">2.</span> <span class="toc-text">参考博客</span></a></li></ol>
             </div>
         <!-- sidebar -->
         <div class="sidebar sidebar-hide">
@@ -1196,7 +1216,7 @@ target="_blank" rel="noopener" href="https://www.cnblogs.com/propheterLiu/p/5966
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">08/01</span>
-            <a class="archive-post-title" href="/posts/ae68c748/">CSS基础2--CSS基础2-应用</a>
+            <a class="archive-post-title" href="/posts/ae68c748/">CSS基础2--应用</a>
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">08/01</span>
@@ -1255,10 +1275,6 @@ target="_blank" rel="noopener" href="https://www.cnblogs.com/propheterLiu/p/5966
             <span class="sidebar-tag-name" data-tags="SQL注入">
                 <span class="iconfont-archer">&#xe606;</span>
                 SQL注入
-            </span>
-            <span class="sidebar-tag-name" data-tags="CSS">
-                <span class="iconfont-archer">&#xe606;</span>
-                CSS
             </span>
             <span class="sidebar-tag-name" data-tags="python">
                 <span class="iconfont-archer">&#xe606;</span>

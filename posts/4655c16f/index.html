@@ -18,10 +18,11 @@
 <meta property="og:description" content="层叠和继承是CSS最基本的两个特性，本篇将对CSS基础3.1-特性之层叠性相关内容简单介绍。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://lzwgiter.github.io/img/CSS%E5%9F%BA%E7%A1%803.1-%E7%89%B9%E6%80%A7%E4%B9%8B%E5%B1%82%E5%8F%A0%E6%80%A7/2.png">
+<meta property="og:image" content="https://lzwgiter.github.io/img/CSS%E5%9F%BA%E7%A1%803.1-%E7%89%B9%E6%80%A7%E4%B9%8B%E5%B1%82%E5%8F%A0%E6%80%A7/3.png">
 <meta property="article:published_time" content="2018-08-01T13:30:35.000Z">
-<meta property="article:modified_time" content="2024-07-24T02:37:50.799Z">
+<meta property="article:modified_time" content="2024-12-02T13:28:55.940Z">
 <meta property="article:author" content="f10@t">
-<meta property="article:tag" content="CSS">
+<meta property="article:tag" content="前端">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://lzwgiter.github.io/img/CSS%E5%9F%BA%E7%A1%803.1-%E7%89%B9%E6%80%A7%E4%B9%8B%E5%B1%82%E5%8F%A0%E6%80%A7/2.png">
     <meta http-equiv="Cache-control" content="no-cache">
@@ -337,12 +338,12 @@
                 开发技术
             </span>
         </span>
-        <a class="post-tag" href="javascript:void(0);" data-tags="CSS">CSS</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="前端">前端</a>
 </div>
 
                 <!-- 文章字数统计 -->
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">982</span>阅读时长: <span class="post-count reading-time">3 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">986</span>阅读时长: <span class="post-count reading-time">3 min</span></span>
                     </div>
                 <div class="post-intro-meta">
                     <!-- 撰写日期 -->
@@ -501,21 +502,29 @@
     <article class="article-entry">
         <blockquote>
 <p>层叠和继承是CSS最基本的两个特性，本篇将对CSS基础3.1-特性之层叠性相关内容简单介绍。
-<span id="more"></span> # CSSCSS基础3.1-特性之层叠性: ## 1&gt; CSS
-样式表的优先级： 按照CSS
+<span id="more"></span></p>
+</blockquote>
+<h1 id="css基础3.1-特性之层叠性">CSS基础3.1-特性之层叠性:</h1>
+<h2 id="css-样式表的优先级">1&gt; CSS 样式表的优先级：</h2>
+<p>按照CSS
 的起源可以将网页定义的样式分为4种：HTML、作者、用户、浏览器。HTML表示元素的默认样式；
 作者就是创建人，即创建网站所编辑的CSS；
 用户也就是浏览网页的人所设置的样式； 浏览器就是指浏览器默认的样式。
 原则上讲，作者定义的样式会优先于用户设置的样式，用户设置的样式优先于浏览器的默认样式，而浏览器的默认样式会优先于HTML的默认样式。
 特别的，在CSS2中，当用户设置的样式使用了<code>!important</code>命令声明之后，用户的<code>!important</code>的命令会优先于作者声明的<code>!important</code>命令。</p>
-</blockquote>
 <h2 id="css样式的优先级">2&gt;CSS样式的优先级</h2>
-<p>对于相同CSS起源来说，不同位置的样式器优先级也是不同的。一般来说，行内样式会优先于内嵌式样式表，内部样式表会优先于外部样式表。即<code>行内 &gt; 内嵌式 &gt; 外部</code>。而被附加了<code>!important</code>关键字的声明会拥有最高的优先级。
-如在实际开发中，如果作者设计网页字体颜色为14号黑色字体，而用户在浏览器中利用firefox的firebug插件修改字体为18号红色字体，浏览器如何处理呢？
-<img src="/img/CSS基础3.1-特性之层叠性/2.png" alt="更改" /> <img
-src="/img/CSS基础3.1-特性之层叠性/3.png" alt="结果" />
-根据CSS层叠规则：<strong>作者设计的样式能够覆盖浏览器默认设置的样式，而用户在浏览器里设置的样式可以覆盖作者的样式。</strong>(上图所示)<strong>同时，CSS根据样式的远近关系来决定层叠样式的优先级：在同等条件下，距离应用对象(也就是标签)的距离越近就越有较大的优先权，因而行内样式的优先权大于内部样式和外部样式。</strong>
-如果多个不同类型的选择器同时对一个对象设置样式时，该对象最终样式由一个优先级加权值决定，下面是计算方法：</p>
+<p>对于相同CSS起源来说，不同位置的样式器优先级也是不同的。一般来说，行内样式会优先于内嵌式样式表，内部样式表会优先于外部样式表。即<code>行内 &gt; 内嵌式 &gt; 外部</code>。而被附加了<code>!important</code>关键字的声明会拥有最高的优先级。</p>
+<p>如在实际开发中，如果作者设计网页字体颜色为14号黑色字体，而用户在浏览器中利用firefox的firebug插件修改字体为18号红色字体，浏览器如何处理呢？</p>
+<figure>
+<img src="/img/CSS基础3.1-特性之层叠性/2.png" alt="更改" />
+<figcaption aria-hidden="true">更改</figcaption>
+</figure>
+<figure>
+<img src="/img/CSS基础3.1-特性之层叠性/3.png" alt="结果" />
+<figcaption aria-hidden="true">结果</figcaption>
+</figure>
+<p>根据CSS层叠规则：<strong>作者设计的样式能够覆盖浏览器默认设置的样式，而用户在浏览器里设置的样式可以覆盖作者的样式。</strong>(上图所示)<strong>同时，CSS根据样式的远近关系来决定层叠样式的优先级：在同等条件下，距离应用对象(也就是标签)的距离越近就越有较大的优先权，因而行内样式的优先权大于内部样式和外部样式。</strong></p>
+<p>如果多个不同类型的选择器同时对一个对象设置样式时，该对象最终样式由一个优先级加权值决定，下面是计算方法：</p>
 <ol type="1">
 <li>标签选择器：优先级加权值为1；</li>
 <li>伪元素或伪对象选择器：优先级加权值为1；</li>
@@ -534,8 +543,8 @@ src="/img/CSS基础3.1-特性之层叠性/3.png" alt="结果" />
 对于多个选择器组合而成的复合型选择器，首先分别计算每个组成选择器的加权值，接着相加得出当前选择器的总分，哪个分值高则选择哪个所设置的样式。对于分值相等的情况，则按上述的位置关系判断。
 如：</code></pre>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">h3</span>&#123;<span class="attribute">color</span>: <span class="number">#ff7300</span>;&#125;        <span class="comment">/*加权值=1*/</span></span><br><span class="line"><span class="selector-class">.fl4</span>&#123;<span class="attribute">font-size</span>: <span class="number">14px</span>;&#125;     <span class="comment">/*加权值=10*/</span></span><br><span class="line"><span class="selector-id">#head</span>&#123;<span class="attribute">width</span>: <span class="number">960px</span>;&#125;       <span class="comment">/*加权值=1+10=11*/</span></span><br><span class="line"><span class="selector-id">#head</span> <span class="selector-tag">h2</span>&#123;<span class="attribute">border</span>: <span class="number">1px</span> soild <span class="number">#ff73</span>;&#125;    <span class="comment">/*加权值=100+1=101*/</span></span><br></pre></td></tr></table></figure>
-<p>如果调整样式的优先级，还可以使用<code>!important</code>命令，它表示最大优先级，<strong>注意：该命令必须放在生命语句和分号之间，否则无效。</strong>
-这里附上<a
+<p>如果调整样式的优先级，还可以使用<code>!important</code>命令，它表示最大优先级，<strong>注意：该命令必须放在生命语句和分号之间，否则无效。</strong></p>
+<p>这里附上<a
 target="_blank" rel="noopener" href="https://www.w3cschool.cn/cssref/53s812dp.html">CSS选择器</a>的详细。</p>
 
     </article>
@@ -544,7 +553,7 @@ target="_blank" rel="noopener" href="https://www.w3cschool.cn/cssref/53s812dp.ht
             <p>原文作者：<a href="https://lzwgiter.github.io">f10@t</a>
             <p>原文链接：<a href="https://lzwgiter.github.io/posts/4655c16f/">https://lzwgiter.github.io/posts/4655c16f/</a>
             <p>发表日期：<a href="https://lzwgiter.github.io/posts/4655c16f/">八月 1日 2018, 9:30:35 晚上</a>
-            <p>更新日期：<a href="https://lzwgiter.github.io/posts/4655c16f/">July 24th 2024, 10:37:50 am</a>
+            <p>更新日期：<a href="https://lzwgiter.github.io/posts/4655c16f/">December 2nd 2024, 9:28:55 pm</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     <!-- paginator -->
@@ -557,8 +566,8 @@ target="_blank" rel="noopener" href="https://www.w3cschool.cn/cssref/53s812dp.ht
         </li>
         <li class="previous">
                 <div class="prevSlogan">Previous Post</div>
-                <a href="/posts/ae68c748/" title="CSS基础2--CSS基础2-应用">
-                    <div class="prevTitle">CSS基础2--CSS基础2-应用</div>
+                <a href="/posts/ae68c748/" title="CSS基础2--应用">
+                    <div class="prevTitle">CSS基础2--应用</div>
                 </a>
         </li>
     </ul>
@@ -624,7 +633,7 @@ target="_blank" rel="noopener" href="https://www.w3cschool.cn/cssref/53s812dp.ht
                 <div class="toc-catalog">
                     <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
                 </div>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#css%E6%A0%B7%E5%BC%8F%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">1.</span> <span class="toc-text">2&gt;CSS样式的优先级</span></a></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#css%E5%9F%BA%E7%A1%803.1-%E7%89%B9%E6%80%A7%E4%B9%8B%E5%B1%82%E5%8F%A0%E6%80%A7"><span class="toc-number">1.</span> <span class="toc-text">CSS基础3.1-特性之层叠性:</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#css-%E6%A0%B7%E5%BC%8F%E8%A1%A8%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">1.1.</span> <span class="toc-text">1&gt; CSS 样式表的优先级：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#css%E6%A0%B7%E5%BC%8F%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">1.2.</span> <span class="toc-text">2&gt;CSS样式的优先级</span></a></li></ol></li></ol>
             </div>
         <!-- sidebar -->
         <div class="sidebar sidebar-hide">
@@ -1165,7 +1174,7 @@ target="_blank" rel="noopener" href="https://www.w3cschool.cn/cssref/53s812dp.ht
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">08/01</span>
-            <a class="archive-post-title" href="/posts/ae68c748/">CSS基础2--CSS基础2-应用</a>
+            <a class="archive-post-title" href="/posts/ae68c748/">CSS基础2--应用</a>
         </li>
         <li class="archive-post-item">
             <span class="archive-post-date">08/01</span>
@@ -1224,10 +1233,6 @@ target="_blank" rel="noopener" href="https://www.w3cschool.cn/cssref/53s812dp.ht
             <span class="sidebar-tag-name" data-tags="SQL注入">
                 <span class="iconfont-archer">&#xe606;</span>
                 SQL注入
-            </span>
-            <span class="sidebar-tag-name" data-tags="CSS">
-                <span class="iconfont-archer">&#xe606;</span>
-                CSS
             </span>
             <span class="sidebar-tag-name" data-tags="python">
                 <span class="iconfont-archer">&#xe606;</span>
